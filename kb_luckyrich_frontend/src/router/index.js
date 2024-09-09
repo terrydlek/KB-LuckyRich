@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'  // npm im vue-router@next
 import Home from '@/views/Home.vue'
-
+import Asset from '@/views/Asset.vue'
 
 const routes = [
     // MZ 자산 관리 API 등록 라우터
@@ -9,6 +9,11 @@ const routes = [
         name: 'Home',
         component: Home
     },
+    {
+        path: '/asset',
+        name: 'Asset',
+        component: Asset
+    }
 ]
 
 
