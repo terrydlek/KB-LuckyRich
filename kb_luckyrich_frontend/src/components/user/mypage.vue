@@ -1,5 +1,5 @@
 <template>
-    <h1>Mypage</h1>
+    <h1>Mypagea</h1>
 </template>
 
 

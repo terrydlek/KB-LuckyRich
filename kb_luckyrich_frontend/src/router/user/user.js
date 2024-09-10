@@ -2,7 +2,7 @@ import login from "@/components/user/login.vue";
 import userUpdate from "@/components/user/userUpdate.vue";
 import mypage from '@/components/user/mypage.vue';
 import home from '@/components/home.vue';
-
+// 
 export default [
     {
         path: '/',

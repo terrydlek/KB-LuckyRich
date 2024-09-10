@@ -3,7 +3,7 @@ import lookup from "@/components/account/lookup.vue";
 import accountUpdate from "@/components/account/accountUpdate.vue";
 import asset from '@/components/account/asset.vue';
 import recommendation from '@/components/account/recommendation.vue'
-
+// 
 export default [
     {
         path: '/accountbook',

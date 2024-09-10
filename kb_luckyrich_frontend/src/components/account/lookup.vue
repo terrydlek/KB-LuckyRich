@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>lookup</h1>
+        <h1>lookupa</h1>
     </div>
 </template>
 

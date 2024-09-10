@@ -1,5 +1,5 @@
 <template>
-    <h1>Asset</h1>
+    <h1>Asseta</h1>
 </template>
 
 

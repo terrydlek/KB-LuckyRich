@@ -1,7 +1,7 @@
-import { createWebHistory, createRouter } from 'vue-router'  // npm im vue-router@next
+import { createWebHistory, createRouter } from 'vue-router'
 import account from '@/router/account/account.js'
 import user from '@/router/user/user.js'
-
+// 
 
 const router = createRouter({
     history: createWebHistory(),
