@@ -44,7 +44,7 @@ public class SecurityConfig {
 
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .antMatchers("/member/**").permitAll()
-                        .antMatchers("/bbs/bbslist").permitAll()
+                        .antMatchers("/api/**").permitAll()
                         .antMatchers("bbs.bbswrite").authenticated()
                         .anyRequest().authenticated());   // (무조건)허용
 
