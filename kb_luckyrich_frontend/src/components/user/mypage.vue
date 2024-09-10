@@ -1,5 +1,5 @@
 <template>
-<h1>Asset</h1>
+    <h1>Mypage</h1>
 </template>
 
 
@@ -7,5 +7,4 @@
 </script>
 
 
-<style>
-</style>
+<style></style>

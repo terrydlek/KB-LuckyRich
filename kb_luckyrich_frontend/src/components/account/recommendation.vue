@@ -1,5 +1,5 @@
 <template>
-  <h1>Recommendation</h1>
+    <h1>Recommendation</h1>
 </template>
 
 <script></script>
