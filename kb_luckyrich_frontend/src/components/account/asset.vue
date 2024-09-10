@@ -20,15 +20,13 @@ import totalChart from './totalChart.vue';
 import goalChart from './goalChart.vue';
 import assetGraph from './assetGraph.vue';
 import accountBookChart from './accountBookChart.vue';
-import consumptionChart from './consumptionChart.vue';
 
 export default {
     components: {
         totalChart,
         goalChart,
         assetGraph,
-        accountBookChart,
-        consumptionChart
+        accountBookChart
     }
 }
 </script>
