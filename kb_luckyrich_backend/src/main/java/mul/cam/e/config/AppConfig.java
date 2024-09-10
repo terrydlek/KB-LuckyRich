@@ -5,8 +5,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -14,8 +16,14 @@ import javax.sql.DataSource;
 
 // Database 설정
 @Configuration
+@PropertySource({"classpath:/application-secret.properties"})
 @MapperScan("mul.cam.e")
 public class AppConfig {
+
+    @Value("${aws.driver}") String driver;
+    @Value("${aws.url}") String url;
+    @Value("${aws.username}") String username;
+    @Value("${aws.password}") String password;
 
     @Bean
     public DataSource dataSource(){
@@ -26,6 +34,15 @@ public class AppConfig {
         dataSource.setUrl("jdbc:mysql://localhost:3306/shop3?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true");
         dataSource.setUsername("root");
         dataSource.setPassword("1234");
+
+        // AWS database
+        /*
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        */
+
         dataSource.setInitialSize(5);
         dataSource.setMaxTotal(10);
         return dataSource;

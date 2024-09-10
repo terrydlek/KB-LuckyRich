@@ -2,15 +2,16 @@ package mul.cam.e.dto;
 
 import lombok.*;
 
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
+@ToString
 public class UserDto {
-    private String userId;
-    private String userName;
-    private String password;
+    private int id;
+    private String user_name;
     private String email;
-    private String phone;
-    private String auth;
+    private String gender;
+    private int age;
 }
