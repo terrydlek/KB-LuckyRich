@@ -1,11 +1,13 @@
-import { createApp } from 'vue';
-import App from './App.vue';
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import router from '@/router/index';
+import router from '@/router/index'
 
-import BootstrapVue from 'bootstrap-vue-3';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+import BootstrapVue from 'bootstrap-vue-3'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
+
+
 
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts';
@@ -15,12 +17,13 @@ import SolidGauge from 'highcharts/modules/solid-gauge';
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
+
 // createApp(App).mount('#app')
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.use(router);
-app.use(BootstrapVue);
-app.use(HighchartsVue);
+app.use(router)
+app.use(BootstrapVue)
+app.use(HighchartsVue)
 
-app.mount('#app');
+app.mount('#app')

@@ -1,14 +1,14 @@
 <template>
-    <h1>home</h1>a
-    <router-link to="/asset">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/accountbook">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/accountUpdate">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/lookup">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/recommendation">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/login">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/mypage">내 자산 한눈에 확인하기</router-link><br>
-    <router-link to="/userUpdate">내 자산 한눈에 확인하기</router-link><br>
-    a
+    <h1>home</h1>
+    <router-link to="/asset">asset</router-link><br>
+    <router-link to="/accountbook">accountbook</router-link><br>
+    <router-link to="/accountUpdate">accountuipdate</router-link><br>
+    <router-link to="/lookup">lookup</router-link><br>
+    <router-link to="/recommendation">recommendation</router-link><br>
+    <router-link to="/login">login</router-link><br>
+    <router-link to="/mypage">mypage</router-link><br>
+    <router-link to="/userUpdate">userupdate</router-link><br>
+
 </template>
 
 
