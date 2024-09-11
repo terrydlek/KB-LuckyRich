@@ -1,18 +1,18 @@
-import login from "@/components/user/login.vue";
 import userUpdate from "@/components/user/userUpdate.vue";
 import mypage from '@/components/user/mypage.vue';
-import home from '@/components/home.vue';
+import Home from "@/views/Home.vue";
+import Login from "@/views/Login.vue";
 // 
 export default [
     {
         path: '/',
         name: 'home',
-        component: home
+        component: Home
     },
     {
         path: '/login',
         name: 'login',
-        component: login
+        component: Login
     },
     {
         path: '/userUpdate',

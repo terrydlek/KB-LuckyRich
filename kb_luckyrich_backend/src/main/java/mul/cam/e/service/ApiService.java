@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import mul.cam.e.dto.GoogleResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +22,7 @@ public class ApiService {
     @Value("${google.oauth.password}") String password;
     @Value("${google.oauth.url}") String redirectUrl;
 
-    public String getAccessToken(String code) {
+    public GoogleResponseDto getAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> params = new HashMap<>();
 
@@ -31,7 +32,8 @@ public class ApiService {
         params.put("redirect_uri", redirectUrl);
         params.put("grant_type", "authorization_code");
 
-        ResponseEntity<String> res = restTemplate.postForEntity(google_token_url, params, String.class);
+        ResponseEntity<GoogleResponseDto> res = restTemplate
+                .postForEntity(google_token_url, params, GoogleResponseDto.class);
 
         return res.getBody();
     }
