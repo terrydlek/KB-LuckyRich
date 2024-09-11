@@ -1,5 +1,4 @@
 <template>
-  <h1>Asset Comparison Distribution</h1>
   <div class="charts-wrapper">
     <div class="chart">
       <highcharts :options="theirChartOptions"></highcharts>

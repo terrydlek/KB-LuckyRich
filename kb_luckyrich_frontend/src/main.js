@@ -14,8 +14,11 @@ import Highcharts from 'highcharts';
 import HighchartsMore from 'highcharts/highcharts-more';
 import SolidGauge from 'highcharts/modules/solid-gauge';
 
+
+
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
+
 
 
 // createApp(App).mount('#app')
@@ -25,5 +28,6 @@ const app = createApp(App)
 app.use(router)
 app.use(BootstrapVue)
 app.use(HighchartsVue)
+
 
 app.mount('#app')
