@@ -10,6 +10,9 @@
 import { onMounted } from 'vue';
 import googleLoginImage from '@/assets/images/google-login.png';
 import axios from 'axios';
+import { useUserStore } from '@/stores/store';
+
+const userStore = useUserStore();
 
 function loginWithGoogle() {
     axios.post("http://localhost:8080/api/google", null, { params: {} })
@@ -29,6 +32,9 @@ function handleGoogleLoginCallback() {
         axios.get(`http://localhost:8080/api/login/google?code=${code}`)
             .then(res => {
                 window.location.href = '/';
+
+                // const user = res.data;
+                // userStore.setUser(user);
             })
             .catch(err => {
                 console.log(err);

@@ -1,12 +1,13 @@
 <template>
     <div>
-        <h1>accountbook</h1>
+        <h1>Account Book</h1>
     </div>
 </template>
 
+<script setup>
 
-<script>
 </script>
 
+<style>
 
-<style></style>
+</style>

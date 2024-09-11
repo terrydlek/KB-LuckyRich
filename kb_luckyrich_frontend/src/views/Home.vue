@@ -1,13 +1,19 @@
 <template>
     <div class="home">
-        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="lookup" />
-        <ServiceComponent serviceName="상품 추천" route="recommendation" />
+        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="lookup">
+            <totalChart />
+        </ServiceComponent>
+        <ServiceComponent serviceName="상품 추천" route="recommendation">
+            <ProductTable />
+        </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />
     </div>
 </template>
 
 <script setup>
 import ServiceComponent from '@/components/ServiceComponent.vue';
+import totalChart from '@/components/account/totalChart.vue';
+import ProductTable from '@/components/tables/ProductTable.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
