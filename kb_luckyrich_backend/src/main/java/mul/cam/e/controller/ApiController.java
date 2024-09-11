@@ -19,6 +19,9 @@ public class ApiController {
     @Value("${google.oauth.password}") String password;
     @Value("${google.oauth.url}") String redirectUrl;
 
+    @Value("${kakao.oauth.client-id}") String KakaoClientId;
+    @Value("${kako.oauth.url}") String KakaoUrl;
+
     public ApiController(ApiService service) {
         this.service = service;
     }
@@ -33,10 +36,25 @@ public class ApiController {
     @GetMapping("login/google")
     public String getUserCode(@RequestParam("code") String code){
         String res_body = service.getAccessToken(code);
-//        System.out.println(res_body);
+        System.out.println(res_body);
 
         //TODO
         //디코딩 후 database 유저 확인후 가입 or 로그인 처리
+
+        return "";
+    }
+
+    @PostMapping("kakao")
+    public String getKakaoLoginUrl(){
+        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
+                + KakaoClientId + "&redirect_uri=" + KakaoUrl;
+        return url;
+    }
+
+    @GetMapping("login/kakao")
+    public String getKakaoUserCode(@RequestParam("code") String code){
+        String res_body = service.getKakaoToken(code);
+        System.out.println("asddddddddd"+res_body);
 
         return "";
     }
