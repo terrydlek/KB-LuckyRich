@@ -58,15 +58,6 @@ public class ApiController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-
-        // Vue Home URL
-        String redirectUrl = "http://localhost:5173/";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(redirectUrl));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
-    }
-
     @PostMapping("kakao")
     public String getKakaoLoginUrl(){
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
