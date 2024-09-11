@@ -28,6 +28,9 @@ public class ApiController {
     @Value("${google.oauth.password}") String password;
     @Value("${google.oauth.url}") String redirectUrl;
 
+    @Value("${kakao.oauth.client-id}") String KakaoClientId;
+    @Value("${kako.oauth.url}") String KakaoUrl;
+
     public ApiController(ApiService service) {
         this.service = service;
     }
@@ -53,5 +56,29 @@ public class ApiController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(redirectUrl));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+
+        // Vue Home URL
+        String redirectUrl = "http://localhost:5173/";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(redirectUrl));
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @PostMapping("kakao")
+    public String getKakaoLoginUrl(){
+        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
+                + KakaoClientId + "&redirect_uri=" + KakaoUrl;
+        return url;
+    }
+
+    @GetMapping("login/kakao")
+    public String getKakaoUserCode(@RequestParam("code") String code){
+        String res_body = service.getKakaoToken(code);
+        System.out.println("asddddddddd"+res_body);
+
+        return "";
     }
 }
