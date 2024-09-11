@@ -1,8 +1,13 @@
 package mul.cam.e.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -30,4 +35,35 @@ public class ApiService {
 
         return res.getBody();
     }
+
+    @Value("${kakao.oauth.client-id}") String KakaoClientId;
+    @Value("${kako.oauth.url}") String KakoUrl;
+    private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
+
+    public String getKakaoToken(String code) {
+        // RestTemplate을 사용해 카카오 서버로 요청 보내기
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HttpHeaders 설정 (x-www-form-urlencoded)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        // 요청 파라미터 설정
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", KakaoClientId); // 본인의 REST API 키로 교체
+        params.add("redirect_uri", KakoUrl); // 리다이렉트 URI
+        params.add("code", code); // Authorization Code
+
+        // HttpEntity에 헤더와 파라미터 담기
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        // 카카오 서버로 요청 전송
+        ResponseEntity<String> response = restTemplate.postForEntity(kakao_token_url, request, String.class);
+
+        // 응답 본문 반환
+        return response.getBody();
+    }
+
+
 }
