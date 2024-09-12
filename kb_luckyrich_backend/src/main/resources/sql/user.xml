@@ -8,4 +8,9 @@
         from user
         where email=#{email}
     </select>
+
+    <insert id="register" parameterType="mul.cam.e.dto.UserDto">
+        insert into user(user_name, email)
+        values (#{user_name}, #{email})
+    </insert>
 </mapper>

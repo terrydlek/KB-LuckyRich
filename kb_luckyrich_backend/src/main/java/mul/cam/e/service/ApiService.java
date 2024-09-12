@@ -1,11 +1,11 @@
 package mul.cam.e.service;
 
 import mul.cam.e.dto.GoogleResponseDto;
+import mul.cam.e.dto.GoogleUserInfDto;
+import mul.cam.e.util.TokenDecoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -17,10 +17,18 @@ import java.util.Map;
 @Service
 public class ApiService {
 
+    private final TokenDecoder tokenDecoder;
+
     private final String google_token_url = "https://oauth2.googleapis.com/token";
+    private final String google_user_inf_url = "https://www.googleapis.com/userinfo/v2/me";
     @Value("${google.oauth.client-id}") String clientId;
     @Value("${google.oauth.password}") String password;
     @Value("${google.oauth.url}") String redirectUrl;
+
+    @Autowired
+    public ApiService(TokenDecoder tokenDecoder) {
+        this.tokenDecoder = tokenDecoder;
+    }
 
     public GoogleResponseDto getAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -36,6 +44,30 @@ public class ApiService {
                 .postForEntity(google_token_url, params, GoogleResponseDto.class);
 
         return res.getBody();
+    }
+
+    public void getGoogleUserInf(String token) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate
+                .exchange(google_user_inf_url, HttpMethod.GET, entity, Map.class);
+        System.out.println(response);
+    }
+
+    public GoogleUserInfDto decodeIdToken(String idToken) {
+//        System.out.println("decode IdToken");
+        try {
+            GoogleUserInfDto userInf = tokenDecoder.decodeIdToken(idToken);
+            return userInf;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;

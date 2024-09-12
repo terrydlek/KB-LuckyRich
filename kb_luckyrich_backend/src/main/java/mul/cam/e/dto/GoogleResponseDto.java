@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class GoogleResponseDto {
     private String access_token;
