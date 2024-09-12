@@ -1,5 +1,12 @@
 package mul.cam.e.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FundDto {
     private String managementCompany;
     private String productName;
