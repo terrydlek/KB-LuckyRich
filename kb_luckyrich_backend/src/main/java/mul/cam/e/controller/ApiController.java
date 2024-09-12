@@ -2,6 +2,7 @@ package mul.cam.e.controller;
 
 import mul.cam.e.dto.GoogleResponseDto;
 import mul.cam.e.dto.GoogleUserInfDto;
+import mul.cam.e.dto.NaverUserInfDto;
 import mul.cam.e.dto.UserDto;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.service.UserService;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -86,10 +89,55 @@ public class ApiController {
     }
 
     @GetMapping("login/kakao")
-    public String getKakaoUserCode(@RequestParam("code") String code){
+    public ResponseEntity<Void> getKakaoUserCode(@RequestParam("code") String code){
         String res_body = apiService.getKakaoToken(code);
         System.out.println("asddddddddd"+res_body);
 
-        return "";
+        String redirectUrl = "http://localhost:5173/";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(redirectUrl));
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+
+    @Value("${naver.oauth.client-id}") String NaverClientId;
+    @Value("${naver.oauth.url}") String NaverUrl;
+    @Value("${naver.oauth.client-secret}") String NaverClientSecret;
+    @PostMapping("naver")
+
+    public String getNaverLoginUrl(){
+        String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="
+                + NaverClientId +"&state=STATE_STRING&redirect_uri=" + NaverUrl;
+        return url;
+    }
+
+    @GetMapping("login/naver")
+    public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
+        Map<String, Object> map = new HashMap<>();
+
+        // 실제 API 서비스 호출로 교체
+        String accessToken = apiService.getNaverToken(code, state);
+        //System.out.println("accessToken = " + accessToken);
+
+        NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
+
+        map.put("id", userInfo.getId());
+        map.put("name", userInfo.getName());
+        map.put("email", userInfo.getEmail());
+        map.put("gender", userInfo.getGender());
+        map.put("accessToken", accessToken);
+
+        System.out.println("naver info" + map);
+
+        String redirectUrl = "http://localhost:5173/";
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(redirectUrl));
+
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 }
+
+

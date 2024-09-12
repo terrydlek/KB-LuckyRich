@@ -1,7 +1,10 @@
 package mul.cam.e.service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import mul.cam.e.dto.GoogleResponseDto;
 import mul.cam.e.dto.GoogleUserInfDto;
+import mul.cam.e.dto.NaverUserInfDto;
 import mul.cam.e.util.TokenDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +14,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,5 +103,65 @@ public class ApiService {
         return response.getBody();
     }
 
+
+    @Value("${naver.oauth.client-id}") private String NaverClientId;
+    @Value("${naver.oauth.client-secret}") private String NaverClientSecret;
+    @Value("${naver.oauth.url}") private String NaverUrl;
+
+    private final String naver_token_url = "https://nid.naver.com/oauth2.0/token";
+
+    public String getNaverToken(String code, String state) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", NaverClientId);
+        params.add("client_secret", NaverClientSecret);
+        params.add("code", code);
+        params.add("state", state);
+
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(naver_token_url,
+                HttpMethod.POST,
+                naverTokenRequest,
+                String.class);
+
+        String responseBody = response.getBody();
+        JsonObject asJsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+        return asJsonObject.get("access_token").getAsString();
+    }
+
+    public NaverUserInfDto getNaverUserInfo(String accessToken) {
+        String reqUrl = "https://openapi.naver.com/v1/nid/me";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> naverProfileRequest = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(reqUrl,
+                HttpMethod.GET,
+                naverProfileRequest,
+                String.class);
+
+        String responseBody = response.getBody();
+        JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+        JsonObject responseJson = jsonObject.getAsJsonObject("response");
+
+        NaverUserInfDto naverProfile = new NaverUserInfDto();
+        naverProfile.setId(responseJson.get("id").getAsString());
+        naverProfile.setName(responseJson.get("name").getAsString());
+        naverProfile.setEmail(responseJson.get("email").getAsString());
+        naverProfile.setGender(responseJson.get("gender").getAsString());
+
+        return naverProfile;
+    }
 
 }
