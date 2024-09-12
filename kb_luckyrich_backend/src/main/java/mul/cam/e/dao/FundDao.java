@@ -8,4 +8,6 @@ public interface FundDao {
 
     List<FundDto> conservativeList();
 
+    List<FundDto> neutrilityList();
+
 }
