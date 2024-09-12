@@ -21,5 +21,9 @@ public class RecommendService {
         return fundDao.conservativeList();
     }
 
+    public List<FundDto> neutrilityList() {
+        return fundDao.neutrilityList();
+    }
+
 
 }

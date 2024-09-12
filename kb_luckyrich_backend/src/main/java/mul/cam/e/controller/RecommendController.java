@@ -27,4 +27,9 @@ public class RecommendController {
         return ResponseEntity.ok(recommendService.conservativeList());
     }
 
+    @GetMapping("/neutrilityList")
+    public ResponseEntity<List<FundDto>> neutrilityList() {
+        return ResponseEntity.ok(recommendService.neutrilityList());
+    }
+
 }

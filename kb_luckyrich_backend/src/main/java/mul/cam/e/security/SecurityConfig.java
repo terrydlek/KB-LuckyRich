@@ -43,10 +43,8 @@ public class SecurityConfig {
                  .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .antMatchers("/member/**").permitAll()
-                        .antMatchers("/api/**").permitAll()
                         .antMatchers("/asset/**").permitAll()
-                        .antMatchers("bbs.bbswrite").authenticated()
+                        .antMatchers("/api/**").permitAll()
                         .anyRequest().authenticated());   // (무조건)허용
 
         // 2. 세션을 사용하지 않음
