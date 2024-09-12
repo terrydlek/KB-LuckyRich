@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import mul.cam.e.dto.GoogleResponseDto;
 import mul.cam.e.dto.GoogleUserInfDto;
+import mul.cam.e.dto.NaverResponseDto;
 import mul.cam.e.dto.NaverUserInfDto;
 import mul.cam.e.util.TokenDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,7 @@ public class ApiService {
 
     private final String naver_token_url = "https://nid.naver.com/oauth2.0/token";
 
-    public String getNaverToken(String code, String state) {
+    public NaverResponseDto getNaverToken(String code, String state) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -123,16 +124,16 @@ public class ApiService {
         params.add("code", code);
         params.add("state", state);
 
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(naver_token_url,
+        ResponseEntity<NaverResponseDto> response = restTemplate.exchange(
+                naver_token_url,
                 HttpMethod.POST,
-                naverTokenRequest,
-                String.class);
+                request,
+                NaverResponseDto.class
+        );
 
-        String responseBody = response.getBody();
-        JsonObject asJsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-        return asJsonObject.get("access_token").getAsString();
+        return response.getBody();
     }
 
     public NaverUserInfDto getNaverUserInfo(String accessToken) {

@@ -1,9 +1,6 @@
 package mul.cam.e.controller;
 
-import mul.cam.e.dto.GoogleResponseDto;
-import mul.cam.e.dto.GoogleUserInfDto;
-import mul.cam.e.dto.NaverUserInfDto;
-import mul.cam.e.dto.UserDto;
+import mul.cam.e.dto.*;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.service.UserService;
 import mul.cam.e.util.TokenDecoder;
@@ -15,7 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,9 +107,10 @@ public class ApiController {
     @Value("${naver.oauth.client-id}") String NaverClientId;
     @Value("${naver.oauth.url}") String NaverUrl;
     @Value("${naver.oauth.client-secret}") String NaverClientSecret;
-    @PostMapping("naver")
 
+    @PostMapping("naver")
     public String getNaverLoginUrl(){
+        System.out.println("getNaverLoginUrl");
         String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="
                 + NaverClientId +"&state=STATE_STRING&redirect_uri=" + NaverUrl;
         return url;
@@ -114,14 +118,16 @@ public class ApiController {
 
     @GetMapping("login/naver")
     public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
-        Map<String, Object> map = new HashMap<>();
+    //public Map<String, Object> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
 
+        NaverResponseDto res_body = apiService.getNaverToken(code, state);
         // 실제 API 서비스 호출로 교체
-        String accessToken = apiService.getNaverToken(code, state);
-        //System.out.println("accessToken = " + accessToken);
+        String accessToken = res_body.getAccess_token();
+        //System.out.println("access" + accessToken);
 
         NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
 
+        Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());
         map.put("name", userInfo.getName());
         map.put("email", userInfo.getEmail());
@@ -130,13 +136,66 @@ public class ApiController {
 
         System.out.println("naver info" + map);
 
-        String redirectUrl = "http://localhost:5173/";
+//        String redirectUrl = "http://localhost:5173/";
+//
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create(redirectUrl));
 
+        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(redirectUrl));
+        //return map;
+    }
 
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    // 로그아웃
+    @CrossOrigin(origins = "http://localhost:5173")  // 프론트엔드 주소
+    @PostMapping("/logout")
+    public ResponseEntity<String> naverUserCode(@RequestParam("token") String accessToken, HttpSession session) throws IOException {
+        System.out.println("네이버 로그아웃 중...");
+
+        // 네이버 토큰 삭제 API 호출
+        String deleteTokenUrl = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=" + NaverClientId
+                + "&client_secret=" + NaverClientSecret + "&access_token=" + accessToken + "&service_provider=NAVER";
+
+        System.out.println("토큰 삭제 URL: " + deleteTokenUrl);
+
+        try {
+            String response = requestToServer(deleteTokenUrl);
+            System.out.println("토큰 삭제 응답: " + response);
+
+            // 세션 무효화 (사용자 로그아웃 처리)
+            session.invalidate();
+
+            return ResponseEntity.ok("로그아웃 성공");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("로그아웃 실패");
+        }
+    }
+
+    // 서버에 API 요청을 보내는 메소드
+    private String requestToServer(String apiURL) throws IOException {
+        URL url = new URL(apiURL);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+
+        int responseCode = con.getResponseCode();
+        BufferedReader br;
+
+        if (responseCode == 200) { // 정상 응답
+            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        } else {  // 에러 발생
+            br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+        }
+
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+        while ((inputLine = br.readLine()) != null) {
+            response.append(inputLine);
+        }
+        br.close();
+
+        return responseCode == 200 ? response.toString() : null;
     }
 }
 
