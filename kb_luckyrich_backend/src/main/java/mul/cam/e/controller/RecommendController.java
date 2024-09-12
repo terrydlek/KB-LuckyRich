@@ -22,7 +22,7 @@ public class RecommendController {
     }
 
 
-    @GetMapping("/conservativeList")
+    @GetMapping("conservativeList")
     public ResponseEntity<List<FundDto>> conservativeList() {
         return ResponseEntity.ok(recommendService.conservativeList());
     }

@@ -22,7 +22,6 @@ import java.net.URI;
 public class ApiController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
-    private final JwtTokenProvider jwtTokenProvider;
 
     private final ApiService apiService;
     private final UserService userService;
@@ -39,7 +38,6 @@ public class ApiController {
         this.apiService = service;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("google")
