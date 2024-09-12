@@ -1,5 +1,4 @@
 <template>
-  <h1>Consumption Status by Category</h1>
   <highcharts :options="chartOptions" />
 </template>
 
