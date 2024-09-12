@@ -4,7 +4,7 @@
             <router-link to="/">Home</router-link>
         </div>
         <div class="navbar-right">
-            <router-link to="/mypage">My Page</router-link>
+            <router-link to="/userUpdate">My Page</router-link>
             <button @click="handleAuth">{{ isLoggedIn ? 'Logout' : 'Login' }}</button>
         </div>
     </nav>

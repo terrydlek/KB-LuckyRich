@@ -8,7 +8,6 @@
     <router-link to="/login">login</router-link><br>
     <router-link to="/mypage">mypage</router-link><br>
     <router-link to="/userUpdate">userupdate</router-link><br>
-    <router-link to="/dsList">dsList</router-link><br>
 
 </template>
 
