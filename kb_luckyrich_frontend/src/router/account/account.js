@@ -1,26 +1,24 @@
-import accountbook from '@/components/account/accountbook.vue';
-import lookup from '@/components/account/lookup.vue';
-import accountUpdate from '@/components/account/accountUpdate.vue';
 import asset from '@/components/account/asset.vue';
 import recommendation from '@/components/account/recommendation.vue';
-import investmentPreferenceTest from '@/components/account/investmentPreferenceTest.vue';
-
+import AccountUpdate from '@/views/account/AccountUpdate.vue';
+import AccountTotal from '@/views/account/AccountTotal.vue';
+import Accountbook from '@/views/account/accountbook.vue';
 //
 export default [
   {
     path: '/accountbook',
     name: 'accountbook',
-    component: accountbook,
+    component: Accountbook,
   },
   {
     path: '/lookup',
     name: 'lookup',
-    component: lookup,
+    component: AccountTotal,
   },
   {
     path: '/accountUpdate',
     name: 'accountUpdate',
-    component: accountUpdate,
+    component: AccountUpdate,
   },
   {
     path: '/asset',
@@ -31,10 +29,5 @@ export default [
     path: '/recommendation',
     name: 'recommendation',
     component: recommendation,
-  },
-  {
-    path: '/test',
-    name: 'investmentPreferenceTest',
-    component: investmentPreferenceTest,
   },
 ];

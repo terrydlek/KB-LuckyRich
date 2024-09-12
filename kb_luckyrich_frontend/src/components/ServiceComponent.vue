@@ -32,7 +32,7 @@ const navigate = () => {
 
 </script>
 
-<style>
+<style scoped>
 .service-component {
     border: 1px solid #ccc;
     padding: 16px;
@@ -59,5 +59,10 @@ const navigate = () => {
     border: none;
     font-size: 18px;
     cursor: pointer;
+}
+
+.content {
+    margin: auto;
+    padding: 10px;
 }
 </style>
