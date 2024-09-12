@@ -1,6 +1,7 @@
 package mul.cam.e.controller;
 
 import mul.cam.e.dto.*;
+import mul.cam.e.jwt.JwtTokenProvider;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.service.UserService;
 import mul.cam.e.util.TokenDecoder;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class ApiController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
+    private final JwtTokenProvider jwtTokenProvider;
 
     private final ApiService apiService;
     private final UserService userService;
@@ -38,8 +40,9 @@ public class ApiController {
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
     @Value("${kako.oauth.url}") String KakaoUrl;
 
-    public ApiController(ApiService service, TokenDecoder decoder, UserService userService) {
+    public ApiController(ApiService service, TokenDecoder decoder, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.apiService = service;
+        this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
     }
 
@@ -58,6 +61,9 @@ public class ApiController {
 
         // Decode Id_Token
         GoogleUserInfDto userInf = apiService.decodeIdToken(res_body.getId_token());
+
+        // JWT 토큰 생성
+        String jwtToken = jwtTokenProvider.createToken(userInf.getEmail());
 
         UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
                 userInf.getEmail(), null, 0);
