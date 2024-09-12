@@ -37,7 +37,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰 발행(JWT 토큰 생성)
-    public String createToken(String userPk) {  //, List<String> roles) {
+    public String createToken(String userPk) {
         System.out.println("createToken - 토큰 생성");
 
         Claims claims = Jwts.claims().setSubject(userPk); // user를 식별하는 값을 넣는다

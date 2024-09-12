@@ -9,7 +9,8 @@
         </div>
         <div class="charts-container">
             <accountBookChart />
-            <consumptionChart />
+            <consumptionstatus />
+            <assetcomparison />
         </div>
 
     </div>
@@ -20,13 +21,17 @@ import totalChart from './totalChart.vue';
 import goalChart from './goalChart.vue';
 import assetGraph from './assetGraph.vue';
 import accountBookChart from './accountBookChart.vue';
+import assetcomparison from './assetComparison.vue';
+import consumptionstatus from './consumptionstatus.vue';
 
 export default {
     components: {
         totalChart,
         goalChart,
         assetGraph,
-        accountBookChart
+        accountBookChart,
+        consumptionstatus,
+        assetcomparison
     }
 }
 </script>
