@@ -1,12 +1,7 @@
-<template lang="">
-  <div>
-    <h3>
-      당신의 투자 성향은 공격투자형입니다. 암호화폐 상품을 추천해드릴게요.
-    </h3>
-  </div>
+<template>
   <section class="coin-tracker">
     <div class="title">
-      <h2>암호화폐 실시간 TOP 100</h2>
+      <h1>암호화폐 실시간 TOP 100</h1>
       <div class="btn">
         <button @click="refreshPage">새로고침</button>
       </div>
@@ -81,7 +76,6 @@ import { ref, onMounted } from 'vue';
 const loading = ref(true); // 로딩 중으로 초기화
 const coins = ref([]); // 빈 배열로 초기화
 
-// 새로고침 내장함수
 const refreshPage = () => {
   window.location.reload();
 };
