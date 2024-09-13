@@ -7,17 +7,22 @@
             <ProductTable />
         </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />
+
     </div>
 </template>
 
 <script setup>
 import ServiceComponent from '@/components/ServiceComponent.vue';
 import totalChart from '@/components/account/totalChart.vue';
+import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 import ProductTable from '@/components/tables/ProductTable.vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
 
+onMounted(() => {
+    handleNaverLoginCallback();
+})
 </script>
 
 <style>

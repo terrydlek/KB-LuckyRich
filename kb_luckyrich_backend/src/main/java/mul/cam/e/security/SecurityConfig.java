@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .antMatchers("/asset/**").permitAll()
                         .antMatchers("/api/**").permitAll()
+                        .antMatchers("bbs.bbswrite").authenticated()
                         .anyRequest().authenticated());   // (무조건)허용
 
         // 2. 세션을 사용하지 않음
