@@ -1,25 +1,56 @@
 package mul.cam.e.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 // 토큰을 발행하고 받은 토큰을 분석하는 클래스
-
 @Component
 public class JwtTokenProvider {
 
+    private static final String SECRET_KEY = "pomqi1baytc1t2xsdtw3df44ffe5gs76hsr7je08kn9";
+
+    // 토큰 생성
+    public static String createToken(String email) {    // String username) {
+        Claims claims = Jwts.claims().setSubject(email);
+//        claims.put("user_name", username);
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 60 * 60 * 1000); // 1시간 유효
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    // 토큰 검사
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // 토큰으로 이메일 확인
+    public String getEmail(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    /*
     public static String httpHeaderKey = "Authorization"; // 허가
     private String securityKey = "myJWTkeymyJWTkeymyJWTkeymyJWTkeymyJWTkey";
     private long delayTime = 60 * 60 * 1000L;    // 토큰의 유효시간
@@ -79,6 +110,7 @@ public class JwtTokenProvider {
         System.out.println("getUserInfo(JwtTokenProvider) - 사용자 정보 확인 " + new Date());
         return Jwts.parser().setSigningKey(securityKey).parseClaimsJws(token).getBody().getSubject();
     }
+    */
 }
 
 

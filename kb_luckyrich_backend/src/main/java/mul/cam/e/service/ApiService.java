@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import mul.cam.e.dto.GoogleResponseDto;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -67,17 +68,6 @@ public class ApiService {
         ResponseEntity<Map> response = restTemplate
                 .exchange(google_user_inf_url, HttpMethod.GET, entity, Map.class);
         System.out.println(response);
-    }
-
-    public GoogleUserInfDto decodeIdToken(String idToken) {
-//        System.out.println("decode IdToken");
-        try {
-            GoogleUserInfDto userInf = tokenDecoder.decodeIdToken(idToken);
-            return userInf;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;

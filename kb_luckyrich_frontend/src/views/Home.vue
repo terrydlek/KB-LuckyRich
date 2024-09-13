@@ -9,6 +9,8 @@
         <ServiceComponent serviceName="가계부" route="accountbook" />
 
     </div>
+
+    <button @click="jwtFilterTest">filter test</button>
 </template>
 
 <script setup>
@@ -19,7 +21,25 @@ import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin'
 import ProductTable from '@/components/tables/ProductTable.vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 const router = useRouter();
+
+function jwtFilterTest() {
+    const accessToken = localStorage.getItem('access_token');
+
+    axios.get("http://localhost:8080/asset/test", {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+        .then(res => {
+            alert(res.data);
+        })
+        .catch(err => {
+            alert(err);
+        });
+}
 
 onMounted(() => {
     handleNaverLoginCallback();
