@@ -1,121 +1,73 @@
 <template>
     <div>
         <h2>당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.</h2>
-        <table border="1">
+
+        <!-- 데이터가 있을 경우 테이블 표시 -->
+        <table v-if="deposits.length">
             <thead>
                 <tr>
+                    <th>금융회사</th>
                     <th>상품명</th>
-                    <th>가입 목적</th>
-                    <th @click="sortTable('hitIrtCndCone')">
-                        최고 금리
-                        <span v-if="sortKey === 'hitIrtCndCone'">
-                            {{ sortOrder === 'asc' ? '▲' : '▼' }}
-                        </span>
-                    </th>
-                    <th @click="sortTable('prdJinTrmCone')">
-                        가입 기간
-                        <span v-if="sortKey === 'prdJinTrmCone'">
-                            {{ sortOrder === 'asc' ? '▲' : '▼' }}
-                        </span>
-                    </th>
+                    <th>세전 이자율</th>
+                    <th>세후 이자율</th>
+                    <th>세후 이자</th>
+                    <th>최고 우대 금리</th>
+                    <th>가입 제한 여부</th>
+                    <th>이자 계산 방식</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in sortedProducts" :key="index">
-                    <td>{{ formatText(item.prdNm) }}</td>
-                    <td>{{ formatText(item.prdJinPpo) }}</td>
-                    <td>{{ formatText(item.hitIrtCndCone) }}</td>
-                    <td>{{ formatText(item.prdJinTrmCone) }}</td>
+                <tr v-for="deposit in deposits" :key="deposit.상품명">
+                    <td>{{ deposit.금융회사 }}</td>
+                    <td>{{ deposit.상품명 }}</td>
+                    <td>{{ deposit.세전이자율 ?? 'N/A' }}</td>
+                    <td>{{ deposit.세후이자율 ?? 'N/A' }}</td>
+                    <td>{{ deposit.세후이자 ?? 'N/A' }}</td>
+                    <td>{{ deposit.최고우대금리 ?? 'N/A' }}</td>
+                    <td>{{ deposit.가입제한여부 ?? 'N/A' }}</td>
+                    <td>{{ deposit.이자계산방식 }}</td>
                 </tr>
             </tbody>
         </table>
+
+        <p v-else>추천할 예적금 상품이 없습니다.</p>
     </div>
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
-import { xml2json } from 'xml-js';
+import axios from 'axios';
 
 export default {
-    setup() {
-        const depositProducts = ref([]);
-        const sortKey = ref('');
-        const sortOrder = ref('asc');
-        const totalPages = 10; // 가져오고 싶은 페이지 수
-
-        const fetchDepositProducts = async (pageNo) => {
-            const url = 'http://apis.data.go.kr/B190030/GetDepositProductInfoService/getDepositProductList';
-            const serviceKey = 'Z1DCmdUJF3GRM2FNN3Ci3mdKuyR4tTw1cGg0qfk%2BKK0grrDBXjFQVTmy9Opr6nNlt8nCIQse8b8qS1RslSDE%2Bg%3D%3D';
-            const queryParams = `?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=10&sBseDt=20200621&eBseDt=20200630`;
-            const response = await fetch(url + queryParams);
-            const text = await response.text();
-            const result = xml2json(text, { compact: true, spaces: 4 });
-            const jsonResult = JSON.parse(result);
-            const items = jsonResult.response.body.items.item || [];
-            return Array.isArray(items) ? items : [items];
-        };
-
-        const fetchAllPages = async () => {
-            let allItems = [];
-            for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
-                const items = await fetchDepositProducts(pageNo);
-                allItems = allItems.concat(items);
-            }
-            depositProducts.value = allItems;
-        };
-
-        const formatText = (text) => {
-            if (text && text._text) {
-                let formattedText = text._text.trim();
-                if (formattedText.startsWith('[') && formattedText.endsWith(']')) {
-                    formattedText = formattedText.slice(1, -1).trim();
-                }
-                return formattedText;
-            }
-            return '';
-        };
-
-        // 정렬
-        const sortTable = (key) => {
-            if (sortKey.value === key) {
-                sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortKey.value = key;
-                sortOrder.value = 'asc';
-            }
-        };
-
-        const sortedProducts = computed(() => {
-            const sorted = [...depositProducts.value];
-            if (sortKey.value) {
-                sorted.sort((a, b) => {
-                    let valA = formatText(a[sortKey.value]);
-                    let valB = formatText(b[sortKey.value]);
-
-                    // If sorting numbers, convert the text to a number
-                    if (sortKey.value === 'hitIrtCndCone' || sortKey.value === 'prdJinTrmCone') {
-                        valA = parseFloat(valA) || 0;
-                        valB = parseFloat(valB) || 0;
-                    }
-
-                    if (valA < valB) return sortOrder.value === 'asc' ? -1 : 1;
-                    if (valA > valB) return sortOrder.value === 'asc' ? 1 : -1;
-                    return 0;
-                });
-            }
-            return sorted;
-        });
-
-        onMounted(fetchAllPages);
-
+    data() {
         return {
-            depositProducts,
-            sortKey,
-            sortOrder,
-            sortedProducts,
-            sortTable,
-            formatText,
+            deposits: []
         };
+    },
+    mounted() {
+        axios.get('http://localhost:8080/asset/getDeposit')
+            .then(response => {
+                this.deposits = response.data;
+            })
+            .catch(error => {
+                console.error("There was an error fetching the deposits:", error);
+            });
     }
-};
+}
 </script>
+
+<style scoped>
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+</style>
