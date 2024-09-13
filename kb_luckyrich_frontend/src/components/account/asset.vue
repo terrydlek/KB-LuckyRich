@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import totalChart from './totalChart.vue';
-import goalChart from './goalChart.vue';
-import assetGraph from './assetGraph.vue';
-import accountBookChart from './accountBookChart.vue';
-import assetcomparison from './assetComparison.vue';
-import consumptionstatus from './consumptionstatus.vue';
+import totalChart from './chart/totalChart.vue';
+import goalChart from './chart/goalChart.vue';
+import assetGraph from './chart/assetGraph.vue';
+import accountBookChart from './chart/accountBookChart.vue';
+import assetcomparison from './chart/assetComparison.vue';
+import consumptionstatus from './chart/consumptionstatus.vue';
 
 export default {
     components: {

@@ -8,6 +8,7 @@ import ConservativeList from '@/components/account/recommend/ConservativeList.vu
 import Neutrility from '@/components/account/recommend/Neutrility.vue';
 import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
+import Recommendation from '@/components/account/recommendation.vue';
 //
 export default [
   {
@@ -59,5 +60,10 @@ export default [
     path: '/AggresiveList',
     name: 'AggresiveList',
     component: AggresiveList,
+  },
+  {
+    path: '/recommendation',
+    name: 'recommendation',
+    component: Recommendation,
   },
 ];
