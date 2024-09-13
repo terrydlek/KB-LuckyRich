@@ -1,7 +1,15 @@
 <template>
-    <h1>Recommendationa</h1>
+    <ActiveList />
 </template>
 
-<script></script>
+<script>
+import ActiveList from './recommend/ActiveList.vue';
 
-<style></style>
+export default {
+    components: {
+        ActiveList
+    }
+}
+
+
+</script>

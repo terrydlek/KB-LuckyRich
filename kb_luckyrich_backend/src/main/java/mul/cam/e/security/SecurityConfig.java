@@ -87,7 +87,7 @@ public class SecurityConfig {
                  .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .antMatchers("/member/**").permitAll()
+                        .antMatchers("/asset/**").permitAll()
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/asset/**").permitAll()
                         .anyRequest().authenticated());   // (무조건)허용

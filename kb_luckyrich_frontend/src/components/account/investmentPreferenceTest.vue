@@ -41,6 +41,8 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const questions = [
   {
@@ -180,7 +182,17 @@ const investmentType = computed(() => {
 });
 
 const showResult = () => {
-  alert(`당신의 투자 성향은 ${investmentType.value}입니다.`);
+  if (investmentType.value === '안정형') {
+    router.push('/SteadinessList');
+  } else if (investmentType.value === '안정추구형') {
+    router.push('/ConservativeList');
+  } else if (investmentType.value === '위험중립형') {
+    router.push('/Neutrility');
+  } else if (investmentType.value === '적극투자형') {
+    router.push('/ActiveList');
+  } else {
+    router.push('/AggresiveList');
+  }
 };
 
 // watch(

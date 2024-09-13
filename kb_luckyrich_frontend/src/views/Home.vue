@@ -7,6 +7,7 @@
             <ProductTable />
         </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />
+
     </div>
 
     <button @click="jwtFilterTest">filter test</button>
@@ -15,7 +16,10 @@
 <script setup>
 import ServiceComponent from '@/components/ServiceComponent.vue';
 import totalChart from '@/components/account/totalChart.vue';
+import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
+import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 import ProductTable from '@/components/tables/ProductTable.vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
@@ -37,6 +41,10 @@ function jwtFilterTest() {
         });
 }
 
+onMounted(() => {
+    handleNaverLoginCallback();
+    handleKakaoLoginCallback();
+})
 </script>
 
 <style>

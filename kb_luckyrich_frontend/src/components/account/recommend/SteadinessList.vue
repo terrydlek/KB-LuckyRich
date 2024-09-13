@@ -119,25 +119,3 @@ export default {
     }
 };
 </script>
-
-<!-- <style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-    cursor: pointer;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: #f4f4f4;
-}
-
-th span {
-    font-size: 0.8em;
-    margin-left: 5px;
-}
-</style> -->

@@ -30,6 +30,10 @@ public class RecommendController {
     @GetMapping("test")
     public String test() {
         return "done";
+        
+    @GetMapping("/neutrilityList")
+    public ResponseEntity<List<FundDto>> neutrilityList() {
+        return ResponseEntity.ok(recommendService.neutrilityList());
     }
 
 }

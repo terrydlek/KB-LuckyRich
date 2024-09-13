@@ -5,27 +5,37 @@
         </div>
         <div class="navbar-right">
             <router-link to="/userUpdate">My Page</router-link>
-            <button @click="handleAuth">{{ isLoggedIn ? 'Logout' : 'Login' }}</button>
+            <button @click="handleAuth">{{ authStore.isLoggedIn ? 'Logout' : 'Login' }}</button>
         </div>
     </nav>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { authStore } from '@/stores/auth'; // 경로를 자신의 프로젝트에 맞게 조정
+
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-const isLoggedIn = ref(false); // 로그인 상태
+// // 로그인 상태 관리
+// const isLoggedIn = ref(false); 
 const router = useRouter();
 
+// // 컴포넌트가 마운트될 때 로그인 상태 확인
+// onMounted(() => {
+//     const token = localStorage.getItem('naver_access_token');
+//     isLoggedIn.value = !!token; // 토큰이 있으면 로그인 상태로 변경
+// });
+
+// 로그인/로그아웃 버튼 핸들러
 const handleAuth = () => {
-    if (isLoggedIn.value) {
-        // 로그아웃
-        isLoggedIn.value = false;
-        alert('Logged out');
-    } else {
-        // 로그인
-        router.push({ name: 'login' });
-    }
+    if (authStore.isLoggedIn) {
+    localStorage.removeItem('access_token');
+    authStore.setLoggedIn(false); // 상태 업데이트
+    alert('Logged out');
+    router.push('/'); // 홈 페이지로 리다이렉트
+  } else {
+    router.push({ name: 'login' });
+  }
 };
 </script>
 
@@ -42,8 +52,7 @@ const handleAuth = () => {
 .navbar-left,
 .navbar-right {
     display: flex;
-    /* align-items: center; */
-    margin: 0px, 10px;
+    margin: 0 10px;
 }
 
 .navbar a,

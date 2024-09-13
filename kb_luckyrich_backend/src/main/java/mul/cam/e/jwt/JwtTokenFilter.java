@@ -106,6 +106,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String token = request.getHeader(JwtTokenProvider.httpHeaderKey);
 
+        String path = request.getRequestURI();
+
+        // 경로가 /asset/** 또는 /api/**로 시작하는 경우, 필터를 통과시킴
+        if (path.startsWith("/asset/") || path.startsWith("/api/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if(token != null) {
             System.out.println("**** token:" + BearerRemove(token));
             token = BearerRemove(token);
