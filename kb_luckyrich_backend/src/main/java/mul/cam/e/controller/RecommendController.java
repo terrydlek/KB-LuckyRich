@@ -27,4 +27,9 @@ public class RecommendController {
         return ResponseEntity.ok(recommendService.conservativeList());
     }
 
+    @GetMapping("test")
+    public String test() {
+        return "done";
+    }
+
 }

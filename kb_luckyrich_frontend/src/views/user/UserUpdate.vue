@@ -32,8 +32,8 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
-const username = ref("name");
-const email = ref("email");
+const username = ref("");
+const email = ref("");
 const age = ref("");
 const gender = ref("");
 const balance = ref("");
@@ -60,6 +60,20 @@ function updateUserInfo() {
 
     updating.value = false;     // res.data == success
 };
+
+// function fetchUserInfo() {
+//     axios.get("")
+//         .then(res => {
+//             res.data;
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         })
+// };
+
+// onMounted(() => {
+//     fetchUserInfo();
+// });
 
 </script>
 

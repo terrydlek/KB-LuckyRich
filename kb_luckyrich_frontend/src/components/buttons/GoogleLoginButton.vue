@@ -10,12 +10,12 @@
 import { onMounted } from 'vue';
 import googleLoginImage from '@/assets/images/google-login.png';
 import axios from 'axios';
-import { useUserStore } from '@/stores/store';
+import { useRouter } from 'vue-router';
 
-const userStore = useUserStore();
+const router = useRouter();
 
 function loginWithGoogle() {
-    axios.post("http://localhost:8080/api/google", null, { params: {} })
+    axios.get("http://localhost:8080/api/google")
         .then(res => {
             window.location.href = res.data;
         })
@@ -26,19 +26,13 @@ function loginWithGoogle() {
 
 function handleGoogleLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-
-    if (code) {
-        axios.get(`http://localhost:8080/api/login/google?code=${code}`)
-            .then(res => {
-                window.location.href = '/';
-
-                // const user = res.data;
-                // userStore.setUser(user);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+    const accessToken = urlParams.get('access_token');
+    if (accessToken) {
+        localStorage.setItem('access_token', accessToken);
+        router.push('/');
+    } else {
+        console.error('Access token not found');
+        // alert("로그인 실패");
     }
 }
 

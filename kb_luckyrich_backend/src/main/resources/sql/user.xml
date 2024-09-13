@@ -13,4 +13,10 @@
         insert into user(user_name, email)
         values (#{user_name}, #{email})
     </insert>
+
+    <select id="login" parameterType="java.lang.String" resultType="mul.cam.e.security.UserDetail">
+        select user_name, email, gender, age
+        from user
+        where email=#{email}
+    </select>
 </mapper>
