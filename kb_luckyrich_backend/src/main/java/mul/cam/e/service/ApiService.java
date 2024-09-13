@@ -1,11 +1,10 @@
 package mul.cam.e.service;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import mul.cam.e.dto.GoogleResponseDto;
-import mul.cam.e.dto.GoogleUserInfDto;
-import mul.cam.e.dto.NaverResponseDto;
-import mul.cam.e.dto.NaverUserInfDto;
+import lombok.extern.log4j.Log4j;
+import mul.cam.e.dto.*;
 import mul.cam.e.util.TokenDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +14,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Log4j
 @Service
 public class ApiService {
 
@@ -79,7 +84,7 @@ public class ApiService {
     @Value("${kako.oauth.url}") String KakoUrl;
     private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
 
-    public String getKakaoToken(String code) {
+    public KakaoResponseDto getKakaoToken(String code) {
         // RestTemplate을 사용해 카카오 서버로 요청 보내기
         RestTemplate restTemplate = new RestTemplate();
 
@@ -98,12 +103,58 @@ public class ApiService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         // 카카오 서버로 요청 전송
-        ResponseEntity<String> response = restTemplate.postForEntity(kakao_token_url, request, String.class);
+        ResponseEntity<KakaoResponseDto> response = restTemplate.postForEntity(kakao_token_url, request, KakaoResponseDto.class);
 
         // 응답 본문 반환
         return response.getBody();
     }
+    public KakaoUserInfDto getKakaoUserInfo(String accessToken) {
+        KakaoUserInfDto userInfo = new KakaoUserInfDto();
+        String reqUrl = "https://kapi.kakao.com/v2/user/me";
+        try{
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+            int responseCode = conn.getResponseCode();
+//            log.info("[KakaoApi.getUserInfo] responseCode : {}",  responseCode);
+
+            BufferedReader br;
+            if (responseCode >= 200 && responseCode <= 300) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            String line = "";
+            StringBuilder responseSb = new StringBuilder();
+            while((line = br.readLine()) != null){
+                responseSb.append(line);
+            }
+            String result = responseSb.toString();
+//            log.info("responseBody = {}", result);
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+            JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+
+            String name = properties.get("nickname").getAsString();
+            String email = kakaoAccount.get("email").getAsString();
+
+            userInfo.setName(name);
+            userInfo.setEmail(email);
+
+            br.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return userInfo;
+    }
 
     @Value("${naver.oauth.client-id}") private String NaverClientId;
     @Value("${naver.oauth.client-secret}") private String NaverClientSecret;

@@ -29,7 +29,7 @@ const router = useRouter();
 // 로그인/로그아웃 버튼 핸들러
 const handleAuth = () => {
     if (authStore.isLoggedIn) {
-    localStorage.removeItem('naver_access_token');
+    localStorage.removeItem('access_token');
     authStore.setLoggedIn(false); // 상태 업데이트
     alert('Logged out');
     router.push('/'); // 홈 페이지로 리다이렉트

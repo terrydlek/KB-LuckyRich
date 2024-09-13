@@ -1,20 +1,21 @@
-// src/utils/naverLogin.js
 import axios from 'axios';
 import { authStore } from '@/stores/auth'; // 경로를 자신의 프로젝트에 맞게 조정
 
-export function handleNaverLoginCallback() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const NaverCode = urlParams.get('code');
-    const service = urlParams.get('service');
-    console.log('dasssssssss',service)
 
-    if (NaverCode) {
-        axios.get(`http://localhost:8080/api/login/naver?code=${NaverCode}&state=STATE_STRING`)
+export function handleKakaoLoginCallback() {
+    // URL에서 카카오 인증 코드를 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const KakaoCode = urlParams.get('code');
+    console.log("kakakoCode", KakaoCode)
+
+    if (KakaoCode) {
+        // 백엔드로 인증 코드를 전송하여 로그인 처리
+        axios.get(`http://localhost:8080/api/login/kakao?code=${KakaoCode}`)
             .then(res => {
-                const accessToken = res.data.accessToken;
+                const accessToken = res.data.access_token;
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
                 localStorage.setItem('access_token', accessToken);
-                console.log('NaverAccess Token:', accessToken);
+                console.log('KakaoAccess Token:', accessToken);
                 window.history.replaceState({}, document.title, '/');
 
             })

@@ -1,5 +1,4 @@
 import asset from '@/components/account/asset.vue';
-import recommendation from '@/components/account/recommendation.vue';
 import AccountUpdate from '@/views/account/AccountUpdate.vue';
 import AccountTotal from '@/views/account/AccountTotal.vue';
 import Accountbook from '@/views/account/accountbook.vue';
@@ -24,10 +23,5 @@ export default [
     path: '/asset',
     name: 'asset',
     component: asset,
-  },
-  {
-    path: '/recommendation',
-    name: 'recommendation',
-    component: recommendation,
   },
 ];

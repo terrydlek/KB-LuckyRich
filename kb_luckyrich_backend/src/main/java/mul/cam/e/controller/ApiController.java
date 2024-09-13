@@ -98,15 +98,22 @@ public class ApiController {
     }
 
     @GetMapping("login/kakao")
-    public ResponseEntity<Void> getKakaoUserCode(@RequestParam("code") String code){
-        String res_body = apiService.getKakaoToken(code);
-        System.out.println("asddddddddd"+res_body);
+    public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
+        KakaoResponseDto res_body = apiService.getKakaoToken(code);
+        String accessToken = res_body.getAccess_token();
+        KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
+        System.out.println("KakaoAccessToken"+userInfo);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", userInfo.getName());
+        map.put("email", userInfo.getEmail());
+        map.put("access_token", accessToken);
+        System.out.println("MAAAAAAAAAAAAAAAp"+map);
 
         String redirectUrl = "http://localhost:5173/";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(redirectUrl));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
+
     }
 
 
@@ -124,7 +131,6 @@ public class ApiController {
 
     @GetMapping("login/naver")
     public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
-    //public Map<String, Object> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
 
         NaverResponseDto res_body = apiService.getNaverToken(code, state);
         // 실제 API 서비스 호출로 교체
@@ -142,15 +148,8 @@ public class ApiController {
 
         System.out.println("naver info" + map);
 
-//        String redirectUrl = "http://localhost:5173/";
-//
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(URI.create(redirectUrl));
 
         return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
-
-        //return map;
     }
 
     // 로그아웃
