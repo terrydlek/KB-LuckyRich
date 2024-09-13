@@ -43,7 +43,7 @@ function handleKakaoLoginCallback() {
 
 // 컴포넌트가 처음 로드될 때 카카오 로그인 콜백을 처리
 onMounted(() => {
-    handleKakaoLoginCallback();
+    //handleKakaoLoginCallback();
 });
 </script>
 

@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +48,7 @@ public class ApiController {
     @Value("${google.oauth.url}") String redirectUrl;
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
-    @Value("${kako.oauth.url}") String KakaoUrl;
+    @Value("${kakao.oauth.url}") String KakaoUrl;
 
     public ApiController(ApiService service, TokenDecoder decoder, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.apiService = service;
@@ -106,7 +109,10 @@ public class ApiController {
     @GetMapping("login/kakao")
     public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
         KakaoResponseDto res_body = apiService.getKakaoToken(code);
+        System.out.println("asdasd"+ res_body);
+
         String accessToken = res_body.getAccess_token();
+
         KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
         System.out.println("KakaoAccessToken"+userInfo);
 
