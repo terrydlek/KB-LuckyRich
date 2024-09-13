@@ -14,6 +14,7 @@
 <script setup>
 import ServiceComponent from '@/components/ServiceComponent.vue';
 import totalChart from '@/components/account/totalChart.vue';
+import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
 import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 import ProductTable from '@/components/tables/ProductTable.vue';
 import { onMounted } from 'vue';
@@ -22,6 +23,7 @@ const router = useRouter();
 
 onMounted(() => {
     handleNaverLoginCallback();
+    handleKakaoLoginCallback();
 })
 </script>
 
