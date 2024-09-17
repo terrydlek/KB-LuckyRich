@@ -1,4 +1,4 @@
-import asset from '@/components/account/asset.vue';
+import asset from '@/views/account/asset.vue';
 import AccountUpdate from '@/views/account/AccountUpdate.vue';
 import AccountTotal from '@/views/account/AccountTotal.vue';
 import Accountbook from '@/views/account/accountbook.vue';
@@ -8,8 +8,8 @@ import ConservativeList from '@/components/account/recommend/ConservativeList.vu
 import Neutrility from '@/components/account/recommend/Neutrility.vue';
 import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
-import Recommendation from '@/components/account/recommendation.vue';
-//
+
+
 export default [
   {
     path: '/accountbook',
@@ -22,48 +22,43 @@ export default [
     component: AccountTotal,
   },
   {
-    path: '/accountUpdate',
-    name: 'accountUpdate',
-    component: AccountUpdate,
-  },
-  {
     path: '/asset',
     name: 'asset',
     component: asset,
   },
   {
-    path: '/test',
+    path: '/account/test',
     name: 'test',
     component: test,
   },
   {
-    path: '/SteadinessList',
+    path: '/account/SteadinessList',
     name: 'SteadinessList',
     component: SteadinessList,
   },
   {
-    path: '/ConservativeList',
+    path: '/account/ConservativeList',
     name: 'ConservativeList',
     component: ConservativeList,
   },
   {
-    path: '/Neutrility',
+    path: '/account/Neutrility',
     name: 'Neutrility',
     component: Neutrility,
   },
   {
-    path: '/ActiveList',
+    path: '/account/ActiveList',
     name: 'ActiveList',
     component: ActiveList,
   },
   {
-    path: '/AggresiveList',
+    path: '/account/AggresiveList',
     name: 'AggresiveList',
     component: AggresiveList,
   },
   {
-    path: '/recommendation',
-    name: 'recommendation',
-    component: Recommendation,
-  },
+    path: '/asset/accountupdate',
+    name: 'accountupdate',
+    component: AccountUpdate
+  }
 ];

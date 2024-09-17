@@ -183,15 +183,15 @@ const investmentType = computed(() => {
 
 const showResult = () => {
   if (investmentType.value === '안정형') {
-    router.push('/SteadinessList');
+    router.push('/account/SteadinessList');
   } else if (investmentType.value === '안정추구형') {
-    router.push('/ConservativeList');
+    router.push('/account/ConservativeList');
   } else if (investmentType.value === '위험중립형') {
-    router.push('/Neutrility');
+    router.push('/account/Neutrility');
   } else if (investmentType.value === '적극투자형') {
-    router.push('/ActiveList');
+    router.push('/account/ActiveList');
   } else {
-    router.push('/AggresiveList');
+    router.push('/account/AggresiveList');
   }
 };
 

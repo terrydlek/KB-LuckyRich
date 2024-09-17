@@ -29,7 +29,8 @@ export default {
         return {
             chartOptions: {
                 chart: {
-                    type: 'pie'
+                    type: 'pie',
+                    height: '100%'
                 },
                 title: {
                     text: '계좌 보유 잔액'
