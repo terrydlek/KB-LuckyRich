@@ -18,19 +18,19 @@
             </thead>
             <tbody>
                 <tr v-for="deposit in deposits" :key="deposit.상품명">
-                    <td>{{ deposit.금융회사 }}</td>
-                    <td>{{ deposit.상품명 }}</td>
-                    <td>{{ deposit.세전이자율 ?? 'N/A' }}</td>
-                    <td>{{ deposit.세후이자율 ?? 'N/A' }}</td>
-                    <td>{{ deposit.세후이자 ?? 'N/A' }}</td>
-                    <td>{{ deposit.최고우대금리 ?? 'N/A' }}</td>
-                    <td>{{ deposit.가입제한여부 ?? 'N/A' }}</td>
-                    <td>{{ deposit.이자계산방식 }}</td>
+                    <td>{{ deposit.company }}</td>
+                    <td>{{ deposit.prodname }}</td>
+                    <td>{{ deposit.prerate ?? 'N/A' }}</td>
+                    <td>{{ deposit.afterrate ?? 'N/A' }}</td>
+                    <td>{{ deposit.afterinterest ?? 'N/A' }}</td>
+                    <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
+                    <td>{{ deposit.limit ?? 'N/A' }}</td>
+                    <td>{{ deposit.calmethod }}</td>
                 </tr>
             </tbody>
         </table>
 
-        <p v-else>추천할 예적금 상품이 없습니다.</p>
+        <p v-else>예적금 상품을 불러오고 있어요~</p>
     </div>
 </template>
 
