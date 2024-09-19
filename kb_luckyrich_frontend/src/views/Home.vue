@@ -1,9 +1,9 @@
 <template>
     <div class="home">
-        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="lookup">
+        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="asset">
             <totalChart />
         </ServiceComponent>
-        <ServiceComponent serviceName="상품 추천" route="recommendation">
+        <ServiceComponent serviceName="나에게 맞는 투자 상품은?" route="test">
             <ProductTable />
         </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />

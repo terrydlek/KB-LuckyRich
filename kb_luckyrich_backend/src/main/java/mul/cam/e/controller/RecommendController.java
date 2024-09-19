@@ -39,7 +39,7 @@ public class RecommendController {
     public String test() throws IOException {
         return "done";
     }
-        
+
     @GetMapping("/neutrilityList")
     public ResponseEntity<List<FundDto>> neutrilityList() {
         return ResponseEntity.ok(recommendService.neutrilityList());
@@ -47,6 +47,7 @@ public class RecommendController {
 
     @GetMapping("/getStock")
     public List<StockDto> getStock() throws IOException {
+        System.out.println("asset getStock execute~~~~");
 
         String url = "https://finance.naver.com/sise/sise_quant.naver";
 
@@ -79,7 +80,6 @@ public class RecommendController {
                 stockList.add(stock);
             }
         }
-        System.out.println(stockList);
 
         // 추출한 주식 데이터 리스트 반환
         return stockList;
@@ -89,8 +89,6 @@ public class RecommendController {
     @GetMapping("/getDeposit")
     public ResponseEntity<List<DepositDto>> getDeposits() throws IOException {
         System.out.println("Recommendation getDeposit execute~~~~~~~~~~");
-
-        System.out.println(recommendService.depositList());
         return ResponseEntity.ok(recommendService.depositList());
     }
 
