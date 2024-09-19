@@ -54,7 +54,7 @@ public class ApiController {
         this.userService = userService;
     }
 
-    @GetMapping("google")
+    @GetMapping("/google")
     public String getLoginUrl(){
         String url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + clientId +
                 "&redirect_uri=" + redirectUrl +
@@ -63,7 +63,7 @@ public class ApiController {
         return url;
     }
 
-    @GetMapping("login/google")
+    @GetMapping("/login/google")
     public void getUserCode(@RequestParam("code") String code, HttpServletResponse response) throws Exception {
         GoogleResponseDto res_body = apiService.getAccessToken(code);
 
@@ -98,46 +98,19 @@ public class ApiController {
         // apiService.getGoogleUserInf(res_body.getAccess_token());
     }
 
-    @PostMapping("kakao")
+    @PostMapping("/kakao")
     public String getKakaoLoginUrl(){
+        System.out.println("kakao");
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
                 + KakaoClientId + "&redirect_uri=" + KakaoUrl;
+        System.out.println(url);
         return url;
     }
-
-    @GetMapping("login/kakao")
-    public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
-        KakaoResponseDto res_body = apiService.getKakaoToken(code);
-        String accessToken = res_body.getAccess_token();
-        KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
-        System.out.println("KakaoAccessToken"+userInfo);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", userInfo.getName());
-        map.put("email", userInfo.getEmail());
-        map.put("access_token", accessToken);
-        System.out.println("MAAAAAAAAAAAAAAAp"+map);
-
-
-        String redirectUrl = "http://localhost:5173/";
-
-        String name = userInfo.getName();
-        String email = userInfo.getEmail() + "kakao";
-        UserDto user = new UserDto(name,email,null,0);
-
-        boolean regi = userService.register(user);
-        if (!regi) {
-            return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
-        }
-        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
-
-    }
-
 
     @Value("${naver.oauth.client-id}") String NaverClientId;
     @Value("${naver.oauth.url}") String NaverUrl;
     @Value("${naver.oauth.client-secret}") String NaverClientSecret;
-    @PostMapping("naver")
+    @PostMapping("/naver")
     public String getNaverLoginUrl(){
         System.out.println("getNaverLoginUrl");
         String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="
@@ -145,36 +118,62 @@ public class ApiController {
         return url;
     }
 
-    @GetMapping("login/naver")
-    public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state) {
+    @GetMapping("/login/kakao")
+    public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
+        System.out.println("kakao login execute~~~~~~~~");
+        KakaoResponseDto res_body = apiService.getKakaoToken(code);
+        String accessToken = res_body.getAccess_token();
 
+        KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
+
+        UserDetail userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
+        System.out.println(userDetail);
+        System.out.println("KakaoAccessToken"+userInfo);
+
+        if (userDetail == null) {
+            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0);
+            userService.register(dto);
+            userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
+        }
+        String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", userInfo.getName());
+        map.put("email", userInfo.getEmail());
+        map.put("access_token", jwtToken);
+        System.out.println("MAAAAAAAAAAAAAAAp"+map);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
+
+    }
+
+    @GetMapping("/login/naver")
+    public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam("code") String code, @RequestParam(name = "state") String state, HttpServletResponse response) throws Exception {
+        System.out.println("naver login execute");
         NaverResponseDto res_body = apiService.getNaverToken(code, state);
         // 실제 API 서비스 호출로 교체
         String accessToken = res_body.getAccess_token();
         //System.out.println("access" + accessToken);
-
         NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
+
+        UserDetail userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
+        System.out.println(userDetail);
+
+        if (userDetail == null) {
+            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0);
+            userService.register(dto);
+            userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
+        }
+        String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());
         map.put("name", userInfo.getName());
         map.put("email", userInfo.getEmail());
         map.put("gender", userInfo.getGender());
-        map.put("accessToken", accessToken);
+        map.put("accessToken", jwtToken);
 
-        String name = userInfo.getName();
-        String email = userInfo.getEmail();
-        UserDto user = new UserDto(name,email,null,0);
-        boolean regi = userService.register(user);
-
-        if (!regi) {
-            return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
-        }
-
-        System.out.println("naver info" + map);
-
-
-        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     // 로그아웃
@@ -228,5 +227,3 @@ public class ApiController {
         return responseCode == 200 ? response.toString() : null;
     }
 }
-
-
