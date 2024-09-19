@@ -8,6 +8,7 @@ import ConservativeList from '@/components/account/recommend/ConservativeList.vu
 import Neutrility from '@/components/account/recommend/Neutrility.vue';
 import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
+import MyBank from '@/components/account/accountRegi/MyBank.vue';
 
 
 export default [
@@ -60,5 +61,10 @@ export default [
     path: '/asset/accountupdate',
     name: 'accountupdate',
     component: AccountUpdate
+  },
+  {
+    path : '/account/accountRegi/MyBank',
+    name : 'Mybank',
+    component : MyBank
   }
 ];

@@ -6,7 +6,7 @@ export function handleNaverLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const NaverCode = urlParams.get('code');
     const service = urlParams.get('service');
-    console.log('dasssssssss',service)
+    console.log('dasssssssss',NaverCode)
 
     if (NaverCode) {
         axios.get(`http://localhost:8080/api/login/naver?code=${NaverCode}&state=STATE_STRING`)
