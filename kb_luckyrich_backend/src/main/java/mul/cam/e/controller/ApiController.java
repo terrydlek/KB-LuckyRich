@@ -47,7 +47,7 @@ public class ApiController {
     @Value("${google.oauth.url}") String redirectUrl;
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
-    @Value("${kako.oauth.url}") String KakaoUrl;
+    @Value("${kakao.oauth.url}") String KakaoUrl;
 
     public ApiController(ApiService service, TokenDecoder decoder, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.apiService = service;
@@ -118,8 +118,17 @@ public class ApiController {
         map.put("access_token", accessToken);
         System.out.println("MAAAAAAAAAAAAAAAp"+map);
 
+
         String redirectUrl = "http://localhost:5173/";
 
+        String name = userInfo.getName();
+        String email = userInfo.getEmail() + "kakao";
+        UserDto user = new UserDto(name,email,null,0);
+
+        boolean regi = userService.register(user);
+        if (!regi) {
+            return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
+        }
         return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
 
     }
@@ -128,7 +137,6 @@ public class ApiController {
     @Value("${naver.oauth.client-id}") String NaverClientId;
     @Value("${naver.oauth.url}") String NaverUrl;
     @Value("${naver.oauth.client-secret}") String NaverClientSecret;
-
     @PostMapping("naver")
     public String getNaverLoginUrl(){
         System.out.println("getNaverLoginUrl");
@@ -153,6 +161,15 @@ public class ApiController {
         map.put("email", userInfo.getEmail());
         map.put("gender", userInfo.getGender());
         map.put("accessToken", accessToken);
+
+        String name = userInfo.getName();
+        String email = userInfo.getEmail();
+        UserDto user = new UserDto(name,email,null,0);
+        boolean regi = userService.register(user);
+
+        if (!regi) {
+            return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
+        }
 
         System.out.println("naver info" + map);
 
