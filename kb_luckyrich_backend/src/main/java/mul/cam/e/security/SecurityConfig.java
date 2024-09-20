@@ -35,6 +35,7 @@ public class SecurityConfig {
                         // api login -> access token 없이 진입 가능
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/asset/**").permitAll()
+                        .antMatchers("/myasset/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

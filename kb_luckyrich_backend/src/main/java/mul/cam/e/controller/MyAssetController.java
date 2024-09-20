@@ -1,8 +1,9 @@
 package mul.cam.e.controller;
 
+import lombok.extern.log4j.Log4j;
+import mul.cam.e.dto.*;
 import mul.cam.e.service.MyAssetService;
-import mul.cam.e.dto.AccountDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,14 +11,38 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@Log4j
+@RequestMapping("/myasset")
 public class MyAssetController {
 
-    @Autowired
-    private MyAssetService myAssetService;
+    private final MyAssetService myAssetService;
 
-    @GetMapping("account/accountRegi/MyBank")
-    public List<AccountDTO> getAccounts() {
-        return myAssetService.getAccounts();
+
+    public MyAssetController(MyAssetService myAssetService) {
+        this.myAssetService = myAssetService;
+    }
+
+    @GetMapping("/getMyStock")
+    public ResponseEntity<List<MyStockDto>> getMyStock() {
+        System.out.println("getMyStock execute~~~~~");
+        return ResponseEntity.ok(myAssetService.getMyStock(10));
+    }
+
+    @GetMapping("/getMyEstate")
+    public ResponseEntity<List<MyEstateDto>> getMyEstate() {
+        System.out.println("getMyEstate execute~~~~~");
+        return ResponseEntity.ok(myAssetService.getMyEstate(10));
+    }
+
+    @GetMapping("/getMyCar")
+    public ResponseEntity<List<MyCarDto>> getMyCar() {
+        System.out.println("getMyCar execute~~~~~");
+        return ResponseEntity.ok(myAssetService.getMyCar(10));
+    }
+
+    @GetMapping("/getMyAccount")
+    public ResponseEntity<List<MyAccountDto>> getMyAccount() {
+        System.out.println("getMyAccount execute~~~~~");
+        return ResponseEntity.ok(myAssetService.getMyAccount(10));
     }
 }

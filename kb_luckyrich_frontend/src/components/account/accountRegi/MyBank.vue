@@ -1,43 +1,80 @@
 <template>
-    <div>
-        <h1>은행 계좌</h1>
-        <ul v-if="accounts.length">
-            <li v-for="account in accounts" :key="account.accountId">
-                <strong>{{ account.accountName }}</strong>
-                <p>계좌 번호: {{ account.accountNumber }}</p>
-                <p>잔액: {{ account.balance }}</p>
-                <p>계좌 종류: {{ account.accountType }}</p>
-            </li>
-        </ul>
-        <p v-else>계좌 정보가 없습니다.</p>
-    </div>
+  <div>
+    <h1>My Accounts</h1>
+    <table class="account-table">
+      <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Account Number</th>
+          <th>Balance</th>
+          <th>Account Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="account in accounts" :key="account.accountId">
+          <td>{{ account.accountName }}</td>
+          <td>{{ account.accountNumber }}</td>
+          <td>{{ formatBalance(account.balance) }}</td>
+          <td>{{ account.accountType }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-    data() {
-        return {
-            accounts: []  // 계좌 정보를 저장할 배열
-        };
+  data() {
+    return {
+      accounts: [],
+    };
+  },
+  mounted() {
+    axios
+      .get("http://localhost:8080/myasset/getMyAccount")
+      .then((response) => {
+        console.log(response.data);
+        this.accounts = response.data;
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the accounts:", error);
+      });
+  },
+  methods: {
+    formatBalance(balance) {
+      // 천 단위로 쉼표를 추가하는 함수
+      return balance.toLocaleString();
     },
-    created() {
-        this.fetchAccounts();  // 컴포넌트가 생성되면 계좌 정보를 가져옴
-    },
-    methods: {
-        async fetchAccounts() {
-            try {
-                const response = await fetch('http://localhost:8080/api/account/accountRegi/MyBank');  // API에서 계좌 정보 가져오기
-                const data = await response.json();  // JSON 형식으로 변환
-                this.accounts = data;  // 계좌 정보를 accounts 배열에 저장
-                console.log("DADADADADAD",data)
-            } catch (error) {
-                console.error('계좌 정보를 가져오는 도중 오류 발생:', error);  // 오류 처리
-            }
-        }
-    }
-}
+  },
+};
 </script>
 
-<style>
-/* 스타일을 여기에 추가하세요 */
+<style scoped>
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.account-table th,
+.account-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.account-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.account-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.account-table tr:hover {
+  background-color: #f1f1f1;
+}
 </style>
