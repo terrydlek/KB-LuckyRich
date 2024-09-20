@@ -39,7 +39,7 @@ public class RecommendController {
     public String test() throws IOException {
         return "done";
     }
-
+        
     @GetMapping("/neutrilityList")
     public ResponseEntity<List<FundDto>> neutrilityList() {
         return ResponseEntity.ok(recommendService.neutrilityList());

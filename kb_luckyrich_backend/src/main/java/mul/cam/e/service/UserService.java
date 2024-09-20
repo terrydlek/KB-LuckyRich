@@ -5,6 +5,8 @@ import mul.cam.e.dto.UserDto;
 import mul.cam.e.security.UserDetail;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class UserService {
 
@@ -24,5 +26,16 @@ public class UserService {
 
     public UserDetail login(String email) {
         return userDao.login(email);
+    }
+
+    public UserDetail getUserByEmail(String email) { return userDao.getUserByEmail(email); }
+
+    public boolean updateUserInfo(String email, Map<String, String> request) {
+        try {
+            return userDao.updateUserInfo(email, request);
+        } catch (Exception e) {
+            System.out.println("Error updating user info: " + e.getMessage());
+            return false;
+        }
     }
 }
