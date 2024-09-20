@@ -39,7 +39,7 @@ function loginWithNaver() {
                 alert('Access Token:', accessToken);
 
                 // 액세스 토큰을 로컬 스토리지나 쿠키에 저장
-                localStorage.setItem('naver_access_token', accessToken);
+                localStorage.setItem('access_token', accessToken);
                 console.log('Access Token:', accessToken);
                 // 성공 시 홈으로 리다이렉트
                 //window.location.href = 'http://localhost:5173/';

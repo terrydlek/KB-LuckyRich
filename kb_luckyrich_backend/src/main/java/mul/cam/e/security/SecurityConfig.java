@@ -34,7 +34,8 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
                         // api login -> access token 없이 진입 가능
                         .antMatchers("/api/**").permitAll()
-                        .antMatchers("/asset/**").permitAll()
+                        .antMatchers("/asset/**").authenticated()
+                        .antMatchers("/user/**").authenticated()
                         .antMatchers("/myasset/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()

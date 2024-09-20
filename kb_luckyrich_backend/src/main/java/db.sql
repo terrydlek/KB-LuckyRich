@@ -5,7 +5,9 @@ create table user(
     user_name varchar(30) not null,
     email varchar(100) not null unique,
     gender varchar(30),
-    age int
+    age int,
+    provider_id int,
+    foreign key (provider_id) references auth_provider(provider_id)
 );
 
 create table auth_provider(
@@ -13,7 +15,7 @@ create table auth_provider(
     provider_name varchar(50)
 );
 
-create table user_auth(
+/*create table user_auth(
     user_auth_id int auto_increment primary key,
     user_id int,
     provider_id int,
@@ -23,6 +25,7 @@ create table user_auth(
     foreign key (user_id) references user(user_id),
     foreign key (provider_id) references auth_provider(provider_id)
 );
+*/
 
 create table bank(
     bank_id int auto_increment primary key,
@@ -34,7 +37,7 @@ create table account(
     user_id int,
     bank_id int,
     balance decimal(15) default 0,
-    account_name varchar(50) not null,
+#     account_name varchar(50) not null,
     foreign key (user_id) references user(user_id),
     foreign key (bank_id) references bank(bank_id)
 );
@@ -48,4 +51,10 @@ create table transaction(
     description varchar(100),
     transaction_date timestamp not null,
     foreign key (account_id) references account(account_id)
+);
+
+create table car(
+    car_id int auto_increment primary key,
+    car_name varchar(100),
+    value int
 );

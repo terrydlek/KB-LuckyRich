@@ -59,13 +59,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             UserDetail userDetail = userDetailServices.loadUserByUsername(email);
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
+//                System.out.println("UserDetail: " + userDetail);
                 // 인증 토큰을 생성하고 SecurityContext에 저장
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, null, userDetail.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
                 // 토큰이 유효하지 않은 경우 401 에러 반환
-                System.out.println("***** 유효하지 않은 토큰 " + new Date());
+                System.out.println("**** 유효하지 않은 토큰 " + new Date());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
