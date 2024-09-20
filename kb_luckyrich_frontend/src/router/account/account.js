@@ -1,20 +1,16 @@
 import asset from '@/views/account/asset.vue';
 import AccountUpdate from '@/views/account/AccountUpdate.vue';
 import AccountTotal from '@/views/account/AccountTotal.vue';
-// import Accountbook from '@/views/account/accountbook.vue';
 import test from '@/views/account/test.vue';
 import SteadinessList from '@/components/account/recommend/SteadinessList.vue';
 import ConservativeList from '@/components/account/recommend/ConservativeList.vue';
 import NeutralList from '@/components/account/recommend/NeutralList.vue';
 import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
+import MyFinancialDashboard from '@/views/account/MyFinancialDashboard.vue';
+import MyDataAgree from '@/components/account/accountRegi/MyDataAgree.vue';
 
 export default [
-  // {
-  //   path: '/accountbook',
-  //   name: 'accountbook',
-  //   component: Accountbook,
-  // },
   {
     path: '/lookup',
     name: 'lookup',
@@ -59,5 +55,15 @@ export default [
     path: '/asset/accountupdate',
     name: 'accountupdate',
     component: AccountUpdate,
+  },
+  {
+    path: '/myasset/MyFinancialDashboard',
+    name: 'MyFinancialDashboard',
+    component: MyFinancialDashboard,
+  },
+  {
+    path: '/myasset/MyDataAgree',
+    name: 'myDataAgree',
+    component: MyDataAgree,
   },
 ];
