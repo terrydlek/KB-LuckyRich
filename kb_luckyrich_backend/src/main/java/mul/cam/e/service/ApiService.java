@@ -71,7 +71,7 @@ public class ApiService {
     }
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
-    @Value("${kako.oauth.url}") String KakaoUrl;
+    @Value("${kakao.oauth.url}") String KakaoUrl;
     private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
 
     public KakaoResponseDto getKakaoToken(String code) {
@@ -91,7 +91,6 @@ public class ApiService {
 
         // HttpEntity에 헤더와 파라미터 담기
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-
         // 카카오 서버로 요청 전송
         ResponseEntity<KakaoResponseDto> response = restTemplate.postForEntity(kakao_token_url, request, KakaoResponseDto.class);
 

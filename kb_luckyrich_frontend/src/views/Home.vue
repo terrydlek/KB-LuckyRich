@@ -1,45 +1,25 @@
 <template>
     <div class="home">
-        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="lookup">
+        <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="asset">
             <totalChart />
         </ServiceComponent>
-        <ServiceComponent serviceName="상품 추천" route="recommendation">
+        <ServiceComponent serviceName="나에게 맞는 투자 상품은?" route="test">
             <ProductTable />
         </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />
 
     </div>
-
-    <button @click="jwtFilterTest">filter test</button>
 </template>
 
 <script setup>
 import ServiceComponent from '@/components/ServiceComponent.vue';
-import totalChart from '@/components/account/totalChart.vue';
+import totalChart from '@/components/account/chart/totalChart.vue';
 import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
 import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 import ProductTable from '@/components/tables/ProductTable.vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
-
 const router = useRouter();
-
-function jwtFilterTest() {
-    const accessToken = localStorage.getItem('access_token');
-
-    axios.get("http://localhost:8080/asset/test", {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    })
-        .then(res => {
-            alert(res.data);
-        })
-        .catch(err => {
-            alert(err);
-        });
-}
 
 onMounted(() => {
     handleNaverLoginCallback();

@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoUserInfDto {
-    private String name;
-    private String email;
+public class MyEstateDto {
+    private int realEstateId;
+    private String realEstateName;
+    private long realEstatePrice;
 }
