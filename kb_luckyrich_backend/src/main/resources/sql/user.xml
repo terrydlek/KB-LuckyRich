@@ -19,4 +19,15 @@
         from user
         where email=#{email}
     </select>
+
+    <select id="getUserByEmail" parameterType="java.lang.String" resultType="mul.cam.e.security.UserDetail">
+        select user_name, email, gender, age
+        from user
+        where email=#{email}
+    </select>
+    <update id="updateUserInfo">
+        UPDATE user
+        SET age=#{request.age}, gender=#{request.gender}
+        WHERE email=#{email}
+    </update>
 </mapper>

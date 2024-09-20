@@ -44,38 +44,59 @@ function setUpdate() {
     updating.value = !updating.value;
 };
 
-// send age, gender to backend
+// JWT 토큰을 로컬 스토리지에서 가져오는 함수
+function getToken() {
+    return localStorage.getItem('access_token');
+}
+
+// 유저 정보를 업데이트
 function updateUserInfo() {
-
-    // axios.post("", null, {
-    //     age: age.value,
-    //     gender: gender.value
-    // })
-    //     .then(res => {
-
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
-
-    updating.value = false;     // res.data == success
+    axios.post("http://localhost:8080/user/update", {
+        age: age.value,
+        gender: gender.value
+    }, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`
+        }
+    })
+        .then(res => {
+            console.log(res.data);
+            updating.value = false;
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
-// function fetchUserInfo() {
-//     axios.get("")
-//         .then(res => {
-//             res.data;
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         })
-// };
+// 유저 정보를 가져오기
+function fetchUserInfo() {
 
-// onMounted(() => {
-//     fetchUserInfo();
-// });
+    axios.get("http://localhost:8080/user/inf", {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`
+        }
+    })
+        .then(res => {
+            const data = res.data;
+            // console.log(data);
+
+            username.value = data.username;
+            email.value = data.email;
+            age.value = data.age;
+            gender.value = data.gender;
+            balance.value = data.balance;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+onMounted(() => {
+    fetchUserInfo();
+});
 
 </script>
+
 
 <style scoped>
 .user-info-container {

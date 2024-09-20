@@ -29,6 +29,7 @@ function handleGoogleLoginCallback() {
     const accessToken = urlParams.get('access_token');
     if (accessToken) {
         localStorage.setItem('access_token', accessToken);
+        // userStore.login();
         router.push('/');
     } else {
         console.error('Access token not found');

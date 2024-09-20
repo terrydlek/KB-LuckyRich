@@ -71,7 +71,7 @@ public class ApiService {
     }
 
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
-    @Value("${kako.oauth.url}") String KakoUrl;
+    @Value("${kako.oauth.url}") String KakaoUrl;
     private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
 
     public KakaoResponseDto getKakaoToken(String code) {
@@ -86,7 +86,7 @@ public class ApiService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", KakaoClientId); // 본인의 REST API 키로 교체
-        params.add("redirect_uri", KakoUrl); // 리다이렉트 URI
+        params.add("redirect_uri", KakaoUrl); // 리다이렉트 URI
         params.add("code", code); // Authorization Code
 
         // HttpEntity에 헤더와 파라미터 담기
