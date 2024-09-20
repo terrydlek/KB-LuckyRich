@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import investmentPreferenceTest from '@/components/account/investmentPreferenceTest.vue';
+import investmentPreferenceTest from '@/views/account/investmentPreferenceTest.vue';
 
 export default {
   components: {
