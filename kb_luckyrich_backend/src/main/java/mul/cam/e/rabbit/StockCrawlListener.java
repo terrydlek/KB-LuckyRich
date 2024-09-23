@@ -33,7 +33,12 @@ public class StockCrawlListener {
         for (Element row : rows) {
             Elements columns = row.select("td");
             if (columns.size() > 1) {
-                String stockName = columns.get(1).text();  // 종목명
+                // 종목명과 링크 추출
+                Element stockElement = columns.get(1).selectFirst("a");
+                String stockName = stockElement.text();  // 종목명
+                String href = stockElement.attr("href");  // 링크에서 코드 추출
+                String code = href.split("code=")[1];  // 'code=' 이후의 부분 추출
+
                 String currentPrice = columns.get(2).text();  // 현재가
                 String change = columns.get(3).text();  // 전일비
                 String changeRate = columns.get(4).text();  // 등락률
@@ -45,8 +50,8 @@ public class StockCrawlListener {
                 String per = columns.get(10).text();  // PER
                 String roe = columns.get(11).text();  // ROE
 
-                // StockDto에 데이터 저장
-                StockDto stock = new StockDto(stockName, currentPrice, change, changeRate, volume, marketCap, sales, operatingProfit, eps, per, roe);
+                // StockDto에 데이터 저장 (종목 코드 추가)
+                StockDto stock = new StockDto(stockName, code, currentPrice, change, changeRate, volume, marketCap, sales, operatingProfit, eps, per, roe);
                 stockList.add(stock);
             }
         }

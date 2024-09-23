@@ -14,6 +14,7 @@ public class StockDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String stockName;       // 종목명
+    private String stockCode;       // 주식 코드
     private String stockPrice;      // 현재가
     private String comparePre;         // 전일비
     private String fluctuationRate;  // 등락률
