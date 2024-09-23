@@ -35,6 +35,7 @@ public class SecurityConfig {
                         // api login -> access token 없이 진입 가능
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/asset/**").permitAll()
+                        .antMatchers("/test-redis").permitAll()
                         .antMatchers("/user/**").authenticated()
                         .antMatchers("/myasset/**").permitAll()
                         .antMatchers("/test-redis").permitAll()
