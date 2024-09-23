@@ -6,7 +6,7 @@
             <table v-if="stocks.length" class="stock-table">
                 <thead>
                     <tr>
-                        <th>id</th>
+                        <th>주식 코드 </th>
                         <th>종목명</th>
                         <th>현재가</th>
                         <th>전일비</th>
@@ -22,8 +22,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="(stock, index) in stocks" :key="index">
-                        <td>{{ stock.investId }}</td>
-                        <td><a href="">{{ stock.stockName }}</a></td>
+                        <td>{{ stock.stockCode }}</td>
+                        <td><a :href="`/stock/${stock.stockCode}`">{{ stock.stockName }}</a></td>
                         <td>{{ stock.stockPrice }}</td>
                         <td>{{ stock.comparePre }}</td>
                         <td>{{ stock.fluctuationRate }}</td>
