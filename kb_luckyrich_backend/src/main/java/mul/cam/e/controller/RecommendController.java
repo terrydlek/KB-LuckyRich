@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,7 +67,7 @@ public class RecommendController {
         List<StockDto> stockList = redisService.getStockData(redisKey);
 
         if (stockList == null || stockList.isEmpty()) {
-            System.out.println("Redis에 데이터 없음. API 호출.");
+            System.out.println("No data in Redis. API call.");
             stockList = new ArrayList<>();
             String url = "https://finance.naver.com/sise/sise_quant.naver";
             Document doc = Jsoup.connect(url).get();
@@ -96,7 +97,7 @@ public class RecommendController {
                 }
             }
             redisService.setStockData(redisKey, stockList);
-        } else System.out.println("Redis에서 데이터 가져옴.");
+        } else System.out.println("Retrieving data from Redis.");
 
         return ResponseEntity.ok(stockList);
     }
@@ -154,12 +155,17 @@ public class RecommendController {
         List<DepositDto> depositList = redisService.getDepositData(redisKey);
 
         if (depositList == null || depositList.isEmpty()) {
-            System.out.println("Redis에 데이터 없음. DB에서 가져옴.");
+            System.out.println("There is no data in Redis. Retrieved from DB.");
             depositList = recommendService.depositList();
             redisService.setData(redisKey, depositList);
-        } else System.out.println("Redis에서 데이터 가져옴.");
+        } else System.out.println("Retrieving data from Redis.");
 
         return ResponseEntity.ok(depositList);
+    }
+
+    @GetMapping("/getDeposit/{prodname}")
+    public ResponseEntity<DepositDto> getDepositByProdname(@PathVariable("prodname") String prodname) throws IOException {
+        return ResponseEntity.ok(recommendService.getDepositByProdname(prodname));
     }
 
 }

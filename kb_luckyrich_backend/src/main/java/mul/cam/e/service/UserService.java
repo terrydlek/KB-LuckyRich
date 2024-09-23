@@ -42,4 +42,9 @@ public class UserService {
     public int getAccountNum(String email) {
         return userDao.getAccountNum(email);
     }
+
+
+    public UserDetail loginByEmailAndProvider(String email, int providerId) {
+        return userDao.loginByEmailAndProvider(email, providerId);
+    }
 }

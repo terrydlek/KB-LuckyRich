@@ -20,7 +20,16 @@ public class UserDetailsServices implements UserDetailsService {
 
         return user;
     }
+
+
+    public UserDetail loadUserByEmailAndProvider(String email, int provider_id) throws UsernameNotFoundException {
+        UserDetail user = userService.loginByEmailAndProvider(email, provider_id);
+        System.out.println("**************"+user);
+        return user;
+    }
 }
+
+
 
 /*
 @Service

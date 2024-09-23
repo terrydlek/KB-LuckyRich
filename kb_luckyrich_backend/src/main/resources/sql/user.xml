@@ -10,8 +10,8 @@
     </select>
 
     <insert id="register" parameterType="mul.cam.e.dto.UserDto">
-        insert into user(user_name, email)
-        values (#{user_name}, #{email})
+        insert into user(user_name, email, provider_id)
+        values (#{user_name}, #{email}, #{provider_id})
     </insert>
 
     <select id="login" parameterType="java.lang.String" resultType="mul.cam.e.security.UserDetail">
@@ -27,14 +27,15 @@
     </select>
 
     <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT
-            COUNT(a.account_id) AS account_count
-        FROM
-            user u
-                JOIN
-            account a ON u.user_id = a.user_id
-        WHERE
-            u.email = #{emai};
+        SELECT COUNT(ua.account_id)
+        FROM user_account ua
+                 JOIN user u ON ua.user_id = u.user_id
+        WHERE u.email = #{email}
+    </select>
+    <select id="loginByEmailAndProvider" parameterType="map" resultType="mul.cam.e.security.UserDetail">
+        select user_name, email, gender, age
+        from user
+        where email = #{email} and provider_id = #{provider_id}
     </select>
 
     <update id="updateUserInfo">
