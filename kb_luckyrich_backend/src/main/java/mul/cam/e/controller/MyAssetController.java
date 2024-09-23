@@ -4,8 +4,9 @@ import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.util.AccountType;
-import mul.cam.e.util.AccountUtils;
+import mul.cam.e.util.RandUtils;
 import mul.cam.e.util.BankName;
+import mul.cam.e.util.TransactionGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Log4j
@@ -22,11 +25,13 @@ import java.util.List;
 public class MyAssetController {
 
     private final MyAssetService myAssetService;
-    private final AccountUtils accountUtils;
+    private final RandUtils randUtils;
+    private final TransactionGenerator transactionGenerator;
 
-    public MyAssetController(MyAssetService myAssetService, AccountUtils accountUtils) {
+    public MyAssetController(MyAssetService myAssetService, RandUtils randUtils, TransactionGenerator transactionGenerator) {
         this.myAssetService = myAssetService;
-        this.accountUtils = accountUtils;
+        this.randUtils = randUtils;
+        this.transactionGenerator = transactionGenerator;
     }
 
     @GetMapping("/getMyStock")
@@ -48,21 +53,32 @@ public class MyAssetController {
     }
 
     @GetMapping("/getMyAccount")
-    public ResponseEntity<List<AccountDto>> getMyAccount() {
+    public ResponseEntity<List<Map<String, Object>>> getMyAccount() {
         System.out.println("getMyAccount execute~~~~~");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        List<AccountDto> accounts = new ArrayList<>();
+//        List<AccountDto> accounts = new ArrayList<>();
+        List<Map<String, Object>> accounts = new ArrayList<>();
 
         for (int i=0; i<5; i++) {
-            BankName rBankName = accountUtils.getRandomBankName();
-            String rAccountNum = accountUtils.getAccountNum();
-            int rBalance = accountUtils.getRandomBalance();
-            AccountType rAccountType = accountUtils.getRandomAccountType();
+            BankName rBankName = randUtils.getRandomBankName();
+            String rAccountNum = randUtils.getAccountNum();
+            int rBalance = randUtils.getRandomBalance();
+            AccountType rAccountType = randUtils.getRandomAccountType();
 
-            accounts.add(new AccountDto(rAccountNum, 0, rBankName.getNum(), rAccountType.getNum(), rBalance));
+//            accounts.add(new AccountDto(rAccountNum, 0, rBankName.getNum(), rAccountType.getNum(), rBalance));
+
+            Map<String, Object> account = new HashMap<>();
+            account.put("accountNumber", rAccountNum);
+            account.put("bankName", rBankName.getName());
+            account.put("accountType", rAccountType.getType());
+            account.put("balance", rBalance);
+
+            accounts.add(account);
+
+            myAssetService.setTransaction(transactionGenerator.generateRandomTransactionDto(1));
         }
 
 //        try {
@@ -70,10 +86,6 @@ public class MyAssetController {
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage() + "\n저장안됨...ㅜㅜ");
 //        }
-//        System.out.println("rBankName: " + rBankName);
-//        System.out.println("rAccountNum: " + rAccountNum);
-//        System.out.println("rBalance: " + rBalance);
-//        System.out.println("rAccountType: " + rAccountType);
 
         return ResponseEntity.ok(accounts);
     }

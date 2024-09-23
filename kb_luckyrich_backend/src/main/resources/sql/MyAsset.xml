@@ -36,4 +36,9 @@
         insert into account(account_number, user_id, bank_id, account_type_id, balance)
         values (#{account_number}, (SELECT user_id FROM user WHERE email = #{email}), #{bankId}, #{accountTypeId}, #{balance});
     </update>
+
+    <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
+        insert into transaction(account_id, amount, transaction_type, category, description, transaction_date)
+        values (#{accountId}, #{amount}, #{transactionType}, #{category}, #{description}, #{transactionDate});
+    </update>
 </mapper>

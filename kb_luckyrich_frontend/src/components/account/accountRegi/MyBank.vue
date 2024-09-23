@@ -12,20 +12,20 @@
             </thead>
             <tbody>
                 <tr v-for="account in accounts" :key="account.accountNumber">
-                    <td>{{ account.bankId }}</td>
+                    <td>{{ account.bankName }}</td>
                     <td>{{ account.accountNumber }}</td>
                     <td>{{ formatBalance(account.balance) }}</td>
-                    <td>{{ account.accountTypeId }}</td>
+                    <td>{{ account.accountType }}</td>
                     <td><button @click="selectAccount(account)">선택</button></td>
                 </tr>
             </tbody>
         </table>
         <div v-if="selectedAccount">
             <h2>Selected Account</h2>
-            <p>Account Name: {{ selectedAccount.bankId }}</p>
+            <p>Account Name: {{ selectedAccount.bankName }}</p>
             <p>Account Number: {{ selectedAccount.accountNumber }}</p>
             <p>Balance: {{ formatBalance(selectedAccount.balance) }}</p>
-            <p>Account Type: {{ selectedAccount.accountTypeId }}</p>
+            <p>Account Type: {{ selectedAccount.accountType }}</p>
             <button @click="">다음</button>
         </div>
     </div>

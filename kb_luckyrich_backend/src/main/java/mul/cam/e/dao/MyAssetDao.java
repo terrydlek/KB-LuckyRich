@@ -1,9 +1,6 @@
 package mul.cam.e.dao;
 
-import mul.cam.e.dto.AccountDto;
-import mul.cam.e.dto.MyCarDto;
-import mul.cam.e.dto.MyEstateDto;
-import mul.cam.e.dto.MyStockDto;
+import mul.cam.e.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -26,4 +23,6 @@ public interface MyAssetDao {
                          @Param("bankId") int bankId,
                          @Param("accountTypeId") int accountTypeId,
                          @Param("balance") int balance);
+
+    boolean setTransaction(TransactionDto transactionDto);
 }

@@ -1,10 +1,7 @@
 package mul.cam.e.service;
 
 import mul.cam.e.dao.MyAssetDao;
-import mul.cam.e.dto.AccountDto;
-import mul.cam.e.dto.MyCarDto;
-import mul.cam.e.dto.MyEstateDto;
-import mul.cam.e.dto.MyStockDto;
+import mul.cam.e.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,4 +38,6 @@ public class MyAssetService {
         System.out.println(account_number);
         return myAssetDao.setMyAccount(account_number, email, bank_id, account_type_id, balance);
     }
+
+    public boolean setTransaction(TransactionDto transactionDto) { return myAssetDao.setTransaction(transactionDto); }
 }

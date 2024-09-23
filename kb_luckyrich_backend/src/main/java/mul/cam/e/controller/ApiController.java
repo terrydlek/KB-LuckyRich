@@ -67,13 +67,13 @@ public class ApiController {
         GoogleResponseDto res_body = apiService.getAccessToken(code);
 
         // Decode Id_Token
-        GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getIdToken());
+        GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getId_token());
 
         // 유저 조회
         UserDetail userDetail = userDetailsService.loadUserByUsername(userInf.getEmail());
 
         if(userDetail == null) {
-            UserDto user = new UserDto(userInf.getFamilyName()+userInf.getGivenName(),
+            UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
                     userInf.getEmail(), null, 0);
             userService.register(user);
 

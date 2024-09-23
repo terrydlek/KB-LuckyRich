@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Random;
 
 @Component
-public class AccountUtils {
+public class RandUtils {
     Random random = new Random();
 
     // 랜덤 계좌 ****-**-****** 형식
@@ -52,7 +52,7 @@ public class AccountUtils {
     }
 
     // 거래 액수 1000 - 100000
-    public double getRandomTransactionAmount() {
+    public int getRandomTransactionAmount() {
         return (random.nextInt(100) + 1) * 1000;
     }
 
