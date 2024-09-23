@@ -25,10 +25,15 @@
         order by 2 desc;
     </select>
 
-    <select id="getMyAccount" parameterType="int" resultType="mul.cam.e.dto.MyAccountDto">
+    <select id="getMyAccount" parameterType="int" resultType="mul.cam.e.dto.AccountDto">
         select a.account_name, a.account_number, a.balance, a.account_type
         from account a join user_account b on a.account_id = b.account_id
         where b.user_id = #{userId}
         order by 2 desc;
     </select>
+
+    <update id="setMyAccount">
+        insert into account(account_number, user_id, bank_id, account_type_id, balance)
+        values (#{account_number}, (SELECT user_id FROM user WHERE email = #{email}), #{bankId}, #{accountTypeId}, #{balance});
+    </update>
 </mapper>

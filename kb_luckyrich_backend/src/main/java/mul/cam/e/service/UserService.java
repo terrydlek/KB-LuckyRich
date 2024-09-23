@@ -38,4 +38,8 @@ public class UserService {
             return false;
         }
     }
+
+    public int getAccountNum(String email) {
+        return userDao.getAccountNum(email);
+    }
 }

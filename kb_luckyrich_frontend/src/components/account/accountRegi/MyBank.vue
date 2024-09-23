@@ -1,80 +1,75 @@
 <template>
-  <div>
-    <h1>My Accounts</h1>
-    <table class="account-table">
-      <thead>
-        <tr>
-          <th>Account Name</th>
-          <th>Account Number</th>
-          <th>Balance</th>
-          <th>Account Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="account in accounts" :key="account.accountId">
-          <td>{{ account.accountName }}</td>
-          <td>{{ account.accountNumber }}</td>
-          <td>{{ formatBalance(account.balance) }}</td>
-          <td>{{ account.accountType }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div id="mybank">
+        <h1>My Accounts</h1>
+        <table class="account-table">
+            <thead>
+                <tr>
+                    <th>Account Name</th>
+                    <th>Account Number</th>
+                    <th>Balance</th>
+                    <th>Account Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="account in accounts" :key="account.accountNumber">
+                    <td>{{ account.bankId }}</td>
+                    <td>{{ account.accountNumber }}</td>
+                    <td>{{ formatBalance(account.balance) }}</td>
+                    <td>{{ account.accountTypeId }}</td>
+                    <td><button @click="selectAccount(account)">선택</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div v-if="selectedAccount">
+            <h2>Selected Account</h2>
+            <p>Account Name: {{ selectedAccount.bankId }}</p>
+            <p>Account Number: {{ selectedAccount.accountNumber }}</p>
+            <p>Balance: {{ formatBalance(selectedAccount.balance) }}</p>
+            <p>Account Type: {{ selectedAccount.accountTypeId }}</p>
+            <button @click="">다음</button>
+        </div>
+    </div>
 </template>
 
-<script>
-import axios from "axios";
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-export default {
-  data() {
-    return {
-      accounts: [],
-    };
-  },
-  mounted() {
-    axios
-      .get("http://localhost:8080/myasset/getMyAccount")
-      .then((response) => {
-        console.log(response.data);
-        this.accounts = response.data;
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the accounts:", error);
-      });
-  },
-  methods: {
-    formatBalance(balance) {
-      // 천 단위로 쉼표를 추가하는 함수
-      return balance.toLocaleString();
-    },
-  },
+const accounts = ref([]);
+const selectedAccount = ref(null);
+
+function formatBalance(balance) {
+    // 천 단위로 쉼표를 추가하는 함수
+    return balance.toLocaleString()
 };
+
+function getMyAccount() {
+    const token = getToken();
+    axios.get('http://localhost:8080/myasset/getMyAccount', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then((response) => {
+            console.log(response.data)
+            accounts.value = response.data
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+};
+
+function getToken() {
+    return localStorage.getItem('access_token');
+};
+
+function selectAccount(account) {
+    selectedAccount.value = account;
+}
+
+onMounted(() => {
+    getMyAccount();
+})
 </script>
 
-<style scoped>
-.account-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.account-table th,
-.account-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.account-table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-.account-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.account-table tr:hover {
-  background-color: #f1f1f1;
-}
-</style>
+<style></style>

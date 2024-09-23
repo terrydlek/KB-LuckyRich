@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,13 +67,13 @@ public class ApiController {
         GoogleResponseDto res_body = apiService.getAccessToken(code);
 
         // Decode Id_Token
-        GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getId_token());
+        GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getIdToken());
 
         // 유저 조회
         UserDetail userDetail = userDetailsService.loadUserByUsername(userInf.getEmail());
 
         if(userDetail == null) {
-            UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
+            UserDto user = new UserDto(userInf.getFamilyName()+userInf.getGivenName(),
                     userInf.getEmail(), null, 0);
             userService.register(user);
 
@@ -89,9 +88,13 @@ public class ApiController {
         // JWT 토큰 생성
         String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
 
+        // 계좌 갯수 확인
+        int account_num = userService.getAccountNum(userDetail.getEmail());
+
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/login?access_token=";
-        response.sendRedirect(redirectUrl + jwtToken);
+        response.sendRedirect(redirectUrl + jwtToken + "&" +
+                account_num + "=" + account_num);
 
         // Access_Token을 이용한 방법
         // id, email, verified_email, name, given_name, family_name, picture, locale 반환
@@ -137,6 +140,9 @@ public class ApiController {
         }
         String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
 
+        // 계좌 갯수 확인
+        int account_num = userService.getAccountNum(userDetail.getEmail());
+
         Map<String, Object> map = new HashMap<>();
         map.put("name", userInfo.getName());
         map.put("email", userInfo.getEmail());
@@ -166,12 +172,16 @@ public class ApiController {
         }
         String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
 
+        // 계좌 갯수 확인
+        int account_num = userService.getAccountNum(userDetail.getEmail());
+
         Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());
         map.put("name", userInfo.getName());
         map.put("email", userInfo.getEmail());
         map.put("gender", userInfo.getGender());
         map.put("accessToken", jwtToken);
+        map.put("account_num", account_num);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
     }

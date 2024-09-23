@@ -25,6 +25,18 @@
         from user
         where email=#{email}
     </select>
+
+    <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            COUNT(a.account_id) AS account_count
+        FROM
+            user u
+                JOIN
+            account a ON u.user_id = a.user_id
+        WHERE
+            u.email = #{emai};
+    </select>
+
     <update id="updateUserInfo">
         UPDATE user
         SET age=#{request.age}, gender=#{request.gender}

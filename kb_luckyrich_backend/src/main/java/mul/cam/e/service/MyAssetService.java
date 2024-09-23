@@ -1,7 +1,7 @@
 package mul.cam.e.service;
 
 import mul.cam.e.dao.MyAssetDao;
-import mul.cam.e.dto.MyAccountDto;
+import mul.cam.e.dto.AccountDto;
 import mul.cam.e.dto.MyCarDto;
 import mul.cam.e.dto.MyEstateDto;
 import mul.cam.e.dto.MyStockDto;
@@ -33,8 +33,12 @@ public class MyAssetService {
         return myAssetDao.getMyCar(userId);
     }
 
-    public List<MyAccountDto> getMyAccount(int userId) {
+    public List<AccountDto> getMyAccount(int userId) {
         return myAssetDao.getMyAccount(userId);
     }
 
+    public boolean setMyAccount(String account_number, String email, int bank_id, int account_type_id, int balance) {
+        System.out.println(account_number);
+        return myAssetDao.setMyAccount(account_number, email, bank_id, account_type_id, balance);
+    }
 }

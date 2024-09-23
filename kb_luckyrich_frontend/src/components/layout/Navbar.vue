@@ -15,28 +15,28 @@ import { authStore } from '@/stores/auth'; // 경로를 자신의 프로젝트�
 import { ref, onMounted, onBeforeUpdate } from 'vue';
 import { useRouter } from 'vue-router';
 
-// // 로그인 상태 관리
+// 로그인 상태 관리
 const isLoggedIn = ref(false);
 const router = useRouter();
 
-// // 컴포넌트가 마운트될 때 로그인 상태 확인
+// 컴포넌트가 마운트될 때 로그인 상태 확인
 onMounted(() => {
-    // const token = localStorage.getItem('access_token');
-    // isLoggedIn.value = !token; // 토큰이 있으면 로그인 상태로 변경
+    const token = localStorage.getItem('access_token');
+    isLoggedIn.value = !token; // 토큰이 있으면 로그인 상태로 변경
     // isLogined();
 });
 
-onBeforeUpdate(() => {
-    console.log("onBeforeUpdate");
+// onBeforeUpdate(() => {
+//     console.log("onBeforeUpdate");
     
-    isLogined();
-})
+//     isLogined();
+// })
 
 // 로그인/로그아웃 버튼 핸들러
 const handleAuth = () => {
     if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
-    // authStore.setLoggedIn(false); // 상태 업데이트
+    authStore.setLoggedIn(false); // 상태 업데이트
     alert('Logged out');
     isLoggedIn.value = false;
     router.push('/'); // 홈 페이지로 리다이렉트

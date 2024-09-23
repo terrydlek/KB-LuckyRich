@@ -19,4 +19,6 @@ public interface UserDao {
     UserDetail getUserByEmail(String email);
 
     boolean updateUserInfo(@Param("email") String email, @Param("request") Map<String, String> request);
+
+    int getAccountNum(String email);
 }
