@@ -5,10 +5,12 @@ import mul.cam.e.dto.DepositDto;
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.dto.StockDto;
 import mul.cam.e.service.RecommendService;
+import mul.cam.e.service.RedisTestService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,13 @@ import java.util.List;
 public class RecommendController {
 
     private final RecommendService recommendService;
+    private final RedisTestService redisTestService;
 
-    public RecommendController(RecommendService recommendService) {
+    @Autowired
+    public RecommendController(RecommendService recommendService, RedisTestService redisTestService) {
         this.recommendService = recommendService;
+        this.redisTestService = redisTestService;
     }
-
 
     @GetMapping("conservativeList")
     public ResponseEntity<List<FundDto>> conservativeList() {
@@ -85,12 +89,12 @@ public class RecommendController {
         return stockList;
     }
 
-
     @GetMapping("/getDeposit")
     public ResponseEntity<List<DepositDto>> getDeposits() throws IOException {
         System.out.println("Recommendation getDeposit execute~~~~~~~~~~");
-        return ResponseEntity.ok(recommendService.depositList());
+        List<DepositDto> depositList = recommendService.depositList();
+        redisTestService.testRedisConnection(depositList);
+        System.out.println("status is" + ResponseEntity.ok(depositList));
+        return ResponseEntity.ok(depositList);
     }
-
-
 }
