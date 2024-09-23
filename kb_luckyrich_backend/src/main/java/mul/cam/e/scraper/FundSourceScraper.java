@@ -1,7 +1,6 @@
 package mul.cam.e.scraper;
 
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.FundDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Double.parseDouble;
 
 // investing.com 웹 사이트에서 펀드 데이터 스크래핑 하는 클래스
 @Service

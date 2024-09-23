@@ -10,28 +10,33 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @Transactional
 public class RecommendService {
 
-    private final FundDao fundDao;
+    private final FundService fundService;
     private final DepositDao depositDao;
+    private final RedisService redisService;
 
-    public RecommendService(FundDao fundDao, DepositDao depositDao) {
-        this.fundDao = fundDao;
+    @Autowired
+    public RecommendService(FundService fundService, DepositDao depositDao, RedisService redisService) {
+        this.fundService = fundService;
         this.depositDao = depositDao;
+        this.redisService = redisService;
     }
 
-    public List<FundDto> conservativeList() {
-        return fundDao.conservativeList();
+    public List<FundDto> conservativeList() throws IOException {
+        return fundService.getFundsByRiskRating(2);
     }
 
-    public List<FundDto> neutrilityList() {
-        return fundDao.neutrilityList();
+    public List<FundDto> neutralList() throws IOException {
+        return fundService.getFundsByRiskRating(3);
     }
 
+    // 제욱님 예적금
     public List<DepositDto> depositList() {
         return depositDao.getDeposit();
     }

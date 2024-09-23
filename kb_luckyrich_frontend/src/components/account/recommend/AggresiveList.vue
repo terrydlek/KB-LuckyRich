@@ -76,6 +76,7 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 const loading = ref(true); // 로딩 중으로 초기화
