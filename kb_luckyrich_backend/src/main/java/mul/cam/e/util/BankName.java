@@ -1,17 +1,18 @@
 package mul.cam.e.util;
 
+import lombok.Getter;
+
+@Getter
 public enum BankName {
-    KOOKMIN_BANK("국민은행"),
-    KAKAO_BANK("카카오뱅크"),
-    SHINHAN_BANK("신한은행");
+    국민은행("국민은행", 1),
+    카카오뱅크("카카오뱅크", 2),
+    신한은행("신한은행", 3);
 
     private final String name;
+    private final int num;
 
-    BankName(String name) {
+    BankName(String name, int num) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
+        this.num = num;
     }
 }

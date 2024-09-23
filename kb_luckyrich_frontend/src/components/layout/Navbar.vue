@@ -16,11 +16,11 @@ import { authStore } from "@/stores/auth"; // 경로를 자신의 프로젝트�
 import { ref, onMounted, onBeforeUpdate } from "vue";
 import { useRouter } from "vue-router";
 
-// // 로그인 상태 관리
+// 로그인 상태 관리
 const isLoggedIn = ref(false);
 const router = useRouter();
 
-// // 컴포넌트가 마운트될 때 로그인 상태 확인
+// 컴포넌트가 마운트될 때 로그인 상태 확인
 onMounted(() => {
   const token = localStorage.getItem('access_token');
 
