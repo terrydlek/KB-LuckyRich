@@ -8,24 +8,15 @@
                 <tr>
                     <th>금융회사</th>
                     <th>상품명</th>
-                    <th>세전 이자율</th>
-                    <th>세후 이자율</th>
-                    <th>세후 이자</th>
                     <th>최고 우대 금리</th>
-                    <th>가입 제한 여부</th>
-                    <th>이자 계산 방식</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="deposit in deposits" :key="deposit.상품명">
+                <tr v-for="deposit in deposits" :key="deposit.prodname">
                     <td>{{ deposit.company }}</td>
-                    <td>{{ deposit.prodname }}</td>
-                    <td>{{ deposit.prerate ?? 'N/A' }}</td>
-                    <td>{{ deposit.afterrate ?? 'N/A' }}</td>
-                    <td>{{ deposit.afterinterest ?? 'N/A' }}</td>
+                    <!-- 상품명 클릭 시 상세 페이지로 이동 -->
+                    <td><a :href="`/deposit/${deposit.prodname}`">{{ deposit.prodname }}</a></td>
                     <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
-                    <td>{{ deposit.limit ?? 'N/A' }}</td>
-                    <td>{{ deposit.calmethod }}</td>
                 </tr>
             </tbody>
         </table>
@@ -54,6 +45,7 @@ export default {
     }
 }
 </script>
+
 
 <style scoped>
 table {
