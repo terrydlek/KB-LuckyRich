@@ -143,9 +143,6 @@ public class ApiController {
         // 계좌 갯수 확인
         int account_num = userService.getAccountNum(userDetail.getEmail());
 
-        // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(userDetail.getEmail());
-
         Map<String, Object> map = new HashMap<>();
         map.put("name", userInfo.getName());
         map.put("email", userInfo.getEmail());
