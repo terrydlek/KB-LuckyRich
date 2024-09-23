@@ -6,8 +6,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private String user_name;
+    private String userName;
     private String email;
     private String gender;
     private int age;
+    private int provider_id;
 }
