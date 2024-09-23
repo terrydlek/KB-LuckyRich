@@ -70,15 +70,16 @@ public class ApiController {
         // Decode Id_Token
         GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getId_token());
 
+        int provider_id = 2;
         // 유저 조회
-        UserDetail userDetail = userDetailsService.loadUserByUsername(userInf.getEmail());
+        UserDetail userDetail = userDetailsService.loadUserByEmailAndProvider(userInf.getEmail(), provider_id);
 
         if(userDetail == null) {
             UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
-                    userInf.getEmail(), null, 0, 2);
+                    userInf.getEmail(), null, 0, provider_id);
             userService.register(user);
 
-            userDetail = userDetailsService.loadUserByUsername(userInf.getEmail());
+            userDetail = userDetailsService.loadUserByEmailAndProvider(userInf.getEmail(), provider_id);
         }
 
         // 인증 처리 왜 안됨????????
