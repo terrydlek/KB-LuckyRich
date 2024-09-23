@@ -1,6 +1,7 @@
 package mul.cam.e.service;
 
 import mul.cam.e.dto.DepositDto;
+import mul.cam.e.dto.FundDto;
 import mul.cam.e.dto.StockDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,13 +20,31 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void setData(String key, Object object) {
-        redisTemplate.opsForValue().set(key, object);
+    public void setData(String key, Object object, int time) {
+        redisTemplate.opsForValue().set(key, object, time,TimeUnit.MINUTES);
     }
 
+    public List<FundDto> getFundData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<FundDto>) result;
+        }
+        return null;
+    }
+
+    public void invalidateCache(String key) {
+        redisTemplate.delete(key);
+    }
+
+    /*
     public void setStockData(String key, Object object) {
         // 5분 간격으로 Redis 갱신
         redisTemplate.opsForValue().set(key, object, 5, TimeUnit.MINUTES);
+    }
+
+    public void setFundData(String key, Object object) {
+        // 24시간에 한 번 Redis 갱신
+        redisTemplate.opsForValue().set(key, object, 1440, TimeUnit.MINUTES);
     }
 
     public void invalidateCache(String key) {
@@ -48,7 +67,13 @@ public class RedisService {
         return null;
     }
 
-
+    public List<FundDto> getFundData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<FundDto>) result;
+        }
+        return null;
+    }
 
     public void testRedisConnection(Object object) {
 
@@ -61,4 +86,6 @@ public class RedisService {
         }
         System.out.println("Value: " + value);
     }
+
+    */
 }

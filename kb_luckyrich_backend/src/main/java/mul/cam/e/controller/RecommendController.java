@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.DepositDto;
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.dto.StockDto;
+import mul.cam.e.service.FundService;
 import mul.cam.e.service.RabbitService;
 import mul.cam.e.service.RecommendService;
 import mul.cam.e.service.RedisService;
@@ -24,34 +25,38 @@ import java.util.List;
 
 @RestController
 @Log4j
-@RequestMapping("/asset")
+@RequestMapping("/recommend")
 public class RecommendController {
 
     private final RedisService redisService;
     private final RecommendService recommendService;
     private final RabbitService rabbitService;
+    private final FundService fundService;
 
     @Autowired
-    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService) {
+    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService, FundService fundService) {
         this.redisService = redisService;
         this.recommendService = recommendService;
         this.rabbitService = rabbitService;
+        this.fundService = fundService;
     }
 
-    @GetMapping("conservativeList")
-    public ResponseEntity<List<FundDto>> conservativeList() {
-        return ResponseEntity.ok(recommendService.conservativeList());
+    @GetMapping("/conservative")
+    public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
+        return ResponseEntity.ok(fundService.getFundsByRiskRating(2));
     }
 
-    @GetMapping("test")
-    public String test() throws IOException {
-        return "done";
+    @GetMapping("/neutral")
+    public ResponseEntity<List<FundDto>> getNeutralFunds() throws IOException {
+        return ResponseEntity.ok(fundService.getFundsByRiskRating(3));
     }
 
-    @GetMapping("/neutrilityList")
-    public ResponseEntity<List<FundDto>> neutrilityList() {
-        return ResponseEntity.ok(recommendService.neutrilityList());
-    }
+//    @GetMapping("test")
+//    public String test() throws IOException {
+//        return "done";
+//    }
+
+    /*
 
     @GetMapping("/deleteStock")
     public void deleteStock() {
@@ -168,4 +173,5 @@ public class RecommendController {
         return ResponseEntity.ok(recommendService.getDepositByProdname(prodname));
     }
 
+    */
 }

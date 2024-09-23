@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .antMatchers("/asset/**").permitAll()
                         .antMatchers("/test-redis").permitAll()
                         .antMatchers("/user/**").authenticated()
-                        .antMatchers("/myasset/**").permitAll()
+                        .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/test-redis").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
