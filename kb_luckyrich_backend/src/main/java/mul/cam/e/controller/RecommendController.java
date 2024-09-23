@@ -2,6 +2,7 @@ package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
+import mul.cam.e.service.FundService;
 import mul.cam.e.service.RabbitService;
 import mul.cam.e.service.RecommendService;
 import mul.cam.e.service.RedisService;
@@ -49,6 +50,7 @@ public class RecommendController {
     public ResponseEntity<List<FundDto>> getNeutralFunds() throws IOException {
         return ResponseEntity.ok(fundService.getFundsByRiskRating(3));
     }
+}
 
 //    @GetMapping("test")
 //    public String test() throws IOException {
@@ -250,3 +252,4 @@ public class RecommendController {
     }
 
 }
+     */
