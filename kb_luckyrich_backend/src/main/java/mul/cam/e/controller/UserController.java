@@ -23,6 +23,7 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+
         UserDetail user = userService.getUserByEmail(email);
 //        System.out.println(user);
 
@@ -39,8 +40,10 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+
         boolean isUpdated = userService.updateUserInfo(email, request);
-        System.out.println(isUpdated);
+//        System.out.println(isUpdated);
+
         if (isUpdated) {
             return ResponseEntity.ok("User information updated successfully");
         } else {

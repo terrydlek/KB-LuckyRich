@@ -1,9 +1,12 @@
 package mul.cam.e.util;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.Timestamp;
 import java.util.Random;
 
-public class AccountUtils {
+@Component
+public class RandUtils {
     Random random = new Random();
 
     // 랜덤 계좌 ****-**-****** 형식
@@ -31,8 +34,14 @@ public class AccountUtils {
         return bankNames[random.nextInt(bankNames.length)];
     }
 
+    // 계좌 타입
+    public AccountType getRandomAccountType() {
+        AccountType[] accountTypes = AccountType.values();
+        return accountTypes[random.nextInt(accountTypes.length)];
+    }
+
     // 잔액 1000 - 10000000
-    public double getRandomBalance() {
+    public int getRandomBalance() {
         return (random.nextInt(10000) + 1) * 1000;
     }
 
@@ -43,7 +52,7 @@ public class AccountUtils {
     }
 
     // 거래 액수 1000 - 100000
-    public double getRandomTransactionAmount() {
+    public int getRandomTransactionAmount() {
         return (random.nextInt(100) + 1) * 1000;
     }
 

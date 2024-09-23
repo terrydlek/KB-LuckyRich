@@ -9,6 +9,7 @@ import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
 import MyFinancialDashboard from '@/views/account/MyFinancialDashboard.vue';
 import MyDataAgree from '@/components/account/accountRegi/MyDataAgree.vue';
+import MyBank from '@/components/account/accountRegi/MyBank.vue';
 import DepositDetail from '@/components/account/details/DepositDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import RealEstate from '@/views/realestate/RealEstate.vue';
@@ -69,6 +70,11 @@ export default [
     path: '/myasset/MyDataAgree',
     name: 'myDataAgree',
     component: MyDataAgree,
+  },
+  {
+    path: '/myasset/MyBank',
+    name: 'myBank',
+    component: MyBank
   },
   {
     path: '/deposit/:prodname',
