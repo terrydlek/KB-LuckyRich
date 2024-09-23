@@ -27,10 +27,14 @@ function loginWithGoogle() {
 function handleGoogleLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
+    const accountNum = urlParams.get('account_num');
     if (accessToken) {
         localStorage.setItem('access_token', accessToken);
         // userStore.login();
-        router.push('/');
+        if (accountNum > 1) {
+            router.push('/');
+        }
+        router.push({ name: 'myDataAgree' });
     } else {
         console.error('Access token not found');
         // alert("로그인 실패");
