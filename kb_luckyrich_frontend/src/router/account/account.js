@@ -4,14 +4,12 @@ import AccountTotal from '@/views/account/AccountTotal.vue';
 import test from '@/views/account/test.vue';
 import SteadinessList from '@/components/account/recommend/SteadinessList.vue';
 import ConservativeList from '@/components/account/recommend/ConservativeList.vue';
-import Neutrility from '@/components/account/recommend/Neutrility.vue';
+import NeutralList from '@/components/account/recommend/NeutralList.vue';
 import ActiveList from '@/components/account/recommend/ActiveList.vue';
 import AggresiveList from '@/components/account/recommend/AggresiveList.vue';
-import MyStock from '@/components/account/accountRegi/MyStock.vue';
-import MyEstate from '@/components/account/accountRegi/MyEstate.vue';
-import MyCar from '@/components/account/accountRegi/MyCar.vue';
-import MyBank from '@/components/account/accountRegi/MyBank.vue';
+import MyFinancialDashboard from '@/views/account/MyFinancialDashboard.vue';
 import MyDataAgree from '@/components/account/accountRegi/MyDataAgree.vue';
+import DepositDetail from '@/components/account/details/DepositDetail.vue';
 
 export default [
   {
@@ -40,9 +38,9 @@ export default [
     component: ConservativeList,
   },
   {
-    path: '/account/Neutrility',
-    name: 'Neutrility',
-    component: Neutrility,
+    path: '/account/NeutralList',
+    name: 'NeutralList',
+    component: NeutralList,
   },
   {
     path: '/account/ActiveList',
@@ -57,31 +55,21 @@ export default [
   {
     path: '/asset/accountupdate',
     name: 'accountupdate',
-    component: AccountUpdate
+    component: AccountUpdate,
   },
   {
-    path: '/myasset/MyStock',
-    name: 'myStock',
-    component: MyStock
-  },
-  {
-    path: '/myasset/MyEstate',
-    name: 'myEstate',
-    component: MyEstate
-  },
-  {
-    path: '/myasset/MyCar',
-    name: 'myCar',
-    component: MyCar
-  },
-  {
-    path: '/myasset/MyBank',
-    name: 'myBank',
-    component: MyBank
+    path: '/myasset/MyFinancialDashboard',
+    name: 'MyFinancialDashboard',
+    component: MyFinancialDashboard,
   },
   {
     path: '/myasset/MyDataAgree',
     name: 'myDataAgree',
-    component: MyDataAgree
+    component: MyDataAgree,
   },
+  {
+    path: '/deposit/:prodname',
+    name: 'DepositDetail',
+    component: DepositDetail
+}
 ];

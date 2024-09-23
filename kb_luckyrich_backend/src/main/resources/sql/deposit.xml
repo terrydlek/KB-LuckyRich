@@ -9,4 +9,12 @@
         select *
         from deposit_data;
     </select>
+
+    <select id="getDepositByProdname" parameterType="string" resultType="mul.cam.e.dto.DepositDto">
+        select *
+        from deposit_data
+        where prodname = #{prodname}
+        limit 1;
+    </select>
+
 </mapper>
