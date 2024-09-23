@@ -36,5 +36,8 @@ public class RecommendService {
         return depositDao.getDeposit();
     }
 
+    public DepositDto getDepositByProdname(String prodname) {
+        return depositDao.getDepositByProdname(prodname);
+    }
 
 }
