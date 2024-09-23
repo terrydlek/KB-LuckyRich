@@ -12,4 +12,6 @@ public interface DepositDao {
 
     List<DepositDto> getDeposit();
 
+    DepositDto getDepositByProdname(String prodname);
+
 }
