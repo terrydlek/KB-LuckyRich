@@ -32,23 +32,12 @@ public class RedisService {
         return null;
     }
 
-    public void invalidateCache(String key) {
-        redisTemplate.delete(key);
-    }
-
-    /*
-    public void setStockData(String key, Object object) {
-        // 5분 간격으로 Redis 갱신
-        redisTemplate.opsForValue().set(key, object, 5, TimeUnit.MINUTES);
-    }
-
-    public void setFundData(String key, Object object) {
-        // 24시간에 한 번 Redis 갱신
-        redisTemplate.opsForValue().set(key, object, 1440, TimeUnit.MINUTES);
-    }
-
-    public void invalidateCache(String key) {
-        redisTemplate.delete(key);
+    public List<StockDto> getStockData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<StockDto>) result;
+        }
+        return null;
     }
 
     public List<DepositDto> getDepositData(String key) {
@@ -59,33 +48,8 @@ public class RedisService {
         return null;
     }
 
-    public List<StockDto> getStockData(String key) {
-        Object result = redisTemplate.opsForValue().get(key);
-        if (result instanceof List<?>) {
-            return (List<StockDto>) result;
-        }
-        return null;
+    public void invalidateCache(String key) {
+        redisTemplate.delete(key);
     }
 
-    public List<FundDto> getFundData(String key) {
-        Object result = redisTemplate.opsForValue().get(key);
-        if (result instanceof List<?>) {
-            return (List<FundDto>) result;
-        }
-        return null;
-    }
-
-    public void testRedisConnection(Object object) {
-
-        redisTemplate.opsForValue().set("testKey", object);
-
-        Object result = redisTemplate.opsForValue().get("testKey");
-        List<String> value = null;
-        if (result instanceof List) {
-            value = (List<String>) result;
-        }
-        System.out.println("Value: " + value);
-    }
-
-    */
 }
