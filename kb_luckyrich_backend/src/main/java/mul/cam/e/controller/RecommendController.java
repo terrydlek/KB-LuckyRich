@@ -179,7 +179,7 @@ public class RecommendController {
         stockDetail.setLowerLimitPrice(lowerLimitPrice);
         stockDetail.setTradeVolume(tradeVolume);
         stockDetail.setTradeValue(tradeValue);
-        stockDetail.setChartImageUrl("https://finance.naver.com" + chartImageUrl);
+        stockDetail.setChartImageUrl(chartImageUrl);
 
         // ResponseEntity로 반환
         return ResponseEntity.ok(stockDetail);
@@ -187,62 +187,68 @@ public class RecommendController {
 
 
 
-    @GetMapping("/stock/{stockCode}/compare")
-    public ResponseEntity<StockCompareDto> getStockComparison(@PathVariable("stockCode") String stockCode) throws IOException {
-        String url = "https://finance.naver.com/item/main.naver?code=" + stockCode;
-        Document doc = Jsoup.connect(url).get();
-
-        StockCompareDto compareData = new StockCompareDto();
-
-        // 종목명 추출
-        Elements stockNamesElements = doc.select(".section.trade_compare table thead th[scope=col] a");
-        List<String> stockNames = new ArrayList<>();
-        for (Element element : stockNamesElements) {
-            stockNames.add(element.text());
-        }
-        compareData.setStockNames(stockNames);
-
-        // 각 데이터 항목 추출 (현재가, 전일대비, 등락률, 시가총액 등)
-        Elements rows = doc.select(".section.trade_compare table tbody tr");
-
-        // 현재가 추출
-        compareData.setCurrentPrices(rows.get(0).select("td").eachText());
-
-        // 전일대비 추출
-        compareData.setPriceChanges(rows.get(1).select("td").eachText());
-
-        // 등락률 추출
-        compareData.setFluctuationRates(rows.get(2).select("td").eachText());
-
-        // 시가총액 추출
-        compareData.setMarketCaps(rows.get(3).select("td").eachText());
-
-        // 외국인 비율 추출
-        compareData.setForeignOwnerships(rows.get(4).select("td").eachText());
-
-        // 매출액 추출
-        compareData.setSales(rows.get(5).select("td").eachText());
-
-        // 영업이익 추출
-        compareData.setOperatingProfits(rows.get(6).select("td").eachText());
-
-        // 당기순이익 추출
-        compareData.setNetProfits(rows.get(9).select("td").eachText());
-
-        // 주당순이익(EPS) 추출
-        compareData.setEps(rows.get(10).select("td").eachText());
-
-        // ROE 추출
-        compareData.setRoes(rows.get(11).select("td").eachText());
-
-        // PER 추출
-        compareData.setPers(rows.get(12).select("td").eachText());
-
-        // PBR 추출
-        compareData.setPbrs(rows.get(13).select("td").eachText());
-
-        // ResponseEntity로 반환
-        return ResponseEntity.ok(compareData);
-    }
+//    @GetMapping("/stock/compare/{stockCode}")
+//    public ResponseEntity<StockCompareDto> getStockComparison(@PathVariable("stockCode") String stockCode) throws IOException {
+//        System.out.println("execute 1~~~~~~~~~~~~~~~~~~~~~~");
+//        String url = "https://finance.naver.com/item/main.naver?code=" + stockCode;
+//        Document doc = Jsoup.connect(url).get();
+//        StockCompareDto compareData = new StockCompareDto();
+//
+//        // 종목명 추출
+//        Elements stockNamesElements = doc.select(".h_th2 th_cop_comp1 th[scope=col] a");
+//        System.out.println(stockNamesElements);
+//        System.out.println(0);
+//        List<String> stockNames = new ArrayList<>();
+//        System.out.println(1);
+//        for (Element element : stockNamesElements) {
+//            System.out.println(2);
+//            stockNames.add(element.text());
+//        }
+//
+//        System.out.println(3);
+//        compareData.setStockNames(stockNames);
+//
+//        // 각 데이터 항목 추출 (현재가, 전일대비, 등락률, 시가총액 등)
+//        Elements rows = doc.select(".section.trade_compare table tbody tr");
+//
+//        // 현재가 추출
+//        compareData.setCurrentPrices(rows.get(0).select("td").eachText());
+//
+//        // 전일대비 추출
+//        compareData.setPriceChanges(rows.get(1).select("td").eachText());
+//
+//        // 등락률 추출
+//        compareData.setFluctuationRates(rows.get(2).select("td").eachText());
+//
+//        // 시가총액 추출
+//        compareData.setMarketCaps(rows.get(3).select("td").eachText());
+//
+//        // 외국인 비율 추출
+//        compareData.setForeignOwnerships(rows.get(4).select("td").eachText());
+//
+//        // 매출액 추출
+//        compareData.setSales(rows.get(5).select("td").eachText());
+//
+//        // 영업이익 추출
+//        compareData.setOperatingProfits(rows.get(6).select("td").eachText());
+//
+//        // 당기순이익 추출
+//        compareData.setNetProfits(rows.get(9).select("td").eachText());
+//
+//        // 주당순이익(EPS) 추출
+//        compareData.setEps(rows.get(10).select("td").eachText());
+//
+//        // ROE 추출
+//        compareData.setRoes(rows.get(11).select("td").eachText());
+//
+//        // PER 추출
+//        compareData.setPers(rows.get(12).select("td").eachText());
+//
+//        // PBR 추출
+//        compareData.setPbrs(rows.get(13).select("td").eachText());
+//
+//        // ResponseEntity로 반환
+//        return ResponseEntity.ok(compareData);
+//    }
 
 }
