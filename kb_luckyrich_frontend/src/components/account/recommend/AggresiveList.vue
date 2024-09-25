@@ -31,7 +31,11 @@
         <tbody>
           <tr v-for="coin in coins" :key="coin.rank">
             <td>{{ coin.rank }}위</td>
-            <td>{{ coin.name }}</td>
+            <td>
+              <a href="#" @click.prevent="goToCoinDetail(coin.id)">{{
+                coin.name
+              }}</a>
+            </td>
             <td>{{ coin.symbol }}</td>
             <td>
               <span v-if="coin.quotes.KRW.price >= 100000000">
@@ -76,9 +80,10 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const loading = ref(true); // 로딩 중으로 초기화
 const coins = ref([]); // 빈 배열로 초기화
 
@@ -94,6 +99,10 @@ const fetchCoins = () => {
       coins.value = json.slice(0, 100); // 가져온 데이터 1~100위까지
       loading.value = false; // 로딩 멈추기
     });
+};
+
+const goToCoinDetail = (coinId) => {
+  router.push({ name: 'CoinDetail', params: { id: coinId } });
 };
 
 onMounted(() => {

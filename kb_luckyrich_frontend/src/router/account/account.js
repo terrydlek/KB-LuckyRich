@@ -13,7 +13,8 @@ import MyBank from '@/components/account/accountRegi/MyBank.vue';
 import DepositDetail from '@/components/account/details/DepositDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import RealEstate from '@/views/realestate/RealEstate.vue';
-
+import CoinDetail from '@/components/account/details/CoinDetail.vue';
+import FundDetail from '@/components/account/details/FundDetail.vue';
 
 export default [
   {
@@ -74,21 +75,31 @@ export default [
   {
     path: '/myasset/MyBank',
     name: 'myBank',
-    component: MyBank
+    component: MyBank,
   },
   {
     path: '/deposit/:prodname',
     name: 'DepositDetail',
-    component: DepositDetail
+    component: DepositDetail,
   },
   {
-    path : '/account/AccountBook',
-    name : 'accountbook',
-    component : AccountBook
+    path: '/coin/:id',
+    name: 'CoinDetail',
+    component: CoinDetail,
   },
   {
-    path : '/RealEstate',
-    name : 'realestate',
-    component : RealEstate
-  }
+    path: '/fund/:encodedUrl',
+    name: 'FundDetail',
+    component: FundDetail,
+  },
+  {
+    path: '/account/AccountBook',
+    name: 'accountbook',
+    component: AccountBook,
+  },
+  {
+    path: '/RealEstate',
+    name: 'realestate',
+    component: RealEstate,
+  },
 ];
