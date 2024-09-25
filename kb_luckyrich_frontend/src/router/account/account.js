@@ -15,6 +15,7 @@ import RealEstate from '@/views/realestate/RealEstate.vue';
 import CoinDetail from '@/components/account/details/CoinDetail.vue';
 import FundDetail from '@/components/account/details/FundDetail.vue';
 import StockDetail from '@/components/account/details/StockDetail.vue';
+import Detail from '@/components/account/details/Detail.vue';
 
 export default [
   {
@@ -99,7 +100,12 @@ export default [
   },
   {
     path: '/recommend/active/:stockCode',
-    name: '/StockDetail',
+    name: 'StockDetail',
     component: StockDetail,
   },
+  {
+    path: '/recommend/funds/:fundUrl',
+    name: 'Detail',
+    component: Detail,
+  }
 ];
