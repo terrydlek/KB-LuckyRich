@@ -47,7 +47,6 @@ public class FundService {
             // 캐시된 데이터 없으면 새로 가져오기
             return getAndCacheFundsByRiskRating(riskRating);
         }
-
         // 있으면 그대로 반환
         return cachedData;
     }

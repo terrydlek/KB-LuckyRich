@@ -3,6 +3,7 @@ package mul.cam.e.service;
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.StockDetailDto;
 import mul.cam.e.dto.StockDto;
+import mul.cam.e.dto.StockTimeDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -71,6 +72,45 @@ public class StockService {
 
         return stockList;
     }
+
+    public StockTimeDto getStockDetailTime(String stockCode) throws IOException {
+        System.out.println("StockService getStockDetailTime execute~~~~");
+
+        String url = "https://finance.naver.com/item/sise.naver?code=" + stockCode + "&asktype=10";
+
+        Document doc = Jsoup.connect(url).get();
+
+        StockTimeDto stockTimeDto = new StockTimeDto();
+
+        stockTimeDto.setNowVal(doc.select("#_nowVal").text());
+        stockTimeDto.setDiff(doc.select("#_diff span").text());
+        stockTimeDto.setRate(doc.select("#_rate span").text());
+        stockTimeDto.setQuant(doc.select("#_quant").text());
+        stockTimeDto.setAmount(doc.select("#_amount").text());
+        stockTimeDto.setFaceVal(doc.select(".section.inner_sub th:contains(액면가)").next().text());
+        stockTimeDto.setUpperLimit(doc.select(".section.inner_sub th:contains(상한가)").next().text());
+        stockTimeDto.setLowerLimit(doc.select(".section.inner_sub th:contains(하한가)").next().text());
+        stockTimeDto.setPer(doc.select("#_sise_per").text());
+        stockTimeDto.setEps(doc.select("#_sise_eps").text());
+        stockTimeDto.setHigh52Week(doc.select(".section.inner_sub th:contains(52주 최고)").next().text());
+        stockTimeDto.setLow52Week(doc.select(".section.inner_sub th:contains(52주 최저)").next().text());
+        stockTimeDto.setMarketCap(doc.select("#_sise_market_sum").text());
+        stockTimeDto.setForeignShares(doc.select(".section.inner_sub th:contains(외국인현재)").next().text());
+        stockTimeDto.setSellingPrice(doc.select(".type2 tbody tr:nth-child(3) td:nth-child(2)").text());
+        stockTimeDto.setBuyingPrice(doc.select(".type2 tbody tr:nth-child(3) td:nth-child(4)").text());
+        stockTimeDto.setPreviousPrice(doc.select(".section.inner_sub th:contains(전일가)").next().text());
+        stockTimeDto.setOpeningPrice(doc.select(".section.inner_sub th:contains(시가)").next().text().split(" ")[0]);
+        stockTimeDto.setHighPrice(doc.select("td:contains(고가)").next().text().split(" ")[1]);
+        stockTimeDto.setLowPrice(doc.select("td:contains(저가)").next().text().split(" ")[1]);
+        // 이까지 잘 됌
+        stockTimeDto.setPreviousUpperLimit(doc.select(".section.inner_sub th:contains(전일상한)").next().text());
+        stockTimeDto.setPreviousLowerLimit(doc.select(".section.inner_sub th:contains(전일하한)").next().text());
+        stockTimeDto.setListedShares(doc.select(".section.inner_sub th:contains(상장주식수)").next().text());
+        stockTimeDto.setCapital(doc.select(".section.inner_sub th:contains(자본금)").next().text());
+
+        return stockTimeDto;
+    }
+
 
     public StockDetailDto getStockDetail(String stockCode) throws IOException {
         System.out.println("StockService getStockDetail execute~~~~");
