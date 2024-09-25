@@ -2,6 +2,8 @@ package mul.cam.e.service;
 
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.scraper.FundSourceScraper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -70,15 +72,12 @@ public class FundService {
         redisService.invalidateCache("riskRating: 3");
     }
 
-    public FundDto getFundByUrl(String url) throws IOException {
-        System.out.println("FundService getFundByUrl execute~~~");
-
-        String completeUrl = "https://www.investing.com" + url;
-        System.out.println(completeUrl);
-        FundDto fund = new FundDto();
-
-        // TODO: complete the logic to fetch fund details using completeUrl
-        return fund;
-    }
+//    public FundDto getFundByUrl(String url) throws IOException {
+//        System.out.println("FundService getFundByUrl execute~~~");
+//
+//        String completeUrl = "https://www.investing.com/funds/" + url;
+//
+//        return fund;
+//    }
 
 }
