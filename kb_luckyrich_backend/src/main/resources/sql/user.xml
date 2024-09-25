@@ -3,28 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mul.cam.e.dao.UserDao">
-    <select id="userCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*)
-        from user
-        where email=#{email}
-    </select>
-
-    <insert id="register" parameterType="mul.cam.e.dto.UserDto">
+    <insert id="register" parameterType="mul.cam.e.security.SecurityUser">
         insert into user(user_name, email, provider_id)
         values (#{user_name}, #{email}, #{provider_id})
     </insert>
-
-    <select id="login" parameterType="java.lang.String" resultType="mul.cam.e.security.UserDetail">
-        select user_name, email, gender, age
-        from user
-        where email=#{email}
-    </select>
-
-    <select id="getUserByEmail" parameterType="java.lang.String" resultType="mul.cam.e.security.UserDetail">
-        select user_name, email, gender, age
-        from user
-        where email=#{email}
-    </select>
 
     <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(ua.account_id)
@@ -32,10 +14,11 @@
                  JOIN user u ON ua.user_id = u.user_id
         WHERE u.email = #{email}
     </select>
-    <select id="loginByEmailAndProvider" parameterType="map" resultType="mul.cam.e.security.UserDetail">
-        select user_name, email, gender, age
+
+    <select id="getUserDtoByEmail" resultType="mul.cam.e.security.SecurityUser">
+        select user_id, user_name, email, gender, age, provider_id
         from user
-        where email = #{email} and provider_id = #{provider_id}
+        where email=#{email}
     </select>
 
     <update id="updateUserInfo">

@@ -52,7 +52,7 @@ const handleAuth = () => {
 function isLogined() {
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get("access_token");
-  console.log(accessToken);
+  // console.log(accessToken);
 
   if (accessToken != "") {
     isLoggedIn.value = true;

@@ -8,18 +8,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URLDecoder;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Log4j
 @RequestMapping("/recommend")
@@ -44,12 +44,34 @@ public class RecommendController {
 
     @GetMapping("/conservative")
     public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
+        redisService.invalidateCache("riskRating: 2");
+        redisService.invalidateCache("riskRating: 3");
         return ResponseEntity.ok(fundService.getFundsByRiskRating(2));
     }
 
     @GetMapping("/neutral")
     public ResponseEntity<List<FundDto>> getNeutralFunds() throws IOException {
         return ResponseEntity.ok(fundService.getFundsByRiskRating(3));
+    }
+
+    @GetMapping("/funds/{url}")
+    public String getFundByUrl(@PathVariable String url) throws IOException {
+        System.out.println("controller get fund by url execute~~~");
+
+        String completeUrl = "https://www.investing.com/funds/" + url;
+        Document doc = Jsoup.connect(completeUrl).get();
+
+        doc.select("header, footer").remove();
+
+        Elements links = doc.select("a");
+        for (Element link : links) {
+            link.attr("href", "javascript:void(0);");
+        }
+
+        doc.select(".chartWrap").remove();
+        doc.select("#rightColumn").remove();
+
+        return doc.outerHtml();
     }
 
     @GetMapping("/active")
@@ -76,6 +98,11 @@ public class RecommendController {
     @GetMapping("/steadiness/{prodname}")
     public ResponseEntity<DepositDto> getDepositByProdname(@PathVariable String prodname) throws IOException {
         return ResponseEntity.ok(depositService.getDepositDetail(prodname));
+    }
+
+    @GetMapping("/delete")
+    public void delete() {
+        fundService.invalidateFundCache();
     }
 
 }

@@ -26,7 +26,7 @@
             <p>Account Number: {{ selectedAccount.accountNumber }}</p>
             <p>Balance: {{ formatBalance(selectedAccount.balance) }}</p>
             <p>Account Type: {{ selectedAccount.accountType }}</p>
-            <button @click="">다음</button>
+            <button @click="goToAccountFetch">다음</button>
         </div>
     </div>
 </template>
@@ -34,6 +34,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const accounts = ref([]);
 const selectedAccount = ref(null);
@@ -51,7 +54,7 @@ function getMyAccount() {
         }
     })
         .then((response) => {
-            console.log(response.data)
+            // console.log(response.data)
             accounts.value = response.data
         })
         .catch((error) => {
@@ -65,6 +68,22 @@ function getToken() {
 
 function selectAccount(account) {
     selectedAccount.value = account;
+}
+
+function goToAccountFetch() {
+    axios.post("http://localhost:8080/myasset/fetchaccount", selectedAccount.value, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`
+        }
+    })
+        .then(res => {
+            console.log(res.data);
+            // updating.value = false;
+            router.push({name: 'home'})
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 onMounted(() => {

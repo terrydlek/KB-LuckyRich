@@ -1,8 +1,10 @@
 <template>
   <h2>
-    당신의 투자 성향은 위험 중립형입니다. 재간접 펀드 상품을 추천해드릴게요.
+    당신의 투자 성향은 안정추구형입니다. 채권형 펀드 상품을 추천해드릴게요.
   </h2>
-  <table v-if="funds.length">
+  <div v-if="loading">데이터를 불러오는 중...</div>
+  <div v-else-if="error">{{ error }}</div>
+  <table v-else-if="funds.length">
     <thead>
       <tr>
         <th>국가</th>
@@ -15,49 +17,90 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="fund in funds" :key="fund.symbol">
+      <tr v-for="fund in funds" :key="fund.url">
         <td>{{ fund.country }}</td>
-        <td>{{ fund.name }}</td>
+        <td>
+          <a :href="`/recommend/funds/${encodeURIComponent(fund.url)}`">{{ fund.name }}</a>
+        </td>
         <td>{{ fund.symbol }}</td>
-        <td>{{ fund.lastPrice }}</td>
+        <td>{{ formatNumber(fund.lastPrice) }}</td>
         <td
           :class="{
-            green: fund.changePercent > 0,
-            red: fund.changePercent < 0,
+            'text-green-500': parseFloat(fund.changePercent) > 0,
+            'text-red-500': parseFloat(fund.changePercent) < 0,
           }"
         >
-          {{ fund.changePercent }}%
+          {{ fund.changePercent }}
         </td>
-        <td>{{ fund.totalAssets }}</td>
+        <td>{{ formatNumber(fund.totalAssets) }}</td>
         <td>{{ fund.lastUpdate }}</td>
       </tr>
     </tbody>
   </table>
+  <div v-else>표시할 펀드 데이터가 없습니다.</div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      funds: [],
-    };
-  },
-  mounted() {
-    this.fetchFunds();
-  },
-  methods: {
-    async fetchFunds() {
-      try {
-        const response = await axios.get(
-          'http://localhost:8080/api/funds?riskRating=3'
-        );
-        this.funds = response.data;
-      } catch (error) {
-        console.error('펀드 데이터를 불러오는 데 실패했습니다.', error);
-      }
-    },
-  },
+const funds = ref([]);
+const loading = ref(true);
+const error = ref(null);
+
+const fetchFunds = async () => {
+  try {
+    loading.value = true;
+    const response = await axios.get(
+      'http://localhost:8080/api/funds?riskRating=3'
+    );
+    funds.value = response.data;
+  } catch (err) {
+    console.error('펀드 데이터를 불러오는 데 실패했습니다.', err);
+    error.value =
+      '펀드 데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.';
+  } finally {
+    loading.value = false;
+  }
 };
+
+const formatNumber = (value) => {
+  if (!value) return '-';
+  return new Intl.NumberFormat('ko-KR').format(
+    parseFloat(value.replace(/,/g, ''))
+  );
+};
+
+const encodeUrl = (url) => {
+  return encodeURIComponent(url);
+};
+
+onMounted(fetchFunds);
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+.text-green-500 {
+  color: green;
+}
+.text-red-500 {
+  color: red;
+}
+.external-link {
+  margin-left: 5px;
+  font-size: 0.8em;
+  color: #666;
+}
+</style>

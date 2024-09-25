@@ -1,8 +1,7 @@
 package mul.cam.e.controller;
 
-import mul.cam.e.security.UserDetail;
+import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,18 +13,20 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("inf")
-    public ResponseEntity<UserDetail> fetchUserInfo() {
+    public ResponseEntity<SecurityUser> fetchUserInfo() {
         System.out.println("fetchUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        UserDetail user = userService.getUserByEmail(email);
-//        System.out.println(user);
+        SecurityUser user = userService.loadUserByUsername(email);
 
         if (user != null) {
             return ResponseEntity.ok(user);

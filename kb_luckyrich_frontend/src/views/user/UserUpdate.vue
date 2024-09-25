@@ -78,9 +78,9 @@ function fetchUserInfo() {
     })
         .then(res => {
             const data = res.data;
-            // console.log(data);
+            console.log(data);
 
-            username.value = data.username;
+            username.value = data.user_name;
             email.value = data.email;
             age.value = data.age;
             gender.value = data.gender;
