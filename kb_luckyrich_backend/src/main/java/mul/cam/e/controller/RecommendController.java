@@ -8,17 +8,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URLDecoder;
 
 @RestController
 @Log4j
@@ -44,12 +43,34 @@ public class RecommendController {
 
     @GetMapping("/conservative")
     public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
+        redisService.invalidateCache("riskRating: 2");
+        redisService.invalidateCache("riskRating: 3");
         return ResponseEntity.ok(fundService.getFundsByRiskRating(2));
     }
 
     @GetMapping("/neutral")
     public ResponseEntity<List<FundDto>> getNeutralFunds() throws IOException {
         return ResponseEntity.ok(fundService.getFundsByRiskRating(3));
+    }
+
+    @GetMapping("/funds/{url}")
+    public ResponseEntity<FundDto> getFundByUrl(@PathVariable String url) throws IOException {
+        try {
+            String decodedUrl = URLDecoder.decode(url, "UTF-8");
+            System.out.println("Decoded URL: " + decodedUrl); // 디버그용 로그
+            FundDto fundDetail = fundService.getFundByUrl(decodedUrl);
+
+            if (fundDetail == null) {
+                System.out.println("Fund data not found for URL: " + decodedUrl);
+            } else {
+                System.out.println("Fund data retrieved: " + fundDetail.toString());
+            }
+
+            return ResponseEntity.ok(fundDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/active")
@@ -76,6 +97,11 @@ public class RecommendController {
     @GetMapping("/steadiness/{prodname}")
     public ResponseEntity<DepositDto> getDepositByProdname(@PathVariable String prodname) throws IOException {
         return ResponseEntity.ok(depositService.getDepositDetail(prodname));
+    }
+
+    @GetMapping("/delete")
+    public void delete() {
+        fundService.invalidateFundCache();
     }
 
 }
