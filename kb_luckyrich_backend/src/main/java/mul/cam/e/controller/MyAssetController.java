@@ -10,9 +10,7 @@ import mul.cam.e.util.TransactionGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,8 +56,8 @@ public class MyAssetController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        System.out.println(email);
 
-//        List<AccountDto> accounts = new ArrayList<>();
         List<Map<String, Object>> accounts = new ArrayList<>();
 
         for (int i=0; i<5; i++) {
@@ -68,8 +66,6 @@ public class MyAssetController {
             int rBalance = randUtils.getRandomBalance();
             AccountType rAccountType = randUtils.getRandomAccountType();
 
-//            accounts.add(new AccountDto(rAccountNum, 0, rBankName.getNum(), rAccountType.getNum(), rBalance));
-
             Map<String, Object> account = new HashMap<>();
             account.put("accountNumber", rAccountNum);
             account.put("bankName", rBankName.getName());
@@ -77,16 +73,38 @@ public class MyAssetController {
             account.put("balance", rBalance);
 
             accounts.add(account);
-
-            myAssetService.setTransaction(transactionGenerator.generateRandomTransactionDto(1));
         }
 
-//        try {
-//            boolean b = myAssetService.setMyAccount(rAccountNum, email, rBankName.getNum(), rAccountType.getNum(), 1000000);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage() + "\n저장안됨...ㅜㅜ");
-//        }
-
         return ResponseEntity.ok(accounts);
+    }
+
+    @PostMapping("fetchaccount")
+    public ResponseEntity<String> updateUserInfo(@RequestBody Map<String, Object> requestBody) {
+        System.out.println("fetchAccount -------------------------");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+//        System.out.println(email);
+
+        try {
+            boolean b = myAssetService.setMyAccount(
+                    (String) requestBody.get("accountNumber"),
+                    email,
+                    BankName.valueOf((String) requestBody.get("bankName")).getNum(),
+                    AccountType.valueOf((String) requestBody.get("accountType")).getNum(),
+                    (Integer) requestBody.get("balance"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "\n저장안됨...ㅜㅜ");
+        }
+
+        int account_id = myAssetService.getAccountNum((String) requestBody.get("accountNumber"));
+
+        for (int i = 0; i < 10; i++) {
+            TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
+            myAssetService.setTransaction(transactionDto);
+        }
+
+
+        return ResponseEntity.ok("User information updated successfully");
     }
 }

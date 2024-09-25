@@ -41,4 +41,11 @@
         insert into transaction(account_id, amount, transaction_type, category, description, transaction_date)
         values (#{accountId}, #{amount}, #{transactionType}, #{category}, #{description}, #{transactionDate});
     </update>
+
+    <select id="getAccountNum" parameterType="java.lang.String" resultType="integer">
+        select account_id
+        from account
+        where account_number = #{accountNumber}
+    </select>
+
 </mapper>

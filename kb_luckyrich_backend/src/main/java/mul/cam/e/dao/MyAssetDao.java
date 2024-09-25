@@ -25,4 +25,6 @@ public interface MyAssetDao {
                          @Param("balance") int balance);
 
     boolean setTransaction(TransactionDto transactionDto);
+
+    int getAccountNum(String accountNumber);
 }

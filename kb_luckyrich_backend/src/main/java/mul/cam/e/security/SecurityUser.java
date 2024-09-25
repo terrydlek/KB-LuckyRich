@@ -1,6 +1,7 @@
 package mul.cam.e.security;
 
 import lombok.*;
+import mul.cam.e.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,12 +10,25 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetail implements UserDetails {
-
-    private String username;
+public class SecurityUser implements UserDetails {
+    private int user_id;
+    private String user_name;
     private String email;
     private String gender;
     private int age;
+    private int provider_id;
+//    private UserDto user;
+
+    @Builder(toBuilder = true)
+    public SecurityUser(String user_name, String email, String gender, int age, int provider_id) {
+//        this.user_id = user_id;
+        this.user_name = user_name;
+        this.email = email;
+        this.gender = gender;
+        this.age = age;
+        this.provider_id = provider_id;
+    }
+
     private Collection<? extends GrantedAuthority> authorities;
 //    private String auth;        // ROLE_USER, ROLE_MANAGER, ROLE_ADMIN
 //    private String password;
@@ -32,7 +46,7 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return user_name;
     }
 
     // 계정만료

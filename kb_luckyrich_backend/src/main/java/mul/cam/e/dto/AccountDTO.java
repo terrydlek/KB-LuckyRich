@@ -15,9 +15,8 @@ public class AccountDto {
     private int accountTypeId;
     private long balance;
 
-    public AccountDto(String accountNumber, int userId, int bankId, int accountTypeId, long balance) {
+    public AccountDto(String accountNumber, int bankId, int accountTypeId, long balance) {
         this.accountNumber = accountNumber;
-        this.userId = userId;
         this.bankId = bankId;
         this.accountTypeId = accountTypeId;
         this.balance = balance;

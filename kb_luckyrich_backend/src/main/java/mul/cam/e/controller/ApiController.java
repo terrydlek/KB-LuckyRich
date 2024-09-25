@@ -2,18 +2,15 @@ package mul.cam.e.controller;
 
 import mul.cam.e.dto.*;
 import mul.cam.e.jwt.JwtTokenProvider;
-import mul.cam.e.security.UserDetail;
-import mul.cam.e.security.UserDetailsServices;
+import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.service.UserService;
 import mul.cam.e.util.TokenDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,11 +32,8 @@ public class ApiController {
     private final ApiService apiService;
     private final UserService userService;
 
-    @Autowired
-    private UserDetailsServices userDetailsService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Value("${google.oauth.client-id}") String clientId;
     @Value("${google.oauth.password}") String password;
@@ -71,15 +65,17 @@ public class ApiController {
 
         int provider_id = 2;
         // 유저 조회
-        UserDetail userDetail = userDetailsService.loadUserByEmailAndProvider(userInf.getEmail(), provider_id);
+        SecurityUser customUserDetail = userService.loadUserByUsername(userInf.getEmail());
 
-        if(userDetail == null) {
-            UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
+        if(customUserDetail == null) {
+            SecurityUser user = new SecurityUser(userInf.getFamily_name()+userInf.getGiven_name(),
                     userInf.getEmail(), null, 0, provider_id);
             userService.register(user);
 
-            userDetail = userDetailsService.loadUserByEmailAndProvider(userInf.getEmail(), provider_id);
+            customUserDetail = userService.loadUserByUsername(userInf.getEmail());
         }
+
+        System.out.println(customUserDetail.getEmail());
 
         // 인증 처리 왜 안됨????????
 //        Authentication authentication = authenticationManager.authenticate(
@@ -87,10 +83,10 @@ public class ApiController {
 //        System.out.println("authenticated");
 
         // JWT 토큰 생성
-        String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
+        String jwtToken = JwtTokenProvider.createToken(customUserDetail.getEmail());
 
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(userDetail.getEmail());
+        int account_num = userService.getAccountNum(customUserDetail.getEmail());
 
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/login?access_token=";
@@ -131,17 +127,18 @@ public class ApiController {
         KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
         int provider_id= 1;
 
-        UserDetail userDetail = userDetailsService.loadUserByEmailAndProvider(userInfo.getEmail(), provider_id);
+        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
 
-
-        if (userDetail == null) {
-            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0 ,provider_id);
+        if (customUserDetail == null) {
+            SecurityUser dto = new SecurityUser(userInfo.getName(), userInfo.getEmail(), null, 0 ,provider_id);
             userService.register(dto);
-            userDetail = userDetailsService.loadUserByEmailAndProvider(userInfo.getEmail(), provider_id);
+            customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         }
-        String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
+
+        String jwtToken = JwtTokenProvider.createToken(customUserDetail.getEmail());
+
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(userDetail.getEmail());
+        int account_num = userService.getAccountNum(customUserDetail.getEmail());
 
         Map<String, Object> map = new HashMap<>();
         map.put("name", userInfo.getName());
@@ -162,18 +159,18 @@ public class ApiController {
         //System.out.println("access" + accessToken);
         NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
 
-        UserDetail userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
-        System.out.println(userDetail);
+        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
+        System.out.println(customUserDetail);
 
-        if (userDetail == null) {
-            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0 ,3);
+        if (customUserDetail == null) {
+            SecurityUser dto = new SecurityUser(userInfo.getName(), userInfo.getEmail(), null, 0 ,3);
             userService.register(dto);
-            userDetail = userDetailsService.loadUserByUsername(userInfo.getEmail());
+            customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         }
-        String jwtToken = JwtTokenProvider.createToken(userDetail.getEmail());
+        String jwtToken = JwtTokenProvider.createToken(customUserDetail.getEmail());
 
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(userDetail.getEmail());
+        int account_num = userService.getAccountNum(customUserDetail.getEmail());
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());
