@@ -1,45 +1,50 @@
 <template>
-    <div v-if="deposit">
-        <h2>{{ deposit.prodname }} 상품 상세 정보</h2>
-        <ul>
-            <li><strong>금융회사:</strong> {{ deposit.company }}</li>
-            <li><strong>상품명:</strong> {{ deposit.prodname }}</li>
-            <li><strong>세전 이자율:</strong> {{ deposit.prerate ?? 'N/A' }}</li>
-            <li><strong>세후 이자율:</strong> {{ deposit.afterrate ?? 'N/A' }}</li>
-            <li><strong>세후 이자:</strong> {{ deposit.afterinterest ?? 'N/A' }}</li>
-            <li><strong>최고 우대 금리:</strong> {{ deposit.bestinterest ?? 'N/A' }}</li>
-            <li><strong>가입 제한 여부:</strong> {{ deposit.limit ?? 'N/A' }}</li>
-            <li><strong>이자 계산 방식:</strong> {{ deposit.calmethod }}</li>
+    <div v-if="deposit" class="container mt-5">
+        <h2 class="mb-4">{{ deposit.prodname }} 상품 상세 정보</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item"><strong>금융회사:</strong> {{ deposit.company }}</li>
+            <li class="list-group-item"><strong>상품명:</strong> {{ deposit.prodname }}</li>
+            <li class="list-group-item"><strong>세전 이자율:</strong> {{ deposit.prerate ?? 'N/A' }}</li>
+            <li class="list-group-item"><strong>세후 이자율:</strong> {{ deposit.afterrate ?? 'N/A' }}</li>
+            <li class="list-group-item"><strong>세후 이자:</strong> {{ deposit.afterinterest ?? 'N/A' }}</li>
+            <li class="list-group-item"><strong>최고 우대 금리:</strong> {{ deposit.bestinterest ?? 'N/A' }}</li>
+            <li class="list-group-item"><strong>가입 제한 여부:</strong> {{ deposit.limit ?? 'N/A' }}</li>
+            <li class="list-group-item"><strong>이자 계산 방식:</strong> {{ deposit.calmethod }}</li>
         </ul>
 
-        <!-- 사용자로부터 가입 기간과 원금을 입력받기 위한 폼 -->
-        <h3>이자 계산기</h3>
+        <h3 class="mb-3">이자 계산기</h3>
         <form @submit.prevent="calculateInterest">
-            <div>
-                <label for="principal">원금 (만원):</label>
-                <input type="number" v-model="principal" min="1" required>
+            <div class="mb-3">
+                <label for="principal" class="form-label">원금 (만원):</label>
+                <input type="number" class="form-control" v-model="principal" min="1" required>
             </div>
-            <div>
-                <label for="period">가입 기간 (개월):</label>
-                <input type="number" v-model="period" min="1" required>
+            <div class="mb-3">
+                <label for="period" class="form-label">가입 기간 (개월):</label>
+                <input type="number" class="form-control" v-model="period" min="1" required>
             </div>
-            <div>
-                <label for="method">계산 방식:</label>
-                <select v-model="calcMethod" required>
+            <div class="mb-3">
+                <label for="method" class="form-label">계산 방식:</label>
+                <select class="form-select" v-model="calcMethod" required>
                     <option value="단리">단리</option>
                     <option value="복리">복리</option>
                 </select>
             </div>
-            <button type="submit">계산하기</button>
+            <button type="submit" class="btn btn-primary">계산하기</button>
         </form>
 
         <!-- 계산 결과 표시 -->
-        <div v-if="totalInterest !== null">
+        <div v-if="totalInterest !== null" class="mt-4 alert alert-info">
             <h4>계산 결과:</h4>
-            <p><strong>입력하신 정보를 바탕으로 {{ deposit.prodname }} 상품에 대한 이자 합계를 계산해봤어요:</strong> {{ totalInterest.toFixed(2) }} 원</p>
+            <p><strong>입력하신 정보를 바탕으로 {{ deposit.prodname }} 상품에 대한 이자 합계를 계산해봤어요:</strong> {{ totalInterest.toFixed(2)
+                }} 원</p>
         </div>
     </div>
     <p v-else>상품 정보를 불러오는 중입니다...</p>
+    <center>
+        <div class="mb-3">
+            <button class="btn btn-primary" @click="goBack">목록으로</button>
+        </div>
+    </center>
 </template>
 
 <script>
@@ -57,7 +62,7 @@ export default {
     },
     mounted() {
         const prodname = this.$route.params.prodname;  // URL 파라미터로부터 상품명 추출
-        axios.get(`http://localhost:8080/asset/getDeposit/${prodname}`)  // 상품명에 따라 상세 정보 요청
+        axios.get(`http://localhost:8080/recommend/steadiness/${prodname}`)  // 상품명에 따라 상세 정보 요청
             .then(response => {
                 this.deposit = response.data;
             })
@@ -79,6 +84,9 @@ export default {
                 // 복리 계산: 원금 * (1 + 금리/12)^개월 수 - 원금
                 this.totalInterest = (principalInWon * Math.pow((1 + rate / 12), months) - principalInWon) / 10000;  // 만원 단위로 변환
             }
+        },
+        goBack() {
+            this.$router.go(-1);
         }
     }
 }

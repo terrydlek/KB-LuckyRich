@@ -1,50 +1,82 @@
 <template>
-    <div>
-        <!-- <h4>{{ stockData.stockName }} ({{ stockCode }})</h4> -->
+    <div class="container mt-5">
         <div v-if="stockData">
-            <p>현재가: {{ stockData.currentPrice }} 원</p>
-            <p>전일 종가: {{ stockData.prevClosingPrice }} 원</p>
-            <p>시가: {{ stockData.openingPrice }} 원</p>
-            <p>고가: {{ stockData.highPrice }} 원</p>
-            <p>상한가: {{ stockData.upperLimitPrice }} 원</p>
-            <p>저가: {{ stockData.lowPrice }} 원</p>
-            <p>하한가: {{ stockData.lowerLimitPrice }} 원</p>
-            <p>거래량: {{ stockData.tradeVolume }} 주</p>
-            <p>거래대금: {{ stockData.tradeValue }} 원</p>
+            <div class="text-center mb-4">
+                <h1>{{ stockData.stockName }}</h1>
+            </div>
+            <table class="table text-center">
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="align-middle">
+                            <span class="font-weight-bold">현재가</span>: {{ stockData.currentPrice }} 원
+                        </td>
+                        <td>전일 {{ stockData.prevClosingPrice }} 원</td>
+                        <td>고가 {{ stockData.highPrice }} 원</td>
+                        <td>거래량 {{ stockData.lowPrice }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>시가 {{ stockData.openingPrice }} 원</td>
+                        <td>저가 {{ stockData.lowerLimitPrice }} 원</td>
+                        <td>거래대금 {{ stockData.tradeValue }} 백만원</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <img :src="stockData.chartImageUrl" class="img-fluid" alt="주식 차트" width="800px" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        <StockTimeDetail />
+        <center>
+            <div class="mb-3">
+                <button class="btn btn-primary" @click="goBack">목록으로</button>
+            </div>
+        </center>
     </div>
-    <StockCompareDetail />
 </template>
 
 <script>
 import axios from 'axios';
-import StockCompareDetail from './StockCompareDetail.vue';
+import StockTimeDetail from './StockTimeDetail.vue';
 
 export default {
     data() {
         return {
-            stockData: null,     // 받아올 주식 데이터를 저장할 객체
+            stockData: null, // 받아올 주식 데이터를 저장할 객체
         };
     },
     components: {
-        StockCompareDetail
+        StockTimeDetail
     },
     mounted() {
         const stockCode = this.$route.params.stockCode;
-        axios.get(`http://localhost:8080/asset/stock/${stockCode}`)
-            .then(res => {
+        axios
+            .get(`http://localhost:8080/recommend/active/${stockCode}`)
+            .then((res) => {
                 this.stockData = res.data;
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
-            })
+            });
+    },
+    methods: {
+        goBack() {
+            this.$router.go(-1);
+        }
     }
 };
 </script>
 
 <style scoped>
-img {
-    width: 300px;
-    height: auto;
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table {
+    margin-bottom: 20px;
 }
 </style>

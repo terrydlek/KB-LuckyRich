@@ -62,6 +62,12 @@ public class RecommendController {
         return ResponseEntity.ok(stockService.getStockDetail(stockCode));
     }
 
+    @GetMapping("/active/time/{stockCode}")
+    public ResponseEntity<StockTimeDto> getStockByStockCodeTime(@PathVariable String stockCode) throws IOException {
+        return ResponseEntity.ok(stockService.getStockDetailTime(stockCode));
+    }
+
+
     @GetMapping("/steadiness")
     public ResponseEntity<List<DepositDto>> getSteadinessDeposits() throws IOException {
         return ResponseEntity.ok(depositService.getDeposit());
