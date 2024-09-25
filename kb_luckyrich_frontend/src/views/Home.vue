@@ -7,7 +7,9 @@
             <ProductTable />
         </ServiceComponent>
         <ServiceComponent serviceName="가계부" route="accountbook" />
-
+        <ServiceComponent serviceName="부동산" route="realestate">
+            <img src="../assets/images/realEstate.png"  alt="Real Estate" class="service-image">
+        </ServiceComponent>
     </div>
 </template>
 
@@ -34,5 +36,11 @@ onMounted(() => {
     align-items: flex-start;
     justify-content: center;
     /* flex-wrap: wrap; */
+}
+img {
+    max-width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+    border-radius: 8px; 
 }
 </style>
