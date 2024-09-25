@@ -16,7 +16,6 @@ public class JwtTokenProvider {
     // 토큰 생성
     public static String createToken(String email) {    // String username) {
         Claims claims = Jwts.claims().setSubject(email);
-//        claims.put("user_name", username);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + 60 * 60 * 1000); // 1시간 유효

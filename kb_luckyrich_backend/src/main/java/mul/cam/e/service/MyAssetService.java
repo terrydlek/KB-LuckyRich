@@ -40,4 +40,6 @@ public class MyAssetService {
     }
 
     public boolean setTransaction(TransactionDto transactionDto) { return myAssetDao.setTransaction(transactionDto); }
+
+    public int getAccountNum(String account_number) { return myAssetDao.getAccountNum(account_number); }
 }
