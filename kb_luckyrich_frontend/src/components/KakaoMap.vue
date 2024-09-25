@@ -89,8 +89,8 @@ export default {
                 script.onerror = () => {
                     console.error("Failed to load Kakao Map script");
                 };
-                script.src =
-                    'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=259901136e4a4b811fa3ba8911f12bf2&libraries=services';
+                const kakaoApiKey = process.env.VUE_APP_KAKAO_MAP_APPKEY;
+                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`;
                 document.head.appendChild(script);
             }
         },
