@@ -15,7 +15,7 @@
                 <tr v-for="deposit in deposits" :key="deposit.prodname">
                     <td>{{ deposit.company }}</td>
                     <!-- 상품명 클릭 시 상세 페이지로 이동 -->
-                    <td><a :href="`/deposit/${deposit.prodname}`">{{ deposit.prodname }}</a></td>
+                    <td><a :href="`/recommend/steadiness/${deposit.prodname}`">{{ deposit.prodname }}</a></td>
                     <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
                 </tr>
             </tbody>
@@ -35,7 +35,7 @@ export default {
         };
     },
     mounted() {
-        axios.get('http://localhost:8080/asset/getDeposit')
+        axios.get('http://localhost:8080/recommend/steadiness')
             .then(response => {
                 this.deposits = response.data;
             })
