@@ -28,7 +28,7 @@
 
     <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(ua.account_id)
-        FROM user_account ua
+        FROM account ua
                  JOIN user u ON ua.user_id = u.user_id
         WHERE u.email = #{email}
     </select>
