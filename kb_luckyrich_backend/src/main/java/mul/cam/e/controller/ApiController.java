@@ -134,7 +134,9 @@ public class ApiController {
             userService.register(dto);
             customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         }
+
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getEmail());
+
         // 계좌 갯수 확인
         int account_num = userService.getAccountNum(customUserDetail.getEmail());
 
