@@ -2,17 +2,15 @@ package mul.cam.e.controller;
 
 import mul.cam.e.dto.*;
 import mul.cam.e.jwt.JwtTokenProvider;
+import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.service.UserService;
 import mul.cam.e.util.TokenDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -67,17 +65,17 @@ public class ApiController {
 
         int provider_id = 2;
         // 유저 조회
-        UserDto customUserDetail = userService.loadUserByUsername(userInf.getEmail());
+        SecurityUser customUserDetail = userService.loadUserByUsername(userInf.getEmail());
 
         if(customUserDetail == null) {
-            UserDto user = new UserDto(userInf.getFamily_name()+userInf.getGiven_name(),
+            SecurityUser user = new SecurityUser(userInf.getFamily_name()+userInf.getGiven_name(),
                     userInf.getEmail(), null, 0, provider_id);
             userService.register(user);
 
             customUserDetail = userService.loadUserByUsername(userInf.getEmail());
         }
 
-//        System.out.println(customUserDetail.getUser_id());
+        System.out.println(customUserDetail.getEmail());
 
         // 인증 처리 왜 안됨????????
 //        Authentication authentication = authenticationManager.authenticate(
@@ -129,10 +127,10 @@ public class ApiController {
         KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
         int provider_id= 1;
 
-        UserDto customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
+        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
 
         if (customUserDetail == null) {
-            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0 ,provider_id);
+            SecurityUser dto = new SecurityUser(userInfo.getName(), userInfo.getEmail(), null, 0 ,provider_id);
             userService.register(dto);
             customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         }
@@ -159,11 +157,11 @@ public class ApiController {
         //System.out.println("access" + accessToken);
         NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
 
-        UserDto customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
+        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         System.out.println(customUserDetail);
 
         if (customUserDetail == null) {
-            UserDto dto = new UserDto(userInfo.getName(), userInfo.getEmail(), null, 0 ,3);
+            SecurityUser dto = new SecurityUser(userInfo.getName(), userInfo.getEmail(), null, 0 ,3);
             userService.register(dto);
             customUserDetail = userService.getUserDtoByEmail(userInfo.getEmail());
         }

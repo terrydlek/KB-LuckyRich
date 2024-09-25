@@ -1,8 +1,7 @@
 package mul.cam.e.service;
 
 import mul.cam.e.dao.UserDao;
-import mul.cam.e.dto.UserDto;
-import org.springframework.security.core.userdetails.UserDetails;
+import mul.cam.e.security.SecurityUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,9 @@ public class UserService implements UserDetailsService {
         this.userDao = userDao;
     }
 
-    public void register(UserDto userDto) {
-        userDao.register(userDto);
+    public void register(SecurityUser securityUser) {
+        userDao.register(securityUser);
     }
-
-    public UserDto login(String email) {
-        return userDao.login(email);
-    }
-
-//    public UserDetail getUserByEmail(String email) { return userDao.getUserByEmail(email); }
 
     public boolean updateUserInfo(String email, Map<String, String> request) {
         return userDao.updateUserInfo(email, request);
@@ -36,14 +29,10 @@ public class UserService implements UserDetailsService {
         return userDao.getAccountNum(email);
     }
 
-    public UserDto getUserByEmail(Map<String, Object> params) {
-        return userDao.getUserByEmail(params);
-    }
-
-    public UserDto getUserDtoByEmail(String email) { return userDao.getUserDtoByEmail(email); }
+    public SecurityUser getUserDtoByEmail(String email) { return userDao.getUserDtoByEmail(email); }
 
     @Override
-    public UserDto loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
         return userDao.getUserDtoByEmail(username);
     }
 }

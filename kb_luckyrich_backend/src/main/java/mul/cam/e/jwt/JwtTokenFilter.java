@@ -1,6 +1,6 @@
 package mul.cam.e.jwt;
 
-import mul.cam.e.dto.UserDto;
+import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // /api 엔드포인트를 제외
         String requestURI = request.getRequestURI();
         System.out.println(requestURI);
-        if (requestURI.startsWith("/api") || requestURI.startsWith("/myasset/") || requestURI.startsWith("/recommend/") || requestURI.startsWith("/test-redis")|| requestURI.startsWith("/realestate/")) {
+        if (requestURI.startsWith("/api") || requestURI.startsWith("/recommend/") || requestURI.startsWith("/test-redis")|| requestURI.startsWith("/realestate/")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,7 +56,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 사용자 이메일이 존재하고 인증되지 않은 경우
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 사용자 정보를 로드
-            UserDto customUserDetail = userService.loadUserByUsername(email);
+            SecurityUser customUserDetail = userService.loadUserByUsername(email);
             System.out.println(customUserDetail.getEmail());
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
