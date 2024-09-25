@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.net.URLDecoder;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Log4j
 @RequestMapping("/recommend")
@@ -54,23 +55,23 @@ public class RecommendController {
     }
 
     @GetMapping("/funds/{url}")
-    public ResponseEntity<FundDto> getFundByUrl(@PathVariable String url) throws IOException {
-        try {
-            String decodedUrl = URLDecoder.decode(url, "UTF-8");
-            System.out.println("Decoded URL: " + decodedUrl); // 디버그용 로그
-            FundDto fundDetail = fundService.getFundByUrl(decodedUrl);
+    public String getFundByUrl(@PathVariable String url) throws IOException {
+        System.out.println("controller get fund by url execute~~~");
 
-            if (fundDetail == null) {
-                System.out.println("Fund data not found for URL: " + decodedUrl);
-            } else {
-                System.out.println("Fund data retrieved: " + fundDetail.toString());
-            }
+        String completeUrl = "https://www.investing.com/funds/" + url;
+        Document doc = Jsoup.connect(completeUrl).get();
 
-            return ResponseEntity.ok(fundDetail);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        doc.select("header, footer").remove();
+
+        Elements links = doc.select("a");
+        for (Element link : links) {
+            link.attr("href", "javascript:void(0);");
         }
+
+        doc.select(".chartWrap").remove();
+        doc.select("#rightColumn").remove();
+
+        return doc.outerHtml();
     }
 
     @GetMapping("/active")
