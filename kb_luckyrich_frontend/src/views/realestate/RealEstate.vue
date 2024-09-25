@@ -1,19 +1,20 @@
-<script>
-
-export default {
-
-}
-
-</script>
-
-
 <template>
     <div>
-        sadasdsasdsadsdd
+        <KakaoMap/>
     </div>
+    
 </template>
 
+<script>
+import KakaoMap from '@/components/KakaoMap.vue';
 
-<style>
+export default {
+    name : "RealEstate",
+    components : {
+        KakaoMap
+    }
+};
+</script>
 
+<style scoped>
 </style>

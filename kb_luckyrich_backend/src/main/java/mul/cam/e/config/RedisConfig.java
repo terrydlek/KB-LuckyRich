@@ -33,7 +33,7 @@ public class RedisConfig {
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
 
-//        return new LettuceConnectionFactory("localhost", 6379);
+        // return new LettuceConnectionFactory("localhost", 6379);
     }
 
     @Bean
@@ -48,4 +48,3 @@ public class RedisConfig {
         return template;
     }
 }
-

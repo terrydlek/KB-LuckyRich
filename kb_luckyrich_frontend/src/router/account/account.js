@@ -11,9 +11,10 @@ import MyFinancialDashboard from '@/views/account/MyFinancialDashboard.vue';
 import MyDataAgree from '@/components/account/accountRegi/MyDataAgree.vue';
 import MyBank from '@/components/account/accountRegi/MyBank.vue';
 import DepositDetail from '@/components/account/details/DepositDetail.vue';
-import AccountBook from '@/components/account/AccountBook.vue';
 import RealEstate from '@/views/realestate/RealEstate.vue';
-
+import CoinDetail from '@/components/account/details/CoinDetail.vue';
+import FundDetail from '@/components/account/details/FundDetail.vue';
+import StockDetail from '@/components/account/details/StockDetail.vue';
 
 export default [
   {
@@ -27,32 +28,32 @@ export default [
     component: asset,
   },
   {
-    path: '/account/test',
+    path: '/recommend',
     name: 'test',
     component: test,
   },
   {
-    path: '/account/SteadinessList',
+    path: '/recommend/steadiness',
     name: 'SteadinessList',
     component: SteadinessList,
   },
   {
-    path: '/account/ConservativeList',
+    path: '/recommend/conservative',
     name: 'ConservativeList',
     component: ConservativeList,
   },
   {
-    path: '/account/NeutralList',
+    path: '/recommend/neutral',
     name: 'NeutralList',
     component: NeutralList,
   },
   {
-    path: '/account/ActiveList',
+    path: '/recommend/active',
     name: 'ActiveList',
     component: ActiveList,
   },
   {
-    path: '/account/AggresiveList',
+    path: '/recommend/aggressive',
     name: 'AggresiveList',
     component: AggresiveList,
   },
@@ -74,21 +75,31 @@ export default [
   {
     path: '/myasset/MyBank',
     name: 'myBank',
-    component: MyBank
+    component: MyBank,
   },
   {
-    path: '/deposit/:prodname',
+    path: '/recommend/steadiness/:prodname',
     name: 'DepositDetail',
-    component: DepositDetail
+    component: DepositDetail,
   },
   {
-    path : '/account/AccountBook',
-    name : 'accountbook',
-    component : AccountBook
+    path: '/coin/:id',
+    name: 'CoinDetail',
+    component: CoinDetail,
   },
   {
-    path : '/RealEstate',
-    name : 'realestate',
-    component : RealEstate
-  }
+    path: '/fund/:encodedUrl',
+    name: 'FundDetail',
+    component: FundDetail,
+  },
+  {
+    path: '/RealEstate',
+    name: 'realestate',
+    component: RealEstate,
+  },
+  {
+    path: '/recommend/active/:stockCode',
+    name: '/StockDetail',
+    component: StockDetail,
+  },
 ];

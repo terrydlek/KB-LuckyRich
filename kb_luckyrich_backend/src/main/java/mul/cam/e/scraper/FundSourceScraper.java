@@ -1,7 +1,6 @@
 package mul.cam.e.scraper;
 
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.FundDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Double.parseDouble;
 
 // investing.com 웹 사이트에서 펀드 데이터 스크래핑 하는 클래스
 @Service
@@ -56,9 +53,10 @@ public class FundSourceScraper {
                 Element row = rows.get(i);
                 Elements columns = row.select("td");
 
-                if (columns.size() >= 7) {
+                if (columns.size() >= 8) {
                     FundDto fund = new FundDto();
                     fund.setName(columns.get(1).text());
+                    fund.setUrl(columns.get(1).selectFirst("a").attr("href"));
                     fund.setSymbol(columns.get(2).text());
                     fund.setLastPrice(columns.get(3).text());
                     fund.setChangePercent(columns.get(4).text());
@@ -68,6 +66,7 @@ public class FundSourceScraper {
 
                     // 국가, 발행사, 자산 클래스 정보는 이 테이블에 없으므로 별도로 처리해야 할 수 있습니다
                     fund.setCountry("South Korea"); // 예시
+                    System.out.println(fund);
 
                     funds.add(fund);
                 }
@@ -91,18 +90,19 @@ public class FundSourceScraper {
             String[] fields = fundData.replaceAll("[\\[\\]\"]", "").split(","); // 대괄호 없애고 콤마로만 구분
 
 
-            if (fields.length >= 10) {
+            if (fields.length >= 11) {
                 FundDto fund = new FundDto();
                 fund.setSymbol(fields[0]); // 심볼
                 fund.setName(fields[1]);   // 펀드 이름
-                fund.setLastPrice(fields[2]); // 마지막 가격 (문자열로 유지)
-                fund.setChangePercent(fields[3]); // 변동률
-                fund.setTotalAssets(fields[4]); // 총 자산
-                fund.setLastUpdate(fields[5]); // 마지막 업데이트 시간
-                fund.setCountry(fields[6]); // 국가
-                fund.setIssuer(fields[7]); // 발행자
+                fund.setUrl(fields[2]);
+                fund.setLastPrice(fields[3]); // 마지막 가격 (문자열로 유지)
+                fund.setChangePercent(fields[4]); // 변동률
+                fund.setTotalAssets(fields[5]); // 총 자산
+                fund.setLastUpdate(fields[6]); // 마지막 업데이트 시간
+                fund.setCountry(fields[7]); // 국가
+                fund.setIssuer(fields[8]); // 발행자
                 fund.setRiskRating(riskRating); // 위험 등급
-                fund.setAssetClass(fields[8]); // 자산 클래스
+                fund.setAssetClass(fields[9]); // 자산 클래스
                 funds.add(fund);
             }
         }

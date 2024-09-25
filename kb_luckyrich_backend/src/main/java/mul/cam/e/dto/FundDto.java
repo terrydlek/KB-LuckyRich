@@ -21,6 +21,7 @@ public class FundDto {
 //    private double terFee;
 
     private String name;
+    private String url;
     private String symbol;
     private String lastPrice;
     private String changePercent;
