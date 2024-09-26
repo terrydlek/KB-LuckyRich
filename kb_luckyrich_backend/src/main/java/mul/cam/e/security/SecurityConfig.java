@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .antMatchers("/myasset/**").permitAll()
                         .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
+                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

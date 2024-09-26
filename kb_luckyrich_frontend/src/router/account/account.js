@@ -16,6 +16,9 @@ import CoinDetail from '@/components/account/details/CoinDetail.vue';
 import FundDetail from '@/components/account/details/FundDetail.vue';
 import StockDetail from '@/components/account/details/StockDetail.vue';
 import Detail from '@/components/account/details/Detail.vue';
+import PostList from '@/components/account/board/PostList.vue';
+import PostDetail from '@/components/account/board/PostDetail.vue';
+import CreatePost from '@/components/account/board/CreatePost.vue';
 
 export default [
   {
@@ -107,5 +110,20 @@ export default [
     path: '/recommend/funds/:fundUrl',
     name: 'Detail',
     component: Detail,
+  },
+  {
+    path: '/luckyrich/qa/board',
+    name: 'PostList',
+    component: PostList,
+  },
+  {
+    path: '/luckyrich/qa/board/:id',
+    name: 'PostDetail',
+    component: PostDetail,
+  },
+  {
+    path: '/luckyrich/qa/board/create',
+    name: 'CreatePost',
+    component: CreatePost,
   },
 ];
