@@ -31,12 +31,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = getTokenFromRequest(request);
-        String email = null;
+        String id = null;
 
         // /api 엔드포인트를 제외
         String requestURI = request.getRequestURI();
         System.out.println(requestURI);
-        if (requestURI.startsWith("/api") || requestURI.startsWith("/recommend/") || requestURI.startsWith("/test-redis")|| requestURI.startsWith("/realestate/") || requestURI.startsWith("/board/")) {
+        if (requestURI.startsWith("/api") || requestURI.startsWith("/recommend/") || requestURI.startsWith("/test-redis")|| requestURI.startsWith("/realestate/") || requestURI.startsWith("/news/")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,7 +44,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 토큰 존재시
         if (token != null) {
             try {
-                email = jwtTokenProvider.getEmail(token);
+                id = jwtTokenProvider.getId(token);
             } catch (Exception e) {
                 // 토큰이 유효하지 않음
                 System.out.println("***** 유효하지 않은 토큰 " + new Date());
@@ -54,16 +54,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         // 사용자 이메일이 존재하고 인증되지 않은 경우
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 사용자 정보를 로드
-            SecurityUser customUserDetail = userService.loadUserByUsername(email);
+            SecurityUser customUserDetail = userService.loadUserByUsername(id);
             System.out.println(customUserDetail.getEmail());
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
-//                System.out.println("UserDetail: " + userDetail);
                 // 인증 토큰을 생성하고 SecurityContext에 저장
-//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, null, customUserDetail.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, null, customUserDetail.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
@@ -72,7 +70,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
-        } else if (email == null) {
+        } else if (id == null) {
             // 토큰이 없는 경우 401 에러 반환
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token is missing");
             return;

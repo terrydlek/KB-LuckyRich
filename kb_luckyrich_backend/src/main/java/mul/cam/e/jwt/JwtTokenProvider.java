@@ -14,8 +14,8 @@ public class JwtTokenProvider {
     private static final String SECRET_KEY = "pomqi1baytc1t2xsdtw3df44ffe5gs76hsr7je08kn9";
 
     // 토큰 생성
-    public static String createToken(String email) {    // String username) {
-        Claims claims = Jwts.claims().setSubject(email);
+    public static String createToken(String id) {    // String username) {
+        Claims claims = Jwts.claims().setSubject(id);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + 60 * 60 * 1000); // 1시간 유효
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰으로 이메일 확인
-    public String getEmail(String token) {
+    public String getId(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)

@@ -31,7 +31,7 @@ function handleGoogleLoginCallback() {
     if (accessToken) {
         localStorage.setItem('access_token', accessToken);
         // userStore.login();
-        if (accountNum > 1) {
+        if (accountNum >= 1) {
             router.push('/');
         }
         router.push({ name: 'myDataAgree' });

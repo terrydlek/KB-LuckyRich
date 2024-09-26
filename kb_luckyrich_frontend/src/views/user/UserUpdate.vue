@@ -17,10 +17,6 @@
             <label for="userGender">성별</label>
             <input id="userGender" v-model="gender" type="text" :disabled="!updating">
         </div>
-        <div class="input-group">
-            <label for="balance">총 보유 자산</label>
-            <input id="balance" v-model="balance" type="text" disabled>
-        </div>
         <div class="button-group">
             <button v-if="!updating" @click="setUpdate">Update</button>
             <button v-else @click="updateUserInfo">Save</button>
@@ -36,7 +32,6 @@ const username = ref("");
 const email = ref("");
 const age = ref("");
 const gender = ref("");
-const balance = ref("");
 
 const updating = ref(false);
 
@@ -80,11 +75,10 @@ function fetchUserInfo() {
             const data = res.data;
             console.log(data);
 
-            username.value = data.user_name;
+            username.value = data.nickName;
             email.value = data.email;
             age.value = data.age;
             gender.value = data.gender;
-            balance.value = data.balance;
         })
         .catch(err => {
             console.log(err);

@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import mul.cam.e.dto.*;
 import mul.cam.e.dto.DepositDto;
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.dto.RealEstateDto;
@@ -49,10 +50,33 @@ public class RedisService {
         return null;
     }
 
+    public StockTimeDto getStockTimeData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof StockTimeDto) {
+            return (StockTimeDto) result;
+        }
+        return null;
+    }
+
+    public StockDetailDto getStockDetailData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof StockDetailDto) {
+            return (StockDetailDto) result;
+        }
+        return null;
+    }
+
     public List<RealEstateDto> getRealEstateData(String key) {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof List<?>) {
             return (List<RealEstateDto>) result;
+        }
+        return null;
+    }
+    public List<NewsDto> getNewsData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<NewsDto>) result;
         }
         return null;
     }

@@ -183,15 +183,15 @@ const investmentType = computed(() => {
 
 const showResult = () => {
   if (investmentType.value === '안정형') {
-    router.push('/recommend/steadiness');
+    router.push('/luckyrich/recommend/steadiness');
   } else if (investmentType.value === '안정추구형') {
-    router.push('/recommend/conservative');
+    router.push('/luckyrich/recommend/conservative');
   } else if (investmentType.value === '위험중립형') {
-    router.push('/recommend/neutral');
+    router.push('/luckyrich/recommend/neutral');
   } else if (investmentType.value === '적극투자형') {
-    router.push('/recommend/active');
+    router.push('/luckyrich/recommend/active');
   } else {
-    router.push('/recommend/aggressive');
+    router.push('/luckyrich/recommend/aggressive');
   }
 };
 

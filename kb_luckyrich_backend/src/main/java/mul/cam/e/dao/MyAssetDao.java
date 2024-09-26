@@ -19,7 +19,7 @@ public interface MyAssetDao {
     List<AccountDto> getMyAccount(int userId);
 
     boolean setMyAccount(@Param("account_number") String account_number,
-                         @Param("email") String email,
+                         @Param("userName") String userName,
                          @Param("bankId") int bankId,
                          @Param("accountTypeId") int accountTypeId,
                          @Param("balance") int balance);
