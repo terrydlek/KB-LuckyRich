@@ -16,7 +16,7 @@
           <td>{{ deposit.company }}</td>
           <!-- 상품명 클릭 시 상세 페이지로 이동 -->
           <td>
-            <a :href="`/recommend/steadiness/${deposit.prodname}`">{{
+            <a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`">{{
               deposit.prodname
             }}</a>
           </td>

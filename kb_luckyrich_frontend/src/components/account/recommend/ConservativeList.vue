@@ -20,7 +20,7 @@
       <tr v-for="fund in funds" :key="fund.url">
         <td>{{ fund.country }}</td>
         <td>
-          <a :href="`/recommend/funds/${encodeURIComponent(fund.url)}`">{{ fund.name }}</a>
+          <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(fund.url)}`">{{ fund.name }}</a>
         </td>
         <td>{{ fund.symbol }}</td>
         <td>{{ formatNumber(fund.lastPrice) }}</td>

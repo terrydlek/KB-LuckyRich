@@ -1,18 +1,18 @@
 <template>
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-section about">
+            <!-- <div class="footer-section about">
                 <h2>Lucky Rich</h2>
                 <p>
                     MZ 세대를 위한 스마트 자산 관리 플랫폼. 맞춤형 투자 상품 추천, 실시간
                     자산 정보 및 더 나은 재정 계획을 위한 도구들을 제공합니다.
                 </p>
-            </div>
+            </div> -->
 
             <div class="footer-section links">
                 <h2>Quick Links</h2>
                 <ul>
-                    <a href="/about">About Lucky Rich</a> &nbsp;&nbsp;  <a href="/privacy">Privacy Policy</a> &nbsp;&nbsp; <a href="/terms">Terms of Service</a>&nbsp;&nbsp;<a href="https://github.com/terrydlek/KB-LuckyRich">Lucky Rich's Git Url</a>
+                    <a href="/">About Lucky Rich</a> &nbsp;&nbsp;  <a href="/luckyrich/privacy">Privacy Policy</a> &nbsp;&nbsp; <a href="/luckyrich/terms">Terms of Service</a>&nbsp;&nbsp;<a href="https://github.com/terrydlek/KB-LuckyRich">Lucky Rich's Git Url</a>
                 </ul>
             </div>
         </div>

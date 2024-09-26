@@ -3,6 +3,8 @@ package mul.cam.e.controller;
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
 import mul.cam.e.service.*;
+import mul.cam.e.util.KeyDecrypt;
+import mul.cam.e.util.KeyEncrypt;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,15 +33,19 @@ public class RecommendController {
     private final FundService fundService;
     private final StockService stockService;
     private final DepositService depositService;
+    private final KeyEncrypt keyEncrypt;
+    private final KeyDecrypt keyDecrypt;
 
     @Autowired
-    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService, FundService fundService, StockService stockService, DepositService depositService) {
+    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService, FundService fundService, StockService stockService, DepositService depositService, KeyEncrypt keyEncrypt, KeyDecrypt keyDecrypt) {
         this.redisService = redisService;
         this.recommendService = recommendService;
         this.rabbitService = rabbitService;
         this.fundService = fundService;
         this.stockService = stockService;
         this.depositService = depositService;
+        this.keyEncrypt = keyEncrypt;
+        this.keyDecrypt = keyDecrypt;
     }
 
     @GetMapping("/conservative")
@@ -103,6 +109,17 @@ public class RecommendController {
     @GetMapping("/delete")
     public void delete() {
         fundService.invalidateFundCache();
+    }
+
+    @GetMapping("/cipher")
+    public String cipher() {
+        String text = "hello";
+        System.out.println("text : " + text);
+        String ci = keyEncrypt.encrypt(text);
+        System.out.println("cipher : " + ci);
+        String di = keyDecrypt.decrypt(ci);
+        System.out.println("di : " + di);
+        return "dd";
     }
 
 }
