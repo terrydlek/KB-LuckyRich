@@ -60,9 +60,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             System.out.println(customUserDetail.getEmail());
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
-//                System.out.println("UserDetail: " + userDetail);
                 // 인증 토큰을 생성하고 SecurityContext에 저장
-//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, null, customUserDetail.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
