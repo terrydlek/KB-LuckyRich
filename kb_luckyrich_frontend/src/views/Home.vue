@@ -30,7 +30,7 @@
                 <img src="../assets/images/news.jpg" class="service-image">
             </ServiceComponent>
 
-            <ServiceComponent serviceName="Q&A 게시판" route="asset">
+            <ServiceComponent serviceName="Q&A 게시판" route="qa">
                 <img src="../assets/images/qa.jpg" class="service-image">
             </ServiceComponent>
         </div>
