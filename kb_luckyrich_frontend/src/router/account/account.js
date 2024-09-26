@@ -94,7 +94,7 @@ export default [
     component: FundDetail,
   },
   {
-    path: '/RealEstate',
+    path: '/realestate',
     name: 'realestate',
     component: RealEstate,
   },

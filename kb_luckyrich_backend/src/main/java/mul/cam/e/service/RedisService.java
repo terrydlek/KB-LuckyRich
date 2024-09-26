@@ -2,6 +2,7 @@ package mul.cam.e.service;
 
 import mul.cam.e.dto.DepositDto;
 import mul.cam.e.dto.FundDto;
+import mul.cam.e.dto.RealEstateDto;
 import mul.cam.e.dto.StockDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,6 +45,14 @@ public class RedisService {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof List<?>) {
             return (List<DepositDto>) result;
+        }
+        return null;
+    }
+
+    public List<RealEstateDto> getRealEstateData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<RealEstateDto>) result;
         }
         return null;
     }
