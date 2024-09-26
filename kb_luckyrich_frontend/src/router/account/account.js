@@ -107,5 +107,5 @@ export default [
     path: '/recommend/funds/:fundUrl',
     name: 'Detail',
     component: Detail,
-  }
+  },
 ];
