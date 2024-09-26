@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 public class BoardDto {
     private long id;
-    private int userId;
+    // private int userId;
     private String title;
     private String content;
-    private String author; // 작성자 name
+    // private String author; // 작성자 name
     private String createdAt;
 }

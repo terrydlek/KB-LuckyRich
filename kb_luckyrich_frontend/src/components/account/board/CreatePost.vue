@@ -1,18 +1,17 @@
+<!--
 <template>
   <div class="create-post">
     <h2>게시글 작성</h2>
-    {{ userId }}
     <form action="http://localhost:8080/board/created" method="post">
       <div>
         <label for="title">제목</label>
         <input type="text" id="title" v-model="title" required />
       </div>
       <div>
-        <label for="title">작성자</label>
         <input
-          type="text"
-          id="writer"
-          v-model="writer"
+          type="hidden"
+          id="userId"
+          v-model="userId"
           value="{{ userId }}"
           required
         />
@@ -25,6 +24,16 @@
     </form>
   </div>
 </template>
+-->
+<template>
+  <form @submit.prevent="createPost">
+    <div>
+      <label for="title">제목</label>
+      <input type="text" id="answer" v-model="answer" required />
+    </div>
+    <button type="submit">작성하기</button>
+  </form>
+</template>
 
 <script>
 import axios from 'axios';
@@ -32,8 +41,23 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      userId: sessionStorage.getItem('userId'),
+      answer: '',
     };
+  },
+  methods: {
+    async createPost() {
+      try {
+        const response = await axios.post(
+          'http://localhost:8080/board/created',
+          {
+            answer: this.answer,
+          }
+        );
+        console.log('게시글이 성공적으로 등록되었습니다.', response.data);
+      } catch (error) {
+        console.error('게시글 등록 중 오류가 발생했습니다.', error);
+      }
+    },
   },
 };
 

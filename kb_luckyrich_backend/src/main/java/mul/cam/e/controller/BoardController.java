@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class BoardController {
 
     @GetMapping("/post")
     public ResponseEntity<List<BoardDto>> getBoardList() {
-        System.out.println("getBoardList");
+        log.info("getBoardList");
         List<BoardDto> boardList = boardService.getBoardList();
         return ResponseEntity.ok(boardList);
     }
@@ -34,14 +35,15 @@ public class BoardController {
         return ResponseEntity.ok(userBoards);
     }
 
+    @GetMapping("/created")
+    public ResponseEntity<BoardDto> createBoard(@RequestParam String title, @RequestParam String content) {
+        BoardDto board = new BoardDto(1, title, content, "2024-09-26");
+        return ResponseEntity.ok(boardService.create(board));
+    }
+
     @PostMapping("/created")
-    public ResponseEntity<BoardDto> createBoard(@RequestParam String title, @RequestParam String writer, @RequestParam String content) {
-        System.out.println(title + " " + writer + " " + content);
-        BoardDto boardDto = new BoardDto();
-        boardDto.setTitle(title);
-        boardDto.setContent(content);
-        BoardDto createBoard = new BoardDto();
-        return ResponseEntity.ok(createBoard);
+    public ResponseEntity<String> createBoard(@RequestBody String answer) {
+        return ResponseEntity.ok(answer);
     }
 
     @PutMapping("/{id}")

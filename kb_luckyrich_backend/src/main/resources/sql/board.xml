@@ -24,9 +24,13 @@
         WHERE b.id = #{id}
     </select>
 
-    <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
+    <!-- <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
         insert into board(user_id, title, content, author)
         values (#{userId}, #{title}, #{content}, #{author})
+    </insert> -->
+    <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
+        insert into boardd(title, content, create_at)
+        values (#{title}, #{content}, #{createdAt})
     </insert>
 
     <update id="updateBoard" parameterType="mul.cam.e.dto.BoardDto">
