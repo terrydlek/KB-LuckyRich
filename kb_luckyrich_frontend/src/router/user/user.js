@@ -1,4 +1,7 @@
 import Home from "@/views/Home.vue";
+import About from "@/views/luckyRich/about.vue";
+import PrivacyPolicy from "@/views/luckyRich/PrivacyPolicy.vue";
+import TermsOfService from "@/views/luckyRich/TermsOfService.vue";
 import Login from "@/views/user/Login.vue";
 import UserUpdate from "@/views/user/UserUpdate.vue";
 
@@ -19,5 +22,20 @@ export default [
         name: 'userUpdate',
         component: UserUpdate
     },
+    {
+        path: '/about',
+        name: 'about',
+        component: About
+    },
+    {
+        path: '/privacy',
+        name: 'privacy',
+        component: PrivacyPolicy
+    },
+    {
+        path: '/terms',
+        name: 'terms',
+        component: TermsOfService
+    }
 
 ]
