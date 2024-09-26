@@ -1,8 +1,6 @@
 package mul.cam.e.service;
 
-import mul.cam.e.dto.DepositDto;
-import mul.cam.e.dto.FundDto;
-import mul.cam.e.dto.StockDto;
+import mul.cam.e.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -44,6 +42,22 @@ public class RedisService {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof List<?>) {
             return (List<DepositDto>) result;
+        }
+        return null;
+    }
+
+    public StockTimeDto getStockTimeData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof StockTimeDto) {
+            return (StockTimeDto) result;
+        }
+        return null;
+    }
+
+    public StockDetailDto getStockDetailData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof StockDetailDto) {
+            return (StockDetailDto) result;
         }
         return null;
     }
