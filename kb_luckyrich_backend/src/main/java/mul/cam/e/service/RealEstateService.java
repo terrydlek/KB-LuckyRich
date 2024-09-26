@@ -11,13 +11,21 @@ import java.util.List;
 @Transactional
 public class RealEstateService {
     private final RealEstateDao realEstateDao;
+    private final RedisService redisService;
 
-    public RealEstateService(RealEstateDao realEstateDao) {
+    public RealEstateService(RealEstateDao realEstateDao, RedisService redisService) {
         this.realEstateDao = realEstateDao;
+        this.redisService = redisService;
     }
 
 
     public List<RealEstateDto> getEstate() {
-        return realEstateDao.getRealEstates();
+        String redisKey = "realestateList";
+        List<RealEstateDto> estateList = redisService.getRealEstateData(redisKey);
+        if (estateList == null || estateList.isEmpty()) {
+            estateList = realEstateDao.getRealEstates();
+            redisService.setData(redisKey, estateList, Integer.MAX_VALUE);
+        }
+        return estateList;
     }
 }
