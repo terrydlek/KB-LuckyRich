@@ -16,6 +16,7 @@ import CoinDetail from '@/components/account/details/CoinDetail.vue';
 import FundDetail from '@/components/account/details/FundDetail.vue';
 import StockDetail from '@/components/account/details/StockDetail.vue';
 import Detail from '@/components/account/details/Detail.vue';
+import NewsDetail from '@/components/account/details/NewsDetail.vue';
 
 export default [
   {
@@ -107,5 +108,10 @@ export default [
     path: '/recommend/funds/:fundUrl',
     name: 'Detail',
     component: Detail,
+  },
+  {
+    path : '/financenews/:code1/:code2',
+    name : 'NewsDetail',
+    component : NewsDetail
   }
 ];

@@ -26,7 +26,7 @@
                 <img src="../assets/images/realEstate.png" alt="Real Estate" class="service-image" />
             </ServiceComponent>
 
-            <ServiceComponent serviceName="금융 뉴스" route="asset">
+            <ServiceComponent serviceName="금융 뉴스" route="financenews">
                 <img src="../assets/images/news.jpg" class="service-image">
             </ServiceComponent>
 

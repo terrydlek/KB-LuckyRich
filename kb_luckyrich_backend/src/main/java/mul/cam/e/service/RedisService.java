@@ -62,10 +62,21 @@ public class RedisService {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof StockDetailDto) {
             return (StockDetailDto) result;
+        }
+        return null;
+    }
+
     public List<RealEstateDto> getRealEstateData(String key) {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof List<?>) {
             return (List<RealEstateDto>) result;
+        }
+        return null;
+    }
+    public List<NewsDto> getNewsData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<NewsDto>) result;
         }
         return null;
     }
