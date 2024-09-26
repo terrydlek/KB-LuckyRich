@@ -4,6 +4,24 @@
 
 
 <mapper namespace="mul.cam.e.dao.MyAssetDao">
+
+    <update id="setMyAccount">
+        insert into account(account_number, user_id, bank_id, account_type_id, balance)
+        values (#{account_number}, (SELECT user_id FROM user WHERE user_name=#{userName}), #{bankId}, #{accountTypeId}, #{balance});
+    </update>
+
+    <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
+        insert into transaction(account_id, amount, transaction_type, category, description, transaction_date)
+        values (#{accountId}, #{amount}, #{transactionType}, #{category}, #{description}, #{transactionDate});
+    </update>
+
+    <select id="getAccountNum" parameterType="java.lang.String" resultType="integer">
+        select account_id
+        from account
+        where account_number = #{accountNumber}
+    </select>
+
+
     <select id="getMyStock" parameterType="int" resultType="mul.cam.e.dto.MyStockDto">
         select a.invest_symbol, a.invest_date, a.invest_price
         from invest a join user_invest b on a.invest_id = b.invest_id
@@ -30,22 +48,6 @@
         from account a join user_account b on a.account_id = b.account_id
         where b.user_id = #{userId}
         order by 2 desc;
-    </select>
-
-    <update id="setMyAccount">
-        insert into account(account_number, user_id, bank_id, account_type_id, balance)
-        values (#{account_number}, (SELECT user_id FROM user WHERE email = #{email}), #{bankId}, #{accountTypeId}, #{balance});
-    </update>
-
-    <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
-        insert into transaction(account_id, amount, transaction_type, category, description, transaction_date)
-        values (#{accountId}, #{amount}, #{transactionType}, #{category}, #{description}, #{transactionDate});
-    </update>
-
-    <select id="getAccountNum" parameterType="java.lang.String" resultType="integer">
-        select account_id
-        from account
-        where account_number = #{accountNumber}
     </select>
 
 </mapper>

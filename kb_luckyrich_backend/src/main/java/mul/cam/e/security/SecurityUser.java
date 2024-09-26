@@ -1,41 +1,47 @@
 package mul.cam.e.security;
 
 import lombok.*;
-import mul.cam.e.dto.UserDto;
+import mul.cam.e.util.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SecurityUser implements UserDetails {
-    private int user_id;
-    private String user_name;
+    private int userId;
+    private String userName;
+    private String nickName;
     private String email;
     private String gender;
     private int age;
-    private int provider_id;
-//    private UserDto user;
+    private Role role;
 
-    @Builder(toBuilder = true)
-    public SecurityUser(String user_name, String email, String gender, int age, int provider_id) {
+    @Builder()
+    public SecurityUser(String userName, String nickName, String email, String gender, int age) {
 //        this.user_id = user_id;
-        this.user_name = user_name;
+        this.userName = userName;
+        this.nickName = nickName;
         this.email = email;
         this.gender = gender;
         this.age = age;
-        this.provider_id = provider_id;
     }
 
     private Collection<? extends GrantedAuthority> authorities;
-//    private String auth;        // ROLE_USER, ROLE_MANAGER, ROLE_ADMIN
-//    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        auth.add(new SimpleGrantedAuthority("authority"));  // ROLE_USER, ROLE_ADMIN
+        ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+
+        if (this.role.equals("ADMIN")) {
+            auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        auth.add(new SimpleGrantedAuthority("ROLE_USER"));
+
         return authorities;
     }
 
@@ -46,7 +52,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user_name;
+        return userName;
     }
 
     // 계정만료

@@ -34,9 +34,8 @@ public class MyAssetService {
         return myAssetDao.getMyAccount(userId);
     }
 
-    public boolean setMyAccount(String account_number, String email, int bank_id, int account_type_id, int balance) {
-        System.out.println(account_number);
-        return myAssetDao.setMyAccount(account_number, email, bank_id, account_type_id, balance);
+    public boolean setMyAccount(String account_number, String userName, int bank_id, int account_type_id, int balance) {
+        return myAssetDao.setMyAccount(account_number, userName, bank_id, account_type_id, balance);
     }
 
     public boolean setTransaction(TransactionDto transactionDto) { return myAssetDao.setTransaction(transactionDto); }

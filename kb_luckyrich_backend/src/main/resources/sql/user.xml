@@ -3,27 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mul.cam.e.dao.UserDao">
+    <select id="getUserDtoByEmail" resultType="mul.cam.e.security.SecurityUser">
+        select user_id, user_name, nick_name, email, gender, age
+        from user
+        where user_name=#{userName}
+    </select>
+
     <insert id="register" parameterType="mul.cam.e.security.SecurityUser">
-        insert into user(user_name, email, provider_id)
-        values (#{user_name}, #{email}, #{provider_id})
+        insert into user(user_name, nick_name, email, role)
+        values (#{userName}, #{nickName}, #{email}, #{role})
     </insert>
 
     <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(ua.account_id)
-        FROM account ua
-                 JOIN user u ON ua.user_id = u.user_id
-        WHERE u.email = #{email}
-    </select>
-
-    <select id="getUserDtoByEmail" resultType="mul.cam.e.security.SecurityUser">
-        select user_id, user_name, email, gender, age, provider_id
-        from user
-        where email=#{email}
+        SELECT COUNT(user_name)
+        FROM user
+        WHERE user_name=#{user_name}
     </select>
 
     <update id="updateUserInfo">
         UPDATE user
         SET age=#{request.age}, gender=#{request.gender}
-        WHERE email=#{email}
+        WHERE user_name=#{user_name}
     </update>
 </mapper>

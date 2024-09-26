@@ -83,13 +83,13 @@ public class MyAssetController {
         System.out.println("fetchAccount -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-//        System.out.println(email);
+        String id = authentication.getName();
+        System.out.println(id);
 
         try {
             boolean b = myAssetService.setMyAccount(
                     (String) requestBody.get("accountNumber"),
-                    email,
+                    id,
                     BankName.valueOf((String) requestBody.get("bankName")).getNum(),
                     AccountType.valueOf((String) requestBody.get("accountType")).getNum(),
                     (Integer) requestBody.get("balance"));
