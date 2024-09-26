@@ -38,9 +38,9 @@ public class SecurityUser implements UserDetails {
         ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
 
         if (this.role.equals("ADMIN")) {
-            auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            auth.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
         }
-        auth.add(new SimpleGrantedAuthority("ROLE_USER"));
+        auth.add(new SimpleGrantedAuthority(Role.USER.name()));
 
         return authorities;
     }

@@ -16,6 +16,9 @@ public class UserService implements UserDetailsService {
 
     @Override
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        SecurityUser user = userDao.getUserDtoByEmail(username);
+
         return userDao.getUserDtoByEmail(username);
     }
 

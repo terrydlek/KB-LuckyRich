@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .antMatchers("/asset/**").permitAll()
                         .antMatchers("/login/**").permitAll()
                         .antMatchers("/recommend/**").permitAll()
-                        .antMatchers("/user/**").permitAll()
+                        .antMatchers("/user/**").hasRole("ADMIN")
                         .antMatchers("/myasset/**").permitAll()
                         .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
