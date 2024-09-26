@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(stock, index) in stocks" :key="index">
-                        <td><a :href="`/recommend/active/${stock.stockCode}`">{{ stock.stockName }}</a></td>
+                        <td><a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{ stock.stockName }}</a></td>
                         <td>{{ stock.stockPrice }}</td>
                         <td>{{ stock.comparePre }}</td>
                         <td>{{ stock.fluctuationRate }}</td>
