@@ -5,7 +5,7 @@ import Qa from "@/views/luckyRich/Qa.vue";
 import TermsOfService from "@/views/luckyRich/TermsOfService.vue";
 import Login from "@/views/user/login.vue";
 import UserUpdate from "@/views/user/UserUpdate.vue";
-
+import FinanceNews from "@/views/news/FinanceNews.vue";
 
 export default [
     {
@@ -42,6 +42,11 @@ export default [
         path: '/luckyrich/qa',
         name: 'qa',
         component: Qa
-    }
+    },
+    {
+        path : '/financenews',
+        name : 'financenews',
+        component : FinanceNews
+    },
 
 ]
