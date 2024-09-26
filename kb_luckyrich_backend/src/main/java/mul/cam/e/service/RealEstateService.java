@@ -23,10 +23,8 @@ public class RealEstateService {
         String redisKey = "realestateList";
         List<RealEstateDto> estateList = redisService.getRealEstateData(redisKey);
         if (estateList == null || estateList.isEmpty()) {
-            // Redis에 데이터가 없을 경우 데이터베이스에서 조회
             estateList = realEstateDao.getRealEstates();
-            // 조회한 데이터를 Redis에 캐싱 (유효 기간: 5분)
-            redisService.setData(redisKey, estateList, 100);
+            redisService.setData(redisKey, estateList, Integer.MAX_VALUE);
         }
         return estateList;
     }
