@@ -24,9 +24,9 @@ public class UserController {
         System.out.println("fetchUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String id = authentication.getName();
 
-        SecurityUser user = userService.loadUserByUsername(email);
+        SecurityUser user = userService.loadUserByUsername(id);
 
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -40,9 +40,9 @@ public class UserController {
         System.out.println("updateUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String id = authentication.getName();
 
-        boolean isUpdated = userService.updateUserInfo(email, request);
+        boolean isUpdated = userService.updateUserInfo(id, request);
 //        System.out.println(isUpdated);
 
         if (isUpdated) {

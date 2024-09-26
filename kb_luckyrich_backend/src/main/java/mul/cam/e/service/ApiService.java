@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.GoogleResponseDto;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Log4j
+@Slf4j
 @Service
 public class ApiService {
 
@@ -75,6 +76,7 @@ public class ApiService {
     private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
 
     public KakaoResponseDto getKakaoToken(String code) {
+        log.info("GET Kakao Token -------------");
         // RestTemplate을 사용해 카카오 서버로 요청 보내기
         RestTemplate restTemplate = new RestTemplate();
 
@@ -98,6 +100,7 @@ public class ApiService {
         return response.getBody();
     }
     public KakaoUserInfDto getKakaoUserInfo(String accessToken) {
+        log.info("GET Kakao UserInfo -------------");
         KakaoUserInfDto userInfo = new KakaoUserInfDto();
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
         try{
@@ -128,12 +131,17 @@ public class ApiService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
+//            System.out.println(element.getAsJsonObject().get("id"));
+
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+
+            String id = element.getAsJsonObject().get("id").getAsString();
 
             String name = properties.get("nickname").getAsString();
             String email = kakaoAccount.get("email").getAsString();
 
+            userInfo.setId(id);
             userInfo.setName(name);
             userInfo.setEmail(email);
 
@@ -152,6 +160,7 @@ public class ApiService {
     private final String naver_token_url = "https://nid.naver.com/oauth2.0/token";
 
     public NaverResponseDto getNaverToken(String code, String state) {
+        log.info("GET NaverToken -------------");
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -177,6 +186,7 @@ public class ApiService {
     }
 
     public NaverUserInfDto getNaverUserInfo(String accessToken) {
+        log.info("GET Naver UserInfo -------------");
         String reqUrl = "https://openapi.naver.com/v1/nid/me";
 
         RestTemplate restTemplate = new RestTemplate();
