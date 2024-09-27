@@ -1,6 +1,23 @@
 <template>
     <div>
-        <h1>asdsd</h1>
+        <!-- 뉴스 제목 -->
+        <h1>{{ newsDetail.title }}</h1>
+
+        <!-- 날짜 및 시간 -->
+        <p>{{ newsDetail.dateTime }}</p>
+
+        <!-- 기자 정보 (선택적) -->
+        <p>{{ newsDetail.reporter }}</p>
+
+        <!-- 이미지 출력 -->
+        <div>
+            <img :src="newsDetail.imageUrl" alt="뉴스 이미지" style="max-width: 100%; height: auto;">
+        </div>
+
+        <!-- 뉴스 텍스트 내용 -->
+        <div>
+            <p v-html="newsDetail.articleText"></p>
+        </div>
     </div>
 </template>
 
@@ -10,18 +27,47 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            newsDetail : [],
+            newsDetail: {}, // 빈 객체로 초기화
         }
     },
     mounted() {
-        this.code1 = this.$route.params.code1; // 첫 번째 코드 받아오기
-        this.code2 = this.$route.params.code2; // 두 번째 코드 받아오기
-        console.log("Code1:", this.code1);
-        console.log("Code2:", this.code2);
+        const code1 = this.$route.params.code1; 
+        const code2 = this.$route.params.code2; 
+        const token = localStorage.getItem('access_token');
+        if(!token) {
+            throw new Error('토큰없음');
+        }
+        // 서버에서 뉴스 상세 데이터를 가져옴
+        axios
+            .get(`http://localhost:8080/news/getnews/${code1}/${code2}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                this.newsDetail = res.data; // 데이터를 newsDetail에 저장
+                console.log(this.newsDetail);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 }
 </script>
 
-<style>
+<style scoped>
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
 
+p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+img {
+    margin-bottom: 1rem;
+}
 </style>

@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import mul.cam.e.dto.NewsDetailDto;
 import mul.cam.e.dto.NewsDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,7 +46,7 @@ public class NewsService {
                 if (newsUrl.contains("article/")) {
                     code = newsUrl.split("article/")[1]; // 'article/' 뒤의 부분을 추출
                 }
-                System.out.println(code);
+
                 String description = newsElement.select("div.sa_text_lede").text();
 
                 NewsDto newsDto = new NewsDto();
@@ -62,4 +63,42 @@ public class NewsService {
         }
         return newsList;
     }
+
+    public NewsDetailDto getNewsDetails(String code) throws IOException {
+        System.out.println("NewsService getNewsDetail executed");
+
+        String redisKey = code + "newsDetail";
+
+        NewsDetailDto newsDetail = redisService.getNewsDetailData(redisKey);
+
+        if (newsDetail == null) {
+            System.out.println("No data in Redis. API call.");
+            newsDetail = new NewsDetailDto();
+
+            String url = "https://n.news.naver.com/mnews/article/" + code;
+            Document doc = Jsoup.connect(url).get();
+
+            String newsTitle =doc.select(".media_end_head_title .media_end_head_headline span").text();
+            String dateTime = doc.select(".media_end_head_info_datestamp_time._ARTICLE_DATE_TIME").attr("data-date-time");
+            String imageUrl = doc.select("#img1").attr("data-src");
+            String articleText = doc.select("article#dic_area").text();
+
+            System.out.println("News Title: " + newsTitle);
+            System.out.println("News Title: " + dateTime);
+            System.out.println("Image URL: " + imageUrl);
+            System.out.println("Article Text: " + articleText);
+
+            newsDetail.setTitle(newsTitle);
+            newsDetail.setImageUrl(imageUrl);
+            newsDetail.setArticleText(articleText);
+            newsDetail.setDateTime(dateTime);
+
+
+            redisService.setData(redisKey, newsDetail, 10);
+
+        }
+        return newsDetail;
+
+    }
+
 }
