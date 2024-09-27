@@ -1,8 +1,6 @@
-package mul.cam.e.service;
+package mul.cam.e.security;
 
 import mul.cam.e.dao.UserDao;
-import mul.cam.e.security.SecurityUser;
-import mul.cam.e.util.ProviderName;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,16 +8,22 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class UserService implements UserDetailsService {
+public class SecurityUserService implements UserDetailsService {
 
     private final UserDao userDao;
 
     @Override
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.getUserDtoByEmail(username);
+
+        SecurityUser user = userDao.findByUsername(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException(username);
+//        }
+
+        return user;
     }
 
-    public UserService(UserDao userDao) {
+    public SecurityUserService(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -31,10 +35,9 @@ public class UserService implements UserDetailsService {
         return userDao.updateUserInfo(email, request);
     }
 
-    public int getAccountNum(String email) {
-        return userDao.getAccountNum(email);
+    public int getAccountNum(String id) {
+        return userDao.getAccountNum(id);
     }
 
-    public SecurityUser getUserDtoByEmail(String email) { return userDao.getUserDtoByEmail(email); }
-
+    public int getUserId(String name) { return userDao.getUserId(name); }
 }

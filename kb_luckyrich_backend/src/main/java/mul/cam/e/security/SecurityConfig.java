@@ -3,7 +3,6 @@ package mul.cam.e.security;
 import lombok.RequiredArgsConstructor;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
-import mul.cam.e.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,7 +33,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
         return web -> web.ignoring()
                 // error endpoint를 열어줘야 함, favicon.ico 추가
-                .requestMatchers("/error", "/favicon.ico");
+                .requestMatchers("/favicon.ico", "/error"); //, "/resources/**", "/css/**", "/dist/**", "/js/**", "/plugins/**");
     }
 
     @Bean
@@ -52,6 +51,7 @@ public class SecurityConfig {
                         .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
                         .antMatchers("/news/**").permitAll()
+                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -79,9 +79,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, UserService userService) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http, SecurityUserService securityUserService) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userService)
+                .userDetailsService(securityUserService)
                 .and()
                 .build();
     }

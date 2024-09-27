@@ -21,33 +21,9 @@
         where account_number = #{accountNumber}
     </select>
 
-
-    <select id="getMyStock" parameterType="int" resultType="mul.cam.e.dto.MyStockDto">
-        select a.invest_symbol, a.invest_date, a.invest_price
-        from invest a join user_invest b on a.invest_id = b.invest_id
-        where b.user_id = #{userId}
-        order by 3 desc;
-    </select>
-
-    <select id="getMyEstate" parameterType="int" resultType="mul.cam.e.dto.MyEstateDto">
-        select a.realestate_name, a.realestate_price
-        from realestate a join user_realestate b on a.realestate_id = b.realestate_id
-        where b.user_id = #{userId}
-        order by 2 desc;
-    </select>
-
-    <select id="getMyCar" parameterType="int" resultType="mul.cam.e.dto.MyCarDto">
-        select a.car_type, a.car_amount
-        from car a join user_car b on a.car_id = b.car_id
-        where b.user_id = #{userId}
-        order by 2 desc;
-    </select>
-
-    <select id="getMyAccount" parameterType="int" resultType="mul.cam.e.dto.AccountDto">
-        select a.account_name, a.account_number, a.balance, a.account_type
-        from account a join user_account b on a.account_id = b.account_id
-        where b.user_id = #{userId}
-        order by 2 desc;
-    </select>
+    <update id="setStockHoldings">
+        insert into stock_holdings(user_id, stock_symbol, stock_name, purchase_price, quantity, purchase_date)
+        values (#{userId}, #{stockSymbol}, #{stockName}, #{purchasePrice}, #{quantity}, #{purchaseDate})
+    </update>
 
 </mapper>

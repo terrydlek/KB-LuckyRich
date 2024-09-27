@@ -1,10 +1,10 @@
 package mul.cam.e.controller;
 
-import mul.cam.e.dto.*;
 import mul.cam.e.jwt.JwtTokenProvider;
 import mul.cam.e.security.SecurityUser;
+import mul.cam.e.security.dto.*;
 import mul.cam.e.service.ApiService;
-import mul.cam.e.service.UserService;
+import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.util.Role;
 import mul.cam.e.util.TokenDecoder;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class ApiController {
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
     private final ApiService apiService;
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
     @Value("${google.oauth.client-id}") String clientId;
     @Value("${google.oauth.password}") String password;
@@ -40,9 +40,13 @@ public class ApiController {
     @Value("${kakao.oauth.client-id}") String KakaoClientId;
     @Value("${kakao.oauth.url}") String KakaoUrl;
 
-    public ApiController(ApiService service, UserService userService) {
+    @Value("${naver.oauth.client-id}") String NaverClientId;
+    @Value("${naver.oauth.url}") String NaverUrl;
+    @Value("${naver.oauth.client-secret}") String NaverClientSecret;
+
+    public ApiController(ApiService service, SecurityUserService securityUserService) {
         this.apiService = service;
-        this.userService = userService;
+        this.securityUserService = securityUserService;
     }
 
     @GetMapping("/google")
@@ -54,6 +58,20 @@ public class ApiController {
         return url;
     }
 
+    @PostMapping("/kakao")
+    public String getKakaoLoginUrl(){
+        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
+                + KakaoClientId + "&redirect_uri=" + KakaoUrl;
+        return url;
+    }
+
+    @PostMapping("/naver")
+    public String getNaverLoginUrl(){
+        String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="
+                + NaverClientId +"&state=STATE_STRING&redirect_uri=" + NaverUrl;
+        return url;
+    }
+
     @GetMapping("/login/google")
     public void getUserCode(@RequestParam("code") String code, HttpServletResponse response) throws Exception {
         GoogleResponseDto res_body = apiService.getAccessToken(code);
@@ -62,77 +80,59 @@ public class ApiController {
         GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getId_token());
 
         // 유저 조회
-        SecurityUser customUserDetail = userService.loadUserByUsername(userInf.getSub());
+        SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInf.getSub());
 
         if(customUserDetail == null) {
             SecurityUser user = new SecurityUser(userInf.getSub(), userInf.getFamily_name()+userInf.getGiven_name(),
                     userInf.getEmail(), null, 0);
             user.setRole(Role.USER);
-            userService.register(user);
+            securityUserService.register(user);
 
-            customUserDetail = userService.loadUserByUsername(userInf.getSub());
+            customUserDetail = securityUserService.loadUserByUsername(userInf.getSub());
         }
-
-//        System.out.println(customUserDetail);
 
         // JWT 토큰 생성
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
 
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(customUserDetail.getUsername());
+        int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
+//        System.out.println(account_num);
 
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
-                account_num + "=" + account_num);
+                "account_num=" + account_num);
 
         // Access_Token을 이용한 방법
         // id, email, verified_email, name, given_name, family_name, picture, locale 반환
         // apiService.getGoogleUserInf(res_body.getAccess_token());
     }
 
-    @PostMapping("/kakao")
-    public String getKakaoLoginUrl(){
-        String url = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="
-                + KakaoClientId + "&redirect_uri=" + KakaoUrl;
-        return url;
-    }
-
-    @Value("${naver.oauth.client-id}") String NaverClientId;
-    @Value("${naver.oauth.url}") String NaverUrl;
-    @Value("${naver.oauth.client-secret}") String NaverClientSecret;
-    @PostMapping("/naver")
-    public String getNaverLoginUrl(){
-        String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id="
-                + NaverClientId +"&state=STATE_STRING&redirect_uri=" + NaverUrl;
-        return url;
-    }
-
     @GetMapping("/login/kakao")
     public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
-        System.out.println("kakao login execute~~~~~~~~");
+//        System.out.println("kakao login execute~~~~~~~~");
         KakaoResponseDto res_body = apiService.getKakaoToken(code);
         String accessToken = res_body.getAccess_token();
 
         KakaoUserInfDto userInfo = apiService.getKakaoUserInfo(accessToken);
 
-        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getId());
+        SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
 
         if (customUserDetail == null) {
             SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0 );
             dto.setRole(Role.USER);
-            userService.register(dto);
-            customUserDetail = userService.getUserDtoByEmail(userInfo.getId());
+            securityUserService.register(dto);
+            customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }
 
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
 
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(customUserDetail.getUsername());
+        int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
 
         Map<String, Object> map = new HashMap<>();
-        map.put("name", userInfo.getName());
-        map.put("email", userInfo.getEmail());
+//        map.put("name", userInfo.getName());
+//        map.put("email", userInfo.getEmail());
         map.put("access_token", jwtToken);
         map.put("account_num", account_num);
 
@@ -142,25 +142,25 @@ public class ApiController {
 
     @GetMapping("/login/naver")
     public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam("code") String code, @RequestParam(name = "state") String state, HttpServletResponse response) throws Exception {
-        System.out.println("naver login execute");
+//        System.out.println("naver login execute");
         NaverResponseDto res_body = apiService.getNaverToken(code, state);
         // 실제 API 서비스 호출로 교체
         String accessToken = res_body.getAccess_token();
         //System.out.println("access" + accessToken);
         NaverUserInfDto userInfo = apiService.getNaverUserInfo(accessToken);
 
-        SecurityUser customUserDetail = userService.getUserDtoByEmail(userInfo.getId());
+        SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
 
         if (customUserDetail == null) {
             SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0);
             dto.setRole(Role.USER);
-            userService.register(dto);
-            customUserDetail = userService.getUserDtoByEmail(userInfo.getId());
+            securityUserService.register(dto);
+            customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
 
         // 계좌 갯수 확인
-        int account_num = userService.getAccountNum(customUserDetail.getUsername());
+        int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());

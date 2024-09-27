@@ -1,7 +1,7 @@
 package mul.cam.e.jwt;
 
 import mul.cam.e.security.SecurityUser;
-import mul.cam.e.service.UserService;
+import mul.cam.e.security.SecurityUserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -19,11 +19,11 @@ import java.util.Date;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, SecurityUserService securityUserService) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
+        this.securityUserService = securityUserService;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // /api 엔드포인트를 제외
         String requestURI = request.getRequestURI();
         System.out.println(requestURI);
-        if (requestURI.startsWith("/api") || requestURI.startsWith("/recommend/") || requestURI.startsWith("/test-redis")|| requestURI.startsWith("/realestate/") || requestURI.startsWith("/news/")) {
+        if (requestURI.startsWith("/api")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,8 +56,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 사용자 이메일이 존재하고 인증되지 않은 경우
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 사용자 정보를 로드
-            SecurityUser customUserDetail = userService.loadUserByUsername(id);
-            System.out.println(customUserDetail.getEmail());
+            SecurityUser customUserDetail = securityUserService.loadUserByUsername(id);
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
                 // 인증 토큰을 생성하고 SecurityContext에 저장
