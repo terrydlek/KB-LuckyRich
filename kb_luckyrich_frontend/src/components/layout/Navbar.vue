@@ -29,7 +29,7 @@ const router = useRouter();
 // 컴포넌트가 마운트될 때 로그인 상태 확인
 onMounted(() => {
   const token = localStorage.getItem('access_token');
-  alert(token);
+  // alert(token);
 
   isLoggedIn.value = !token; // 토큰이 있으면 로그인 상태로 변경
   isLogined();

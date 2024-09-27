@@ -2,6 +2,7 @@ package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
+import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.util.AccountType;
 import mul.cam.e.util.RandUtils;
@@ -23,31 +24,15 @@ import java.util.Map;
 public class MyAssetController {
 
     private final MyAssetService myAssetService;
+    private final SecurityUserService securityUserService;
     private final RandUtils randUtils;
     private final TransactionGenerator transactionGenerator;
 
-    public MyAssetController(MyAssetService myAssetService, RandUtils randUtils, TransactionGenerator transactionGenerator) {
+    public MyAssetController(MyAssetService myAssetService, SecurityUserService securityUserService, RandUtils randUtils, TransactionGenerator transactionGenerator) {
         this.myAssetService = myAssetService;
+        this.securityUserService = securityUserService;
         this.randUtils = randUtils;
         this.transactionGenerator = transactionGenerator;
-    }
-
-    @GetMapping("/getMyStock")
-    public ResponseEntity<List<MyStockDto>> getMyStock() {
-        System.out.println("getMyStock execute~~~~~");
-        return ResponseEntity.ok(myAssetService.getMyStock(10));
-    }
-
-    @GetMapping("/getMyEstate")
-    public ResponseEntity<List<MyEstateDto>> getMyEstate() {
-        System.out.println("getMyEstate execute~~~~~");
-        return ResponseEntity.ok(myAssetService.getMyEstate(10));
-    }
-
-    @GetMapping("/getMyCar")
-    public ResponseEntity<List<MyCarDto>> getMyCar() {
-        System.out.println("getMyCar execute~~~~~");
-        return ResponseEntity.ok(myAssetService.getMyCar(10));
     }
 
     @GetMapping("/getMyAccount")
@@ -55,8 +40,7 @@ public class MyAssetController {
         System.out.println("getMyAccount execute~~~~~");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        System.out.println(email);
+        String userName = authentication.getName();
 
         List<Map<String, Object>> accounts = new ArrayList<>();
 
@@ -83,13 +67,13 @@ public class MyAssetController {
         System.out.println("fetchAccount -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
-        System.out.println(id);
+        String userName = authentication.getName();
+        int userId = securityUserService.getUserId(userName);
 
         try {
             boolean b = myAssetService.setMyAccount(
                     (String) requestBody.get("accountNumber"),
-                    id,
+                    userName,
                     BankName.valueOf((String) requestBody.get("bankName")).getNum(),
                     AccountType.valueOf((String) requestBody.get("accountType")).getNum(),
                     (Integer) requestBody.get("balance"));
@@ -99,11 +83,30 @@ public class MyAssetController {
 
         int account_id = myAssetService.getAccountNum((String) requestBody.get("accountNumber"));
 
+        // random 10 transaction
         for (int i = 0; i < 10; i++) {
             TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
             myAssetService.setTransaction(transactionDto);
         }
 
+        // random 2 stock
+        try {
+            for (int i=0; i<2; i++){
+                StockDto stock = randUtils.getRandomStockDto();
+                StockHoldingsDto stockHoldings = StockHoldingsDto.builder()
+                        .userId(userId)
+                        .stockSymbol(stock.getStockCode())
+                        .stockName(stock.getStockName())
+                        .purchasePrice(randUtils.getRandomStockPrice(stock.getStockPrice()))
+                        .quantity(randUtils.getRandomNumber())
+                        .purchaseDate(randUtils.getRandomPerchaseDate())
+                        .build();
+
+                myAssetService.setStockHoldings(stockHoldings);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity.ok("User information updated successfully");
     }

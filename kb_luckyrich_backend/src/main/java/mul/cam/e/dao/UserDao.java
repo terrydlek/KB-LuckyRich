@@ -1,7 +1,6 @@
 package mul.cam.e.dao;
 
 import mul.cam.e.security.SecurityUser;
-import mul.cam.e.util.ProviderName;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,9 @@ public interface UserDao {
 
     boolean updateUserInfo(@Param("user_name") String email, @Param("request") Map<String, String> request);
 
-    int getAccountNum(String email);
+    int getAccountNum(String userName);
 
-    SecurityUser getUserDtoByEmail(String email);
+    SecurityUser findByUsername(String email);
+
+    int getUserId(String userName);
 }

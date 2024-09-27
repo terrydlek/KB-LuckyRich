@@ -31,16 +31,12 @@ public class SecurityUser implements UserDetails {
         this.age = age;
     }
 
-    private Collection<? extends GrantedAuthority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        if (this.role.equals("ADMIN")) {
-            auth.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
-        }
-        auth.add(new SimpleGrantedAuthority(Role.USER.name()));
+//        System.out.println("Role : " + role);
 
         return authorities;
     }

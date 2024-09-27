@@ -24,7 +24,7 @@ export function handleKakaoLoginCallback() {
                 localStorage.setItem('access_token', accessToken);
 
                 if (accountNum > 1) {
-                     router.push('/'); // 루트 경로로 이동
+                     router.push('/luckyrich'); // 루트 경로로 이동
                 } else {
                      router.push({ name: 'myDataAgree' }); // 'myDataAgree'로 이동
                 }
