@@ -110,4 +110,15 @@ public class MyAssetController {
 
         return ResponseEntity.ok("User information updated successfully");
     }
+
+    @GetMapping("gettransaction")
+    ResponseEntity<List<TransactionDto>> getTransaction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        int userId = securityUserService.getUserId(userName);
+
+        List<TransactionDto> transactions = myAssetService.getTransactions(userId);
+
+        return ResponseEntity.ok(transactions);
+    }
 }

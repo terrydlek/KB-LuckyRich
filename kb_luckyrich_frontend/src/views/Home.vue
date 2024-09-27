@@ -18,7 +18,7 @@
                 <img src="../assets/images/test.jpg" class="service-image">
             </ServiceComponent>
 
-            <ServiceComponent serviceName="거래 내역 조회" route="accountbook">
+            <ServiceComponent serviceName="거래 내역 조회" route="accountBook">
                 <img src="../assets/images/credit.jpg" class="service-image">
             </ServiceComponent>
 
@@ -41,7 +41,6 @@
 import ServiceComponent from '@/components/ServiceComponent.vue';
 import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
 import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
-import ProductTable from '@/components/tables/ProductTable.vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 

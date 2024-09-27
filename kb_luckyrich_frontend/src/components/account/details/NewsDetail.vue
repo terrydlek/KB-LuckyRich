@@ -12,6 +12,8 @@
         <!-- 이미지 출력 -->
         <div>
             <img :src="newsDetail.imageUrl" alt="뉴스 이미지" style="max-width: 100%; height: auto;">
+            <!-- 이미지 설명 -->
+            <p style="font-style: italic; margin-top: 0.5rem;">{{ newsDetail.imageDescription }}</p>
         </div>
 
         <!-- 뉴스 텍스트 내용 -->
@@ -68,6 +70,6 @@ p {
 }
 
 img {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 </style>

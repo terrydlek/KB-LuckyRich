@@ -12,4 +12,5 @@ public class NewsDetailDto {
     private String dateTime;
     private String imageUrl;
     private String articleText;
+    private String imageDescription;
 }

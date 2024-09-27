@@ -82,6 +82,7 @@ public class NewsService {
             String dateTime = doc.select(".media_end_head_info_datestamp_time._ARTICLE_DATE_TIME").attr("data-date-time");
             String imageUrl = doc.select("#img1").attr("data-src");
             String articleText = doc.select("article#dic_area").text();
+            String imageDescription = doc.select("em.img_desc").text();
 
             System.out.println("News Title: " + newsTitle);
             System.out.println("News Title: " + dateTime);
@@ -92,7 +93,7 @@ public class NewsService {
             newsDetail.setImageUrl(imageUrl);
             newsDetail.setArticleText(articleText);
             newsDetail.setDateTime(dateTime);
-
+            newsDetail.setImageDescription(imageDescription);
 
             redisService.setData(redisKey, newsDetail, 10);
 

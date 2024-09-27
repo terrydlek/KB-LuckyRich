@@ -7,7 +7,7 @@
         </div>
         <div class="news-content">
           <h3 class="news-title">
-            <a :href="`/financenews/${newsItem.code}`">{{ newsItem.title }}</a>
+            <a :href="`/luckyrich/financenews/${newsItem.code}`">{{ newsItem.title }}</a>
           </h3>
           <p class="news-description">{{ newsItem.description }}</p>
         </div>
@@ -31,8 +31,14 @@ export default {
   },
   methods: {
     async getNews() {
+      const token = localStorage.getItem('access_token');
+
       try {
-        const res = await axios.get('http://localhost:8080/news/getnews');
+        const res = await axios.get('http://localhost:8080/news/getnews', {
+          headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+        });
         this.news = res.data; // API로부터 받은 뉴스 데이터를 news에 저장
         console.log(res.data);
       } catch (err) {
