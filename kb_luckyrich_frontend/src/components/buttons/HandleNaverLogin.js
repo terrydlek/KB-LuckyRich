@@ -7,7 +7,7 @@ export function handleNaverLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const NaverCode = urlParams.get('code');
     const service = urlParams.get('service');
-    console.log('dasssssssss',NaverCode)
+    console.log('naverCode',NaverCode)
     const router = useRouter();
 
     if (NaverCode) {

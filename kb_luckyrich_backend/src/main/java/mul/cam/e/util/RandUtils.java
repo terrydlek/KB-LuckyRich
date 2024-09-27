@@ -1,13 +1,28 @@
 package mul.cam.e.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import mul.cam.e.dto.StockDto;
+import mul.cam.e.service.StockService;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Component
 public class RandUtils {
+
     Random random = new Random();
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    private final StockService stockService;
+
+    public RandUtils(StockService stockService) {
+        this.stockService = stockService;
+    }
 
     // 랜덤 계좌 ****-**-****** 형식
     public String getAccountNum() {
@@ -59,6 +74,42 @@ public class RandUtils {
     // 거래 날짜
     public Timestamp getRandomTransactionDate() {
         return new Timestamp(System.currentTimeMillis() - random.nextInt(1000000000));
+    }
+
+    public StockDto getRandomStockDto() {
+        int r = random.nextInt(100);
+
+        List<StockDto> stocks;
+
+        try {
+            stocks = stockService.getStock();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+//        StockDto rStock = stocks.get(r);
+        StockDto rStock = objectMapper.convertValue(stocks.get(r), StockDto.class);
+        return rStock;
+    }
+
+    public int getRandomStockPrice(String stockPrice) {
+        String cleanInput = stockPrice.replaceAll(",", "");
+        int price = Integer.parseInt(cleanInput);
+
+        int min = -30;
+        int max = 30;
+        int randomNumber = random.nextInt((max - min) + 1) + min;
+
+        int diff = (((price * randomNumber)/100) + price);
+        return diff;
+    }
+
+    public Date getRandomPerchaseDate() {
+        return new Date(System.currentTimeMillis() - random.nextInt(1000000000));
+    }
+
+    public int getRandomNumber() {
+        return random.nextInt(10);
     }
 }
 

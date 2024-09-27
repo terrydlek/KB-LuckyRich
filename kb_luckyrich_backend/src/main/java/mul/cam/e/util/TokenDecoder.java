@@ -1,7 +1,7 @@
 package mul.cam.e.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mul.cam.e.dto.GoogleUserInfDto;
+import mul.cam.e.security.dto.GoogleUserInfDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;

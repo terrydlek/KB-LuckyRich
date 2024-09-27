@@ -1,12 +1,10 @@
 package mul.cam.e.service;
 
 import lombok.extern.slf4j.Slf4j;
-import mul.cam.e.dto.GoogleResponseDto;
+import mul.cam.e.security.dto.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import lombok.extern.log4j.Log4j;
-import mul.cam.e.dto.*;
 import mul.cam.e.util.TokenDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,7 +74,7 @@ public class ApiService {
     private final String kakao_token_url = "https://kauth.kakao.com/oauth/token";
 
     public KakaoResponseDto getKakaoToken(String code) {
-        log.info("GET Kakao Token -------------");
+//        log.info("GET Kakao Token -------------");
         // RestTemplate을 사용해 카카오 서버로 요청 보내기
         RestTemplate restTemplate = new RestTemplate();
 
@@ -100,7 +98,7 @@ public class ApiService {
         return response.getBody();
     }
     public KakaoUserInfDto getKakaoUserInfo(String accessToken) {
-        log.info("GET Kakao UserInfo -------------");
+//        log.info("GET Kakao UserInfo -------------");
         KakaoUserInfDto userInfo = new KakaoUserInfDto();
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
         try{
@@ -160,7 +158,7 @@ public class ApiService {
     private final String naver_token_url = "https://nid.naver.com/oauth2.0/token";
 
     public NaverResponseDto getNaverToken(String code, String state) {
-        log.info("GET NaverToken -------------");
+//        log.info("GET NaverToken -------------");
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -186,7 +184,7 @@ public class ApiService {
     }
 
     public NaverUserInfDto getNaverUserInfo(String accessToken) {
-        log.info("GET Naver UserInfo -------------");
+//        log.info("GET Naver UserInfo -------------");
         String reqUrl = "https://openapi.naver.com/v1/nid/me";
 
         RestTemplate restTemplate = new RestTemplate();
