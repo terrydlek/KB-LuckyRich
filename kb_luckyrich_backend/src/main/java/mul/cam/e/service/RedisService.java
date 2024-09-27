@@ -73,6 +73,13 @@ public class RedisService {
         }
         return null;
     }
+    public List<NewsDto> getNewsData(String key) {
+        Object result = redisTemplate.opsForValue().get(key);
+        if (result instanceof List<?>) {
+            return (List<NewsDto>) result;
+        }
+        return null;
+    }
 
     public void invalidateCache(String key) {
         redisTemplate.delete(key);

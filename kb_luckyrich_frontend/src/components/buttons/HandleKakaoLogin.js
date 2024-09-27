@@ -30,7 +30,7 @@ export function handleKakaoLoginCallback() {
                 }
                 
                 
-                window.history.replaceState({}, document.title, '/');
+                window.history.replaceState({}, document.title, '/luckyrich');
 
             })
             .catch(err => {

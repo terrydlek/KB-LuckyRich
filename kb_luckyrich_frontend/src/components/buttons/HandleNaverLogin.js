@@ -21,12 +21,12 @@ export function handleNaverLoginCallback() {
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
                 console.log('NaverAccess Token:', accessToken);
                 if (accountNum > 1) {
-                    router.push('/');
+                    router.push('/luckyrich');
                 }else {
                     router.push({ name: 'myDataAgree' });
                 }
                 
-                window.history.replaceState({}, document.title, '/');
+                window.history.replaceState({}, document.title, '/luckyrich');
 
             })
             .catch(err => {
