@@ -82,7 +82,7 @@ public class ApiController {
         int account_num = userService.getAccountNum(customUserDetail.getUsername());
 
         // Vue Login창으로 Redirect
-        String redirectUrl = "http://localhost:5173/login?access_token=";
+        String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
                 account_num + "=" + account_num);
 
