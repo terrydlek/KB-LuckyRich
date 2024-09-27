@@ -56,8 +56,13 @@ export default {
     },
     methods: {
         async fetchStockData() {
+            const token = localStorage.getItem('access_token');
             try {
-                const response = await axios.get('http://localhost:8080/recommend/active');
+                const response = await axios.get('http://localhost:8080/recommend/active', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 this.stocks = response.data;
             } catch (error) {
                 console.error(error);
@@ -82,5 +87,4 @@ export default {
 .stock-table tr:hover {
     background-color: #ddd;
 }
-
 </style>

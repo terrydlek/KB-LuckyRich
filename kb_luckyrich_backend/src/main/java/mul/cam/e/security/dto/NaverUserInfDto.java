@@ -1,4 +1,4 @@
-package mul.cam.e.dto;
+package mul.cam.e.security.dto;
 
 import lombok.Data;
 

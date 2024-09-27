@@ -1,7 +1,7 @@
 package mul.cam.e.controller;
 
 import mul.cam.e.security.SecurityUser;
-import mul.cam.e.service.UserService;
+import mul.cam.e.security.SecurityUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,10 +13,10 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(SecurityUserService securityUserService) {
+        this.securityUserService = securityUserService;
     }
 
     @GetMapping("inf")
@@ -26,7 +26,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
 
-        SecurityUser user = userService.loadUserByUsername(id);
+        SecurityUser user = securityUserService.loadUserByUsername(id);
 
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -42,7 +42,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
 
-        boolean isUpdated = userService.updateUserInfo(id, request);
+        boolean isUpdated = securityUserService.updateUserInfo(id, request);
 //        System.out.println(isUpdated);
 
         if (isUpdated) {

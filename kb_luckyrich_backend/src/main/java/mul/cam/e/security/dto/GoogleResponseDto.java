@@ -1,16 +1,16 @@
-package mul.cam.e.dto;
+package mul.cam.e.security.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class NaverResponseDto {
+public class GoogleResponseDto {
     private String access_token;
     private int expires_in;
-    private String grant_type;
+    private String scope;
     private String token_type;
     private String id_token;
-    private String refresh_token;
-
 }
