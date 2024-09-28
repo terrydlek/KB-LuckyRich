@@ -1,14 +1,12 @@
 package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
+import mul.cam.e.dto.NewsDetailDto;
 import mul.cam.e.dto.NewsDto;
 import mul.cam.e.service.NewsService;
 import mul.cam.e.service.RedisService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +27,12 @@ public class NewsController {
     @GetMapping("/getnews")
     public ResponseEntity<List<NewsDto>> getAllNews() throws IOException {
         return ResponseEntity.ok(newsService.getNews());
+    }
+
+    @GetMapping("/getnews/{code1}/{code2}")
+    public ResponseEntity<NewsDetailDto> getNewsDetail(@PathVariable String code1, @PathVariable String code2) throws IOException {
+        String fullCode = code1 + "/" + code2;
+        return ResponseEntity.ok(newsService.getNewsDetails(fullCode));
     }
 
 }
