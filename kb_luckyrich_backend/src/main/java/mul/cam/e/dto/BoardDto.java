@@ -1,22 +1,21 @@
 package mul.cam.e.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class BoardDto {
-    private long id;
-    // private int userId;
+    private int boardNum;
+    private String userName;
+    private String nickName;
     private String title;
     private String content;
-    // private String author; // 작성자 name
-    private String createdAt;
+    private Timestamp createdAt;
 }

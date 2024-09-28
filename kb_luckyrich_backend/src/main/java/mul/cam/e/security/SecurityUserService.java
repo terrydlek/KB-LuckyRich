@@ -40,4 +40,8 @@ public class SecurityUserService implements UserDetailsService {
     }
 
     public int getUserId(String name) { return userDao.getUserId(name); }
+
+    public String getNickname(String userName) {
+        return userDao.getNickname(userName);
+    }
 }
