@@ -2,8 +2,8 @@
     <div class="faq-page">
         <div class="sidebar">
             <ul>
-                <li><a href="#faq">자주 묻는 질문</a></li>
-                <li><a href="#ask">질문하기</a></li>
+                <li><a href="/luckyrich/qa">자주 묻는 질문</a></li>
+                <li><a href="/luckyrich/qa/ask">질문하기</a></li>
             </ul>
         </div>
         <div class="faq-content">

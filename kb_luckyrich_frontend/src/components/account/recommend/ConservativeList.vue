@@ -24,12 +24,10 @@
         </td>
         <td>{{ fund.symbol }}</td>
         <td>{{ formatNumber(fund.lastPrice) }}</td>
-        <td
-          :class="{
-            'text-green-500': parseFloat(fund.changePercent) > 0,
-            'text-red-500': parseFloat(fund.changePercent) < 0,
-          }"
-        >
+        <td :class="{
+          'text-green-500': parseFloat(fund.changePercent) > 0,
+          'text-red-500': parseFloat(fund.changePercent) < 0,
+        }">
           {{ fund.changePercent }}
         </td>
         <td>{{ formatNumber(fund.totalAssets) }}</td>

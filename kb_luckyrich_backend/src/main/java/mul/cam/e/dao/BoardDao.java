@@ -12,13 +12,12 @@ import java.util.List;
 public interface BoardDao {
     List<BoardDto> getBoardList();
 
-    List<BoardDto> getBoardByUserId(@Param("userId") int userId);
+    void insertBoard(BoardDto board);
 
-    BoardDto getBoard(@Param("id") long id);
+    BoardDto getBoard(int boardNum);
 
-    int insertBoard(BoardDto boardDto);
+    void deleteBoard(int boardNum);
 
-    int updateBoard(BoardDto boardDto);
+    void updateBoard(BoardDto board);
 
-    int deleteBoard(@Param("id") long id);
 }
