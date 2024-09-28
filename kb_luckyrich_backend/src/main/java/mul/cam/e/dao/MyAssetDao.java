@@ -24,4 +24,6 @@ public interface MyAssetDao {
     void setStockHoldings(StockHoldingsDto stockHoldings);
 
     List<TransactionDto> getTransactions(int userId);
+
+    List<BankTransactionDto> getBankTransactions(int userId);
 }

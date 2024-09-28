@@ -45,5 +45,29 @@
         order by
             t.transaction_date desc
     </select>
+    <select id="getBankTransactions" resultType="mul.cam.e.dto.BankTransactionDto">
+        select
+            t.account_id as accountId,
+            a.account_number as accountNumber,
+            t.amount,
+            t.transaction_type as transactionType,
+            t.category,
+            t.description as description,
+            t.transaction_date as transactionDate,
+            b.bank_id as bankId
+        from
+            transaction t
+                join
+            account a on t.account_id = a.account_id
+                join
+            user u on a.user_id = u.user_id
+                join
+            bank b on a.bank_id = b.bank_id
+        where
+            u.user_id = #{userId}
+        order by
+            t.transaction_date desc;
+    </select>
+
 
 </mapper>

@@ -33,4 +33,8 @@ public class MyAssetService {
     public List<TransactionDto> getTransactions(int userId) {
         return myAssetDao.getTransactions(userId);
     }
+
+    public List<BankTransactionDto> getBankTransactions(int userId) {
+        return myAssetDao.getBankTransactions(userId);
+    }
 }

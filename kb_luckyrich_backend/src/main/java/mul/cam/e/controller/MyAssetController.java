@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Log4j
 @RequestMapping("/myasset")
@@ -121,4 +122,14 @@ public class MyAssetController {
 
         return ResponseEntity.ok(transactions);
     }
+
+    @GetMapping("getbanktransaction")
+        ResponseEntity<List<BankTransactionDto>> getBankTransaction() {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            int userId = securityUserService.getUserId(userName);
+            List<BankTransactionDto> bankTransactions = myAssetService.getBankTransactions(userId);
+
+            return  ResponseEntity.ok(bankTransactions);
+        }
 }
