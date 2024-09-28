@@ -44,7 +44,7 @@ export default [
         component: Qa
     },
     {
-        path : '/financenews',
+        path : '/luckyrich/financenews',
         name : 'financenews',
         component : FinanceNews
     },

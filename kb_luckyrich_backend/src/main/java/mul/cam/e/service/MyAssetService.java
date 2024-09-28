@@ -6,6 +6,8 @@ import mul.cam.e.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -26,5 +28,13 @@ public class MyAssetService {
 
     public void setStockHoldings(StockHoldingsDto stockHoldings) {
         myAssetDao.setStockHoldings(stockHoldings);
+    }
+
+    public List<TransactionDto> getTransactions(int userId) {
+        return myAssetDao.getTransactions(userId);
+    }
+
+    public List<BankTransactionDto> getBankTransactions(int userId) {
+        return myAssetDao.getBankTransactions(userId);
     }
 }

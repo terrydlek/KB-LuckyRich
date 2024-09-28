@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dao.BoardDao;
 import mul.cam.e.dao.UserDao;
 import mul.cam.e.dto.BoardDto;
-import mul.cam.e.dto.UserDto;
 import mul.cam.e.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
