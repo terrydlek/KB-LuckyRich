@@ -15,11 +15,13 @@
     "chart.js": "^4.4.4",
     "highcharts": "^11.4.8",
     "highcharts-vue": "^2.0.1",
+    "jquery": "^3.7.1",
     "pinia": "^2.2.2",
     "swiper": "^11.1.14",
     "vue": "^3.4.29",
     "vue-router": "^4.0.13",
     "vue3-cookies": "^1.0.6",
+    "vue3-summernote-editor": "^1.0.2",
     "xml-js": "^1.6.11",
     "xml2js": "^0.6.2"
   },

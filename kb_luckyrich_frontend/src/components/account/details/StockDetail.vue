@@ -53,8 +53,13 @@ export default {
     },
     mounted() {
         const stockCode = this.$route.params.stockCode;
+        const token = localStorage.getItem('access_token');
         axios
-            .get(`http://localhost:8080/recommend/active/${stockCode}`)
+            .get(`http://localhost:8080/recommend/active/${stockCode}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
             .then((res) => {
                 this.stockData = res.data;
             })

@@ -61,7 +61,11 @@ export default {
     },
     mounted() {
         this.loadKakaoMap();
-        axios.get('http://localhost:8080/realestate/getEstate')
+        axios.get('http://localhost:8080/realestate/getEstate', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+            },
+        })
             .then((response) => {
                 // estate 데이터를 변환해서 places로 사용할 수 있도록 함
                 this.estate = response.data.map(item => ({
@@ -90,7 +94,7 @@ export default {
                     console.error("Failed to load Kakao Map script");
                 };
                 const kakaoApiKey = import.meta.env.VITE_KAKAO_MAP_APPKEY;
-                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`;                document.head.appendChild(script);
+                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`; document.head.appendChild(script);
             }
         },
         initKakaoMap() {
