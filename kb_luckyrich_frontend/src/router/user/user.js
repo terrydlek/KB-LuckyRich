@@ -77,5 +77,8 @@ export default [
         path: '/luckyrich/qa/ask/:boardNum',
         name: 'PostDetail',
         component: PostDetail,
+        path : '/luckyrich/financenews',
+        name : 'financenews',
+        component : FinanceNews
     },
 ]

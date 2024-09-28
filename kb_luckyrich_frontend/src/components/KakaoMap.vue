@@ -61,10 +61,12 @@ export default {
     },
     mounted() {
         this.loadKakaoMap();
+        const token = localStorage.getItem('access_token');
+
         axios.get('http://localhost:8080/realestate/getEstate', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-            },
+                    'Authorization': `Bearer ${token}`,
+                },
         })
             .then((response) => {
                 // estate 데이터를 변환해서 places로 사용할 수 있도록 함

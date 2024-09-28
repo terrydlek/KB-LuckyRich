@@ -18,7 +18,7 @@
                 <img src="../assets/images/test.jpg" class="service-image">
             </ServiceComponent>
 
-            <ServiceComponent serviceName="거래 내역 조회" route="accountbook">
+            <ServiceComponent serviceName="거래 내역 조회" route="accountBook">
                 <img src="../assets/images/credit.jpg" class="service-image">
             </ServiceComponent>
 
