@@ -17,42 +17,31 @@ import java.util.List;
 @Transactional
 public class BoardService {
 
-    @Autowired
-    private BoardDao boardDao;
+    private final BoardDao boardDao;
 
-    @Autowired
-    private UserDao userDao;
+    public BoardService(BoardDao boardDao) {
+        this.boardDao = boardDao;
+    }
 
     public List<BoardDto> getBoardList() {
         return boardDao.getBoardList();
     }
 
-    public List<BoardDto> getBoardByUserId(int userId) {
-        return boardDao.getBoardByUserId(userId);
-    }
-
-    public BoardDto getBoard(int id) {
-        return boardDao.getBoard(id);
-    }
-
-    public BoardDto create(BoardDto boardDto) {
+    public void insertBoard(BoardDto boardDto) {
         boardDao.insertBoard(boardDto);
-        return boardDto;
     }
 
-    public BoardDto update(BoardDto boardDto) {
-        int result = boardDao.updateBoard(boardDto);
-        if (result > 0) {
-            return boardDao.getBoard(boardDto.getId());
-        } else {
-            throw new RuntimeException("Fail to update board");
-        }
+    public BoardDto getBoard(int boardNum) {
+        return boardDao.getBoard(boardNum);
     }
 
-    public void delete(long id) {
-        int result = boardDao.deleteBoard(id);
-        if (result == 0) {
-            throw new RuntimeException("Fail to delete board");
-        }
+    public void deleteBoard(int boardNum) {
+        System.out.println("service " + boardNum);
+        boardDao.deleteBoard(boardNum);
     }
+
+    public void updateBoard(BoardDto boardDto) {
+        boardDao.updateBoard(boardDto);
+    }
+
 }

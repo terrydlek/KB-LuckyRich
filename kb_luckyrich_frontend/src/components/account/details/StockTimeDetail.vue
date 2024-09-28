@@ -140,7 +140,11 @@ export default {
         };
     },
     mounted() {
-        axios.get(`http://localhost:8080/recommend/active/time/${this.stockCode}`)
+        axios.get(`http://localhost:8080/recommend/active/time/${this.stockCode}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+            }
+        })
             .then(response => {
                 this.timeData = response.data;
             })

@@ -39,14 +39,22 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get('http://localhost:8080/recommend/steadiness')
-      .then((response) => {
+    this.fetchDepositData();
+  },
+  methods: {
+    async fetchDepositData() {
+      const token = localStorage.getItem('access_token');
+      try {
+        const response = await axios.get('http://localhost:8080/recommend/steadiness', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         this.deposits = response.data;
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('There was an error fetching the deposits:', error);
-      });
+      }
+    },
   },
 };
 </script>

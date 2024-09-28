@@ -6,41 +6,32 @@
 <mapper namespace="mul.cam.e.dao.BoardDao">
 
     <select id="getBoardList" resultType="mul.cam.e.dto.BoardDto">
-        SELECT b.id, b.user_id, b.title, b.content, u.user_name AS author, b.created_at
-        FROM board b
-                 JOIN user u ON b.user_id = u.user_id
-        ORDER BY b.created_at DESC
+        select a.board_num, a.user_name, b.nick_name, a.title, a.content, a.created_at
+        from board a join user b on a.user_name = b.user_name
+        order by created_at desc;
     </select>
 
-    <select id="getBoardByUserId" parameterType="int" resultType="mul.cam.e.dto.BoardDto">
-        select * from board where user_id = #{userId}
-        order by created_at desc
-    </select>
-
-    <select id="getBoard" parameterType="long" resultType="mul.cam.e.dto.BoardDto">
-        SELECT b.id, b.user_id, b.title, b.content, u.user_name AS author, b.created_at
-        FROM board b
-                 JOIN user u ON b.user_id = u.user_id
-        WHERE b.id = #{id}
-    </select>
-
-    <!-- <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
-        insert into board(user_id, title, content, author)
-        values (#{userId}, #{title}, #{content}, #{author})
-    </insert> -->
     <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
-        insert into boardd(title, content, create_at)
-        values (#{title}, #{content}, #{createdAt})
+        insert into board(user_name, title, content, created_at)
+        values (#{userName}, #{title}, #{content}, #{createdAt});
     </insert>
+
+    <select id="getBoard" parameterType="int" resultType="mul.cam.e.dto.BoardDto">
+        select a.board_num, a.user_name, b.nick_name, a.title, a.content, a.created_at
+        from board a join user b on a.user_name = b.user_name
+        where a.board_num = #{boardNum};
+    </select>
+
+    <delete id="deleteBoard" parameterType="int">
+        delete
+        from board
+        where board_num = #{boardNum};
+    </delete>
 
     <update id="updateBoard" parameterType="mul.cam.e.dto.BoardDto">
         update board
-        set title = #{title}, content = #{content}, author = #{author}
-        where id = #{id}
+        set content = #{content}
+        where board_num = #{boardNum};
     </update>
-
-    <delete id="deleteBoard" parameterType="long">
-        delete from board where id = #{id}
-    </delete>
 
 </mapper>

@@ -95,8 +95,13 @@ export default {
   },
   mounted() {
     const prodname = this.$route.params.prodname; // URL 파라미터로부터 상품명 추출
+    const token = localStorage.getItem('access_token');
     axios
-      .get(`http://localhost:8080/recommend/steadiness/${prodname}`) // 상품명에 따라 상세 정보 요청
+      .get(`http://localhost:8080/recommend/steadiness/${prodname}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      }) // 상품명에 따라 상세 정보 요청
       .then((response) => {
         this.deposit = response.data;
       })

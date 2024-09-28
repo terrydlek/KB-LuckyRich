@@ -104,7 +104,7 @@ watch(consents, (newValues) => {
 <style scoped>
 .consent-page {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 50px auto 50px;
   padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
