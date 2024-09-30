@@ -4,7 +4,7 @@
 
 <mapper namespace="mul.cam.e.dao.UserDao">
     <select id="findByUsername" resultType="mul.cam.e.security.SecurityUser">
-        select user_id, user_name, nick_name, email, gender, age
+        select user_id, user_name, nick_name, email, gender, age, role
         from user
         where user_name=#{userName}
     </select>
@@ -38,4 +38,11 @@
         from user
         where user_name=#{userName}
     </select>
+
+    <select id="checkAuthority" parameterType="string" resultType="int">
+        select count(*)
+        from user
+        where user_name = #{userName} and role = "ADMIN"
+    </select>
+
 </mapper>

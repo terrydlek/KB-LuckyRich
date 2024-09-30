@@ -11,4 +11,8 @@ import Navbar from './components/layout/Navbar.vue';
 import Footer from '@/components/layout/Footer.vue';
 </script>
 
-<style></style>
+<style>
+#app {
+  padding-bottom: 60px;
+}
+</style>

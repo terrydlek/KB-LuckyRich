@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -109,7 +108,7 @@ public class RandUtils {
     }
 
     public int getRandomNumber() {
-        return random.nextInt(10);
+        return random.nextInt(30) + 1;
     }
 }
 

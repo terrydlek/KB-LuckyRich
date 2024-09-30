@@ -83,9 +83,15 @@ public class ApiController {
         SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInf.getSub());
 
         if(customUserDetail == null) {
-            SecurityUser user = new SecurityUser(userInf.getSub(), userInf.getFamily_name()+userInf.getGiven_name(),
-                    userInf.getEmail(), null, 0);
-            user.setRole(Role.USER);
+            SecurityUser user = SecurityUser.builder()
+                    .userName(userInf.getSub())
+                    .nickName(userInf.getFamily_name()+userInf.getGiven_name())
+                    .email(userInf.getEmail())
+                    .gender(null)
+                    .age(0)
+                    .role(Role.USER.getKey())
+                    .build();
+
             securityUserService.register(user);
 
             customUserDetail = securityUserService.loadUserByUsername(userInf.getSub());
@@ -119,8 +125,15 @@ public class ApiController {
         SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
 
         if (customUserDetail == null) {
-            SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0 );
-            dto.setRole(Role.USER);
+            SecurityUser dto = SecurityUser.builder()
+                    .userName(userInfo.getId())
+                    .nickName(userInfo.getName())
+                    .email(userInfo.getEmail())
+                    .gender(null)
+                    .age(0)
+                    .role(Role.USER.getKey())
+                    .build();
+
             securityUserService.register(dto);
             customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }
@@ -152,8 +165,20 @@ public class ApiController {
         SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
 
         if (customUserDetail == null) {
-            SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0);
-            dto.setRole(Role.USER);
+            SecurityUser dto = SecurityUser.builder()
+                    .userName(userInfo.getId())
+                    .nickName(userInfo.getName())
+                    .email(userInfo.getEmail())
+                    .gender(null)
+                    .age(0)
+//                    .role(Role.USER.getKey())
+                    .build();
+
+            if (dto.getUsername().equals("OzasBAmAO1H1Ph-lAJ5A-xmD3ncxo8YRE53C9m90G_M")) {
+                dto.setRole(Role.ADMIN.getKey());
+            } else {
+                dto.setRole(Role.USER.getKey());
+            }
             securityUserService.register(dto);
             customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }

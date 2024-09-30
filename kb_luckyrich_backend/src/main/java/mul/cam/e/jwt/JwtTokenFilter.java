@@ -1,5 +1,6 @@
 package mul.cam.e.jwt;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.security.SecurityUser;
 import mul.cam.e.security.SecurityUserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
@@ -57,6 +59,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 사용자 정보를 로드
             SecurityUser customUserDetail = securityUserService.loadUserByUsername(id);
+            log.info(customUserDetail.getAuthorities().toString());
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
                 // 인증 토큰을 생성하고 SecurityContext에 저장

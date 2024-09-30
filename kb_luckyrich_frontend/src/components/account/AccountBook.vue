@@ -86,6 +86,8 @@
       <div v-if="!hasMore && filteredTransactions.length === 0" class="no-data">
         거래 내역이 없습니다.
       </div>
+
+      <button @click="nextSlide" class="next"></button>
     </div>
   </div>
 </template>

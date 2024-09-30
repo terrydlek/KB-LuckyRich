@@ -3,6 +3,7 @@ package mul.cam.e.security;
 import lombok.RequiredArgsConstructor;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
+import mul.cam.e.util.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -51,7 +52,8 @@ public class SecurityConfig {
                         .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
                         .antMatchers("/news/**").permitAll()
-                        .antMatchers("/board/**").permitAll()
+                        .antMatchers("/board/**").hasRole(Role.ADMIN.name())
+//                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

@@ -8,6 +8,7 @@
     <select id="getBoardList" resultType="mul.cam.e.dto.BoardDto">
         select a.board_num, a.user_name, b.nick_name, a.title, a.content, a.created_at
         from board a join user b on a.user_name = b.user_name
+        where del = 0
         order by created_at desc;
     </select>
 
@@ -22,16 +23,34 @@
         where a.board_num = #{boardNum};
     </select>
 
-    <delete id="deleteBoard" parameterType="int">
-        delete
-        from board
+<!--    <delete id="deleteBoard" parameterType="int">-->
+<!--        delete-->
+<!--        from board-->
+<!--        where board_num = #{boardNum};-->
+<!--    </delete>-->
+
+    <update id="deleteBoard" parameterType="int">
+        update board
+        set del = 1
         where board_num = #{boardNum};
-    </delete>
+    </update>
 
     <update id="updateBoard" parameterType="mul.cam.e.dto.BoardDto">
         update board
         set content = #{content}
         where board_num = #{boardNum};
     </update>
+
+    <insert id="addComment" parameterType="mul.cam.e.dto.BoardReplyDto">
+        insert into board_reply(board_num, reply, reply_at)
+        values(#{boardNum}, #{reply}, #{replyAt});
+    </insert>
+
+    <select id="getReply" parameterType="int" resultType="mul.cam.e.dto.BoardReplyDto">
+        select reply, reply_at
+        from board_reply
+        where board_num = #{boardNum}
+        order by 2;
+    </select>
 
 </mapper>
