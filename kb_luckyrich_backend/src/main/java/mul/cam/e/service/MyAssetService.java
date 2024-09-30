@@ -37,4 +37,20 @@ public class MyAssetService {
     public List<BankTransactionDto> getBankTransactions(int userId) {
         return myAssetDao.getBankTransactions(userId);
     }
+
+    public int totalAccount(String userName) {
+        return myAssetDao.totalAccount(userName);
+    }
+
+    public int totalStock(String userName) {
+        return myAssetDao.totalStock(userName);
+    }
+
+    public int totalRealestate(String userName) {
+        return myAssetDao.totalRealestate(userName);
+    }
+
+    public int totalCar(String userName) {
+        return myAssetDao.totalCar(userName);
+    }
 }

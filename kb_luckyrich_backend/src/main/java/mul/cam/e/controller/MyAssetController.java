@@ -45,7 +45,7 @@ public class MyAssetController {
 
         List<Map<String, Object>> accounts = new ArrayList<>();
 
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             BankName rBankName = randUtils.getRandomBankName();
             String rAccountNum = randUtils.getAccountNum();
             int rBalance = randUtils.getRandomBalance();
@@ -92,7 +92,7 @@ public class MyAssetController {
 
         // random 2 stock
         try {
-            for (int i=0; i<2; i++){
+            for (int i = 0; i < 2; i++) {
                 StockDto stock = randUtils.getRandomStockDto();
                 StockHoldingsDto stockHoldings = StockHoldingsDto.builder()
                         .userId(userId)
@@ -124,12 +124,28 @@ public class MyAssetController {
     }
 
     @GetMapping("getbanktransaction")
-        ResponseEntity<List<BankTransactionDto>> getBankTransaction() {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            int userId = securityUserService.getUserId(userName);
-            List<BankTransactionDto> bankTransactions = myAssetService.getBankTransactions(userId);
+    ResponseEntity<List<BankTransactionDto>> getBankTransaction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        int userId = securityUserService.getUserId(userName);
+        List<BankTransactionDto> bankTransactions = myAssetService.getBankTransactions(userId);
 
-            return  ResponseEntity.ok(bankTransactions);
-        }
+        return ResponseEntity.ok(bankTransactions);
+    }
+
+    @GetMapping("/total")
+        public ResponseEntity<Map<String, Object>> getAssetTotal() {
+        System.out.println("getAssetTotal execute~~~~~");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("Bank Balance", myAssetService.totalAccount(userName));
+        map.put("Stock Total", myAssetService.totalStock(userName));
+        map.put("Car", myAssetService.totalCar(userName));
+        map.put("real estate", myAssetService.totalRealestate(userName));
+
+        return ResponseEntity.ok(map);
+    }
+
 }
