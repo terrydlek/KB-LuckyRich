@@ -3,26 +3,52 @@
     <div class="cards-container">
       <button @click="prevCard">←</button>
       <div class="accounts">
-        <div class="card"
+        <div
+          class="card"
           v-if="currentCard"
           :class="{ active: selectedAccount === currentCard.accountNumber }"
-          :style="getCardStyle(currentCard.bankName)">
+          :style="getCardStyle(currentCard.bankName)"
+        >
           <div class="card-header">
             <h3>{{ currentCard.bankName }}</h3>
           </div>
           <div class="card-body">
             <p>{{ currentCard.accountNumber }}</p>
           </div>
-          <div class="circle" :style="getCircleStyle(currentCard.bankName)"></div>
+          <div
+            class="circle"
+            :style="getCircleStyle(currentCard.bankName)"
+          ></div>
         </div>
       </div>
       <button @click="nextCard">→</button>
     </div>
+    <div id="app">
+      <div>
+        <button @click="makeExcelFiles">거래 내역 다운받기</button>
+      </div>
+    </div>
 
+    <!-- 
     <div class="currentmonth">
       <button @click="prevMonth">Previous Month</button>
       <span>{{ currentMonth }}, {{ currentYear }}</span>
       <button @click="nextMonth">Next Month</button>
+    </div> -->
+
+    <div class="date-selector">
+      <select v-model="currentYear" @change="resetAndFetchTransactions">
+        <option :value="null">전체 년도</option>
+        <option v-for="year in yearOptions" :key="year" :value="year">
+          {{ year }}년
+        </option>
+      </select>
+      <select v-model="currentMonth" @change="resetAndFetchTransactions">
+        <option :value="null">전체 월</option>
+        <option v-for="month in 12" :key="month" :value="month">
+          {{ month }}월
+        </option>
+      </select>
     </div>
 
     <div class="filters">
@@ -31,8 +57,6 @@
         <option value="입금">입금</option>
         <option value="출금">출금</option>
       </select>
-      <input v-model.number="minAmount" type="number" placeholder="최소 금액" />
-      <input v-model.number="maxAmount" type="number" placeholder="최대 금액" />
     </div>
 
     <div class="transactions" ref="transactionList">
@@ -68,17 +92,24 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useInfiniteScroll } from '@vueuse/core';
-import { convertTimestampToDate, isSameYearAndMonth } from './transaction/dateUtils';
+import {
+  convertTimestampToDate,
+  isSameYearAndMonth,
+} from './transaction/dateUtils';
+import * as Xlsx from 'xlsx';
+
 const transactions = ref([]);
 const selectedAccount = ref(null);
 
-const currentMonth = ref(new Date().getMonth() + 1);
-const currentYear = ref(new Date().getFullYear());
+// const currentMonth = ref(new Date().getMonth() + 1); // js에서 Month가 0부터 시작
+// const currentYear = ref(new Date().getFullYear()); // Date 객체에서 연도 부분만 추출
+
+const currentYear = ref(null);
+const currentMonth = ref(null);
 
 const selectedType = ref('');
 const minAmount = ref('');
@@ -88,7 +119,20 @@ const transactionList = ref(null);
 const hasMore = ref(true);
 const isLoading = ref(false);
 
+const makeExcelFiles = () => {
+  const excelData = filteredTransactions.value.map((transaction) => ({
+    날짜: formatDate(transaction.transactionDate),
+    유형: transaction.transactionType,
+    금액: transaction.amount,
+    설명: transaction.description,
+    계좌번호: transaction.accountNumber,
+  }));
 
+  const workBook = Xlsx.utils.book_new();
+  const workSheet = Xlsx.utils.json_to_sheet(excelData);
+  Xlsx.utils.book_append_sheet(workBook, workSheet, '거래내역');
+  Xlsx.writeFile(workBook, '거래내역.xlsx');
+};
 
 const bankNames = {
   1: '국민은행',
@@ -110,16 +154,20 @@ const uniqueAccounts = computed(() => {
 });
 
 const currentIndex = ref(0);
-const currentCard = computed(() => uniqueAccounts.value[currentIndex.value] || null);
+const currentCard = computed(
+  () => uniqueAccounts.value[currentIndex.value] || null
+);
 
 const nextCard = () => {
   currentIndex.value = (currentIndex.value + 1) % uniqueAccounts.value.length;
-  selectAccount(currentCard.value.accountNumber); 
+  selectAccount(currentCard.value.accountNumber);
 };
 
 const prevCard = () => {
-  currentIndex.value = (currentIndex.value - 1 + uniqueAccounts.value.length) % uniqueAccounts.value.length;
-  selectAccount(currentCard.value.accountNumber); 
+  currentIndex.value =
+    (currentIndex.value - 1 + uniqueAccounts.value.length) %
+    uniqueAccounts.value.length;
+  selectAccount(currentCard.value.accountNumber);
 };
 
 const selectAccount = (accountNumber) => {
@@ -144,32 +192,40 @@ const filteredTransactions = computed(() => {
       (!maxAmount.value || t.amount <= maxAmount.value);
     const accountMatch =
       !selectedAccount.value || t.accountNumber === selectedAccount.value;
-    const dateMatch = isSameYearAndMonth(
-      t.transactionDate,
-      currentYear.value,
-      currentMonth.value
-    );
+    const dateMatch =
+      !currentYear.value ||
+      !currentMonth.value ||
+      isSameYearAndMonth(
+        t.transactionDate,
+        currentYear.value,
+        currentMonth.value
+      );
     return typeMatch && amountMatch && accountMatch && dateMatch;
   });
 });
 
-const prevMonth = () => {
-  currentMonth.value--;
-  if (currentMonth.value < 1) {
-    currentMonth.value = 12;
-    currentYear.value--;
-  }
-  resetAndFetchTransactions();
-};
+const yearOptions = computed(() => {
+  const currentYear = new Date().getFullYear();
+  return Array.from({ length: 5 }, (_, i) => currentYear - i);
+});
 
-const nextMonth = () => {
-  currentMonth.value++;
-  if (currentMonth.value > 12) {
-    currentMonth.value = 1;
-    currentYear.value++;
-  }
-  resetAndFetchTransactions();
-};
+// const prevMonth = () => {
+//   currentMonth.value--;
+//   if (currentMonth.value < 1) {
+//     currentMonth.value = 12;
+//     currentYear.value--;
+//   }
+//   resetAndFetchTransactions();
+// };
+
+// const nextMonth = () => {
+//   currentMonth.value++;
+//   if (currentMonth.value > 12) {
+//     currentMonth.value = 1;
+//     currentYear.value++;
+//   }
+//   resetAndFetchTransactions();
+// };
 
 function formatCurrency(amount) {
   return new Intl.NumberFormat('ko-KR').format(amount);
@@ -196,17 +252,21 @@ async function getMyBankTransaction() {
   const token = localStorage.getItem('access_token');
 
   try {
+    const params = {
+      accountNumber: selectedAccount.value,
+    };
+
+    // 날짜 필터가 선택된 경우에만 파라미터 추가
+    if (currentYear.value) params.year = currentYear.value;
+    if (currentMonth.value) params.month = currentMonth.value;
+
     const response = await axios.get(
       'http://localhost:8080/myasset/getbanktransaction',
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: {
-          year: currentYear.value,
-          month: currentMonth.value,
-          accountNumber: selectedAccount.value,
-        },
+        params: params,
       }
     );
 
@@ -237,6 +297,7 @@ async function getMyBankTransaction() {
 }
 
 onMounted(() => {
+  console.log('Component mounted');
   getMyBankTransaction();
 });
 
@@ -305,7 +366,6 @@ const getCircleStyle = (bankName) => {
 };
 </script>
 
-
 <style>
 .cards-container {
   display: flex;
@@ -316,7 +376,7 @@ const getCircleStyle = (bankName) => {
 
 .accounts {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
 }
 

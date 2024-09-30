@@ -1,0 +1,47 @@
+<template>
+  <div class="create-post">
+    <h2>게시글 작성</h2>
+    <form @submit.prevent="createPost">
+      <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" v-model="title" required />
+      </div>
+      <div>
+        <label for="content">내용</label>
+        <textarea id="content" v-model="content" required></textarea>
+      </div>
+      <button type="submit">작성하기</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      title: '',
+      content: '',
+    };
+  },
+  methods: {
+    async createPost() {
+      try {
+        const response = await axios.get(
+          'http://localhost:8080/board/created',
+          {
+            params: {
+                title: this.title,
+              content: this.content,
+            },
+          }
+        );
+        console.log('게시글이 성공적으로 등록되었습니다.', response.data);
+      } catch (error) {
+        console.error('게시글 등록 중 오류가 발생했습니다.', error);
+      }
+    },
+  },
+};
+</script>

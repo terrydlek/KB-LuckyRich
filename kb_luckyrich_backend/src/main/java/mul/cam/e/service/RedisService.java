@@ -73,6 +73,7 @@ public class RedisService {
         }
         return null;
     }
+
     public List<NewsDto> getNewsData(String key) {
         Object result = redisTemplate.opsForValue().get(key);
         if (result instanceof List<?>) {

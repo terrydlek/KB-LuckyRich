@@ -18,6 +18,7 @@ import StockDetail from '@/components/account/details/StockDetail.vue';
 import Detail from '@/components/account/details/Detail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
+
 export default [
   {
     path: '/luckyrich/lookup',
@@ -116,7 +117,7 @@ export default [
   },
   {
     path: '/luckyrich/accountbook',
-    name: 'accountbook',
-    component: AccountBook
-  }
+    name: 'accountBook',
+    component: AccountBook,
+  },
 ];

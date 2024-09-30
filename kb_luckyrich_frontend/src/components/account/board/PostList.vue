@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import Sidebar from "@/components/layout/QaSidebar.vue";
-import axios from "axios";
+import Sidebar from '@/components/layout/QaSidebar.vue';
+import axios from 'axios';
 
 export default {
   components: { Sidebar },
@@ -47,16 +47,16 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8080/board/getList", {
+      .get('http://localhost:8080/board/getList', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
       })
       .then((response) => {
         this.posts = response.data;
       })
       .catch((error) => {
-        console.error("There was an error fetching the posts:", error);
+        console.error('There was an error fetching the posts:', error);
       });
   },
 };
