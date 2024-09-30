@@ -1,5 +1,6 @@
 package mul.cam.e.security;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dao.UserDao;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -7,7 +8,9 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
+@Slf4j
 @Service
 public class SecurityUserService implements UserDetailsService {
 
@@ -17,9 +20,21 @@ public class SecurityUserService implements UserDetailsService {
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SecurityUser user = userDao.findByUsername(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException(username);
-//        }
+        log.info("Found user: {}", user);
+
+        /*if (user != null) {
+            SecurityUser authUser = SecurityUser.builder()
+                    .userName(user.getUsername())
+                    .nickName(user.getNickName())
+                    .email(user.getEmail())
+                    .gender(user.getGender())
+                    .age(user.getAge())
+                    .role(user.getRole())
+                    .build();
+
+            log.info("authUser : " + authUser);
+            return authUser;
+        }*/
 
         return user;
     }

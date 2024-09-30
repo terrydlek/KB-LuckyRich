@@ -7,7 +7,7 @@
 
     <update id="setMyAccount">
         insert into account(account_number, user_id, bank_id, account_type_id, balance)
-        values (#{account_number}, (SELECT user_id FROM user WHERE user_name=#{userName}), #{bankId}, #{accountTypeId}, #{balance});
+        values (#{accountNumber}, #{userId}, #{bankId}, #{accountTypeId}, #{balance});
     </update>
 
     <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
@@ -45,6 +45,25 @@
         order by
             t.transaction_date desc
     </select>
+
+    <select id="getStock" resultType="mul.cam.e.dto.StockHoldingsDto">
+        select *
+        from stock_holdings
+        where user_id = #{userId}
+    </select>
+
+    <!--<select id="getStocksByUser" resultType="">
+        select
+            u.user_id,
+            u.age,
+            sh.stock_symbol,
+            sh.purchase_price,
+            sh.quantity
+        FROM
+            user u
+                JOIN
+            stock_holdings sh ON u.user_id = sh.user_id;
+    </select>-->
     <select id="getBankTransactions" resultType="mul.cam.e.dto.BankTransactionDto">
         select
             t.account_id as accountId,

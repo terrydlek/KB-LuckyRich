@@ -12,8 +12,7 @@
     </div>
 
     <div class="navbar-right">
-      <router-link to="/luckyrich/userUpdate">My Page</router-link>
-
+      <button v-if="isLoggedIn" @click="goToMyPage">My Page</button>
       <button @click="handleAuth">{{ isLoggedIn ? "Logout" : "Login" }}</button>
     </div>
   </nav>
@@ -47,10 +46,13 @@ const handleAuth = () => {
   }
 };
 
+const goToMyPage = () => {
+  router.push("/luckyrich/userUpdate");
+};
+
 router.afterEach(() => {
   checkLoginStatus();
 });
-
 </script>
 
 <style>
