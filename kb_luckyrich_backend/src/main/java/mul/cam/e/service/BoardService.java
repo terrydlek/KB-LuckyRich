@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dao.BoardDao;
 import mul.cam.e.dao.UserDao;
 import mul.cam.e.dto.BoardDto;
+import mul.cam.e.dto.BoardReplyDto;
 import mul.cam.e.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,4 +45,11 @@ public class BoardService {
         boardDao.updateBoard(boardDto);
     }
 
+    public void addComment(BoardReplyDto boardReplyDto) {
+        boardDao.addComment(boardReplyDto);
+    }
+
+    public List<BoardReplyDto> getReply(int boardNum) {
+        return boardDao.getReply(boardNum);
+    }
 }

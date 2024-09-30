@@ -34,8 +34,12 @@ public class SecurityUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
+//        if (this.role != null) {
+//            authorities.add(new SimpleGrantedAuthority(this.role.getKey())); // role.getKey()를 사용하여 역할 추가
+//        }
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 //        System.out.println("Role : " + role);
 
         return authorities;
