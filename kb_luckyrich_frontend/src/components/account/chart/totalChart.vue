@@ -3,26 +3,12 @@
 </template>
 
 <script>
-import Highcharts from 'highcharts'
-import HighchartsVue from 'highcharts-vue'
+import Highcharts from 'highcharts';
+import HighchartsVue from 'highcharts-vue';
+import axios from 'axios';
 
 export default {
     name: 'AssetChart',
-    methods: {
-        input_function() {
-            function getRandomNumber(min, max) {
-                return (Math.random() * (max - min) + min).toFixed(2);
-            }
-
-            return [
-                { name: 'Bank Balance', y: parseFloat(getRandomNumber(10000, 500000)) },
-                { name: 'Stock Total', y: parseFloat(getRandomNumber(20000, 1000000)) },
-                { name: 'Car', y: parseFloat(getRandomNumber(20000, 1000000)) },
-                { name: 'Real Estate', y: parseFloat(getRandomNumber(20000, 1000000)) },
-                { name: 'Cash', y: parseFloat(getRandomNumber(20000, 1000000)) }
-            ];
-        }
-    },
     data() {
         return {
             chartOptions: {
@@ -53,10 +39,34 @@ export default {
                 series: [{
                     name: 'Total Assets',
                     colorByPoint: true,
-                    data: this.input_function()
+                    data: [],
                 }]
             }
         };
+    },
+    mounted() {
+        this.fetchAssetData();
+    },
+    methods: {
+        fetchAssetData() {
+            const token = localStorage.getItem('access_token');
+            axios.get('http://localhost:8080/myasset/total', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then(response => {
+                    const assets = response.data; // 백엔드에서 받은 데이터
+                    const chartData = Object.keys(assets).map(key => ({
+                        name: key,
+                        y: assets[key],
+                    }));
+                    this.chartOptions.series[0].data = chartData; // 차트 데이터 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching asset data: ', error);
+                });
+        }
     }
 }
 </script>

@@ -88,5 +88,37 @@
             t.transaction_date desc;
     </select>
 
+    <select id="totalAccount" parameterType="string" resultType="int">
+        select coalesce(sum(balance), 0) as balance
+        from account
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
+    </select>
+
+    <select id="totalStock" parameterType="string" resultType="int">
+        select coalesce(sum(purchase_price * quantity), 0) as total_price
+        from stock_holdings
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
+    </select>
+
+    <select id="totalRealestate" resultType="int">
+        select coalesce(sum(transaction_amount) * 100000000, 0)
+        from sg_real
+        where no = (select realestate_no
+            from user
+            where user_name = #{userName});
+    </select>
+
+    <select id="totalCar" resultType="int">
+        select coalesce(sum(car_price), 0)
+        from car
+        where car_no = (select car_no
+                        from user
+                        where user_name = #{userName});
+    </select>
+
 
 </mapper>

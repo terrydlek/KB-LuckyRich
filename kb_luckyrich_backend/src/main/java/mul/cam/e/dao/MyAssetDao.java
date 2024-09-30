@@ -23,4 +23,12 @@ public interface MyAssetDao {
     List<StockHoldingsDto> getStock(int userId);
     
     List<BankTransactionDto> getBankTransactions(int userId);
+
+    int totalAccount(String userName);
+
+    int totalStock(String userName);
+
+    int totalRealestate(String userName);
+
+    int totalCar(String userName);
 }
