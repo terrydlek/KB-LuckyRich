@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .antMatchers("/recommend/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
                         .antMatchers("/news/**").permitAll()
+//                        .antMatchers("/board/**").hasRole("ADMIN")
                         .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()

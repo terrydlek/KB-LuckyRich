@@ -38,4 +38,11 @@
         from user
         where user_name=#{userName}
     </select>
+
+    <select id="checkAuthority" parameterType="string" resultType="int">
+        select count(*)
+        from user
+        where user_name = #{userName} and role = "ADMIN"
+    </select>
+
 </mapper>

@@ -114,4 +114,9 @@ export default [
     name: 'NewsDetail',
     component: NewsDetail,
   },
+  {
+    path: '/luckyrich/accountbook',
+    name: 'accountBook',
+    component: AccountBook
+  }
 ];

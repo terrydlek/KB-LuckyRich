@@ -7,10 +7,10 @@ import Login from "@/views/user/login.vue";
 import UserUpdate from "@/views/user/UserUpdate.vue";
 import FinanceNews from "@/views/news/FinanceNews.vue";
 import PostList from '@/components/account/board/PostList.vue';
-import BoardDetail from "@/components/account/details/BoardDetail.vue";
+// import BoardDetail from "@/components/account/board/PostdDetail.vue";
 import PostUpdate from "@/components/account/board/PostUpdate.vue";
 import PostCreate from "@/components/account/board/PostCreate.vue";
-import PostDetail from "@/components/account/board/PostDetail.vue";
+import PostDetail from "@/components/account/board/PostDetail.vue"
 import AccountBook from "@/components/account/AccountBook.vue";
 
 export default [
@@ -60,11 +60,6 @@ export default [
         component: PostList,
     },
     {
-        path: '/luckyrich/qa/ask/:boardNum',
-        name: 'boardDetail',
-        component: BoardDetail,
-    },
-    {
         path: '/luckyrich/qa/ask/edit/:boardNum',
         name: 'postUpdate',
         component: PostUpdate,
@@ -84,10 +79,4 @@ export default [
         name : 'financenews',
         component : FinanceNews
     },
-    {
-        path : '/luckyrich/accountbook',
-        name : 'accountbook',
-        component : AccountBook
-    }
-    
 ]

@@ -2,9 +2,11 @@ package mul.cam.e.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.BoardDto;
+import mul.cam.e.dto.BoardReplyDto;
 import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.BoardService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +62,7 @@ public class BoardController {
         Map<String, Object> map = new HashMap<>();
         map.put("board", board);
         map.put("userName", userName);
+        System.out.println(map);
         return ResponseEntity.ok(map);
     }
 
@@ -70,11 +73,12 @@ public class BoardController {
         return ResponseEntity.ok(userName);
     }
 
-    @DeleteMapping("/deleteBoard")
-    public ResponseEntity<String> deleteBoard(@RequestParam int boardNum) {
-        System.out.println(boardNum);
+    @PostMapping("/deleteBoard")
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDto boardDto) {
+        System.out.println("execute deleteBoard~~~");
+        int boardId = boardDto.getBoardNum();
         try {
-            boardService.deleteBoard(boardNum);
+            boardService.deleteBoard(boardId);
             return ResponseEntity.ok("ok");
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,4 +97,39 @@ public class BoardController {
         }
         return ResponseEntity.ok("fail");
     }
+
+    @GetMapping("/checkAdmin")
+    public ResponseEntity<String> checkAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getAuthorities());
+        System.out.println(authentication.getName());
+        if (securityUserService.checkAuthority(authentication.getName()) > 0) {
+            System.out.println("yes");
+            return ResponseEntity.ok("yes");
+        }
+        return ResponseEntity.ok("no");
+    }
+
+    @PostMapping("/addComment")
+    public ResponseEntity<String> addComment(@RequestBody BoardReplyDto boardReplyDto) {
+        System.out.println("execute addComment~~~");
+        boardReplyDto.setReplyAt(new Timestamp(System.currentTimeMillis()));
+        System.out.println(boardReplyDto);
+        try {
+            boardService.addComment(boardReplyDto);
+            return ResponseEntity.ok("ok");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("fail");
+    }
+
+    @GetMapping("/reply/{boardNum}")
+    public ResponseEntity<List<BoardReplyDto>> getReply(@PathVariable int boardNum) {
+        System.out.println(boardNum);
+        System.out.println("execute getReply~~~");
+        return ResponseEntity.ok(boardService.getReply(boardNum));
+    }
+
+
 }

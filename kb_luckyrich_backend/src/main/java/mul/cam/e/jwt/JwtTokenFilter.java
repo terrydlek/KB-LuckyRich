@@ -57,6 +57,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // 사용자 정보를 로드
             SecurityUser customUserDetail = securityUserService.loadUserByUsername(id);
+            System.out.println(customUserDetail);
             // 토큰이 유효한 경우
             if (jwtTokenProvider.validateToken(token)) {
                 // 인증 토큰을 생성하고 SecurityContext에 저장
