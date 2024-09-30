@@ -116,7 +116,7 @@ export default [
   },
   {
     path: '/luckyrich/accountbook',
-    name: 'accountBook',
+    name: 'accountbook',
     component: AccountBook
   }
 ];

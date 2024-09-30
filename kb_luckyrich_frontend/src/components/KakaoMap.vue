@@ -1,5 +1,15 @@
 <template>
     <div class="map-container">
+        <!-- 로딩 상태일 때 화면을 어둡게 하고 로딩 스피너와 문구 표시 -->
+        <div v-if="isLoading" class="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading...</p>
+            </div>
+        </div>
+
         <!-- 검색 영역 -->
         <div class="search-panel">
             <input v-model="searchQuery" placeholder="단지명을 입력하세요" />
@@ -36,7 +46,7 @@
                     <p>계약월: {{ selectedPlace.contractTime }}</p>
 
                     <!-- 로드뷰 영역 -->
-                    <div id="roadview" class="roadview"></div> <!-- 로드뷰를 표시할 div -->
+                    <div id="roadview" class="roadview"></div> 
                 </div>
             </div>
         </div>
@@ -56,32 +66,13 @@ export default {
             searchQuery: '',
             searchResults: [],
             markers: [],
-            estate: []
+            estate: [],
+            isLoading: true, 
         };
     },
     mounted() {
         this.loadKakaoMap();
-        const token = localStorage.getItem('access_token');
-
-        axios.get('http://localhost:8080/realestate/getEstate', {
-            headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-        })
-            .then((response) => {
-                // estate 데이터를 변환해서 places로 사용할 수 있도록 함
-                this.estate = response.data.map(item => ({
-                    complexName: item.estateName,
-                    address: `${item.city} ${item.streetNumber}`,
-                    price: item.transactionAmount || '가격 정보 없음',
-                    floor: item.floor,
-                    contractTime: item.contractTime
-                }));
-                this.initKakaoMap();
-            })
-            .catch((error) => {
-                console.error('There was an error fetching the estate data:', error);
-            });
+        this.fetchRealEstateData(); 
     },
     methods: {
         loadKakaoMap() {
@@ -96,8 +87,33 @@ export default {
                     console.error("Failed to load Kakao Map script");
                 };
                 const kakaoApiKey = import.meta.env.VITE_KAKAO_MAP_APPKEY;
-                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`; document.head.appendChild(script);
+                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`; 
+                document.head.appendChild(script);
             }
+        },
+        fetchRealEstateData() {
+            const token = localStorage.getItem('access_token');
+
+            axios.get('http://localhost:8080/realestate/getEstate', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                this.estate = response.data.map(item => ({
+                    complexName: item.estateName,
+                    address: `${item.city} ${item.streetNumber}`,
+                    price: item.transactionAmount || '가격 정보 없음',
+                    floor: item.floor,
+                    contractTime: item.contractTime
+                }));
+
+                this.createMarkers();
+            })
+            .catch((error) => {
+                console.error('There was an error fetching the estate data:', error);
+                this.isLoading = false; 
+            });
         },
         initKakaoMap() {
             const mapContainer = document.getElementById('map');
@@ -106,8 +122,10 @@ export default {
                 level: 7,
             };
             this.map = new kakao.maps.Map(mapContainer, mapOptions);
-
-            const markerInfo = {};  // 주소를 키로 해서 해당 주소에 대한 거래 정보를 저장
+        },
+        createMarkers() {
+            const markerInfo = {};  
+            let createdMarkers = 0;  
 
             // estate 데이터를 사용하여 지도에 마커 추가
             this.estate.forEach((place) => {
@@ -115,19 +133,15 @@ export default {
                     if (coords) {
                         const addressKey = `${place.address}`;
 
-                        // 이미 해당 주소에 대한 마커가 존재하는 경우
                         if (markerInfo[addressKey]) {
-                            // 기존 오버레이에 층수와 가격 추가
                             const existingOverlayContent = markerInfo[addressKey].overlayContent;
                             existingOverlayContent.innerHTML += `<div>${place.floor}층: ${place.price}억</div>`;
                         } else {
-                            // 새로운 마커와 오버레이 생성
                             const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
                             const marker = new kakao.maps.Marker({
                                 position: markerPosition,
                                 map: this.map,
                             });
-
                             const overlayContent = document.createElement('div');
                             overlayContent.style.padding = '10px';
                             overlayContent.style.backgroundColor = 'white';
@@ -138,9 +152,9 @@ export default {
                             overlayContent.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)';
                             overlayContent.style.whiteSpace = 'nowrap';
                             overlayContent.innerHTML = `
-                        <div>단지명: ${place.complexName}</div>
-                        <div>${place.floor}층: ${place.price}억</div>
-                    `;
+                                <div>단지명: ${place.complexName}</div>
+                                <div>${place.floor}층: ${place.price}억</div>
+                            `;
 
                             overlayContent.addEventListener('click', () => {
                                 this.openModal({ ...place, ...coords });
@@ -154,6 +168,7 @@ export default {
                             });
                             customOverlay.setMap(this.map);
 
+                            // 마커 클릭 시 모달 열기
                             kakao.maps.event.addListener(marker, 'click', () => {
                                 this.openModal({ ...place, ...coords });
                             });
@@ -168,6 +183,12 @@ export default {
 
                         this.markers.push({ marker: markerInfo[addressKey].marker, place, customOverlay: markerInfo[addressKey].customOverlay });
                     }
+
+                    // 마커 생성 완료 추적
+                    createdMarkers++;
+                    if (createdMarkers === this.estate.length) {
+                        this.isLoading = false;
+                    }
                 });
             });
         },
@@ -181,78 +202,68 @@ export default {
                     };
                     callback(coords);
                 } else {
-                    //console.error("주소 변환 실패", status);
                     callback(null);
                 }
             });
         },
         openModal(place) {
-            // 동일한 주소의 모든 거래 정보를 찾음
             const relatedTransactions = this.estate.filter(item => item.address === place.address);
 
-            // priceInfo 배열에 해당 주소의 모든 층과 가격 정보를 저장
             const priceInfo = relatedTransactions.map(item => ({
                 floor: item.floor,
                 price: item.price,
             }));
 
-            // 선택된 장소에 모든 거래 정보를 포함
             this.selectedPlace = {
                 ...place,
-                priceInfo, // 층별 가격 정보 배열 추가
+                priceInfo,
             };
 
             this.$nextTick(() => {
                 this.initRoadView(place);
             });
-        }
-        ,
+        },
         closeModal() {
             this.selectedPlace = null;
         },
         initRoadView(place) {
-            const rvContainer = document.getElementById('roadview'); // 로드뷰를 표시할 div
+            const rvContainer = document.getElementById('roadview');
             if (!rvContainer) {
                 console.error("로드뷰 div를 찾을 수 없습니다.");
                 return;
             }
 
-            const rv = new kakao.maps.Roadview(rvContainer); // 로드뷰 객체 생성
-            const rc = new kakao.maps.RoadviewClient(); // 로드뷰 헬퍼 객체 생성
-            const rvPosition = new kakao.maps.LatLng(place.lat, place.lng); // 선택한 장소의 좌표
+            const rv = new kakao.maps.Roadview(rvContainer);
+            const rc = new kakao.maps.RoadviewClient();
+            const rvPosition = new kakao.maps.LatLng(place.lat, place.lng);
 
-            rc.getNearestPanoId(rvPosition, 200, (panoid) => {
+            rc.getNearestPanoId(rvPosition, 250, (panoid) => {
                 if (panoid) {
-                    rv.setPanoId(panoid, rvPosition); // 로드뷰에 파노라마 ID 설정
+                    rv.setPanoId(panoid, rvPosition);
                 } else {
                     console.error('로드뷰 파노라마 ID를 찾을 수 없습니다.');
                 }
             });
-            // 로드뷰 초기화 시 이벤트 설정
+
             kakao.maps.event.addListener(rv, 'init', () => {
-                // 로드뷰에 마커 설정
                 const rMarker = new kakao.maps.Marker({
-                    position: rvPosition, // 로드뷰의 중심 좌표에 마커를 설정
-                    map: rv // 마커를 로드뷰에 추가
+                    position: rvPosition,
+                    map: rv
                 });
 
-                // 로드뷰에 인포윈도우 추가
                 const rLabel = new kakao.maps.InfoWindow({
                     content: `<div style="padding:5px; width: 200px; word-break: break-all; border: 2px solid black; border-radius: 10px;">
-                  ${place.complexName}
-                </div>`,
+                        ${place.complexName}
+                    </div>`,
                 });
 
-                // 마커 위에 인포윈도우 표시
                 rLabel.open(rv, rMarker);
 
-                // 마커를 클릭했을 때 인포윈도우를 다시 열기
                 kakao.maps.event.addListener(rMarker, 'click', () => {
                     rLabel.open(rv, rMarker);
                 });
             });
         },
-
         searchPlaces() {
             if (this.searchQuery) {
                 this.searchResults = this.estate.filter((place) =>
@@ -260,7 +271,7 @@ export default {
                 );
                 this.highlightSearchedMarkers();
             } else {
-                this.clearHighlight();  // 검색어가 없으면 하이라이트를 초기화
+                this.clearHighlight();
             }
         },
         highlightSearchedMarkers() {
@@ -275,23 +286,18 @@ export default {
             });
         },
         highlightMarker(place) {
-            // 기존에 선택된 오버레이가 있으면 원래 흰색으로 복원
             if (this.selectedOverlay) {
                 this.selectedOverlay.style.backgroundColor = 'white';
             }
 
-            // 선택된 장소의 오버레이를 찾음
             const markerObj = this.markers.find((markerObj) => markerObj.place.address === place.address);
             if (markerObj) {
-                console.log("asdasd", markerObj)
                 this.map.setCenter(markerObj.marker.getPosition());
 
-                // 오버레이의 배경을 노란색으로 변경
                 const overlayContent = markerObj.customOverlay.getContent();
                 if (overlayContent instanceof HTMLElement) {
                     overlayContent.style.backgroundColor = 'yellow';
 
-                    // 선택된 오버레이로 저장
                     this.selectedOverlay = overlayContent;
                 }
             }
@@ -311,6 +317,24 @@ export default {
     display: flex;
     width: 100%;
     height: 100vh;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner {
+    text-align: center;
+    color: white;
 }
 
 .search-panel {
