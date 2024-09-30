@@ -319,7 +319,8 @@ const getCircleStyle = (bankName) => {
 }
 
 .card {
-  width: 200px;
+  width: 400px;
+  height: 200px !important;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;

@@ -110,7 +110,7 @@ export default [
     component: Detail,
   },
   {
-    path: '/financenews/:code1/:code2',
+    path: '/luckyrich/financenews/:code1/:code2',
     name: 'NewsDetail',
     component: NewsDetail,
   },
