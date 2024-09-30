@@ -3,6 +3,7 @@ package mul.cam.e.security;
 import mul.cam.e.dao.UserDao;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -40,4 +41,12 @@ public class SecurityUserService implements UserDetailsService {
     }
 
     public int getUserId(String name) { return userDao.getUserId(name); }
+
+    public String getNickname(String userName) {
+        return userDao.getNickname(userName);
+    }
+
+    public int checkAuthority(String userName) {
+        return userDao.checkAuthority(userName);
+    }
 }

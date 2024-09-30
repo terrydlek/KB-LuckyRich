@@ -5,7 +5,9 @@
     </div>
 
     <div class="middle">
-      <h2>Lucky Rich</h2>
+      <center>
+        <h2>Lucky Rich</h2>
+      </center>
       <p>MZ 세대를 위한 스마트 자산 관리 플랫폼. 맞춤형 투자 상품 추천, 실시간 자산 정보 및 더 나은 재정 계획을 위한 도구들을 제공합니다.</p>
     </div>
 
@@ -24,23 +26,23 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 
 onMounted(() => {
-  checkLoginStatus(); 
+  checkLoginStatus();
 });
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  
-  isLoggedIn.value = !!token; 
+
+  isLoggedIn.value = !!token;
 }
 
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem("access_token");
     alert("로그아웃 되었습니다.");
-    checkLoginStatus(); 
-    router.push("/"); 
+    checkLoginStatus();
+    router.push("/");
   } else {
-    router.push({ name: "login" }); 
+    router.push({ name: "login" });
   }
 };
 
@@ -49,7 +51,7 @@ const goToMyPage = () => {
 };
 
 router.afterEach(() => {
-  checkLoginStatus(); 
+  checkLoginStatus();
 });
 </script>
 

