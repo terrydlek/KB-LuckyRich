@@ -36,6 +36,7 @@ public class MyAssetService {
 
     public List<StockHoldingsDto> getStocks(int userId) {
         return myAssetDao.getStock(userId);
+    }
         
     public List<BankTransactionDto> getBankTransactions(int userId) {
         return myAssetDao.getBankTransactions(userId);

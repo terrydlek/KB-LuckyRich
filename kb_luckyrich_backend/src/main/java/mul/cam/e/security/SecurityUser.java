@@ -15,31 +15,30 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SecurityUser implements UserDetails {
-    private static final Logger log = LoggerFactory.getLogger(SecurityUser.class);
     private int userId;
     private String userName;
     private String nickName;
     private String email;
     private String gender;
     private int age;
-    private Role role;
+    private String role;
 
     @Builder()
-    public SecurityUser(String userName, String nickName, String email, String gender, int age) {
+    public SecurityUser(String userName, String nickName, String email, String gender, int age, String role) {
 //        this.user_id = user_id;
         this.userName = userName;
         this.nickName = nickName;
         this.email = email;
         this.gender = gender;
         this.age = age;
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        log.info(role.name());
-        authorities.add(new SimpleGrantedAuthority(role.name()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+role));
 
         return authorities;
     }
