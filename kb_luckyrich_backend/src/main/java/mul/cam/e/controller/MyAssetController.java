@@ -164,6 +164,7 @@ public class MyAssetController {
         String userName = authentication.getName();
 
         Map<String, Object> map = new HashMap<>();
+        System.out.println(myAssetService.totalCar(userName));
         map.put("Bank Balance", myAssetService.totalAccount(userName));
         map.put("Stock Total", myAssetService.totalStock(userName));
         map.put("Car", myAssetService.totalCar(userName));

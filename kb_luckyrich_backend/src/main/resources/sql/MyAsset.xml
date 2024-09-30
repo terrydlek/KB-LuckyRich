@@ -89,7 +89,7 @@
     </select>
 
     <select id="totalAccount" parameterType="string" resultType="int">
-        select sum(balance) as balance
+        select coalesce(sum(balance), 0) as balance
         from account
         where user_id = (select user_id
                          from user
@@ -97,7 +97,7 @@
     </select>
 
     <select id="totalStock" parameterType="string" resultType="int">
-        select sum(purchase_price * quantity) as total_price
+        select coalesce(sum(purchase_price * quantity), 0) as total_price
         from stock_holdings
         where user_id = (select user_id
                          from user
@@ -105,7 +105,7 @@
     </select>
 
     <select id="totalRealestate" resultType="int">
-        select sum(transaction_amount) * 100000000
+        select coalesce(sum(transaction_amount) * 100000000, 0)
         from sg_real
         where no = (select realestate_no
             from user
@@ -113,7 +113,7 @@
     </select>
 
     <select id="totalCar" resultType="int">
-        select car_price
+        select coalesce(sum(car_price), 0)
         from car
         where car_no = (select car_no
                         from user
