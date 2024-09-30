@@ -1,11 +1,12 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+// import './assets/main.css';
 
-import router from '@/router/index'
+import router from '@/router/index';
 
-import BootstrapVue from 'bootstrap-vue-3'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
+import BootstrapVue from 'bootstrap-vue-3';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts';
@@ -14,25 +15,24 @@ import SolidGauge from 'highcharts/modules/solid-gauge';
 
 import SummernoteEditor from 'vue3-summernote-editor';
 
-import { createPinia } from 'pinia'
-import $ from 'jquery';
+import { createPinia } from 'pinia';
+
 // import 'summernote/dist/summernote-lite.js';
 // import 'summernote/dist/summernote-lite.css';
 
 // window.$ = window.jQuery = $;
-
 
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
 // createApp(App).mount('#app')
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router)
+app.use(router);
 app.component('SummernoteEditor', SummernoteEditor);
-app.use(createPinia())
-app.use(BootstrapVue)
-app.use(HighchartsVue)
+app.use(createPinia());
+app.use(BootstrapVue);
+app.use(HighchartsVue);
 
-app.mount('#app')
+app.mount('#app');
