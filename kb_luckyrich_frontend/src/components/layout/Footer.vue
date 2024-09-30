@@ -8,16 +8,12 @@
                     자산 정보 및 더 나은 재정 계획을 위한 도구들을 제공합니다.
                 </p>
             </div> -->
-
             <div class="footer-section links">
-                <h2>Quick Links</h2>
                 <ul>
-                    <a href="/">About Lucky Rich</a> &nbsp;&nbsp;  <a href="/luckyrich/privacy">Privacy Policy</a> &nbsp;&nbsp; <a href="/luckyrich/terms">Terms of Service</a>&nbsp;&nbsp;<a href="https://github.com/terrydlek/KB-LuckyRich">Lucky Rich's Git Url</a>
+                    &copy; 2024 Lucky Rich MZ 자산관리. All rights reserved.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="/">About Lucky Rich</a> &nbsp;&nbsp;&nbsp;  <a href="/luckyrich/privacy">Privacy Policy</a> &nbsp;&nbsp;&nbsp; <a href="/luckyrich/terms">Terms of Service</a>&nbsp;&nbsp;&nbsp; <a href="https://github.com/terrydlek/KB-LuckyRich">Lucky Rich's Git Url</a>
                 </ul>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Lucky Rich MZ 자산관리. All rights reserved.</p>
         </div>
     </footer>
 </template>
@@ -28,9 +24,11 @@
     color: #fff;
     padding: 20px;
     text-align: center;
-    position: relative;
+    position: fixed;
     bottom: 0;
     width: 100%;
+    height: 50px;
+    z-index: 1000;
 }
 
 .footer-content {

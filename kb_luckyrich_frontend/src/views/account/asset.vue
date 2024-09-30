@@ -96,6 +96,8 @@ export default {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  margin-right: 1px;
+  width: 500px;
 }
 
 .card .amount {
