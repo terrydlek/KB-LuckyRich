@@ -36,7 +36,6 @@ public class AppConfig {
 //        dataSource.setPassword("0000");
 
         // AWS database
-
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
         dataSource.setUsername(username);

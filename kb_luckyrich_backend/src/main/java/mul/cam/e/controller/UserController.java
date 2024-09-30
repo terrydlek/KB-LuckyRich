@@ -24,9 +24,9 @@ public class UserController {
         System.out.println("fetchUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
+        String userName = authentication.getName();
 
-        SecurityUser user = securityUserService.loadUserByUsername(id);
+        SecurityUser user = securityUserService.loadUserByUsername(userName);
 
         if (user != null) {
             return ResponseEntity.ok(user);

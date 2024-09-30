@@ -4,10 +4,11 @@
         <table class="account-table">
             <thead>
                 <tr>
-                    <th>Account Name</th>
-                    <th>Account Number</th>
-                    <th>Balance</th>
-                    <th>Account Type</th>
+                    <th>은행</th>
+                    <th>계좌번호</th>
+                    <th>잔액</th>
+                    <th>계좌 종류</th>
+                    <th>계좌 선택</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,18 +17,17 @@
                     <td>{{ account.accountNumber }}</td>
                     <td>{{ formatBalance(account.balance) }}</td>
                     <td>{{ account.accountType }}</td>
-                    <td><button @click="selectAccount(account)">선택</button></td>
+                    <td>
+                        <button @click="toggleAccountSelection(account)">
+                            {{ isSelected(account) ? '선택 해제' : '선택' }}
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <div v-if="selectedAccount">
-            <h2>Selected Account</h2>
-            <p>Account Name: {{ selectedAccount.bankName }}</p>
-            <p>Account Number: {{ selectedAccount.accountNumber }}</p>
-            <p>Balance: {{ formatBalance(selectedAccount.balance) }}</p>
-            <p>Account Type: {{ selectedAccount.accountType }}</p>
-            <button @click="goToAccountFetch">다음</button>
-        </div>
+        <button @click="goToAccountFetch" :disabled="selectedAccounts.length === 0">
+            선택된 계좌 연동하기
+        </button>
     </div>
 </template>
 
@@ -39,7 +39,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const accounts = ref([]);
-const selectedAccount = ref(null);
+const selectedAccounts = ref([]);
 
 function formatBalance(balance) {
     // 천 단위로 쉼표를 추가하는 함수
@@ -54,7 +54,6 @@ function getMyAccount() {
         }
     })
         .then((response) => {
-            // console.log(response.data)
             accounts.value = response.data
         })
         .catch((error) => {
@@ -66,19 +65,27 @@ function getToken() {
     return localStorage.getItem('access_token');
 };
 
-function selectAccount(account) {
-    selectedAccount.value = account;
+function toggleAccountSelection(account) {
+    const index = selectedAccounts.value.findIndex(a => a.accountNumber === account.accountNumber);
+    if (index === -1) {
+        selectedAccounts.value.push(account);
+    } else {
+        selectedAccounts.value.splice(index, 1);
+    }
+}
+
+function isSelected(account) {
+    return selectedAccounts.value.some(a => a.accountNumber === account.accountNumber);
 }
 
 function goToAccountFetch() {
-    axios.post("http://localhost:8080/myasset/fetchaccount", selectedAccount.value, {
+    axios.post("http://localhost:8080/myasset/fetchaccount", selectedAccounts.value, {
         headers: {
             'Authorization': `Bearer ${getToken()}`
         }
     })
         .then(res => {
             console.log(res.data);
-            // updating.value = false;
             router.push({name: 'home'})
         })
         .catch(err => {
@@ -91,4 +98,57 @@ onMounted(() => {
 })
 </script>
 
-<style></style>
+<style>
+#mybank {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+.account-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.account-table th, .account-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.account-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.account-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.account-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+</style>
