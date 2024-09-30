@@ -2,6 +2,8 @@ package mul.cam.e.security;
 
 import lombok.*;
 import mul.cam.e.util.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,28 +21,24 @@ public class SecurityUser implements UserDetails {
     private String email;
     private String gender;
     private int age;
-    private Role role;
+    private String role;
 
     @Builder()
-    public SecurityUser(String userName, String nickName, String email, String gender, int age) {
+    public SecurityUser(String userName, String nickName, String email, String gender, int age, String role) {
 //        this.user_id = user_id;
         this.userName = userName;
         this.nickName = nickName;
         this.email = email;
         this.gender = gender;
         this.age = age;
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-//        if (this.role != null) {
-//            authorities.add(new SimpleGrantedAuthority(this.role.getKey())); // role.getKey()를 사용하여 역할 추가
-//        }
-
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//        System.out.println("Role : " + role);
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+role));
 
         return authorities;
     }

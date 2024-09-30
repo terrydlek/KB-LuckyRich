@@ -2,7 +2,6 @@ package mul.cam.e.dao;
 
 import mul.cam.e.dto.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,11 +10,7 @@ import java.util.List;
 @Repository
 public interface MyAssetDao {
 
-    boolean setMyAccount(@Param("account_number") String account_number,
-                         @Param("userName") String userName,
-                         @Param("bankId") int bankId,
-                         @Param("accountTypeId") int accountTypeId,
-                         @Param("balance") int balance);
+    boolean setMyAccount(AccountDto accountDto);
 
     void setTransaction(TransactionDto transactionDto);
 
@@ -25,6 +20,8 @@ public interface MyAssetDao {
 
     List<TransactionDto> getTransactions(int userId);
 
+    List<StockHoldingsDto> getStock(int userId);
+    
     List<BankTransactionDto> getBankTransactions(int userId);
 
     int totalAccount(String userName);

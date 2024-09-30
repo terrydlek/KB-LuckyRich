@@ -1,6 +1,7 @@
 package mul.cam.e.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,10 +14,12 @@ public class AccountDto {
     private int userId;
     private int bankId;
     private int accountTypeId;
-    private long balance;
+    private int balance;
 
-    public AccountDto(String accountNumber, int bankId, int accountTypeId, long balance) {
+    @Builder
+    public AccountDto(String accountNumber, int userId, int bankId, int accountTypeId, int balance) {
         this.accountNumber = accountNumber;
+        this.userId = userId;
         this.bankId = bankId;
         this.accountTypeId = accountTypeId;
         this.balance = balance;

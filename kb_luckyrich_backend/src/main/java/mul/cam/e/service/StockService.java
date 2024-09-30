@@ -1,6 +1,5 @@
 package mul.cam.e.service;
 
-import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.StockDetailDto;
 import mul.cam.e.dto.StockDto;
 import mul.cam.e.dto.StockTimeDto;
