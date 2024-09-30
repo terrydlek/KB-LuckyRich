@@ -17,6 +17,7 @@ import FundDetail from '@/components/account/details/FundDetail.vue';
 import StockDetail from '@/components/account/details/StockDetail.vue';
 import Detail from '@/components/account/details/Detail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
+import AccountBook from '@/views/account/AccountBook.vue';
 
 export default [
   {
@@ -113,5 +114,10 @@ export default [
     path : '/financenews/:code1/:code2',
     name : 'NewsDetail',
     component : NewsDetail
+  },
+  {
+    path : '/luckyrich/accountBook',
+    name : 'accountBook',
+    component : AccountBook
   }
 ];

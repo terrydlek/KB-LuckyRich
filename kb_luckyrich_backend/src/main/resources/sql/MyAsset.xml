@@ -7,7 +7,7 @@
 
     <update id="setMyAccount">
         insert into account(account_number, user_id, bank_id, account_type_id, balance)
-        values (#{account_number}, (SELECT user_id FROM user WHERE user_name=#{userName}), #{bankId}, #{accountTypeId}, #{balance});
+        values (#{accountNumber}, #{userId}, #{bankId}, #{accountTypeId}, #{balance});
     </update>
 
     <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
@@ -25,5 +25,44 @@
         insert into stock_holdings(user_id, stock_symbol, stock_name, purchase_price, quantity, purchase_date)
         values (#{userId}, #{stockSymbol}, #{stockName}, #{purchasePrice}, #{quantity}, #{purchaseDate})
     </update>
+
+    <select id="getTransactions" resultType="mul.cam.e.dto.TransactionDto">
+        select
+            t.account_id,
+            t.amount,
+            t.transaction_type,
+            t.category,
+            t.description,
+            t.transaction_date
+        from
+            transaction t
+                join
+            account a on t.account_id = a.account_id
+                join
+            user u on a.user_id = u.user_id
+        where
+            u.user_id = #{userId}
+        order by
+            t.transaction_date desc
+    </select>
+
+    <select id="getStock" resultType="mul.cam.e.dto.StockHoldingsDto">
+        select *
+        from stock_holdings
+        where user_id = #{userId}
+    </select>
+
+    <!--<select id="getStocksByUser" resultType="">
+        select
+            u.user_id,
+            u.age,
+            sh.stock_symbol,
+            sh.purchase_price,
+            sh.quantity
+        FROM
+            user u
+                JOIN
+            stock_holdings sh ON u.user_id = sh.user_id;
+    </select>-->
 
 </mapper>

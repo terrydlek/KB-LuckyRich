@@ -2,6 +2,8 @@ package mul.cam.e.security;
 
 import lombok.*;
 import mul.cam.e.util.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SecurityUser implements UserDetails {
+    private static final Logger log = LoggerFactory.getLogger(SecurityUser.class);
     private int userId;
     private String userName;
     private String nickName;
@@ -36,7 +39,8 @@ public class SecurityUser implements UserDetails {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-//        System.out.println("Role : " + role);
+        log.info(role.name());
+        authorities.add(new SimpleGrantedAuthority(role.name()));
 
         return authorities;
     }
