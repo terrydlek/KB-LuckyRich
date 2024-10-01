@@ -39,7 +39,7 @@ export default {
                         'Authorization': `Bearer ${token}`
                     }
         });
-        this.news = res.data; // API로부터 받은 뉴스 데이터를 news에 저장
+        this.news = res.data; 
         console.log(res.data);
       } catch (err) {
         console.log(err);

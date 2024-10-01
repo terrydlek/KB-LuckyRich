@@ -1,25 +1,57 @@
 <template>
     <highcharts :options="chartOptions" />
+    <div class="asset-info">
+        <p>현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ (userGoal || 100000000).toLocaleString() }} 원</p>
+    </div>
+    <input v-model.number="userGoal" type="number" id="userGoal" :placeholder="placeholderText" />
+    <button type="button" @click="updateGoal">수정</button>
 </template>
 
+
 <script>
+import axios from 'axios';
 import Highcharts from 'highcharts';
 
 export default {
     name: 'GoalChart',
-    methods: {
-        generateRandomAmount(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+    mounted() {
+        this.fetchTotalAssetData();
     },
     data() {
-        const goalAsset = 100000000; // 목표 자산: 1억
-        const currentAsset = this.generateRandomAmount(0, goalAsset); // 현재 자산: 0 ~ 목표 자산 내에서 랜덤
-        const max = goalAsset;
-        const tickInterval = Math.floor(max / 8); // 8부분으로 나눠서 표시
-
         return {
-            chartOptions: {
+            userGoal: null,
+            placeholderText: '목표 금액 입력',
+            currentAsset: 0,
+            chartOptions: this.generateChartOptions(100000000, 0)
+        }
+    },
+    methods: {
+        fetchTotalAssetData() {
+            const token = localStorage.getItem('access_token');
+            axios.get('http://localhost:8080/myasset/total', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then(res => {
+                const totalAsset = res.data.Car + res.data['real estate'] + res.data['Bank Balance'] + res.data['Stock Total'];
+                
+                // 총 자산을 currentAsset에 저장
+                this.currentAsset = totalAsset;
+                console.log("총 자산:", totalAsset);
+
+                // 차트 옵션 업데이트
+                this.chartOptions = this.generateChartOptions(this.userGoal || 100000000, totalAsset);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+        generateChartOptions(goalAsset, currentAsset) {
+            const tickInterval = Math.floor(goalAsset / 8); // 8부분으로 나눠서 표시
+            const cappedAsset = Math.min(currentAsset, goalAsset);
+
+            return {
                 chart: {
                     type: 'gauge',
                     plotBackgroundColor: null,
@@ -40,7 +72,7 @@ export default {
                 },
                 yAxis: {
                     min: 0,
-                    max: max, // 목표 자산이 최대값
+                    max: goalAsset, // 목표 자산이 최대값
                     tickPixelInterval: 72,
                     tickPosition: 'inside',
                     tickLength: 20,
@@ -56,34 +88,35 @@ export default {
                     lineWidth: 0,
                     plotBands: [{
                         from: 0,
-                        to: max * 0.6,
+                        to: goalAsset * 0.6,
                         color: '#55BF3B', // Green for lower part
                         thickness: 20
                     }, {
-                        from: max * 0.6,
-                        to: max * 0.8,
+                        from: goalAsset * 0.6,
+                        to: goalAsset * 0.8,
                         color: '#DDDF0D', // Yellow for medium
                         thickness: 20
                     }, {
-                        from: max * 0.8,
-                        to: max,
+                        from: goalAsset * 0.8,
+                        to: goalAsset,
                         color: '#DF5353', // Red for upper part
                         thickness: 20
                     }]
                 },
                 series: [{
                     name: 'Total Asset',
-                    data: [currentAsset], // 현재 자산이 화살표로 표시됨
+                    data: [cappedAsset], 
                     tooltip: {
                         valueSuffix: ' ₩'
                     },
                     dataLabels: {
-                        format: '{y} ₩',
-                        borderWidth: 0,
-                        color: '#333333',
-                        style: {
-                            fontSize: '16px'
-                        }
+                        // format: '{y} 원',
+                        // borderWidth: 0,
+                        // color: '#333333',
+                        // style: {
+                        //     fontSize: '16px'
+                        // }
+                        enabled: false
                     },
                     dial: {
                         radius: '100%',
@@ -97,10 +130,21 @@ export default {
                         radius: 6
                     }
                 }]
-            }
+            };
+        },
+        updateGoal() {
+            const newGoal = this.userGoal || 100000000;
+            this.chartOptions = this.generateChartOptions(newGoal, this.currentAsset);
         }
     }
 }
+
 </script>
 
-<style></style>
+<style>
+.asset-info {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+}
+</style>

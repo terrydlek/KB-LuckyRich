@@ -6,18 +6,38 @@
 
 <script>
 import Highcharts from 'highcharts';
+import axios from 'axios';
 
 export default {
     name: 'AssetGrowthChart',
+    data() {
+        return {
+            assetData: {}
+        };
+    },
     mounted() {
-        this.renderChart();
+        this.fetchAssetData();
     },
     methods: {
+        async fetchAssetData() {
+            const token = localStorage.getItem('access_token');
+            try {
+                const response = await axios.get('http://localhost:8080/myasset/idTrend', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                this.assetData = response.data;
+                this.renderChart();
+            } catch (error) {
+                console.error('Error fetching asset data:', error);
+            }
+        },
         renderChart() {
-            // const goalAsset = Math.random() * (1000000 - 500000) + 500000; // 목표 자산 랜덤 생성
-            const goalAsset = 100000000
-            const totalDays = 120;  // 목표 기간 설정
-            const categories = Array.from({ length: 10 }, (_, i) => Math.floor(totalDays / 10 * (i + 1))); // 목표 설정 기간 10등분
+            const sortedData = Object.entries(this.assetData).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+            const categories = sortedData.map(item => item[0]);
+            const data = sortedData.map(item => item[1]);
 
             Highcharts.chart('container', {
                 title: {
@@ -31,17 +51,17 @@ export default {
                 },
                 xAxis: {
                     title: {
-                        text: '진행 기간'
+                        text: '거래 날짜'
                     },
-                    categories: categories // 목표 기간 10등분
+                    categories: categories
                 },
                 yAxis: {
                     type: 'linear',
                     title: {
                         text: 'Total Asset (in currency units)'
                     },
-                    tickInterval: goalAsset / 10, // 목표 자산을 5등분하여 표시
-                    max: goalAsset // 최대값을 목표 자산으로 설정
+                    tickInterval: Math.max(...data) / 10,
+                    max: Math.max(...data)
                 },
                 tooltip: {
                     headerFormat: '<b>{series.name}</b><br />',
@@ -49,7 +69,7 @@ export default {
                 },
                 series: [{
                     name: 'Asset Growth',
-                    data: Array.from({ length: 10 }, () => Math.random() * goalAsset), // 각 기간별 자산 랜덤 생성
+                    data: data,
                     color: {
                         linearGradient: {
                             x1: 0,

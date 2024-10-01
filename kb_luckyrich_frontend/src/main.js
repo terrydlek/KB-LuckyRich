@@ -18,8 +18,6 @@ import { createPinia } from 'pinia';
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
-// createApp(App).mount('#app')
-
 const app = createApp(App);
 
 app.use(router);

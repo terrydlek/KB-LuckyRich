@@ -41,18 +41,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        // api login -> access token 없이 진입 가능
-                        .antMatchers("/").permitAll()
+                        // api login -> 권한 상관 없이 진입 가능
                         .antMatchers("/api/**").permitAll()
-                        .antMatchers("/asset/**").permitAll()
-                        .antMatchers("/login/**").permitAll()
-                        .antMatchers("/recommend/**").permitAll()
-                        .antMatchers("/user/**").permitAll()
-                        .antMatchers("/myasset/**").permitAll()
-                        .antMatchers("/recommend/**").permitAll()
-                        .antMatchers("/realestate/**").permitAll()
-                        .antMatchers("/news/**").permitAll()
-                        .antMatchers("/board/**").hasRole(Role.ADMIN.name())
+                        .antMatchers("/rabbit/**").permitAll()
+                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
 //                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()

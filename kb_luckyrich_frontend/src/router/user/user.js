@@ -11,6 +11,7 @@ import PostList from '@/components/account/board/PostList.vue';
 import PostUpdate from "@/components/account/board/PostUpdate.vue";
 import PostCreate from "@/components/account/board/PostCreate.vue";
 import PostDetail from "@/components/account/board/PostDetail.vue"
+import AccountBook from "@/components/account/AccountBook.vue";
 
 export default [
     {
@@ -77,5 +78,5 @@ export default [
         path : '/luckyrich/financenews',
         name : 'financenews',
         component : FinanceNews
-    }
+    },
 ]
