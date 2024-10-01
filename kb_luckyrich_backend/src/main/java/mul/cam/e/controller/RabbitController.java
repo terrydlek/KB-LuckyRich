@@ -17,6 +17,7 @@ public class RabbitController {
     public ResponseEntity<String> sendMessage() {
         String testMessage = "Hello Rabbitmq";
         rabbitService.sendMessage(testMessage);
+        rabbitService.createPortfolio("123");
         return ResponseEntity.ok("Message sent to RabbitMQ");
     }
 
