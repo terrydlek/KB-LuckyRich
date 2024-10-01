@@ -17,20 +17,14 @@ import SummernoteEditor from 'vue3-summernote-editor';
 
 import { createPinia } from 'pinia';
 
-// import 'summernote/dist/summernote-lite.js';
-// import 'summernote/dist/summernote-lite.css';
-
-// window.$ = window.jQuery = $;
 
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
-// createApp(App).mount('#app')
 
 const app = createApp(App);
 
 app.use(router);
-app.component('SummernoteEditor', SummernoteEditor);
 app.use(createPinia());
 app.use(BootstrapVue);
 app.use(HighchartsVue);

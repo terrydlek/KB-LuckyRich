@@ -169,7 +169,7 @@ public class MyAssetController {
         map.put("Stock Total", myAssetService.totalStock(userName));
         map.put("Car", myAssetService.totalCar(userName));
         map.put("real estate", myAssetService.totalRealestate(userName));
-
+        
         return ResponseEntity.ok(map);
     }
 

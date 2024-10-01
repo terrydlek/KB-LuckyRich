@@ -93,7 +93,6 @@ export default {
         },
         fetchRealEstateData() {
             const token = localStorage.getItem('access_token');
-
             axios.get('http://localhost:8080/realestate/getEstate', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
