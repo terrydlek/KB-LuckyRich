@@ -16,15 +16,10 @@ import SolidGauge from 'highcharts/modules/solid-gauge';
 
 import { createPinia } from 'pinia';
 
-// import 'summernote/dist/summernote-lite.js';
-// import 'summernote/dist/summernote-lite.css';
-
-// window.$ = window.jQuery = $;
 
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
-// createApp(App).mount('#app')
 
 const app = createApp(App);
 
