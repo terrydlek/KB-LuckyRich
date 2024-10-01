@@ -13,7 +13,6 @@ import Highcharts from 'highcharts';
 import HighchartsMore from 'highcharts/highcharts-more';
 import SolidGauge from 'highcharts/modules/solid-gauge';
 
-import SummernoteEditor from 'vue3-summernote-editor';
 
 import { createPinia } from 'pinia';
 

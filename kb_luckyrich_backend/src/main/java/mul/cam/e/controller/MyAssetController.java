@@ -6,16 +6,15 @@ import mul.cam.e.dto.*;
 import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.service.StockService;
-import mul.cam.e.util.AccountType;
-import mul.cam.e.util.RandUtils;
-import mul.cam.e.util.BankName;
-import mul.cam.e.util.TransactionGenerator;
+import mul.cam.e.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -146,7 +145,7 @@ public class MyAssetController {
 
         return ResponseEntity.ok(res);
     }
-    
+
     @GetMapping("getbanktransaction")
     ResponseEntity<List<BankTransactionDto>> getBankTransaction() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -158,7 +157,7 @@ public class MyAssetController {
     }
 
     @GetMapping("/total")
-        public ResponseEntity<Map<String, Object>> getAssetTotal() {
+    public ResponseEntity<Map<String, Object>> getAssetTotal() {
         System.out.println("getAssetTotal execute~~~~~");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -171,6 +170,47 @@ public class MyAssetController {
         map.put("real estate", myAssetService.totalRealestate(userName));
         
         return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/accounts")
+    public ResponseEntity<Map<String, Object>> accounts() {
+        System.out.println("accounts execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        List<AccountDto> dto = myAssetService.userAccounts(userName);
+
+        Map<String, Object> map = new HashMap<>();
+        for (AccountDto account : dto) {
+            if (account.getBankId() == 1) {
+                map.put("국민은행", account.getBalance());
+            } else if (account.getBankId() == 2) {
+                map.put("카카오뱅크", account.getBalance());
+            } else if (account.getBankId() == 3) {
+                map.put("신한은행", account.getBalance());
+            }
+        }
+        System.out.println(map);
+        return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/idTrend")
+    public ResponseEntity<Map<String, BigInteger>> idTrend() throws IOException {
+        System.out.println("idTrend execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        List<Map<String, Object>> transaction = myAssetService.transactionTen(userName);
+        System.out.println(transaction);
+
+        Map<String, Map<String, List<String>>> symbol = myAssetService.userStockSymbol(userName);
+        System.out.println(symbol);
+
+        Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
+
+        return ResponseEntity.ok(answer);
     }
 
 }
