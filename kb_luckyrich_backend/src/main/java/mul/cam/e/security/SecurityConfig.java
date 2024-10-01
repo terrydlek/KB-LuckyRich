@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/rabbit/**").permitAll()
                         .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
+                        .antMatchers("/ws/**").permitAll()
 //                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
