@@ -56,6 +56,10 @@ dependencies {
     // Jackson - Json 처리
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
 
+    //webSocket
+    implementation 'org.springframework:spring-websocket:5.3.29'
+    implementation 'org.springframework:spring-messaging:5.3.29'
+
     // Crawling
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.17.2'
 

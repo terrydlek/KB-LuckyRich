@@ -14,7 +14,7 @@ public class RealEstateDto {
     private String estateName;
     private String exclusiveArea;
     private String contractTime;
-    private String transactionAmount;
+    private double transactionAmount;
     private String floor;
     private String buyer;
     private String bargainer;

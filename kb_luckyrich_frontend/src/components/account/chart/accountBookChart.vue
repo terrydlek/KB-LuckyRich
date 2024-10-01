@@ -2,35 +2,19 @@
     <highcharts :options="chartOptions" />
 </template>
 
-
 <script>
 import Highcharts from 'highcharts'
+import HighchartsVue from 'highcharts-vue';
+import axios from 'axios';
 
 export default {
     name: 'AccountBookChart',
-    methods: {
-        input_function() {
-            function getRandomNumber(min, max) {
-                return (Math.random() * (max - min) + min).toFixed(2);
-            }
-
-            return [
-                { name: 'A 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'B 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'C 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'D 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'E 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'F 은행', y: parseFloat(getRandomNumber(100000, 500000)) },
-                { name: 'G 은행', y: parseFloat(getRandomNumber(100000, 500000)) }
-            ];
-        }
-    },
     data() {
         return {
             chartOptions: {
                 chart: {
                     type: 'pie',
-                    height: '100%'
+                    height: '70%'
                 },
                 title: {
                     text: '계좌 보유 잔액'
@@ -55,14 +39,38 @@ export default {
                 series: [{
                     name: 'Total Assets',
                     colorByPoint: true,
-                    data: this.input_function()
+                    data: []
                 }]
             }
         };
+    },
+    mounted() {
+        this.fetchAccountData();
+    },
+    methods: {
+        fetchAccountData() {
+            const token = localStorage.getItem('access_token');
+            axios.get('http://localhost:8080/myasset/accounts', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then(response => {
+                    const assets = response.data;
+                    console.log(assets);
+                    const chartData = Object.keys(assets).map(key => ({
+                        name: key,
+                        y: assets[key],
+                    }));
+                    this.chartOptions.series[0].data = chartData;
+                })
+                .catch(error => {
+                    console.error('Error fetching asset data: ', error);
+                });
+        }
     }
 }
-
 </script>
 
-<style>
-</style>
+
+<style></style>

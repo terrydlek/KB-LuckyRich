@@ -24,7 +24,7 @@ public class RealEstateService {
         List<RealEstateDto> estateList = redisService.getRealEstateData(redisKey);
         if (estateList == null || estateList.isEmpty()) {
             estateList = realEstateDao.getRealEstates();
-            redisService.setData(redisKey, estateList, Integer.MAX_VALUE);
+            redisService.setData(redisKey, estateList, 100);
         }
         return estateList;
     }

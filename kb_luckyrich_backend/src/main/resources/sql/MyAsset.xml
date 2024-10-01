@@ -27,23 +27,19 @@
     </update>
 
     <select id="getTransactions" resultType="mul.cam.e.dto.TransactionDto">
-        select
-            t.account_id,
-            t.amount,
-            t.transaction_type,
-            t.category,
-            t.description,
-            t.transaction_date
-        from
-            transaction t
-                join
-            account a on t.account_id = a.account_id
-                join
-            user u on a.user_id = u.user_id
-        where
-            u.user_id = #{userId}
-        order by
-            t.transaction_date desc
+        select t.account_id,
+               t.amount,
+               t.transaction_type,
+               t.category,
+               t.description,
+               t.transaction_date
+        from transaction t
+                 join
+             account a on t.account_id = a.account_id
+                 join
+             user u on a.user_id = u.user_id
+        where u.user_id = #{userId}
+        order by t.transaction_date desc
     </select>
 
     <select id="getStock" resultType="mul.cam.e.dto.StockHoldingsDto">
@@ -65,27 +61,99 @@
             stock_holdings sh ON u.user_id = sh.user_id;
     </select>-->
     <select id="getBankTransactions" resultType="mul.cam.e.dto.BankTransactionDto">
-        select
-            t.account_id as accountId,
-            a.account_number as accountNumber,
-            t.amount,
-            t.transaction_type as transactionType,
-            t.category,
-            t.description as description,
-            t.transaction_date as transactionDate,
-            b.bank_id as bankId
-        from
-            transaction t
-                join
-            account a on t.account_id = a.account_id
-                join
-            user u on a.user_id = u.user_id
-                join
-            bank b on a.bank_id = b.bank_id
-        where
-            u.user_id = #{userId}
-        order by
-            t.transaction_date desc;
+        select t.account_id       as accountId,
+               a.account_number   as accountNumber,
+               t.amount,
+               t.transaction_type as transactionType,
+               t.category,
+               t.description      as description,
+               t.transaction_date as transactionDate,
+               b.bank_id          as bankId
+        from transaction t
+                 join
+             account a on t.account_id = a.account_id
+                 join
+             user u on a.user_id = u.user_id
+                 join
+             bank b on a.bank_id = b.bank_id
+        where u.user_id = #{userId}
+        order by t.transaction_date desc;
+    </select>
+
+    <select id="totalAccount" parameterType="string" resultType="int">
+        select coalesce(sum(balance), 0) as balance
+        from account
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
+    </select>
+
+    <select id="totalStock" parameterType="string" resultType="int">
+        select coalesce(sum(purchase_price * quantity), 0) as total_price
+        from stock_holdings
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
+    </select>
+
+    <select id="totalRealestate" resultType="int">
+        select coalesce(sum(transaction_amount) * 100000000, 0)
+        from sg_real
+        where no = (select realestate_no
+            from user
+            where user_name = #{userName});
+    </select>
+
+    <select id="totalCar" resultType="int">
+        select coalesce(sum(car_price), 0)
+        from car
+        where car_no = (select car_no
+                        from user
+                        where user_name = #{userName});
+    </select>
+
+    <select id="userAccounts" parameterType="string" resultType="mul.cam.e.dto.AccountDto">
+        select account_id, account_number, user_id, bank_id, account_type_id, sum(balance) as balance
+        from account
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName})
+        group by bank_id;
+    </select>
+
+    <select id="transactionTen" parameterType="string" resultType="map">
+        with tb1 as (select transaction_id,
+                            account_id,
+                            case
+                                when transaction_type = '출금' then amount * -1
+                                when transaction_type = '입금' then amount
+                                end                                   as amount,
+                            transaction_type,
+                            category,
+                            description,
+                            date_format(transaction_date, '%Y-%m-%d') as transaction_date
+                     from transaction)
+
+        select transaction_date, coalesce(sum(amount), 0) as amount
+        from tb1
+        where account_id in (select account_id
+                             from account
+                             where user_id = (select user_id
+                                              from user
+                                              where user_name = #{userName})
+                               and transaction_date between date_format(
+                                     date_sub(date_add(now(), interval 9 hour), interval 9 day),
+                                     '%Y-%m-%d') and date_format(date_add(now(), interval 9 hour), '%Y-%m-%d'))
+        group by 1
+        order by 1 desc;
+    </select>
+
+    <select id="userStockSymbol" parameterType="string" resultType="mul.cam.e.dto.StockHoldingsDto">
+        select stock_symbol, quantity
+        from stock_holdings
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
     </select>
 
 
