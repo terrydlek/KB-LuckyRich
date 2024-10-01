@@ -83,7 +83,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
-    implementation("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}")
+//    implementation("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}")
 
 
     // jjwt
@@ -100,6 +100,7 @@ dependencies {
 
     implementation 'io.lettuce:lettuce-core:6.1.8.RELEASE'
 
+    // rabbitmq
     implementation 'org.springframework.amqp:spring-rabbit:2.4.8'
     implementation 'com.rabbitmq:amqp-client:5.13.0'
 

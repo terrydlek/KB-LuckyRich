@@ -38,7 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // /api 엔드포인트를 제외
         String requestURI = request.getRequestURI();
         System.out.println(requestURI);
-        if (requestURI.startsWith("/api")) {
+        if (requestURI.startsWith("/api") || requestURI.startsWith("/rabbit")) {
             filterChain.doFilter(request, response);
             return;
         }
