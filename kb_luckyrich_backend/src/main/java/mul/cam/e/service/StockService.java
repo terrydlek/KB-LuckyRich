@@ -118,35 +118,36 @@ public class StockService {
 
         if (stockTimeDto == null) {
             System.out.println("No data in Redis. API call.");
-            stockTimeDto = new StockTimeDto();
 
             String url = "https://finance.naver.com/item/sise.naver?code=" + stockCode + "&asktype=10";
             Document doc = Jsoup.connect(url).get();
 
-            stockTimeDto.setNowVal(doc.select("#_nowVal").text());
-            stockTimeDto.setDiff(doc.select("#_diff span").text());
-            stockTimeDto.setRate(doc.select("#_rate span").text());
-            stockTimeDto.setQuant(doc.select("#_quant").text());
-            stockTimeDto.setAmount(doc.select("#_amount").text());
-            stockTimeDto.setFaceVal(doc.select(".section.inner_sub th:contains(액면가)").next().text());
-            stockTimeDto.setUpperLimit(doc.select(".section.inner_sub th:contains(상한가)").next().text());
-            stockTimeDto.setLowerLimit(doc.select(".section.inner_sub th:contains(하한가)").next().text());
-            stockTimeDto.setPer(doc.select("#_sise_per").text());
-            stockTimeDto.setEps(doc.select("#_sise_eps").text());
-            stockTimeDto.setHigh52Week(doc.select(".section.inner_sub th:contains(52주 최고)").next().text());
-            stockTimeDto.setLow52Week(doc.select(".section.inner_sub th:contains(52주 최저)").next().text());
-            stockTimeDto.setMarketCap(doc.select("#_sise_market_sum").text());
-            stockTimeDto.setForeignShares(doc.select(".section.inner_sub th:contains(외국인현재)").next().text());
-            stockTimeDto.setSellingPrice(doc.select(".type2 tbody tr:nth-child(3) td:nth-child(2)").text());
-            stockTimeDto.setBuyingPrice(doc.select(".type2 tbody tr:nth-child(3) td:nth-child(4)").text());
-            stockTimeDto.setPreviousPrice(doc.select(".section.inner_sub th:contains(전일가)").next().text());
-            stockTimeDto.setOpeningPrice(doc.select(".section.inner_sub th:contains(시가)").next().text().split(" ")[0]);
-            stockTimeDto.setHighPrice(doc.select("td:contains(고가)").next().text().split(" ")[1]);
-            stockTimeDto.setLowPrice(doc.select("td:contains(저가)").next().text().split(" ")[1]);
-            stockTimeDto.setPreviousUpperLimit(doc.select(".section.inner_sub th:contains(전일상한)").next().text());
-            stockTimeDto.setPreviousLowerLimit(doc.select(".section.inner_sub th:contains(전일하한)").next().text());
-            stockTimeDto.setListedShares(doc.select(".section.inner_sub th:contains(상장주식수)").next().text());
-            stockTimeDto.setCapital(doc.select(".section.inner_sub th:contains(자본금)").next().text());
+            String nowVal = doc.select("#_nowVal").text();
+            String diff = doc.select("#_diff span").text();
+            String rate = doc.select("#_rate span").text();
+            String quant = doc.select("#_quant").text();
+            String amount = doc.select("#_amount").text();
+            String faceVal = doc.select(".section.inner_sub th:contains(액면가)").next().text();
+            String uppderLimit = doc.select(".section.inner_sub th:contains(상한가)").next().text();
+            String lowerLimit = doc.select(".section.inner_sub th:contains(하한가)").next().text();
+            String per = doc.select("#_sise_per").text();
+            String eps = doc.select("#_sise_eps").text();
+            String high52Week = doc.select(".section.inner_sub th:contains(52주 최고)").next().text();
+            String low52Week = doc.select(".section.inner_sub th:contains(52주 최저)").next().text();
+            String marketCap = doc.select("#_sise_market_sum").text();
+            String foreignShares = doc.select(".section.inner_sub th:contains(외국인현재)").next().text();
+            String sellingPrice = doc.select(".type2 tbody tr:nth-child(3) td:nth-child(2)").text();
+            String buyingPrice = doc.select(".type2 tbody tr:nth-child(3) td:nth-child(4)").text();
+            String previousPrice = doc.select(".section.inner_sub th:contains(전일가)").next().text();
+            String openingPrice = doc.select(".section.inner_sub th:contains(시가)").next().text().split(" ")[0];
+            String highPrice = doc.select("td:contains(고가)").next().text().split(" ")[1];
+            String lowPrice = doc.select("td:contains(저가)").next().text().split(" ")[1];
+            String previousUpperLimit = doc.select(".section.inner_sub th:contains(전일상한)").next().text();
+            String previousLowerLimit = doc.select(".section.inner_sub th:contains(전일하한)").next().text();
+            String listedShares = doc.select(".section.inner_sub th:contains(상장주식수)").next().text();
+            String capital = doc.select(".section.inner_sub th:contains(자본금)").next().text();
+
+            stockTimeDto = new StockTimeDto(nowVal, diff, rate, quant, amount, faceVal, uppderLimit, lowerLimit, per, eps, high52Week, low52Week, marketCap, foreignShares, sellingPrice, buyingPrice, previousPrice, openingPrice, highPrice, lowPrice, previousUpperLimit, previousLowerLimit, listedShares, capital);
 
             redisService.setData(redisKey, stockTimeDto, 5);
         } else {
@@ -189,17 +190,8 @@ public class StockService {
             // 차트 이미지 URL (주식 차트 이미지가 표시되는 부분에서 추출)
             String chartImageUrl = doc.select("div.chart img").first().attr("src");
 
-            stockDetail.setStockName(stockName);
-            stockDetail.setCurrentPrice(currentPrice);
-            stockDetail.setPrevClosingPrice(prevClosingPrice);
-            stockDetail.setOpeningPrice(openingPrice);
-            stockDetail.setHighPrice(highPrice);
-            stockDetail.setUpperLimitPrice(upperLimitPrice);
-            stockDetail.setLowPrice(lowPrice);
-            stockDetail.setLowerLimitPrice(lowerLimitPrice);
-            stockDetail.setTradeVolume(tradeVolume);
-            stockDetail.setTradeValue(tradeValue);
-            stockDetail.setChartImageUrl(chartImageUrl);
+            stockDetail = new StockDetailDto(stockName, currentPrice, prevClosingPrice, openingPrice, highPrice, upperLimitPrice, lowPrice, lowerLimitPrice, tradeVolume, tradeValue, chartImageUrl);
+
             redisService.setData(redisKey, stockDetail, 5);
         } else {
             System.out.println("Retrieving data from Redis.");
