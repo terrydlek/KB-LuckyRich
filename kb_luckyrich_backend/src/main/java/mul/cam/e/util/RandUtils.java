@@ -1,6 +1,7 @@
 package mul.cam.e.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import mul.cam.e.dto.AccountDto;
 import mul.cam.e.dto.StockDto;
 import mul.cam.e.service.StockService;
 import org.springframework.stereotype.Component;
@@ -72,9 +73,10 @@ public class RandUtils {
 
     // 거래 날짜
     public Timestamp getRandomTransactionDate() {
-        return new Timestamp(System.currentTimeMillis() - random.nextInt(1000000000));
+        return new Timestamp(System.currentTimeMillis() - random.nextInt(2000000000));
     }
 
+    // Stock
     public StockDto getRandomStockDto() {
         int r = random.nextInt(100);
 
