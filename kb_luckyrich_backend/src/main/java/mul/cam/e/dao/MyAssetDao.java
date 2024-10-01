@@ -1,10 +1,12 @@
 package mul.cam.e.dao;
 
 import mul.cam.e.dto.*;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -31,4 +33,12 @@ public interface MyAssetDao {
     int totalRealestate(String userName);
 
     int totalCar(String userName);
+
+    List<AccountDto> userAccounts(String userName);
+
+    @MapKey("transaction_date")
+    List<Map<String, Object>> transactionTen(String userName);
+
+    List<StockHoldingsDto> userStockSymbol(String userName);
+
 }
