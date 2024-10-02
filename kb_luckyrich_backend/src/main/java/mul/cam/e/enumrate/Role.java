@@ -1,4 +1,4 @@
-package mul.cam.e.util;
+package mul.cam.e.enumrate;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

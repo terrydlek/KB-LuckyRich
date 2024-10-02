@@ -2,20 +2,15 @@ package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
-import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.*;
 import mul.cam.e.util.KeyDecrypt;
 import mul.cam.e.util.KeyEncrypt;
-import mul.cam.e.util.Role;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

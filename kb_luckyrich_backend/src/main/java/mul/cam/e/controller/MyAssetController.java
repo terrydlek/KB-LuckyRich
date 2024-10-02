@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.*;
+import mul.cam.e.enumrate.AccountType;
+import mul.cam.e.enumrate.BankName;
 import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.service.StockService;
@@ -14,13 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -91,8 +91,8 @@ public class MyAssetController {
 
             int account_id = myAssetService.getAccountNum(accountNum);
 
-            // random 10 transaction
-            for (int i = 0; i < 10; i++) {
+            // random transaction
+            for (int i = 0; i < 30; i++) {
                 TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
                 myAssetService.setTransaction(transactionDto);
             }
