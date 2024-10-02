@@ -14,7 +14,7 @@ export default {
             chartOptions: {
                 chart: {
                     type: 'pie',
-                    height: '100%'
+                    height: '70%'
                 },
                 title: {
                     text: '자산 분포'
