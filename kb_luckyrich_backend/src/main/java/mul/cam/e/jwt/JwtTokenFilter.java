@@ -37,8 +37,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // /api 엔드포인트를 제외
         String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
-        if (requestURI.startsWith("/api") || requestURI.startsWith("/rabbit") || requestURI.startsWith("/ws")) {
+        log.info(requestURI);
+        if (requestURI.startsWith("/api") || requestURI.startsWith("/ws")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,7 +49,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 id = jwtTokenProvider.getId(token);
             } catch (Exception e) {
                 // 토큰이 유효하지 않음
-                System.out.println("***** 유효하지 않은 토큰 " + new Date());
+                log.info("***** 유효하지 않은 토큰 " + new Date());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
@@ -68,7 +68,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
                 // 토큰이 유효하지 않은 경우 401 에러 반환
-                System.out.println("**** 유효하지 않은 토큰 " + new Date());
+                log.info("**** 유효하지 않은 토큰 " + new Date());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
