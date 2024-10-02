@@ -156,5 +156,12 @@
                          where user_name = #{userName});
     </select>
 
+    <select id="getAccounts" resultType="mul.cam.e.dto.AccountDto">
+        select *
+        FROM account
+        WHERE user_id = #{userId};
+
+    </select>
+
 
 </mapper>

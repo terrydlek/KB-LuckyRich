@@ -41,4 +41,5 @@ public interface MyAssetDao {
 
     List<StockHoldingsDto> userStockSymbol(String userName);
 
+    List<AccountDto> getAccounts(int userId);
 }
