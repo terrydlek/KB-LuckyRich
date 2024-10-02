@@ -163,7 +163,6 @@ public class MyAssetController {
         log.info("getAssetTotal execute~~~~~");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        System.out.println(userName + "1111111111111111111111111");
 
         Map<String, Object> map = new HashMap<>();
         map.put("Bank Balance", myAssetService.totalAccount(userName));
