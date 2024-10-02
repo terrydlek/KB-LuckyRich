@@ -1,12 +1,16 @@
 package mul.cam.e.controller;
 
+import mul.cam.e.dto.AccountDto;
+import mul.cam.e.dto.TransactionDto;
 import mul.cam.e.jwt.JwtTokenProvider;
 import mul.cam.e.security.SecurityUser;
 import mul.cam.e.security.dto.*;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.security.SecurityUserService;
-import mul.cam.e.util.Role;
+import mul.cam.e.enumrate.Role;
+import mul.cam.e.service.MyAssetService;
 import mul.cam.e.util.TokenDecoder;
+import mul.cam.e.util.TransactionGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,6 +37,8 @@ public class ApiController {
 
     private final ApiService apiService;
     private final SecurityUserService securityUserService;
+    private final MyAssetService myAssetService;
+    private final TransactionGenerator transactionGenerator;
 
     @Value("${google.oauth.client-id}") String clientId;
     @Value("${google.oauth.password}") String password;
@@ -44,9 +51,11 @@ public class ApiController {
     @Value("${naver.oauth.url}") String NaverUrl;
     @Value("${naver.oauth.client-secret}") String NaverClientSecret;
 
-    public ApiController(ApiService service, SecurityUserService securityUserService) {
+    public ApiController(ApiService service, SecurityUserService securityUserService, MyAssetService myAssetService, TransactionGenerator transactionGenerator) {
         this.apiService = service;
         this.securityUserService = securityUserService;
+        this.myAssetService = myAssetService;
+        this.transactionGenerator = transactionGenerator;
     }
 
     @GetMapping("/google")
@@ -104,6 +113,15 @@ public class ApiController {
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
 //        System.out.println(account_num);
 
+        int userId = customUserDetail.getUserId();
+        List<AccountDto> accounts = myAssetService.getAccounts(userId);
+
+        for (AccountDto account : accounts) {
+            int account_id = account.getAccountId();
+            TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
+            myAssetService.setTransaction(transactionDto);
+        }
+
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
@@ -142,6 +160,15 @@ public class ApiController {
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
+
+        int userId = customUserDetail.getUserId();
+        List<AccountDto> accounts = myAssetService.getAccounts(userId);
+
+        for (AccountDto account : accounts) {
+            int account_id = account.getAccountId();
+            TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
+            myAssetService.setTransaction(transactionDto);
+        }
 
         Map<String, Object> map = new HashMap<>();
 //        map.put("name", userInfo.getName());
@@ -187,6 +214,15 @@ public class ApiController {
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
 
+        int userId = customUserDetail.getUserId();
+        List<AccountDto> accounts = myAssetService.getAccounts(userId);
+
+        for (AccountDto account : accounts) {
+            int account_id = account.getAccountId();
+            TransactionDto transactionDto = transactionGenerator.generateRandomTransactionDto(account_id);
+            myAssetService.setTransaction(transactionDto);
+        }
+
         Map<String, Object> map = new HashMap<>();
         map.put("id", userInfo.getId());
         map.put("name", userInfo.getName());
@@ -202,17 +238,17 @@ public class ApiController {
     @CrossOrigin(origins = "http://localhost:5173")  // 프론트엔드 주소
     @PostMapping("/logout")
     public ResponseEntity<String> naverUserCode(@RequestParam("token") String accessToken, HttpSession session) throws IOException {
-        System.out.println("네이버 로그아웃 중...");
+        log.info("네이버 로그아웃 중...");
 
         // 네이버 토큰 삭제 API 호출
         String deleteTokenUrl = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=" + NaverClientId
                 + "&client_secret=" + NaverClientSecret + "&access_token=" + accessToken + "&service_provider=NAVER";
 
-        System.out.println("토큰 삭제 URL: " + deleteTokenUrl);
+        log.info("토큰 삭제 URL: " + deleteTokenUrl);
 
         try {
             String response = requestToServer(deleteTokenUrl);
-            System.out.println("토큰 삭제 응답: " + response);
+            log.info("토큰 삭제 응답: " + response);
 
             // 세션 무효화 (사용자 로그아웃 처리)
             session.invalidate();

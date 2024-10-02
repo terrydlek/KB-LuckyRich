@@ -1,9 +1,10 @@
 package mul.cam.e.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
-import mul.cam.e.util.Role;
+import mul.cam.e.enumrate.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,6 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Date;
 
 @Import(WebConfig.class)
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -45,6 +47,7 @@ public class SecurityConfig {
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/rabbit/**").permitAll()
                         .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
+                        .antMatchers("/ws/**").permitAll()
 //                        .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
@@ -59,7 +62,7 @@ public class SecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        System.out.println("---------- SecurityConfig corsFilter " + new Date());
+        log.info("---------- SecurityConfig corsFilter " + new Date());
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 

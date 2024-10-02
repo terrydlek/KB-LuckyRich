@@ -39,6 +39,8 @@ public class MyAssetService {
         myAssetDao.setStockHoldings(stockHoldings);
     }
 
+    public List<AccountDto> getAccounts(int userId) { return myAssetDao.getAccounts(userId); }
+
     public List<TransactionDto> getTransactions(int userId) {
         return myAssetDao.getTransactions(userId);
     }

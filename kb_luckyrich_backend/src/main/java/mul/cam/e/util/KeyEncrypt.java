@@ -1,5 +1,6 @@
 package mul.cam.e.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -10,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
+@Slf4j
 @Component
 public class KeyEncrypt {
 
@@ -21,7 +23,7 @@ public class KeyEncrypt {
     public String encrypt(String text) {
         try {
             String shaKey = getShaKey(text);
-            System.out.println(shaKey);
+            log.info(shaKey);
             return getAesKey(shaKey);
         } catch (Exception e) {
             throw new RuntimeException("암호화 처리중에 에러가 발생했습니다. e = {}", e);

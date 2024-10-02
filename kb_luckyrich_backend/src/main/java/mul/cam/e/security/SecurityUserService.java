@@ -20,9 +20,10 @@ public class SecurityUserService implements UserDetailsService {
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SecurityUser user = userDao.findByUsername(username);
-        log.info("Found user: {}", user);
+//        log.info("Found user: {}", user);
 
-        /*if (user != null) {
+        /*
+        if (user != null) {
             SecurityUser authUser = SecurityUser.builder()
                     .userName(user.getUsername())
                     .nickName(user.getNickName())
@@ -34,7 +35,8 @@ public class SecurityUserService implements UserDetailsService {
 
             log.info("authUser : " + authUser);
             return authUser;
-        }*/
+        }
+        */
 
         return user;
     }

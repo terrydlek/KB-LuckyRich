@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.NewsDetailDto;
 import mul.cam.e.dto.NewsDto;
 import org.jsoup.Jsoup;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class NewsService {
@@ -24,13 +26,13 @@ public class NewsService {
     }
 
     public List<NewsDto> getNews() throws IOException {
-        System.out.println("NewsService getNews executed");
+        log.info("NewsService getNews executed");
 
         String redisKey = "news";
         List<NewsDto> newsList = redisService.getNewsData(redisKey);
 
         if (newsList == null || newsList.isEmpty()) {
-            System.out.println("No data in Redis. API call.");
+            log.info("No data in Redis. API call.");
             newsList = new ArrayList<>();
             String url = "https://news.naver.com/breakingnews/section/101/259";
             Document doc = Jsoup.connect(url).get();
@@ -65,14 +67,14 @@ public class NewsService {
     }
 
     public NewsDetailDto getNewsDetails(String code) throws IOException {
-        System.out.println("NewsService getNewsDetail executed");
+        log.info("NewsService getNewsDetail executed");
 
         String redisKey = code + "newsDetail";
 
         NewsDetailDto newsDetail = redisService.getNewsDetailData(redisKey);
 
         if (newsDetail == null) {
-            System.out.println("No data in Redis. API call.");
+            log.info("No data in Redis. API call.");
             newsDetail = new NewsDetailDto();
 
             String url = "https://n.news.naver.com/mnews/article/" + code;
@@ -84,10 +86,10 @@ public class NewsService {
             String articleText = doc.select("article#dic_area").text();
             String imageDescription = doc.select("em.img_desc").text();
 
-            System.out.println("News Title: " + newsTitle);
-            System.out.println("News Title: " + dateTime);
-            System.out.println("Image URL: " + imageUrl);
-            System.out.println("Article Text: " + articleText);
+            log.info("News Title: " + newsTitle);
+            log.info("News Title: " + dateTime);
+            log.info("Image URL: " + imageUrl);
+            log.info("Article Text: " + articleText);
 
             newsDetail.setTitle(newsTitle);
             newsDetail.setImageUrl(imageUrl);

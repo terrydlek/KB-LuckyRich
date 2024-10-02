@@ -56,6 +56,10 @@ dependencies {
     // Jackson - Json 처리
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
 
+    //webSocket
+    implementation 'org.springframework:spring-websocket:5.3.29'
+    implementation 'org.springframework:spring-messaging:5.3.29'
+
     // Crawling
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.17.2'
 
@@ -103,6 +107,10 @@ dependencies {
     // rabbitmq
     implementation 'org.springframework.amqp:spring-rabbit:2.4.8'
     implementation 'com.rabbitmq:amqp-client:5.13.0'
+
+    // Spring AMQP 의존성 추가
+    implementation 'org.springframework.amqp:spring-amqp:2.4.0'
+
 
     // 테스트
     testImplementation "org.springframework:spring-test:${springVersion}"
