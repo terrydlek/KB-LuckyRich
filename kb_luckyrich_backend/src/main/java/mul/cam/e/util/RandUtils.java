@@ -1,8 +1,10 @@
 package mul.cam.e.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mul.cam.e.dto.AccountDto;
 import mul.cam.e.dto.StockDto;
+import mul.cam.e.enumrate.AccountType;
+import mul.cam.e.enumrate.BankName;
+import mul.cam.e.enumrate.TransactionType;
 import mul.cam.e.service.StockService;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +64,8 @@ public class RandUtils {
 
     // 거래 타입
     public String getRandomTransactionType() {
-        String[] transactionTypes = {"입금", "출금"};
-        return transactionTypes[random.nextInt(transactionTypes.length)];
+        TransactionType[] transactionTypes = TransactionType.values();
+        return String.valueOf(transactionTypes[random.nextInt(transactionTypes.length)]);
     }
 
     // 거래 액수 1000 - 100000

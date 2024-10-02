@@ -5,7 +5,7 @@ import mul.cam.e.security.SecurityUser;
 import mul.cam.e.security.dto.*;
 import mul.cam.e.service.ApiService;
 import mul.cam.e.security.SecurityUserService;
-import mul.cam.e.util.Role;
+import mul.cam.e.enumrate.Role;
 import mul.cam.e.util.TokenDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

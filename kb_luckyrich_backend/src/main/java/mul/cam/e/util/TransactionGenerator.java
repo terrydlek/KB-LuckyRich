@@ -1,6 +1,7 @@
 package mul.cam.e.util;
 
 import mul.cam.e.dto.TransactionDto;
+import mul.cam.e.enumrate.TransactionType;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -15,7 +16,6 @@ public class TransactionGenerator {
     }
 
     public TransactionDto generateRandomTransactionDto(int accountId) {
-//        int accountId = accountId;
         long amount = (long) randUtils.getRandomTransactionAmount();
         String transactionType = randUtils.getRandomTransactionType();
         String category = getCategoryBasedOnTransactionType(transactionType);
@@ -26,12 +26,8 @@ public class TransactionGenerator {
     }
 
     private String getCategoryBasedOnTransactionType(String transactionType) {
-        if ("입금".equals(transactionType)) {
-            return getRandomCategory(new String[]{"급여", "아르바이트", "용돈", "금융수입", "기타"});
-        } else if ("출금".equals(transactionType)) {
-            return getRandomCategory(new String[]{"식비", "카페", "술", "쇼핑", "교통", "여가", "여행", "경조"});
-        }
-        return "기타";
+        TransactionType type = TransactionType.valueOf(transactionType);
+        return getRandomCategory(type.getCategories());
     }
 
     private String getRandomCategory(String[] categories) {

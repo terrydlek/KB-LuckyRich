@@ -3,7 +3,7 @@ package mul.cam.e.security;
 import lombok.RequiredArgsConstructor;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
-import mul.cam.e.util.Role;
+import mul.cam.e.enumrate.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
