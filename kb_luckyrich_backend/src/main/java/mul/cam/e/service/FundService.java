@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.scraper.FundSourceScraper;
 import org.jsoup.Jsoup;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class FundService {
 
@@ -54,14 +56,14 @@ public class FundService {
 
             long endTime = System.currentTimeMillis();
             long executionTime = endTime - startTime;
-            System.out.println("Redis 미 사용 시 실행 시간: " + executionTime + " 밀리초");
+            log.info("Redis 미 사용 시 실행 시간: " + executionTime + " 밀리초");
 
             return getAndCacheFundsByRiskRating(riskRating);
         } else {
             // Redis에 캐시된 데이터가 있는 경우 그대로 반환
             long endTime = System.currentTimeMillis();
             long executionTime = endTime - startTime;
-            System.out.println("Redis 사용 시(캐시) 실행 시간: " + executionTime + " 밀리초");
+            log.info("Redis 사용 시(캐시) 실행 시간: " + executionTime + " 밀리초");
 
             return cachedData;
         }

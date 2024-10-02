@@ -37,7 +37,6 @@ public class BoardService {
     }
 
     public void deleteBoard(int boardNum) {
-        System.out.println("service " + boardNum);
         boardDao.deleteBoard(boardNum);
     }
 

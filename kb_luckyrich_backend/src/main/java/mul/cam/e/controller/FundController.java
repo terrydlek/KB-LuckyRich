@@ -1,5 +1,6 @@
 package mul.cam.e.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.FundDto;
 import mul.cam.e.scraper.FundSourceScraper;
 import mul.cam.e.service.FundService;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/funds")
 public class FundController {
@@ -29,7 +31,7 @@ public class FundController {
     @GetMapping
     public ResponseEntity<List<FundDto>> getFunds(@RequestParam(required = false) Integer riskRating) throws IOException {
         if (riskRating == null) {
-            System.out.println("Risk rating is null");
+            log.info("Risk rating is null");
             return null;
         }
         return ResponseEntity.ok(fundService.getFundsByRiskRating(riskRating));

@@ -43,7 +43,6 @@ public class BoardController {
         boardDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         boardDto.setUserName(userName);
 
-        System.out.println(boardDto);
         try {
             boardService.insertBoard(boardDto);
             return ResponseEntity.ok("success");
@@ -55,14 +54,12 @@ public class BoardController {
 
     @GetMapping("/{boardNum}")
     public ResponseEntity<Map<String, Object>> getBoard(@PathVariable int boardNum) {
-        System.out.println(boardNum);
         BoardDto board = boardService.getBoard(boardNum);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         Map<String, Object> map = new HashMap<>();
         map.put("board", board);
         map.put("userName", userName);
-        System.out.println(map);
         return ResponseEntity.ok(map);
     }
 
@@ -75,7 +72,7 @@ public class BoardController {
 
     @PostMapping("/deleteBoard")
     public ResponseEntity<String> deleteBoard(@RequestBody BoardDto boardDto) {
-        System.out.println("execute deleteBoard~~~");
+        log.info("execute deleteBoard~~~");
         int boardId = boardDto.getBoardNum();
         try {
             boardService.deleteBoard(boardId);
@@ -88,7 +85,7 @@ public class BoardController {
 
     @PostMapping("/updateBoard")
     public ResponseEntity<String> updateBoard(@RequestBody BoardDto boardDto) {
-        System.out.println(boardDto);
+        log.info("execute updateBoard~~~");
         try {
             boardService.updateBoard(boardDto);
             return ResponseEntity.ok("success");
@@ -101,10 +98,8 @@ public class BoardController {
     @GetMapping("/checkAdmin")
     public ResponseEntity<String> checkAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getAuthorities());
-        System.out.println(authentication.getName());
         if (securityUserService.checkAuthority(authentication.getName()) > 0) {
-            System.out.println("yes");
+            log.info("yes");
             return ResponseEntity.ok("yes");
         }
         return ResponseEntity.ok("no");
@@ -112,9 +107,8 @@ public class BoardController {
 
     @PostMapping("/addComment")
     public ResponseEntity<String> addComment(@RequestBody BoardReplyDto boardReplyDto) {
-        System.out.println("execute addComment~~~");
+        log.info("execute addComment~~~");
         boardReplyDto.setReplyAt(new Timestamp(System.currentTimeMillis()));
-        System.out.println(boardReplyDto);
         try {
             boardService.addComment(boardReplyDto);
             return ResponseEntity.ok("ok");
@@ -126,8 +120,7 @@ public class BoardController {
 
     @GetMapping("/reply/{boardNum}")
     public ResponseEntity<List<BoardReplyDto>> getReply(@PathVariable int boardNum) {
-        System.out.println(boardNum);
-        System.out.println("execute getReply~~~");
+        log.info("execute getReply~~~");
         return ResponseEntity.ok(boardService.getReply(boardNum));
     }
 
