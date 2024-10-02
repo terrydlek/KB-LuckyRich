@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class RedisTestService {
 
@@ -27,6 +29,6 @@ public class RedisTestService {
             value = (List<String>) result;
         }
 
-        System.out.println("Value:" + value);
+        log.info("Value:" + value);
     }
 }

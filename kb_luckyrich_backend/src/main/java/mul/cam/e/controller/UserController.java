@@ -1,5 +1,6 @@
 package mul.cam.e.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.security.SecurityUser;
 import mul.cam.e.security.SecurityUserService;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,7 +23,7 @@ public class UserController {
 
     @GetMapping("inf")
     public ResponseEntity<SecurityUser> fetchUserInfo() {
-        System.out.println("fetchUserInfo -------------------------");
+        log.info("fetchUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -37,13 +39,12 @@ public class UserController {
 
     @PostMapping("update")
     public ResponseEntity<String> updateUserInfo(@RequestBody Map<String, String> request) {
-        System.out.println("updateUserInfo -------------------------");
+        log.info("updateUserInfo -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
 
         boolean isUpdated = securityUserService.updateUserInfo(id, request);
-//        System.out.println(isUpdated);
 
         if (isUpdated) {
             return ResponseEntity.ok("User information updated successfully");

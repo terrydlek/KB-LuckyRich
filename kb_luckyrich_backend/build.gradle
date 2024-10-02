@@ -108,6 +108,10 @@ dependencies {
     implementation 'org.springframework.amqp:spring-rabbit:2.4.8'
     implementation 'com.rabbitmq:amqp-client:5.13.0'
 
+    // Spring AMQP 의존성 추가
+    implementation 'org.springframework.amqp:spring-amqp:2.4.0'
+
+
     // 테스트
     testImplementation "org.springframework:spring-test:${springVersion}"
     testCompileOnly"org.projectlombok:lombok:${lombokVersion}"

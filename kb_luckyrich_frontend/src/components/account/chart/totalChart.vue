@@ -14,7 +14,7 @@ export default {
       chartOptions: {
         chart: {
           type: 'pie',
-          height: '100%',
+          height: '70%',
         },
         title: {
           text: '자산 분포',
@@ -45,31 +45,6 @@ export default {
         ],
       },
     };
-  },
-  mounted() {
-    this.fetchAssetData();
-  },
-  methods: {
-    fetchAssetData() {
-      const token = localStorage.getItem('access_token');
-      axios
-        .get('http://localhost:8080/myasset/total', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const assets = response.data; // 백엔드에서 받은 데이터
-          const chartData = Object.keys(assets).map((key) => ({
-            name: key,
-            y: assets[key],
-          }));
-          this.chartOptions.series[0].data = chartData; // 차트 데이터 업데이트
-        })
-        .catch((error) => {
-          console.error('Error fetching asset data: ', error);
-        });
-    },
   },
 };
 </script>
