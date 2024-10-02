@@ -1,54 +1,36 @@
 <template>
-  <div v-if="fund">
-    <h1>{{ fund.name }}({{ fund.symbol }})</h1>
-    <p><strong>국가:</strong> {{ fund.country }}</p>
-    <p><strong>최근가:</strong> {{ fund.lastPrice }}</p>
-    <p>
-      <strong>변동률:</strong>
-      <span
-        :class="{
-          'text-green-500': parseFloat(fund.changePercent) > 0,
-          'text-red-500': parseFloat(fund.changePercent) < 0,
-        }"
-        >{{ fund.changePercent }}%</span
-      >
-    </p>
-    <p><strong>총 자산:</strong> {{ fund.totalAssets }}</p>
-    <p><strong>갱신 시간:</strong> {{ fund.lastUpdate }}</p>
-    <p><strong>위험 등급:</strong> {{ fund.riskRating }}</p>
-
-    <!-- <h2>가격 차트</h2>
-    <canvas ref="chartCanvas"></canvas> -->
-  </div>
-  <div v-else-if="error">
-    <p>오류 발생: {{ error }}</p>
-  </div>
-  <div v-else>Loading...</div>
+  <div v-html="htmlContent"></div>
+  <!-- HTML 소스를 렌더링 -->
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRoute } from 'vue-router'; // vue-router에서 useRoute 가져오기
-
-const route = useRoute(); // 현재 라우트 정보 가져오기
-const url = decodeURIComponent(route.params.encodedUrl); // URL 파라미터에서 encodedUrl 가져오기
-
-const fund = ref(null);
-const error = ref(null);
-
-const fetchFundDetail = async () => {
-  try {
-    // URL에서 /funds/ 부분을 제거하고 요청
-    const cleanUrl = url.replace(/^\/funds/, '');
-    const response = await axios.get(
-      `http://localhost:8080/recommend/funds${cleanUrl}`
-    );
-    fund.value = response.data;
-  } catch (error) {
-    console.error('펀드 상세 정보를 불러오는 데 실패했습니다.', error);
-  }
+<script>
+export default {
+  data() {
+    return {
+      htmlContent: '', // HTML 소스 저장
+    };
+  },
+  created() {
+    this.fetchHtmlContent();
+  },
+  methods: {
+    async fetchHtmlContent() {
+      try {
+        const url = this.$route.params.fundUrl.substring(7); // 원하는 URL path
+        const token = localStorage.getItem('access_token');
+        const response = await fetch(
+          `http://localhost:8080/recommend/funds/${url}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+        );
+        const data = await response.text(); // HTML 데이터를 받음
+        this.htmlContent = data; // v-html로 출력할 HTML 저장
+      } catch (error) {
+        console.error('Error fetching HTML:', error);
+      }
+    },
+  },
 };
-
-onMounted(fetchFundDetail);
 </script>
