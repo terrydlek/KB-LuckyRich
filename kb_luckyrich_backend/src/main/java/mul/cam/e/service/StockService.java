@@ -1,5 +1,6 @@
 package mul.cam.e.service;
 
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.StockDetailDto;
 import mul.cam.e.dto.StockDto;
 import mul.cam.e.dto.StockTimeDto;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class StockService {
     private final RedisService redisService;
@@ -23,7 +24,7 @@ public class StockService {
     }
 
     public List<StockDto> getStock() throws IOException {
-        System.out.println("StockService getStock execute~~~~");
+        log.info("StockService getStock execute~~~~");
 
         String redisKey = "stockList";
 //        redisService.invalidateCache(redisKey);
@@ -31,7 +32,7 @@ public class StockService {
 
 
         if (stockList == null || stockList.isEmpty()) {
-            System.out.println("No data in Redis. API call.");
+            log.info("No data in Redis. API call.");
             stockList = new ArrayList<>();
             String url = "https://finance.naver.com/sise/sise_market_sum.naver?&page=1";
             Document doc = Jsoup.connect(url).get();
@@ -103,21 +104,21 @@ public class StockService {
 
             redisService.setData(redisKey, stockList, 5);
         } else {
-            System.out.println("Retrieving data from Redis.");
+            log.info("Retrieving data from Redis.");
         }
 
         return stockList;
     }
 
     public StockTimeDto getStockDetailTime(String stockCode) throws IOException {
-        System.out.println("StockService getStockDetailTime execute~~~~");
+        log.info("StockService getStockDetailTime execute~~~~");
 
         String redisKey = stockCode + "_time";
 
         StockTimeDto stockTimeDto = redisService.getStockTimeData(redisKey);
 
         if (stockTimeDto == null) {
-            System.out.println("No data in Redis. API call.");
+            log.info("No data in Redis. API call.");
 
             String url = "https://finance.naver.com/item/sise.naver?code=" + stockCode + "&asktype=10";
             Document doc = Jsoup.connect(url).get();
@@ -151,7 +152,7 @@ public class StockService {
 
             redisService.setData(redisKey, stockTimeDto, 5);
         } else {
-            System.out.println("Retrieving data from Redis.");
+            log.info("Retrieving data from Redis.");
         }
 
         return stockTimeDto;
@@ -159,15 +160,14 @@ public class StockService {
 
 
     public StockDetailDto getStockDetail(String stockCode) throws IOException {
-        System.out.println("StockService getStockDetail execute~~~~");
+        log.info("StockService getStockDetail execute~~~~");
 
         String redisKey = stockCode + "_detail";
 
         StockDetailDto stockDetail = redisService.getStockDetailData(redisKey);
 
         if (stockDetail == null) {
-            System.out.println("No data in Redis. API call.");
-            stockDetail = new StockDetailDto();
+            log.info("No data in Redis. API call.");
 
             // 주식 정보가 있는 URL
             String url = "https://finance.naver.com/item/main.nhn?code=" + stockCode;
@@ -194,7 +194,7 @@ public class StockService {
 
             redisService.setData(redisKey, stockDetail, 5);
         } else {
-            System.out.println("Retrieving data from Redis.");
+            log.info("Retrieving data from Redis.");
         }
 
         return stockDetail;

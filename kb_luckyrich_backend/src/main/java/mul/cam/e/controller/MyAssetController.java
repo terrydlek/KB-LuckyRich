@@ -2,6 +2,7 @@ package mul.cam.e.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.*;
 import mul.cam.e.enumrate.AccountType;
 import mul.cam.e.enumrate.BankName;
@@ -26,6 +27,7 @@ import java.util.Map;
 @Log4j
 @RequiredArgsConstructor
 @RequestMapping("/myasset")
+@Slf4j
 public class MyAssetController {
 
     private final MyAssetService myAssetService;
@@ -36,7 +38,7 @@ public class MyAssetController {
 
     @GetMapping("/getMyAccount")
     public ResponseEntity<List<Map<String, Object>>> getMyAccount() {
-        System.out.println("getMyAccount --------------------");
+        log.info("getMyAccount --------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -63,7 +65,7 @@ public class MyAssetController {
 
     @PostMapping("fetchaccount")
     public ResponseEntity<String> updateUserInfo(@RequestBody List<Map<String, Object>> requestBody) {
-        System.out.println("fetchAccount -------------------------");
+        log.info("fetchAccount -------------------------");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -158,12 +160,12 @@ public class MyAssetController {
 
     @GetMapping("/total")
     public ResponseEntity<Map<String, Object>> getAssetTotal() {
-        System.out.println("getAssetTotal execute~~~~~");
+        log.info("getAssetTotal execute~~~~~");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
+        System.out.println(userName + "1111111111111111111111111");
 
         Map<String, Object> map = new HashMap<>();
-        System.out.println(myAssetService.totalCar(userName));
         map.put("Bank Balance", myAssetService.totalAccount(userName));
         map.put("Stock Total", myAssetService.totalStock(userName));
         map.put("Car", myAssetService.totalCar(userName));
@@ -174,7 +176,7 @@ public class MyAssetController {
 
     @GetMapping("/accounts")
     public ResponseEntity<Map<String, Object>> accounts() {
-        System.out.println("accounts execute~~~~~");
+        log.info("accounts execute~~~~~");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -191,22 +193,22 @@ public class MyAssetController {
                 map.put("신한은행", account.getBalance());
             }
         }
-        System.out.println(map);
+        log.info(map);
         return ResponseEntity.ok(map);
     }
 
     @GetMapping("/idTrend")
     public ResponseEntity<Map<String, BigInteger>> idTrend() throws IOException {
-        System.out.println("idTrend execute~~~~~");
+        log.info("idTrend execute~~~~~");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
 
         List<Map<String, Object>> transaction = myAssetService.transactionTen(userName);
-        System.out.println(transaction);
+        log.info(transaction);
 
         Map<String, Map<String, List<String>>> symbol = myAssetService.userStockSymbol(userName);
-        System.out.println(symbol);
+        log.info(symbol);
 
         Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
 

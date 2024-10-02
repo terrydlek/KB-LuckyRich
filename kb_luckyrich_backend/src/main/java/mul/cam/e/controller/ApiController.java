@@ -202,17 +202,17 @@ public class ApiController {
     @CrossOrigin(origins = "http://localhost:5173")  // 프론트엔드 주소
     @PostMapping("/logout")
     public ResponseEntity<String> naverUserCode(@RequestParam("token") String accessToken, HttpSession session) throws IOException {
-        System.out.println("네이버 로그아웃 중...");
+        log.info("네이버 로그아웃 중...");
 
         // 네이버 토큰 삭제 API 호출
         String deleteTokenUrl = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=" + NaverClientId
                 + "&client_secret=" + NaverClientSecret + "&access_token=" + accessToken + "&service_provider=NAVER";
 
-        System.out.println("토큰 삭제 URL: " + deleteTokenUrl);
+        log.info("토큰 삭제 URL: " + deleteTokenUrl);
 
         try {
             String response = requestToServer(deleteTokenUrl);
-            System.out.println("토큰 삭제 응답: " + response);
+            log.info("토큰 삭제 응답: " + response);
 
             // 세션 무효화 (사용자 로그아웃 처리)
             session.invalidate();

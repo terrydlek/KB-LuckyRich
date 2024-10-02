@@ -57,7 +57,7 @@ public class RecommendController {
 
     @GetMapping("/funds/{url}")
     public String getFundByUrl(@PathVariable String url) throws IOException {
-        System.out.println("controller get fund by url execute~~~");
+        log.info("get fund by url execute~~~");
 
         String completeUrl = "https://www.investing.com/funds/" + url;
         Document doc = Jsoup.connect(completeUrl).get();

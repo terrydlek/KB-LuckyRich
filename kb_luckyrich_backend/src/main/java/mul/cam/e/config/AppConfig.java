@@ -1,5 +1,7 @@
 package mul.cam.e.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -15,6 +17,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 // Database 설정
+@Slf4j
 @Configuration
 @PropertySource({"classpath:/application-secret.properties"})
 @MapperScan("mul.cam.e")
@@ -27,7 +30,7 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource(){
-        System.out.println("~~~ AppConfig dataSource()");
+        log.info("~~~ AppConfig dataSource()");
 
         BasicDataSource dataSource = new BasicDataSource();
 //        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -48,7 +51,7 @@ public class AppConfig {
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        System.out.println("~~~ AppConfig sqlSessionFactory()");
+        log.info("~~~ AppConfig sqlSessionFactory()");
 
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
@@ -65,5 +68,11 @@ public class AppConfig {
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
 }
 

@@ -66,13 +66,13 @@ public class FundSourceScraper {
 
                     // 국가, 발행사, 자산 클래스 정보는 이 테이블에 없으므로 별도로 처리해야 할 수 있습니다
                     fund.setCountry("South Korea"); // 예시
-                    System.out.println(fund);
+                    log.info(fund);
 
                     funds.add(fund);
                 }
             }
         } else {
-            System.out.println("Table not found");
+            log.info("Table not found");
         }
 
         return funds;
@@ -84,7 +84,7 @@ public class FundSourceScraper {
     private List<FundDto> parseFundData(String jsonData, int riskRating) {
         List<FundDto> funds = new ArrayList<>();
         String[] fundDataArray = jsonData.split("\\],\\["); // 정규표현식
-        System.out.println(fundDataArray.length + fundDataArray[0]);
+//        log.info(fundDataArray.length + fundDataArray[0]);
 
         for (String fundData : fundDataArray) {
             String[] fields = fundData.replaceAll("[\\[\\]\"]", "").split(","); // 대괄호 없애고 콤마로만 구분
