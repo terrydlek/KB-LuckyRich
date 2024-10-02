@@ -1,6 +1,5 @@
 <template>
     <div class="map-container">
-        <!-- 로딩 상태일 때 화면을 어둡게 하고 로딩 스피너와 문구 표시 -->
         <div v-if="isLoading" class="loading-overlay">
             <div class="loading-spinner">
                 <div class="spinner-border text-primary" role="status">
@@ -10,12 +9,10 @@
             </div>
         </div>
 
-        <!-- 검색 영역 -->
         <div class="search-panel">
             <input v-model="searchQuery" placeholder="단지명을 입력하세요" />
             <button @click="searchPlaces">검색</button>
 
-            <!-- 검색 결과 표시 -->
             <div v-if="searchResults.length > 0" class="result-list">
                 <div v-for="(place, index) in searchResults" :key="index" class="result-item">
                     <p>단지명: {{ place.complexName }}</p>
@@ -26,10 +23,8 @@
             </div>
         </div>
 
-        <!-- 지도 영역 -->
         <div id="map"></div>
 
-        <!-- 모달 -->
         <div v-if="selectedPlace" class="modal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
@@ -38,15 +33,13 @@
                     <p>단지명: {{ selectedPlace.complexName }}</p>
                     <p>주소: {{ selectedPlace.address }}</p>
 
-                    <!-- 층별 거래 정보 표시 -->
                     <div v-for="(priceInfo, index) in selectedPlace.priceInfo" :key="index">
                         <p>{{ priceInfo.floor }}층: {{ priceInfo.price }}억</p>
                     </div>
 
                     <p>계약월: {{ selectedPlace.contractTime }}</p>
 
-                    <!-- 로드뷰 영역 -->
-                    <div id="roadview" class="roadview"></div> 
+                    <div id="roadview" class="roadview"></div>
                 </div>
             </div>
         </div>
@@ -60,37 +53,36 @@ export default {
     name: 'KakaoMap',
     data() {
         return {
-            map: null,
             selectedPlace: null,
             selectedOverlay: null,
             searchQuery: '',
             searchResults: [],
             markers: [],
             estate: [],
-            isLoading: true, 
+            clusterer: null, 
+            isLoading: true,
         };
     },
     mounted() {
         this.loadKakaoMap();
-        this.fetchRealEstateData(); 
     },
     methods: {
         loadKakaoMap() {
-            if (window.kakao && window.kakao.maps) {
-                this.initKakaoMap();
-            } else {
-                const script = document.createElement('script');
-                script.onload = () => {
-                    kakao.maps.load(this.initKakaoMap);
-                };
-                script.onerror = () => {
-                    console.error("Failed to load Kakao Map script");
-                };
-                const kakaoApiKey = import.meta.env.VITE_KAKAO_MAP_APPKEY;
-                script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services`; 
-                document.head.appendChild(script);
-            }
-        },
+        if (window.kakao && window.kakao.maps) {
+            this.initKakaoMap();
+        } else {
+            const script = document.createElement('script');
+            script.onload = () => {
+                kakao.maps.load(this.initKakaoMap);
+            };
+            script.onerror = () => {
+                console.error("Failed to load Kakao Map script");
+            };
+            const kakaoApiKey = import.meta.env.VITE_KAKAO_MAP_APPKEY;
+            script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${kakaoApiKey}&libraries=services,clusterer`; 
+            document.head.appendChild(script);
+        }
+    },
         fetchRealEstateData() {
             const token = localStorage.getItem('access_token');
             axios.get('http://localhost:8080/realestate/getEstate', {
@@ -111,89 +103,142 @@ export default {
             })
             .catch((error) => {
                 console.error('There was an error fetching the estate data:', error);
-                this.isLoading = false; 
+                this.isLoading = false;
             });
         },
         initKakaoMap() {
-            const mapContainer = document.getElementById('map');
-            const mapOptions = {
-                center: new kakao.maps.LatLng(37.5, 126.9),
-                level: 7,
-            };
-            this.map = new kakao.maps.Map(mapContainer, mapOptions);
+        const mapContainer = document.getElementById('map');
+        const mapOptions = {
+            center: new kakao.maps.LatLng(37.5, 126.9),
+            level: 7,
+        };
+        const map = new kakao.maps.Map(mapContainer, mapOptions);  // 지역변수 map 사용
+
+        this.clusterer = new kakao.maps.MarkerClusterer({
+            map: map,
+            averageCenter: true,
+            minLevel: 4,
+        });
+
+        // clusterer가 초기화된 후 데이터 로드
+        this.fetchRealEstateData();  // initKakaoMap 후에 호출
+
+        kakao.maps.event.addListener(map, 'zoom_changed', this.handleZoomChange);
+    },
+
+        handleZoomChange() {
+            if (!this.map) return;
+
+            const level = this.map.getLevel();
+            if (level <= 3) {
+                this.showMarkers();
+            } else {
+                this.hideMarkers();
+            }
+
+            // Ensure the map layout is recalculated on zoom change
+            this.map.relayout();
         },
-        createMarkers() {
-            const markerInfo = {};  
-            let createdMarkers = 0;  
 
-            // estate 데이터를 사용하여 지도에 마커 추가
-            this.estate.forEach((place) => {
-                this.getCoordinatesFromAddress(place.address, (coords) => {
-                    if (coords) {
-                        const addressKey = `${place.address}`;
-
-                        if (markerInfo[addressKey]) {
-                            const existingOverlayContent = markerInfo[addressKey].overlayContent;
-                            existingOverlayContent.innerHTML += `<div>${place.floor}층: ${place.price}억</div>`;
-                        } else {
-                            const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
-                            const marker = new kakao.maps.Marker({
-                                position: markerPosition,
-                                map: this.map,
-                            });
-                            const overlayContent = document.createElement('div');
-                            overlayContent.style.padding = '10px';
-                            overlayContent.style.backgroundColor = 'white';
-                            overlayContent.style.border = '2px solid black';
-                            overlayContent.style.borderRadius = '10px';
-                            overlayContent.style.fontSize = '14px';
-                            overlayContent.style.fontWeight = 'bold';
-                            overlayContent.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)';
-                            overlayContent.style.whiteSpace = 'nowrap';
-                            overlayContent.innerHTML = `
-                                <div>단지명: ${place.complexName}</div>
-                                <div>${place.floor}층: ${place.price}억</div>
-                            `;
-
-                            overlayContent.addEventListener('click', () => {
-                                this.openModal({ ...place, ...coords });
-                            });
-
-                            const customOverlay = new kakao.maps.CustomOverlay({
-                                content: overlayContent,
-                                position: markerPosition,
-                                yAnchor: 1,
-                                zIndex: 100,
-                            });
-                            customOverlay.setMap(this.map);
-
-                            // 마커 클릭 시 모달 열기
-                            kakao.maps.event.addListener(marker, 'click', () => {
-                                this.openModal({ ...place, ...coords });
-                            });
-
-                            // 마커 정보 저장
-                            markerInfo[addressKey] = {
-                                marker,
-                                overlayContent,
-                                customOverlay
-                            };
-                        }
-
-                        this.markers.push({ marker: markerInfo[addressKey].marker, place, customOverlay: markerInfo[addressKey].customOverlay });
-                    }
-
-                    // 마커 생성 완료 추적
-                    createdMarkers++;
-                    if (createdMarkers === this.estate.length) {
-                        this.isLoading = false;
-                    }
-                });
+        showMarkers() {
+            this.markers.forEach(markerObj => {
+                if (markerObj && markerObj.customOverlay) {
+                    markerObj.customOverlay.setMap(this.map);
+                    markerObj.isVisible = true;
+                }
             });
         },
+
+        hideMarkers() {
+            this.markers.forEach(markerObj => {
+                if (markerObj && markerObj.customOverlay) {
+                    markerObj.customOverlay.setMap(null);
+                    markerObj.isVisible = false;
+                }
+            });
+        },
+        
+        createMarkers() {
+    const markerInfo = {};  
+    let createdMarkers = 0;  
+    const markers = [];
+
+    this.estate.forEach((place) => {
+        this.getCoordinatesFromAddress(place.address, (coords) => {
+            if (coords) {
+                const addressKey = `${place.address}`;
+
+                if (markerInfo[addressKey]) {
+                    const existingOverlayContent = markerInfo[addressKey].overlayContent;
+                    existingOverlayContent.innerHTML += `<div>${place.floor}층: ${place.price}억</div>`;
+                } else {
+                    const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
+                    const marker = new kakao.maps.Marker({
+                        position: markerPosition,
+                    });
+
+                    const overlayContent = document.createElement('div');
+                    overlayContent.style.padding = '10px';
+                    overlayContent.style.backgroundColor = 'white';
+                    overlayContent.style.border = '2px solid black';
+                    overlayContent.style.borderRadius = '10px';
+                    overlayContent.style.fontSize = '14px';
+                    overlayContent.style.fontWeight = 'bold';
+                    overlayContent.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)';
+                    overlayContent.style.whiteSpace = 'nowrap';
+                    overlayContent.innerHTML = `
+                        <div>단지명: ${place.complexName}</div>
+                        <div>${place.floor}층: ${place.price}억</div>
+                    `;
+
+                    overlayContent.addEventListener('click', () => {
+                        this.openModal({ ...place, ...coords });
+                    });
+
+                    const customOverlay = new kakao.maps.CustomOverlay({
+                        content: overlayContent,
+                        position: markerPosition,
+                        yAnchor: 1,
+                        zIndex: 100,
+                    });
+
+                    kakao.maps.event.addListener(marker, 'click', () => {
+                        this.openModal({ ...place, ...coords });
+                    });
+
+                    markers.push(marker);
+
+                    markerInfo[addressKey] = {
+                        marker,
+                        overlayContent,
+                        customOverlay
+                    };
+
+                    this.markers.push({
+                        marker: markerInfo[addressKey].marker,
+                        place,
+                        customOverlay: markerInfo[addressKey].customOverlay,
+                        isVisible: false
+                    });
+                }
+            }
+
+            createdMarkers++;
+            if (createdMarkers === this.estate.length) {
+                this.isLoading = false;
+                if (this.clusterer) {  // clusterer가 null이 아닌지 확인
+                    this.clusterer.addMarkers(markers);
+                } else {
+                    console.error('clusterer is not initialized.');
+                }
+            }
+        });
+    });
+},
+
         getCoordinatesFromAddress(address, callback) {
             const geocoder = new kakao.maps.services.Geocoder();
-            geocoder.addressSearch(address, function (result, status) {
+            geocoder.addressSearch(address, (result, status) => {
                 if (status === kakao.maps.services.Status.OK) {
                     const coords = {
                         lat: result[0].y,
@@ -205,6 +250,7 @@ export default {
                 }
             });
         },
+
         openModal(place) {
             const relatedTransactions = this.estate.filter(item => item.address === place.address);
 
@@ -222,9 +268,11 @@ export default {
                 this.initRoadView(place);
             });
         },
+
         closeModal() {
             this.selectedPlace = null;
         },
+
         initRoadView(place) {
             const rvContainer = document.getElementById('roadview');
             if (!rvContainer) {
@@ -263,6 +311,7 @@ export default {
                 });
             });
         },
+
         searchPlaces() {
             if (this.searchQuery) {
                 this.searchResults = this.estate.filter((place) =>
@@ -273,6 +322,7 @@ export default {
                 this.clearHighlight();
             }
         },
+
         highlightSearchedMarkers() {
             this.markers.forEach((markerObj) => {
                 const isSearchedPlace = this.searchResults.some((place) => place.address === markerObj.place.address);
@@ -284,6 +334,7 @@ export default {
                 markerObj.marker.setImage(markerImage);
             });
         },
+
         highlightMarker(place) {
             if (this.selectedOverlay) {
                 this.selectedOverlay.style.backgroundColor = 'white';
@@ -301,6 +352,7 @@ export default {
                 }
             }
         },
+
         clearHighlight() {
             if (this.selectedOverlay) {
                 this.selectedOverlay.style.backgroundColor = 'white';

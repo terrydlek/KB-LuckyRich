@@ -102,4 +102,125 @@ public class NewsService {
 
     }
 
+    public List<NewsDto> getEstateNews() throws IOException {
+        System.out.println("NewsService getNews executed");
+
+        String redisKey = "estatenews";
+        List<NewsDto> newsList2 = redisService.getNewsData(redisKey);
+
+        if (newsList2 == null || newsList2.isEmpty()) {
+            System.out.println("No data in Redis. API call.");
+            newsList2 = new ArrayList<>();
+            String url = "https://news.naver.com/breakingnews/section/101/260";
+            Document doc = Jsoup.connect(url).get();
+
+            // 뉴스 리스트를 가져오기 위한 selector 설정 (각 뉴스 항목 li를 선택)
+            Elements newsElements = doc.select(".section_article._TEMPLATE .sa_list .sa_item._LAZY_LOADING_WRAP .sa_item_inner .sa_item_flex");
+
+            for (Element newsElement : newsElements) {
+                String imageUrl = newsElement.select("img").attr("data-src");
+                String title = newsElement.select("strong.sa_text_strong").text();
+                String newsUrl = newsElement.select("a.sa_text_title").attr("href");
+                String code = "";
+                if (newsUrl.contains("article/")) {
+                    code = newsUrl.split("article/")[1]; // 'article/' 뒤의 부분을 추출
+                }
+
+                String description = newsElement.select("div.sa_text_lede").text();
+
+                NewsDto newsDto = new NewsDto();
+                newsDto.setImageUrl(imageUrl);
+                newsDto.setTitle(title);
+                newsDto.setDescription(description);
+                newsDto.setUrl(newsUrl);
+                newsDto.setCode(code);
+
+                newsList2.add(newsDto);
+//                System.out.println("EEEEEEEEEEEEEEEEstate" + newsList);
+            }
+            redisService.setData(redisKey, newsList2, 5);
+        }
+        return newsList2;
+    }
+    public List<NewsDto> getsecuritiesNews() throws IOException {
+        System.out.println("NewsService getNews executed");
+
+        String redisKey = "securitiesnews";
+        List<NewsDto> newsList3 = redisService.getNewsData(redisKey);
+
+        if (newsList3 == null || newsList3.isEmpty()) {
+            System.out.println("No data in Redis. API call.");
+            newsList3 = new ArrayList<>();
+            String url = "https://news.naver.com/breakingnews/section/101/258";
+            Document doc = Jsoup.connect(url).get();
+
+            // 뉴스 리스트를 가져오기 위한 selector 설정 (각 뉴스 항목 li를 선택)
+            Elements newsElements = doc.select(".section_article._TEMPLATE .sa_list .sa_item._LAZY_LOADING_WRAP .sa_item_inner .sa_item_flex");
+
+            for (Element newsElement : newsElements) {
+                String imageUrl = newsElement.select("img").attr("data-src");
+                String title = newsElement.select("strong.sa_text_strong").text();
+                String newsUrl = newsElement.select("a.sa_text_title").attr("href");
+                String code = "";
+                if (newsUrl.contains("article/")) {
+                    code = newsUrl.split("article/")[1]; // 'article/' 뒤의 부분을 추출
+                }
+
+                String description = newsElement.select("div.sa_text_lede").text();
+
+                NewsDto newsDto = new NewsDto();
+                newsDto.setImageUrl(imageUrl);
+                newsDto.setTitle(title);
+                newsDto.setDescription(description);
+                newsDto.setUrl(newsUrl);
+                newsDto.setCode(code);
+
+                newsList3.add(newsDto);
+//                System.out.println("EEEEEEEEEEEEEEEEstate" + newsList);
+            }
+            redisService.setData(redisKey, newsList3, 5);
+        }
+        return newsList3;
+    }
+
+    public List<NewsDto> getpersonalNews() throws IOException {
+        System.out.println("NewsService getNews executed");
+
+        String redisKey = "personalnews";
+        List<NewsDto> newsList4 = redisService.getNewsData(redisKey);
+
+        if (newsList4 == null || newsList4.isEmpty()) {
+            System.out.println("No data in Redis. API call.");
+            newsList4 = new ArrayList<>();
+            String url = "https://news.naver.com/breakingnews/section/101/310";
+            Document doc = Jsoup.connect(url).get();
+
+            // 뉴스 리스트를 가져오기 위한 selector 설정 (각 뉴스 항목 li를 선택)
+            Elements newsElements = doc.select(".section_article._TEMPLATE .sa_list .sa_item._LAZY_LOADING_WRAP .sa_item_inner .sa_item_flex");
+
+            for (Element newsElement : newsElements) {
+                String imageUrl = newsElement.select("img").attr("data-src");
+                String title = newsElement.select("strong.sa_text_strong").text();
+                String newsUrl = newsElement.select("a.sa_text_title").attr("href");
+                String code = "";
+                if (newsUrl.contains("article/")) {
+                    code = newsUrl.split("article/")[1]; // 'article/' 뒤의 부분을 추출
+                }
+
+                String description = newsElement.select("div.sa_text_lede").text();
+
+                NewsDto newsDto = new NewsDto();
+                newsDto.setImageUrl(imageUrl);
+                newsDto.setTitle(title);
+                newsDto.setDescription(description);
+                newsDto.setUrl(newsUrl);
+                newsDto.setCode(code);
+
+                newsList4.add(newsDto);
+//                System.out.println("EEEEEEEEEEEEEEEEstate" + newsList);
+            }
+            redisService.setData(redisKey, newsList4, 5);
+        }
+        return newsList4;
+    }
 }
