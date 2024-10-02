@@ -13,9 +13,8 @@ import MyBank from '@/components/account/accountRegi/MyBank.vue';
 import DepositDetail from '@/components/account/details/DepositDetail.vue';
 import RealEstate from '@/views/realestate/RealEstate.vue';
 import CoinDetail from '@/components/account/details/CoinDetail.vue';
-import FundDetail from '@/components/account/details/FundDetail.vue';
 import StockDetail from '@/components/account/details/StockDetail.vue';
-import Detail from '@/components/account/details/Detail.vue';
+import FundDetail from '@/components/account/details/FundDetail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 
@@ -91,11 +90,6 @@ export default [
     component: CoinDetail,
   },
   {
-    path: '/luckyrich/fund/:encodedUrl',
-    name: 'FundDetail',
-    component: FundDetail,
-  },
-  {
     path: '/luckyrich/realestate',
     name: 'realestate',
     component: RealEstate,
@@ -107,8 +101,8 @@ export default [
   },
   {
     path: '/luckyrich/recommend/funds/:fundUrl',
-    name: 'Detail',
-    component: Detail,
+    name: 'FundDetail',
+    component: FundDetail,
   },
   {
     path: '/luckyrich/financenews/:code1/:code2',
