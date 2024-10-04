@@ -2,20 +2,15 @@ package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
-import mul.cam.e.security.SecurityUser;
 import mul.cam.e.service.*;
 import mul.cam.e.util.KeyDecrypt;
 import mul.cam.e.util.KeyEncrypt;
-import mul.cam.e.util.Role;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -69,15 +64,60 @@ public class RecommendController {
 
         doc.select("header, footer").remove();
 
-        Elements links = doc.select("a");
-        for (Element link : links) {
-            link.attr("href", "javascript:void(0);");
+        // remove specific words
+        removeElementsWithWords(doc, "Watchlist", "Create Alert");
+
+        // Remove the sentiment box
+        doc.select(".instrumentsSentiments").remove();
+
+        // Remove the navigation tabs and sub-tabs
+        doc.select("ul.newBigTabs, ul.newBigSubTabs").remove();
+
+        // Remove the 'i' icon next to the title
+        doc.select(".instrumentHeader .infoBox").remove();
+
+        // Remove the chart and its controls
+        doc.select("#js_instrument_chart_wrapper").remove();
+
+        doc.select("a, button, input[type=submit], input[type=button], [onclick]").forEach(element -> {
+            element.removeAttr("href");
+            element.removeAttr("onclick");
+            element.attr("style", element.attr("style") + "; pointer-events: none; cursor: default;");
+        });
+
+        // Remove unnecessary elements
+        doc.select(".chartWrap, #rightColumn").remove();
+        doc.select("div[data-slot-id]").remove();
+
+        // Improve the layout of the overview table
+        Element overviewTable = doc.select(".overviewDataTable").first();
+        if (overviewTable != null) {
+            overviewTable.addClass("improved-layout");
         }
 
-        doc.select(".chartWrap").remove();
-        doc.select("#rightColumn").remove();
+        // Add custom CSS to disable interactions and improve layout
+        Element head = doc.head();
+        head.appendElement("style").text(
+                "* { pointer-events: none !important; user-select: none !important; }" +
+                        "a, button, input[type=submit], input[type=button] { cursor: default !important; }" +
+                        ".improved-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }" +
+                        ".improved-layout > div { margin-bottom: 10px; }" +
+                        ".float_lang_base_1 { font-weight: bold; display: block; margin-bottom: 5px; }" +
+                        ".float_lang_base_2 { display: block; }" +
+                        ".instrumentHeader h1 { font-size: 24px; margin-bottom: 20px; }" +
+                        "body { font-family: Arial, sans-serif; line-height: 1.6; }"
+        );
+
+        // Remove all script tags to prevent any JavaScript execution
+        doc.select("script").remove();
 
         return doc.outerHtml();
+    }
+
+    private void removeElementsWithWords(Document doc, String... words) {
+        for (String word : words) {
+            doc.select(":containsOwn(" + word + ")").remove();
+        }
     }
 
     @GetMapping("/active")

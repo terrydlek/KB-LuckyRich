@@ -34,6 +34,28 @@ public interface MyAssetDao {
 
     int totalCar(String userName);
 
+    List<Integer> getAllTotalAccounts();
+
+    List<Integer> getAllTotalStocks();
+
+    List<Integer> getAllTotalRealestates();
+
+    List<Integer> getAllTotalCars();
+
+    // 특정 사용자의 또래 유저 목록 가져오기
+    List<UserDto> getPeerUsersByAge(int userId);
+
+    // 특정 userId에 대한 Bank Balance 가져오기
+    double getBankBalanceByUserId(int userId);
+
+    // 특정 userId에 대한 Stock Total 가져오기
+    double getStockTotalByUserId(int userId);
+
+    // 특정 userId에 대한 Car Price 가져오기
+    double getCarByUserId(int userId);
+
+    // 특정 userId에 대한 Real Estate Price 가져오기
+    double getRealestateByUserId(int userId);
     List<AccountDto> userAccounts(String userName);
 
     @MapKey("transaction_date")
@@ -45,4 +67,5 @@ public interface MyAssetDao {
 
     RealEstateDto userRealestate(String userName);
 
+    List<AccountDto> getAccounts(int userId);
 }

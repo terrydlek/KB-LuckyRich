@@ -112,6 +112,61 @@
                         where user_name = #{userName});
     </select>
 
+    <select id="getAllTotalAccounts" resultType="int">
+        SELECT total_account FROM users
+    </select>
+
+    <select id="getAllTotalStocks" resultType="int">
+        SELECT total_stock FROM users
+    </select>
+
+    <select id="getAllTotalRealestates" resultType="int">
+        SELECT total_realestate FROM users
+    </select>
+
+    <select id="getAllTotalCars" resultType="int">
+        SELECT total_car FROM users
+    </select>
+
+    <select id="getPeerUsersByAge" parameterType="int" resultType="mul.cam.e.dto.UserDto">
+        SELECT *
+        FROM user
+        WHERE FLOOR((age - 1) / 5) = (
+            SELECT FLOOR((age - 1) / 5)
+            FROM user
+            WHERE user_id = #{userId}
+        )
+    </select>
+
+    <!-- 각 userId에 해당하는 Bank Balance 가져오기 -->
+    <select id="getBankBalanceByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(SUM(balance), 0)
+        FROM account
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Stock Total 가져오기 -->
+    <select id="getStockTotalByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(SUM(purchase_price * quantity), 0)
+        FROM stock_holdings
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Car Price 가져오기 -->
+    <select id="getCarByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(c.car_price, 0)
+        FROM user u
+                 LEFT JOIN kb_final.car c ON u.car_no = c.car_no
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Real Estate Price 가져오기 -->
+    <select id="getRealestateByUserId" resultType="double">
+        SELECT COALESCE(r.transaction_amount, 0)
+        FROM user u
+                 LEFT JOIN kb_final.sg_real r ON u.realestate_no = r.no
+        WHERE u.user_id = #{userId}
+    </select>
     <select id="userAccounts" parameterType="string" resultType="mul.cam.e.dto.AccountDto">
         select account_id, account_number, user_id, bank_id, account_type_id, sum(balance) as balance
         from account
@@ -178,5 +233,13 @@
                  left join sg_real s on u.realestate_no = s.no
         where u.user_name = #{userName};
     </select>
+
+  <select id="getAccounts" resultType="mul.cam.e.dto.AccountDto">
+        select *
+        FROM account
+        WHERE user_id = #{userId};
+
+    </select>
+
 
 </mapper>

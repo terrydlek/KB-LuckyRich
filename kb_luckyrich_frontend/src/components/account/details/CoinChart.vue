@@ -1,13 +1,23 @@
 <template>
   <div>
     <canvas v-if="!error && chartData.length" ref="chartCanvas"></canvas>
-    <p v-else-if="error" class="error-message">{{ error }}</p>
+    <div v-else-if="error" class="error-message">
+      <p>{{ error }}</p>
+      <a
+        :href="coinGeckoUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="coingecko-link"
+      >
+        CoinGecko에서 차트 보기
+      </a>
+    </div>
     <p v-else>로딩 중...</p>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue';
+import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
@@ -34,6 +44,11 @@ const getCoingeckoId = (coinpaprikaId) => {
   };
   return mapping[coinpaprikaId] || coinpaprikaId.split('-')[1];
 };
+
+const coinGeckoUrl = computed(() => {
+  const geckoId = getCoingeckoId(props.coinId);
+  return `https://www.coingecko.com/en/coins/${geckoId}`;
+});
 
 const fetchCoinGeckoData = async (coinId) => {
   try {
@@ -132,7 +147,7 @@ const updateChart = async () => {
 };
 
 onMounted(async () => {
-  await nextTick(); // DOM이 완전히 렌더링될 때까지 기다립니다.
+  await nextTick(); // DOM이 완전히 렌더링될 때까지 기다리기
   await updateChart();
 });
 

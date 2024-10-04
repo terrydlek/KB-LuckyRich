@@ -1,11 +1,11 @@
-import Home from "@/views/Home.vue";
-import About from "@/views/luckyRich/about.vue";
-import PrivacyPolicy from "@/views/luckyRich/PrivacyPolicy.vue";
-import Qa from "@/views/luckyRich/Qa.vue";
-import TermsOfService from "@/views/luckyRich/TermsOfService.vue";
-import Login from "@/views/user/login.vue";
-import UserUpdate from "@/views/user/UserUpdate.vue";
-import FinanceNews from "@/views/news/FinanceNews.vue";
+import Home from '@/views/Home.vue';
+import About from '@/views/luckyRich/about.vue';
+import PrivacyPolicy from '@/views/luckyRich/PrivacyPolicy.vue';
+import Qa from '@/views/luckyRich/Qa.vue';
+import TermsOfService from '@/views/luckyRich/TermsOfService.vue';
+import Login from '@/views/user/login.vue';
+import UserUpdate from '@/views/user/UserUpdate.vue';
+import FinanceNews from '@/views/news/FinanceNews.vue';
 import PostList from '@/components/account/board/PostList.vue';
 // import BoardDetail from "@/components/account/board/PostdDetail.vue";
 import PostUpdate from "@/components/account/board/PostUpdate.vue";
@@ -86,3 +86,4 @@ export default [
         component : AdminBoard
     },
 ]
+

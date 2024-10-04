@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
-import mul.cam.e.util.Role;
+import mul.cam.e.enumrate.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
 //                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()
-//                        .antMatchers("/board/**").permitAll()
+//                      .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

@@ -1,13 +1,23 @@
 <template>
-  <center>
-    <div class="deposit">
-      <h3>당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.</h3>
+  <div class="deposit-container">
+    <button @click="resetTest" class="test-reset-button">
+      테스트 다시하기
+    </button>
+    <h2 class="title">
+      당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
+    </h2>
+    <div class="search-container">
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 상품명이 있나요?"
+        class="search-input"
+      />
+    </div>
 
-      <!-- 검색 입력 필드 -->
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 금융회사 또는 상품명이 있나요?" />
-
-      <!-- 데이터가 있을 경우 테이블 표시 -->
-      <table v-if="filteredDeposits.length">
+    <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
+    <template v-else>
+      <table v-if="filteredDeposits.length" class="deposit-table">
         <thead>
           <tr>
             <th>금융회사</th>
@@ -18,116 +28,228 @@
         <tbody>
           <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
-            <!-- 상품명 클릭 시 상세 페이지로 이동 -->
-            <td><a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`">{{ deposit.prodname }}</a></td>
+            <td>
+              <a
+                :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`"
+                class="deposit-link"
+                >{{ deposit.prodname }}</a
+              >
+            </td>
             <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
           </tr>
         </tbody>
       </table>
 
-      <!-- 페이지네이션 -->
-      <div v-if="totalPages > 1">
-        <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
-
-        <!-- 페이지 번호 표시 -->
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }">
+      <div v-if="filteredDeposits.length && totalPages > 1" class="pagination">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
+          이전
+        </button>
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-
-        <button @click="currentPage++" :disabled="currentPage === totalPages">다음</button>
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
+          다음
+        </button>
       </div>
 
-      <p v-else-if="deposits.length">찾으시는 금융회사 또는 상품명을 찾을 수 없습니다.</p>
-      <p v-else>예적금 상품을 불러오고 있어요~</p>
-    </div>
-  </center>
+      <div
+        v-if="deposits.length && !filteredDeposits.length"
+        class="no-results"
+      >
+        검색 결과가 없습니다.
+      </div>
+      <div v-if="!deposits.length" class="no-data">
+        표시할 예적금 상품이 없습니다.
+      </div>
+    </template>
+  </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      deposits: [],
-      searchQuery: '',
-      currentPage: 1,
-      itemsPerPage: 10,
-      pageRange: 10, // 한 번에 보여줄 페이지 번호 개수
-    };
-  },
-  computed: {
-    // 검색된 예적금 상품 리스트
-    filteredDeposits() {
-      return this.deposits.filter(deposit =>
-        deposit.company.includes(this.searchQuery) || deposit.prodname.includes(this.searchQuery)
-      );
-    },
-    // 페이지네이션 적용된 예적금 상품 리스트
-    paginatedDeposits() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredDeposits.slice(start, end);
-    },
-    // 총 페이지 수 계산
-    totalPages() {
-      return Math.ceil(this.filteredDeposits.length / this.itemsPerPage);
-    },
-    // 페이지 번호 계산
-    pageNumbers() {
-      const rangeStart = Math.floor((this.currentPage - 1) / this.pageRange) * this.pageRange + 1;
-      const rangeEnd = Math.min(rangeStart + this.pageRange - 1, this.totalPages);
-      return Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
-    },
-  },
-  mounted() {
-    this.fetchDepositData();
-  },
-  methods: {
-    // 데이터 가져오기
-    async fetchDepositData() {
-      const token = localStorage.getItem('access_token');
-      try {
-        const response = await axios.get('http://localhost:8080/recommend/steadiness', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        this.deposits = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the deposits:', error);
+const router = useRouter();
+const deposits = ref([]);
+const loading = ref(true);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const pageRange = 10;
+
+const fetchDepositData = async () => {
+  const token = localStorage.getItem('access_token');
+  try {
+    loading.value = true;
+    const response = await axios.get(
+      'http://localhost:8080/recommend/steadiness',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
+    );
+    deposits.value = response.data;
+  } catch (error) {
+    console.error('There was an error fetching the deposits:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const resetTest = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+      router.push('/luckyrich/login');
+      return;
     }
-  },
-  watch: {
-    // 검색어가 변경되면 페이지를 처음으로 초기화
-    searchQuery() {
-      this.currentPage = 1;
+
+    const response = await axios.delete(
+      'http://localhost:8080/investment/resetResult',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log('서버 응답:', response.data);
+    localStorage.removeItem('investmentType');
+    router.push('/luckyrich/recommend');
+  } catch (error) {
+    console.error('테스트 리셋 중 오류 발생:', error);
+    if (error.response) {
+      console.error('서버 응답:', error.response.data);
+      alert(`테스트 리셋에 실패했습니다: ${error.response.data}`);
+    } else {
+      alert('테스트 리셋에 실패했습니다. 다시 시도해 주세요.');
     }
   }
 };
+
+const filteredDeposits = computed(() => {
+  return deposits.value.filter(
+    (deposit) =>
+      deposit.prodname
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase()) ||
+      deposit.company.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+const totalPages = computed(() =>
+  Math.ceil(filteredDeposits.value.length / itemsPerPage)
+);
+
+const paginatedDeposits = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredDeposits.value.slice(start, end);
+});
+
+const pageNumbers = computed(() => {
+  const rangeStart =
+    Math.floor((currentPage.value - 1) / pageRange) * pageRange + 1;
+  const rangeEnd = Math.min(rangeStart + pageRange - 1, totalPages.value);
+  return Array.from(
+    { length: rangeEnd - rangeStart + 1 },
+    (_, i) => rangeStart + i
+  );
+});
+
+onMounted(fetchDepositData);
+
+watch(searchQuery, () => {
+  currentPage.value = 1;
+});
 </script>
 
 <style scoped>
-.deposit {
-  margin-top: 40px;
-}
-
-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-th,
-td {
+.deposit-table th,
+.deposit-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
   text-align: left;
 }
 
-th {
+.deposit-table th {
   background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.deposit-table tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.deposit-link {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.deposit-link:hover {
+  text-decoration: underline;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #e8e8e8;
+}
+
+.pagination-button.active {
+  font-weight: bold;
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+.pagination-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.loading,
+.no-results,
+.no-data {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #666;
 }
 
 input[type="text"] {
