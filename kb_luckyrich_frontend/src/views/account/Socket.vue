@@ -2,7 +2,8 @@
   <div id="element-to-print" style="padding: 20px; border: 1px solid #ccc">
     <h3>자산 포트폴리오</h3>
     <div class="accountInfo" v-if="username && age && email && gender">
-      이름: {{ username }} 나이: {{ age }} 이메일: {{ email }} 성별: {{ gender }}
+      이름: {{ username }} 나이: {{ age }} 이메일: {{ email }} 성별:
+      {{ gender }}
     </div>
 
     <!-- 왼쪽 자산 표 -->
@@ -10,7 +11,9 @@
       <div class="left-table">
         <!-- 총 자산 -->
         <h4>총 자산</h4>
-        <table v-if="portfolioData.assetTotal && portfolioData.assetTotal.assetTotal">
+        <table
+          v-if="portfolioData.assetTotal && portfolioData.assetTotal.assetTotal"
+        >
           <thead>
             <tr>
               <th>항목</th>
@@ -20,19 +23,35 @@
           <tbody>
             <tr>
               <td>총 계좌 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString()
+                }}
+              </td>
             </tr>
             <tr>
               <td>총 부동산 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString()
+                }}
+              </td>
             </tr>
             <tr>
               <td>총 차량 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalCar.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.assetTotal.assetTotal.totalCar.toLocaleString()
+                }}
+              </td>
             </tr>
             <tr>
               <td>총 주식 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalStock.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.assetTotal.assetTotal.totalStock.toLocaleString()
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -40,7 +59,12 @@
         <!-- 부동산 정보 -->
         <h4>부동산 정보</h4>
         <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userRealestate">
+          v-if="
+            portfolioData.detailAsset &&
+            portfolioData.detailAsset.detailAsset &&
+            portfolioData.detailAsset.detailAsset.userRealestate
+          "
+        >
           <thead>
             <tr>
               <th>항목</th>
@@ -50,20 +74,39 @@
           <tbody>
             <tr>
               <td>부동산 위치</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.city }}, {{
-                portfolioData.detailAsset.detailAsset.userRealestate.streetName }}</td>
+              <td>
+                {{ portfolioData.detailAsset.detailAsset.userRealestate.city }},
+                {{
+                  portfolioData.detailAsset.detailAsset.userRealestate
+                    .streetName
+                }}
+              </td>
             </tr>
             <tr>
               <td>부동산 이름</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.estateName }}</td>
+              <td>
+                {{
+                  portfolioData.detailAsset.detailAsset.userRealestate
+                    .estateName
+                }}
+              </td>
             </tr>
             <tr>
               <td>거래 금액</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount.toLocaleString()
+                }}
+              </td>
             </tr>
             <tr>
               <td>전용 면적 (㎡)</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.exclusiveArea }}</td>
+              <td>
+                {{
+                  portfolioData.detailAsset.detailAsset.userRealestate
+                    .exclusiveArea
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -71,7 +114,12 @@
         <!-- 차량 정보 -->
         <h4>차량 정보</h4>
         <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userCar">
+          v-if="
+            portfolioData.detailAsset &&
+            portfolioData.detailAsset.detailAsset &&
+            portfolioData.detailAsset.detailAsset.userCar
+          "
+        >
           <thead>
             <tr>
               <th>항목</th>
@@ -81,11 +129,17 @@
           <tbody>
             <tr>
               <td>차량 모델</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carModel }}</td>
+              <td>
+                {{ portfolioData.detailAsset.detailAsset.userCar.carModel }}
+              </td>
             </tr>
             <tr>
               <td>차량 가격</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }}</td>
+              <td>
+                {{
+                  portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString()
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -93,7 +147,12 @@
         <!-- 계좌 정보 -->
         <h4>계좌 정보</h4>
         <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userAccount">
+          v-if="
+            portfolioData.detailAsset &&
+            portfolioData.detailAsset.detailAsset &&
+            portfolioData.detailAsset.detailAsset.userAccount
+          "
+        >
           <thead>
             <tr>
               <th>계좌번호</th>
@@ -101,7 +160,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="account in portfolioData.detailAsset.detailAsset.userAccount" :key="account.accountId">
+            <tr
+              v-for="account in portfolioData.detailAsset.detailAsset
+                .userAccount"
+              :key="account.accountId"
+            >
               <td>{{ account.accountNumber }}</td>
               <td>{{ account.balance.toLocaleString() }}</td>
             </tr>
@@ -110,7 +173,12 @@
 
         <!-- 주식 보유 현황 -->
         <h4>주식 보유 현황</h4>
-        <table v-if="portfolioData.stockRevenue && portfolioData.stockRevenue.stockRevenue">
+        <table
+          v-if="
+            portfolioData.stockRevenue &&
+            portfolioData.stockRevenue.stockRevenue
+          "
+        >
           <thead>
             <tr>
               <th>종목명</th>
@@ -120,7 +188,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(stock, index) in portfolioData.stockRevenue.stockRevenue" :key="index">
+            <tr
+              v-for="(stock, index) in portfolioData.stockRevenue.stockRevenue"
+              :key="index"
+            >
               <td>{{ stock.stockName }}</td>
               <td>{{ stock.quantity }}</td>
               <td>{{ stock.purchasePrice.toLocaleString() }}</td>
@@ -139,14 +210,12 @@
           <assetGraph ref="assetGraph" />
         </div>
         <div class="chart-container">
-          <consumptionstatus ref="consumptionstatus"/>
+          <consumptionstatus ref="consumptionstatus" />
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
 
 <script>
 import axios from 'axios';
@@ -182,11 +251,10 @@ export default {
     const age = ref('');
     const gender = ref('');
     const portfolioData = ref({});
-    const isDataLoaded = ref(false);  // 데이터를 다 받아왔는지 상태를 저장
+    const isDataLoaded = ref(false); // 데이터를 다 받아왔는지 상태를 저장
 
     // WebSocket 메시지 수신 처리 함수
     function connectWebSocket() {
-
       const serverURL = 'http://localhost:8080/ws';
       const token = localStorage.getItem('access_token');
 
@@ -203,15 +271,18 @@ export default {
         (frame) => {
           console.log('Connected to WebSocket server:', frame);
 
-          stompClient.subscribe('/topic/portfolio/luckyrich', (notification) => {
-            const json = JSON.parse(notification.body);
-            console.log('Notification received:', notification.body);
-            console.log(json);
+          stompClient.subscribe(
+            '/topic/portfolio/luckyrich',
+            (notification) => {
+              const json = JSON.parse(notification.body);
+              console.log('Notification received:', notification.body);
+              console.log(json);
 
-            portfolioData.value = json;
-            alert(portfolioData.value);
-            isDataLoaded.value = true;  // 데이터 로딩 완료
-          });
+              portfolioData.value = json;
+              alert(portfolioData.value);
+              isDataLoaded.value = true; // 데이터 로딩 완료
+            }
+          );
         },
         (error) => {
           console.error('Error connecting to WebSocket server:', error);

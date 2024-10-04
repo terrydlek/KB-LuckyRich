@@ -72,7 +72,6 @@ import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 import Socket from '@/views/account/Socket.vue';
-import axios from 'axios';
 
 export default {
   components: {
@@ -101,23 +100,17 @@ export default {
         const token = localStorage.getItem('access_token');
 
         // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/publish)
-        await axios
-          .post(
-            'http://localhost:8080/rabbit/publish',
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // 헤더에 토큰 추가
-              },
-            }
-          )
-          .then((response) => {
-            console.log('RabbitMQ에 발행 요청 성공:', response.data);
-          })
-          .catch((error) => {
-            console.error('RabbitMQ 발행 요청 실패:', error);
-            return; // 요청 실패 시 더 진행하지 않음
-          });
+        await axios.post(
+          'http://localhost:8080/rabbit/publish',
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log('RabbitMQ에 발행 요청 성공');
 
         // Socket 컴포넌트를 DOM에 추가하여 WebSocket 데이터 수신
         this.showSocketComponent = true;
