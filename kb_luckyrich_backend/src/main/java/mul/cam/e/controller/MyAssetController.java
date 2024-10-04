@@ -215,4 +215,27 @@ public class MyAssetController {
         return ResponseEntity.ok(answer);
     }
 
+    @GetMapping("/getCategoryExpenses")
+    public ResponseEntity<Map<String, Object>> getCategoryExpenses() {
+        log.info("getCategoryExpenses execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        int userId = securityUserService.getUserId(userName);
+
+        List<Map<String, Object>> categoryExpenses = myAssetService.getCategoryExpenses(userId);
+
+        // 총 지출액 계산
+        double totalExpense = categoryExpenses.stream()
+                .mapToDouble(expense -> ((Number) expense.get("amount")).doubleValue())
+                .sum();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("categoryExpenses", categoryExpenses);
+        response.put("totalExpense", totalExpense);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

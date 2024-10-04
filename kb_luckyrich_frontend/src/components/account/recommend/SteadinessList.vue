@@ -182,6 +182,7 @@ watch(searchQuery, () => {
 </script>
 
 <style scoped>
+.deposit-container {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -252,7 +253,7 @@ watch(searchQuery, () => {
   color: #666;
 }
 
-input[type="text"] {
+input[type='text'] {
   margin: 10px 0;
   padding: 5px;
   width: 50%;
