@@ -4,6 +4,8 @@ import mul.cam.e.dto.InvestmentTestResultDto;
 import mul.cam.e.service.InvestmentTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,8 +27,10 @@ public class InvestTestController {
     }
 
     @DeleteMapping("/resetResult")
-    public ResponseEntity<String> resetResult(@RequestParam int userId) {
-        testService.deleteTestResult(userId);
+    public ResponseEntity<String> resetResult() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        testService.deleteTestResult(userName);
         return ResponseEntity.ok("success reset test result");
     }
 }

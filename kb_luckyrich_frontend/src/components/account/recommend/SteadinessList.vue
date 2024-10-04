@@ -7,12 +7,7 @@
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
     </h2>
     <div class="search-container">
-      <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="검색하고 싶은 상품명이 있나요?"
-        class="search-input"
-      />
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
     </div>
 
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
@@ -29,11 +24,8 @@
           <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
             <td>
-              <a
-                :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`"
-                class="deposit-link"
-                >{{ deposit.prodname }}</a
-              >
+              <a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`" class="deposit-link">{{ deposit.prodname
+                }}</a>
             </td>
             <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
           </tr>
@@ -41,35 +33,19 @@
       </table>
 
       <div v-if="filteredDeposits.length && totalPages > 1" class="pagination">
-        <button
-          @click="currentPage--"
-          :disabled="currentPage === 1"
-          class="pagination-button"
-        >
+        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
           이전
         </button>
-        <button
-          v-for="page in pageNumbers"
-          :key="page"
-          @click="currentPage = page"
-          :class="{ active: currentPage === page }"
-          class="pagination-button"
-        >
+        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+          :class="{ active: currentPage === page }" class="pagination-button">
           {{ page }}
         </button>
-        <button
-          @click="currentPage++"
-          :disabled="currentPage === totalPages"
-          class="pagination-button"
-        >
+        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
           다음
         </button>
       </div>
 
-      <div
-        v-if="deposits.length && !filteredDeposits.length"
-        class="no-results"
-      >
+      <div v-if="deposits.length && !filteredDeposits.length" class="no-results">
         검색 결과가 없습니다.
       </div>
       <div v-if="!deposits.length" class="no-data">
@@ -182,6 +158,49 @@ watch(searchQuery, () => {
 </script>
 
 <style scoped>
+.deposit-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.test-reset-button {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #d32f2f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.test-reset-button:hover {
+  background-color: #b71c1c;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.deposit-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -189,13 +208,11 @@ watch(searchQuery, () => {
 
 .deposit-table th,
 .deposit-table td {
-  border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
 }
 
 .deposit-table th {
-  background-color: #f2f2f2;
   font-weight: bold;
 }
 
@@ -250,22 +267,5 @@ watch(searchQuery, () => {
   margin-top: 20px;
   font-size: 18px;
   color: #666;
-}
-
-input[type="text"] {
-  margin: 10px 0;
-  padding: 5px;
-  width: 50%;
-}
-
-button {
-  margin: 5px;
-  padding: 5px 10px;
-}
-
-button.active {
-  font-weight: bold;
-  background-color: #4caf50;
-  color: white;
 }
 </style>
