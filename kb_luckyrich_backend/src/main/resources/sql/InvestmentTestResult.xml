@@ -9,11 +9,14 @@
     </insert>
 
     <select id="findByUserId" resultType="mul.cam.e.dto.InvestmentTestResultDto">
-        select * from investment_test_results where user_id = #{userId}
+        select *
+        from investment_test_results
+        where user_id = #{userId}
     </select>
 
-    <delete id="deleteByUserId" parameterType="int">
-        DELETE FROM investment_test_results
-        WHERE user_id = #{userId}
+    <delete id="deleteByUserId" parameterType="string">
+        DELETE
+        FROM investment_test_results
+        WHERE user_id = (select user_id from user where user_name = #{userName});
     </delete>
 </mapper>
