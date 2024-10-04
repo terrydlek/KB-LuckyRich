@@ -90,13 +90,13 @@ export default {
     },
     mounted() {
         if (!localStorage.getItem('initialLoadDone')) {
-        this.isLoading = true; // 처음 로딩 시에만 로딩창 표시
-        localStorage.setItem('initialLoadDone', 'true');
-    } else {
-        this.isLoading = false;
-    }
-    this.loadKakaoMap();
-    this.fetchRealEstateData('서울특별시');
+            this.isLoading = true; // 처음 로딩 시에만 로딩창 표시
+            localStorage.setItem('initialLoadDone', 'true');
+        } else {
+            this.isLoading = false;
+        }
+        this.loadKakaoMap();
+        this.fetchRealEstateData('서울특별시');
     },
     methods: {
         loadKakaoMap() {
@@ -128,84 +128,84 @@ export default {
             this.addGovernmentMarkers();
         },
         fetchRealEstateData(region) {
-        // isLoading은 처음 로딩 때만 사용 (서울특별시)
-        if (region === '서울특별시') {
-            this.isLoading = true;
-        }
+            // isLoading은 처음 로딩 때만 사용 (서울특별시)
+            if (region === '서울특별시') {
+                this.isLoading = true;
+            }
 
-        const token = localStorage.getItem('access_token');
-        axios.get(`http://localhost:8080/realestate/getEstateByRegion?region=${region}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-        .then((response) => {
-            this.estate = response.data.map(item => ({
-                complexName: item.estateName,
-                address: `${item.city} ${item.streetNumber}`,
-                price: item.transactionAmount || '가격 정보 없음',
-                floor: item.floor,
-                contractTime: item.contractTime
-            }));
+            const token = localStorage.getItem('access_token');
+            axios.get(`http://localhost:8080/realestate/getEstateByRegion?region=${region}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    this.estate = response.data.map(item => ({
+                        complexName: item.estateName,
+                        address: `${item.city} ${item.streetNumber}`,
+                        price: item.transactionAmount || '가격 정보 없음',
+                        floor: item.floor,
+                        contractTime: item.contractTime
+                    }));
 
-            this.createMarkers();
-        })
-        .catch((error) => {
-            console.error('There was an error fetching the estate data:', error);
-            this.isLoading = false;
-        });
-    },
-    createMarkers() {
-        let createdMarkers = 0;
+                    this.createMarkers();
+                })
+                .catch((error) => {
+                    console.error('There was an error fetching the estate data:', error);
+                    this.isLoading = false;
+                });
+        },
+        createMarkers() {
+            let createdMarkers = 0;
 
-        this.estate.forEach((place) => {
-            this.getCoordinatesFromAddress(place.address, (coords) => {
-                if (coords) {
-                    const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
-                    const imageSrc = '/src/assets/images/EstateImg.png';
-                    const imageSize = new kakao.maps.Size(50, 50);
-                    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+            this.estate.forEach((place) => {
+                this.getCoordinatesFromAddress(place.address, (coords) => {
+                    if (coords) {
+                        const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
+                        const imageSrc = '/src/assets/images/EstateImg.png';
+                        const imageSize = new kakao.maps.Size(50, 50);
+                        const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-                    const marker = new kakao.maps.Marker({
-                        position: markerPosition,
-                        image: markerImage,
-                        map: null,
-                    });
+                        const marker = new kakao.maps.Marker({
+                            position: markerPosition,
+                            image: markerImage,
+                            map: null,
+                        });
 
-                    kakao.maps.event.addListener(marker, 'click', () => {
-                        this.openModal({ ...place, ...coords });
-                    });
+                        kakao.maps.event.addListener(marker, 'click', () => {
+                            this.openModal({ ...place, ...coords });
+                        });
 
-                    this.markers.push({ marker, place });
-                }
-
-                createdMarkers++;
-                if (createdMarkers === this.estate.length) {
-                    this.markers.forEach(markerObj => {
-                        markerObj.marker.setMap(this.map);
-                    });
-
-                    // 처음 로딩(서울특별시)만 로딩창을 없애고, 다른 지역은 로딩창을 사용하지 않음
-                    if (this.selectedRegion === '서울특별시') {
-                        this.isLoading = false;
+                        this.markers.push({ marker, place });
                     }
-                    
-                    if (!this.isLoadingOtherRegions) {
-                        this.loadOtherRegions();
+
+                    createdMarkers++;
+                    if (createdMarkers === this.estate.length) {
+                        this.markers.forEach(markerObj => {
+                            markerObj.marker.setMap(this.map);
+                        });
+
+                        // 처음 로딩(서울특별시)만 로딩창을 없애고, 다른 지역은 로딩창을 사용하지 않음
+                        if (this.selectedRegion === '서울특별시') {
+                            this.isLoading = false;
+                        }
+
+                        if (!this.isLoadingOtherRegions) {
+                            this.loadOtherRegions();
+                        }
                     }
-                }
+                });
             });
-        });
-    },
-    loadOtherRegions() {
-        this.isLoadingOtherRegions = true;
-        const otherRegions = Object.keys(this.regionCoordinates).filter(region => region !== '서울특별시');
-        otherRegions.forEach((region, index) => {
-            setTimeout(() => {
-                this.fetchRealEstateData(region);
-            }, index * 2000); // 2초 간격으로 다른 지역 데이터 로딩
-        });
-    },
+        },
+        loadOtherRegions() {
+            this.isLoadingOtherRegions = true;
+            const otherRegions = Object.keys(this.regionCoordinates).filter(region => region !== '서울특별시');
+            otherRegions.forEach((region, index) => {
+                setTimeout(() => {
+                    this.fetchRealEstateData(region);
+                }, index * 2000); // 2초 간격으로 다른 지역 데이터 로딩
+            });
+        },
         getCoordinatesFromAddress(address, callback) {
             const geocoder = new kakao.maps.services.Geocoder();
             geocoder.addressSearch(address, function (result, status) {
@@ -225,6 +225,25 @@ export default {
             const coords = this.regionCoordinates[region];
             const moveLatLon = new kakao.maps.LatLng(coords.lat, coords.lng);
             this.map.setCenter(moveLatLon); // 선택된 지역으로 지도 이동
+
+            this.addCityHallMarker(coords, region);
+
+        },
+        addCityHallMarker(coords, region) {
+            const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; // 파란색 별 모양 마커 이미지
+            const imageSize = new kakao.maps.Size(24, 35); 
+            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            // 마커 생성
+            const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
+            const marker = new kakao.maps.Marker({
+                position: markerPosition,
+                image: markerImage,
+                title: region + " 시청/도청", // 마커에 마우스 오버 시 지역명 표시
+            });
+
+            // 지도에 마커 표시
+            marker.setMap(this.map);
         },
         openModal(place) {
             const relatedTransactions = this.estate.filter(item => item.address === place.address);
