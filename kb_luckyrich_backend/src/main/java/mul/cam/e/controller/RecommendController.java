@@ -50,8 +50,8 @@ public class RecommendController {
 
     @GetMapping("/conservative")
     public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
-        redisService.invalidateCache("riskRating: 2");
-        redisService.invalidateCache("riskRating: 3");
+//        redisService.invalidateCache("riskRating: 2");
+//        redisService.invalidateCache("riskRating: 3");
         return ResponseEntity.ok(fundService.getFundsByRiskRating(2));
     }
 
@@ -106,10 +106,10 @@ public class RecommendController {
         return ResponseEntity.ok(depositService.getDepositDetail(prodname));
     }
 
-//    @GetMapping("/delete")
-//    public void delete() {
-//        fundService.invalidateFundCache();
-//    }
+    @GetMapping("/delete")
+    public void delete() {
+        redisService.invalidateCache("depositList");
+    }
 
 //    @GetMapping("/cipher")
 //    public String cipher() {

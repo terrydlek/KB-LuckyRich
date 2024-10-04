@@ -149,12 +149,34 @@
     </select>
 
     <select id="userStockSymbol" parameterType="string" resultType="mul.cam.e.dto.StockHoldingsDto">
-        select stock_symbol, quantity
+        select stock_symbol, stock_name, purchase_price, sum(quantity) as quantity, purchase_date
         from stock_holdings
         where user_id = (select user_id
                          from user
-                         where user_name = #{userName});
+                         where user_name = #{userName})
+        group by 1;
+    </select>
+    
+    <select id="userCar" parameterType="string" resultType="mul.cam.e.dto.MyCarDto">
+        select coalesce(c.car_no, 0) as car_no,
+               coalesce(c.car_model, '없음') as car_model,
+               coalesce(c.car_price, 0) as car_price
+        from user u
+                 left join car c on u.car_no = c.car_no
+        where u.user_name = #{userName};
     </select>
 
+    <select id="userRealestate" parameterType="string" resultType="mul.cam.e.dto.RealEstateDto">
+        select coalesce(s.city, "없음")                        as city,
+               coalesce(s.street_number, "없음")               as street_number,
+               coalesce(s.estate_name, "없음")                 as estate_name,
+               coalesce(s.exclusive_area, "없음")              as exclusive_area,
+               coalesce(s.transaction_amount, 0) * 100000000 as transaction_amount,
+               coalesce(s.street_name, "없음")                 as street_name,
+               coalesce(s.house_type, "없음")                  as house_type
+        from user u
+                 left join sg_real s on u.realestate_no = s.no
+        where u.user_name = #{userName};
+    </select>
 
 </mapper>

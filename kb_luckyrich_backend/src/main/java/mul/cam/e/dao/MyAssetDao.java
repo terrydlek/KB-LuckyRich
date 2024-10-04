@@ -41,4 +41,8 @@ public interface MyAssetDao {
 
     List<StockHoldingsDto> userStockSymbol(String userName);
 
+    MyCarDto userCar(String userName);
+
+    RealEstateDto userRealestate(String userName);
+
 }
