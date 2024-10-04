@@ -15,6 +15,28 @@ import java.util.Map;
 
 public class StockSymbolProcessor {
 
+    public static String recentStock(String stockSymbol) throws IOException {
+        String url = "https://finance.naver.com/item/sise_day.naver?code=" + stockSymbol;
+        Document doc = Jsoup.connect(url).get();
+
+        List<String> recentPrice = new ArrayList<>();
+
+        Elements rows = doc.select("table.type2 tr");
+
+        for (Element row : rows) {
+            Elements priceElement = row.select("tr td.num span.tah.p11");
+
+            if (!priceElement.isEmpty()) {
+                String closingPrice = priceElement.get(0).text();
+                recentPrice.add(closingPrice);
+
+                if (recentPrice.size() > 0) break;
+            }
+        }
+        return recentPrice.get(0);
+
+    }
+
     public static Map<String, List<String>> processStockSymbol(String stockSymbol, int quantity) throws IOException {
         String url = "https://finance.naver.com/item/sise_day.naver?code=" + stockSymbol;
         Document doc = Jsoup.connect(url).get();

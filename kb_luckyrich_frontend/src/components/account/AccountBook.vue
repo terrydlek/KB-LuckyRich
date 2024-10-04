@@ -29,13 +29,6 @@
       </div>
     </div>
 
-    <!-- 
-    <div class="currentmonth">
-      <button @click="prevMonth">Previous Month</button>
-      <span>{{ currentMonth }}, {{ currentYear }}</span>
-      <button @click="nextMonth">Next Month</button>
-    </div> -->
-
     <div class="date-selector">
       <select v-model="currentYear" @change="resetAndFetchTransactions">
         <option :value="null">전체 년도</option>
@@ -59,9 +52,9 @@
       </select>
     </div>
 
-    <div class="transactions" ref="transactionList">
+    <div class="transactions">
       <div
-        v-for="transaction in filteredTransactions"
+        v-for="transaction in paginatedTransactions"
         :key="transaction.transactionDate.getTime()"
         class="transaction-item"
       >
@@ -83,11 +76,20 @@
         </div>
       </div>
       <div v-if="isLoading" class="loading">데이터 로딩 중...</div>
-      <div v-if="!hasMore && filteredTransactions.length === 0" class="no-data">
+      <div
+        v-if="!isLoading && filteredTransactions.length === 0"
+        class="no-data"
+      >
         거래 내역이 없습니다.
       </div>
+    </div>
 
-      <button @click="nextSlide" class="next"></button>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">
+        다음
+      </button>
     </div>
   </div>
 </template>
@@ -95,7 +97,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
-import { useInfiniteScroll } from '@vueuse/core';
 import {
   convertTimestampToDate,
   isSameYearAndMonth,
@@ -104,20 +105,14 @@ import * as Xlsx from 'xlsx';
 
 const transactions = ref([]);
 const selectedAccount = ref(null);
-
-// const currentMonth = ref(new Date().getMonth() + 1); // js에서 Month가 0부터 시작
-// const currentYear = ref(new Date().getFullYear()); // Date 객체에서 연도 부분만 추출
-
 const currentYear = ref(null);
 const currentMonth = ref(null);
-
 const selectedType = ref('');
 const minAmount = ref('');
 const maxAmount = ref('');
-const page = ref(1);
-const transactionList = ref(null);
-const hasMore = ref(true);
 const isLoading = ref(false);
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 const makeExcelFiles = () => {
   const excelData = filteredTransactions.value.map((transaction) => ({
@@ -177,9 +172,7 @@ const selectAccount = (accountNumber) => {
 
 const resetAndFetchTransactions = () => {
   transactions.value = [];
-  page.value = 1;
-  // hasMore.value = true; 거래내역 없음 글씨가 안나와서 이 부분 false로 수정
-  hasMore.value = false;
+  currentPage.value = 1;
   getMyBankTransaction();
 };
 
@@ -204,47 +197,39 @@ const filteredTransactions = computed(() => {
   });
 });
 
+const totalPages = computed(() => {
+  return Math.ceil(filteredTransactions.value.length / itemsPerPage);
+});
+
+const paginatedTransactions = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return filteredTransactions.value.slice(startIndex, endIndex);
+});
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
 const yearOptions = computed(() => {
   const currentYear = new Date().getFullYear();
   return Array.from({ length: 5 }, (_, i) => currentYear - i);
 });
 
-// const prevMonth = () => {
-//   currentMonth.value--;
-//   if (currentMonth.value < 1) {
-//     currentMonth.value = 12;
-//     currentYear.value--;
-//   }
-//   resetAndFetchTransactions();
-// };
-
-// const nextMonth = () => {
-//   currentMonth.value++;
-//   if (currentMonth.value > 12) {
-//     currentMonth.value = 1;
-//     currentYear.value++;
-//   }
-//   resetAndFetchTransactions();
-// };
-
 function formatCurrency(amount) {
   return new Intl.NumberFormat('ko-KR').format(amount);
 }
 
-const { isScrolling } = useInfiniteScroll(
-  transactionList,
-  () => {
-    if (hasMore.value && !isLoading.value) {
-      getMyBankTransaction();
-    }
-  },
-  { distance: 10 }
-);
-
-watch([selectedType, minAmount, maxAmount], () => {
-  if (transactionList.value) {
-    transactionList.value.scrollTop = 0;
-  }
+watch([selectedType, minAmount, maxAmount, currentYear, currentMonth], () => {
+  currentPage.value = 1;
 });
 
 async function getMyBankTransaction() {
@@ -256,7 +241,6 @@ async function getMyBankTransaction() {
       accountNumber: selectedAccount.value,
     };
 
-    // 날짜 필터가 선택된 경우에만 파라미터 추가
     if (currentYear.value) params.year = currentYear.value;
     if (currentMonth.value) params.month = currentMonth.value;
 
@@ -269,8 +253,6 @@ async function getMyBankTransaction() {
         params: params,
       }
     );
-
-    console.log('API Response:', response.data);
 
     if (response.data && Array.isArray(response.data)) {
       transactions.value = response.data.map((transaction) => ({
@@ -427,12 +409,14 @@ const getCircleStyle = (bankName) => {
   border: 1px solid #ddd;
   text-align: left;
 }
+
 .currentmonth {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .filters {
   margin-bottom: 20px;
 }
@@ -444,7 +428,7 @@ const getCircleStyle = (bankName) => {
 }
 
 .transactions {
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
@@ -491,5 +475,27 @@ const getCircleStyle = (bankName) => {
   text-align: center;
   padding: 20px;
   color: #888;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 </style>

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyCarDto {
-    private int carId;
-    private String carType;
-    private long carAmount;
+    private int carNo;
+    private String carModel;
+    private long carPrice;
 }

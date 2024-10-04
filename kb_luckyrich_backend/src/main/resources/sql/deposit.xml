@@ -7,7 +7,9 @@
 
     <select id="getDeposit" resultType="mul.cam.e.dto.DepositDto">
         select *
-        from deposit_data;
+        from deposit_data
+        group by company
+        limit 100;
     </select>
 
     <select id="getDepositByProdname" parameterType="string" resultType="mul.cam.e.dto.DepositDto">

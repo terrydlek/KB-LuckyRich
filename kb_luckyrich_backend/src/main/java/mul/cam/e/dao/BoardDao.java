@@ -13,6 +13,8 @@ import java.util.List;
 public interface BoardDao {
     List<BoardDto> getBoardList();
 
+    List<BoardDto> getAdminBoardList();
+
     void insertBoard(BoardDto board);
 
     BoardDto getBoard(int boardNum);
@@ -24,5 +26,9 @@ public interface BoardDao {
     void addComment(BoardReplyDto boardReplyDto);
 
     List<BoardReplyDto> getReply(int boardNum);
+
+    void deleteBoardByIds(int boardNum);
+
+    void deleteReplyById(int replyNum);
 
 }

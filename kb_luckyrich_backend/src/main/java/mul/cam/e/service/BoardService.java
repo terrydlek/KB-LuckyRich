@@ -28,6 +28,10 @@ public class BoardService {
         return boardDao.getBoardList();
     }
 
+    public List<BoardDto> getAdminBoardList() {
+        return boardDao.getAdminBoardList();
+    }
+
     public void insertBoard(BoardDto boardDto) {
         boardDao.insertBoard(boardDto);
     }
@@ -51,4 +55,13 @@ public class BoardService {
     public List<BoardReplyDto> getReply(int boardNum) {
         return boardDao.getReply(boardNum);
     }
+
+    public void deleteBoardByIds(int boardNum) {
+        boardDao.deleteBoardByIds(boardNum);
+    }
+
+    public void deleteReplyById(int replyNum) {
+        boardDao.deleteReplyById(replyNum);
+    }
+
 }

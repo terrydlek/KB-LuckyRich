@@ -6,6 +6,12 @@
       <router-link to="/asset/accountupdate">자산 등록 또는 수정</router-link>
     </div>
 
+    <div id="app">
+      <div>
+        <button @click="generatePortfolioPDF">자산 포트폴리오 다운로드</button>
+      </div>
+    </div>
+
     <!-- 카드형 데이터 박스 -->
     <div class="data-cards">
       <div class="card">
@@ -36,21 +42,27 @@
     </div>
     <div>
       <div class="chart-row">
-        <section><account-book-chart /></section>
+        <section><accountBookChart /></section>
         <section><consumptionstatus /></section>
         <section><assetcomparison /></section>
       </div>
+    </div>
+
+    <!-- 숨겨진 Socket.vue 컴포넌트 (화면에서 보이지 않음) -->
+    <div v-if="showSocketComponent" style="display: none">
+      <Socket ref="socketComponent" />
     </div>
   </div>
 </template>
 
 <script>
-import totalChart from "@/components/account/chart/totalChart.vue";
-import goalChart from "@/components/account/chart/goalChart.vue";
-import assetGraph from "@/components/account/chart/assetGraph.vue";
-import accountBookChart from "@/components/account/chart/accountBookChart.vue";
-import assetcomparison from "@/components/account/chart/assetComparison.vue";
-import consumptionstatus from "@/components/account/chart/consumptionstatus.vue";
+import totalChart from '@/components/account/chart/totalChart.vue';
+import goalChart from '@/components/account/chart/goalChart.vue';
+import assetGraph from '@/components/account/chart/assetGraph.vue';
+import accountBookChart from '@/components/account/chart/accountBookChart.vue';
+import assetcomparison from '@/components/account/chart/assetComparison.vue';
+import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
+import Socket from './Socket.vue';
 
 export default {
   components: {
@@ -58,8 +70,29 @@ export default {
     goalChart,
     assetGraph,
     accountBookChart,
-    consumptionstatus,
     assetcomparison,
+    consumptionstatus,
+    Socket, // Socket 컴포넌트 추가
+  },
+  data() {
+    return {
+      showSocketComponent: false, // Socket 컴포넌트를 동적으로 추가
+    };
+  },
+  methods: {
+    async generatePortfolioPDF() {
+      try {
+        // Socket 컴포넌트를 DOM에 추가하고, 그 후 PDF 생성
+        this.showSocketComponent = true;
+        this.$nextTick(async () => {
+          const socketComponent = this.$refs.socketComponent;
+          await socketComponent.generatePDF();
+          this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
+        });
+      } catch (error) {
+        console.error('PDF 생성 중 오류 발생:', error);
+      }
+    },
   },
 };
 </script>

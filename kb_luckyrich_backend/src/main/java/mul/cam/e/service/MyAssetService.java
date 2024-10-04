@@ -77,6 +77,10 @@ public class MyAssetService {
         return myAssetDao.transactionTen(userName);
     }
 
+    public List<Map<String, Object>> getCategoryExpenses(int userId) {
+        return myAssetDao.getCategoryExpenses(userId);
+    }
+
     public Map<String, Map<String, List<String>>> userStockSymbol(String userName) throws IOException {
 
         List<StockHoldingsDto> lists = myAssetDao.userStockSymbol(userName);
