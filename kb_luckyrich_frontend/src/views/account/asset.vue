@@ -15,16 +15,12 @@
     <!-- 카드형 데이터 박스 -->
     <div class="data-cards">
       <div class="card">
-        <p>지난 주 review</p>
-        <p class="highlight">10.6% 성장했어요.</p>
-      </div>
-      <div class="card">
         <p>나의 총 자산</p>
-        <p class="amount">12,345,600원</p>
+        <p class="amount">{{ formatCurrency(totalAsset) }}원</p>
       </div>
       <div class="card">
         <p>나의 투자 금액</p>
-        <p class="amount">9,762,924원</p>
+        <p class="amount">{{ formatCurrency(investmentAmount) }}원</p>
       </div>
       <div class="card">
         <p>투자 성과 순위</p>
@@ -56,6 +52,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import totalChart from '@/components/account/chart/totalChart.vue';
 import goalChart from '@/components/account/chart/goalChart.vue';
 import assetGraph from '@/components/account/chart/assetGraph.vue';
@@ -72,26 +69,77 @@ export default {
     accountBookChart,
     assetcomparison,
     consumptionstatus,
-    Socket, // Socket 컴포넌트 추가
+    Socket,
   },
   data() {
     return {
-      showSocketComponent: false, // Socket 컴포넌트를 동적으로 추가
+      showSocketComponent: false,
+      totalAsset: 0,
+      investmentAmount: 0,
+      investmentRank: 0,
     };
+  },
+  mounted() {
+    this.fetchAssetData();
   },
   methods: {
     async generatePortfolioPDF() {
       try {
-        // Socket 컴포넌트를 DOM에 추가하고, 그 후 PDF 생성
         this.showSocketComponent = true;
         this.$nextTick(async () => {
           const socketComponent = this.$refs.socketComponent;
           await socketComponent.generatePDF();
-          this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
+          this.showSocketComponent = false;
         });
       } catch (error) {
         console.error('PDF 생성 중 오류 발생:', error);
       }
+    },
+    async fetchAssetData() {
+      try {
+        const token = localStorage.getItem('access_token');
+        const totalResponse = await axios.get(
+          'http://localhost:8080/myasset/total',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const investmentResponse = await axios.get(
+          'http://localhost:8080/myasset/gettotalinvestment',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // 총 자산 계산
+        this.totalAsset =
+          totalResponse.data['Bank Balance'] +
+          totalResponse.data['Stock Total'] +
+          totalResponse.data['Car'] +
+          totalResponse.data['real estate'];
+
+        this.investmentAmount = investmentResponse.data.currentTotalStockValue;
+
+        // 투자 순위는 아직 구현되지 않았으므로 임시로 고정값 사용
+        this.investmentRank = 16;
+      } catch (error) {
+        console.error('자산 데이터 가져오기 실패: ', error);
+        if (error.response) {
+          console.error('Error status:', error.response.status);
+          console.error('Error data:', error.response.data);
+        } else if (error.request) {
+          console.error('No response received:', error.request);
+        } else {
+          console.error('Error setting up request:', error.message);
+        }
+      }
+    },
+    formatCurrency(value) {
+      return new Intl.NumberFormat('ko-KR').format(value);
     },
   },
 };
