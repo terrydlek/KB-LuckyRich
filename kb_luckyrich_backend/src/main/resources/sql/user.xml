@@ -44,5 +44,5 @@
         from user
         where user_name = #{userName} and role = "ADMIN"
     </select>
-
+    
 </mapper>

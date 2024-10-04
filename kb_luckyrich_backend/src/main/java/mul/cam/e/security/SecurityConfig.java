@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .antMatchers("/rabbit/**").permitAll()
                         .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()
-//                        .antMatchers("/board/**").permitAll()
+//                      .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

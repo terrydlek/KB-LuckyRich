@@ -1,8 +1,9 @@
-<template lang="">
+<template>
   <div class="test-wrapper">
-    <h2>투자 성향 테스트</h2>
-    <hr />
-    <div v-if="currentQuestionIndex < questions.length">
+    <h2 v-if="!testCompleted">투자 성향 테스트</h2>
+    <hr v-if="!testCompleted" />
+
+    <div v-if="!testCompleted && currentQuestionIndex < questions.length">
       <div class="index">
         {{ currentQuestionIndex + 1 }} / {{ questions.length }}
       </div>
@@ -32,17 +33,18 @@
         </button>
       </div>
     </div>
-    <div v-else>
-      <h2>테스트 완료</h2>
-      <p>당신의 투자 성향 : {{ investmentType }}</p>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 const router = useRouter();
+const userId = ref(null);
+const testCompleted = ref(false);
+const investmentType = ref(null);
 
 const questions = [
   {
@@ -147,19 +149,14 @@ const isLastQuestion = computed(
 );
 
 const allQuestionsAnswered = computed(() => {
-  for (let i = 0; i < answers.value.length; i++) {
-    if (answers.value[i] === null) {
-      return false;
-    }
-  }
-  return true;
+  return answers.value.every((answer) => answer !== null);
 });
 
 const nextQuestion = () => {
   if (currentQuestionIndex.value < questions.length - 1) {
     currentQuestionIndex.value++;
   } else if (allQuestionsAnswered.value) {
-    showResult();
+    submitTest();
   } else {
     alert('모든 질문에 답해주세요.');
   }
@@ -172,7 +169,7 @@ const totalScore = computed(() => {
   }, 0);
 });
 
-const investmentType = computed(() => {
+const computedInvestmentType = computed(() => {
   const score = totalScore.value;
   if (score <= 29) return '안정형';
   if (score <= 40) return '안정추구형';
@@ -182,27 +179,126 @@ const investmentType = computed(() => {
 });
 
 const showResult = () => {
-  if (investmentType.value === '안정형') {
-    router.push('/luckyrich/recommend/steadiness');
-  } else if (investmentType.value === '안정추구형') {
-    router.push('/luckyrich/recommend/conservative');
-  } else if (investmentType.value === '위험중립형') {
-    router.push('/luckyrich/recommend/neutral');
-  } else if (investmentType.value === '적극투자형') {
-    router.push('/luckyrich/recommend/active');
-  } else {
-    router.push('/luckyrich/recommend/aggressive');
+  const resultRoutes = {
+    안정형: '/luckyrich/recommend/steadiness',
+    안정추구형: '/luckyrich/recommend/conservative',
+    위험중립형: '/luckyrich/recommend/neutral',
+    적극투자형: '/luckyrich/recommend/active',
+    공격투자형: '/luckyrich/recommend/aggressive',
+  };
+  router.push(resultRoutes[investmentType.value]);
+};
+
+const submitTest = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+      router.push('/luckyrich/login');
+      return;
+    }
+
+    const response = await axios.post(
+      'http://localhost:8080/investment/saveResult',
+      {
+        userId: userId.value,
+        investmentType: computedInvestmentType.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      testCompleted.value = true;
+      investmentType.value = computedInvestmentType.value;
+      localStorage.setItem('investmentType', computedInvestmentType.value);
+      showResult();
+    } else {
+      alert('결과 저장에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('결과 저장 중 오류 발생:', error);
   }
 };
 
-// watch(
-//   () => currentQuestionIndex.value,
-//   (newIndex) => {
-//     if (newIndex === questions.length) {
-//       logTestResults();
-//     }
-//   }
-// );
+const checkTestResult = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await axios.get(
+      'http://localhost:8080/investment/getResult',
+      {
+        params: { userId: userId.value },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data && response.data.investmentType) {
+      testCompleted.value = true;
+      investmentType.value = response.data.investmentType;
+      showResult();
+    } else {
+      testCompleted.value = false;
+    }
+  } catch (error) {
+    console.error('결과 확인 중 오류 발생:', error);
+  }
+};
+
+onMounted(async () => {
+  const token = localStorage.getItem('access_token');
+  const storedInvestmentType = localStorage.getItem('investmentType');
+
+  if (!token) {
+    router.push('/luckyrich/login');
+    return;
+  }
+
+  try {
+    const userResponse = await axios.get('http://localhost:8080/user/inf', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (userResponse.data && userResponse.data.userId) {
+      userId.value = userResponse.data.userId;
+
+      // 서버에서 테스트 결과 확인
+      const testResultResponse = await axios.get(
+        'http://localhost:8080/investment/getResult',
+        {
+          params: { userId: userId.value },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (testResultResponse.data && testResultResponse.data.investmentType) {
+        testCompleted.value = true;
+        investmentType.value = testResultResponse.data.investmentType;
+        localStorage.setItem('investmentType', investmentType.value);
+        showResult();
+      } else {
+        // 서버에 결과가 없으면 로컬 스토리지도 초기화
+        localStorage.removeItem('investmentType');
+        testCompleted.value = false;
+        currentQuestionIndex.value = 0;
+        answers.value = new Array(questions.length).fill(null);
+      }
+    } else {
+      router.push('/luckyrich/login');
+    }
+  } catch (error) {
+    console.error('에러 발생:', error);
+    router.push('/luckyrich/login');
+  }
+});
 </script>
 
 <style scoped>
@@ -211,34 +307,15 @@ const showResult = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 600px; /* 원하는 최대 너비로 조정 가능 */
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.index {
-  margin: 30px 0;
-}
-
-.question {
-  margin: 30px 0;
-}
-
-.answer {
-  margin: 30px 0;
-}
-
+.index,
+.question,
+.answer,
 .button {
   margin: 30px 0;
-}
-
-@media (max-width: 768px) {
-  .charts-wrapper {
-    flex-direction: column;
-  }
-
-  .chart {
-    margin-bottom: 20px;
-  }
 }
 </style>
