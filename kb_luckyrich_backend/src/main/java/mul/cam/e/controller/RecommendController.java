@@ -135,7 +135,6 @@ public class RecommendController {
         return ResponseEntity.ok(stockService.getStockDetailTime(stockCode));
     }
 
-
     @GetMapping("/steadiness")
     public ResponseEntity<List<DepositDto>> getSteadinessDeposits() throws IOException {
         return ResponseEntity.ok(depositService.getDeposit());

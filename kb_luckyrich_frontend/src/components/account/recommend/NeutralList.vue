@@ -22,11 +22,10 @@
           <tr>
             <th>국가</th>
             <th>펀드명</th>
-            <th>심볼</th>
             <th>최근가</th>
             <th>변동률</th>
             <th>총 자산</th>
-            <th>갱신 시간</th>
+            <!-- <th>갱신 시간</th> -->
           </tr>
         </thead>
         <tbody>
@@ -41,7 +40,6 @@
                 >{{ fund.name }}</a
               >
             </td>
-            <td>{{ fund.symbol }}</td>
             <td>{{ formatNumber(fund.lastPrice) }}</td>
             <td
               :class="{
@@ -52,7 +50,7 @@
               {{ fund.changePercent }}
             </td>
             <td>{{ formatNumber(fund.totalAssets) }}</td>
-            <td>{{ fund.lastUpdate }}</td>
+            <!-- <td>{{ fund.lastUpdate }}</td> -->
           </tr>
         </tbody>
       </table>

@@ -56,6 +56,7 @@ public interface MyAssetDao {
 
     // 특정 userId에 대한 Real Estate Price 가져오기
     double getRealestateByUserId(int userId);
+
     List<AccountDto> userAccounts(String userName);
 
     @MapKey("transaction_date")
@@ -68,4 +69,8 @@ public interface MyAssetDao {
     RealEstateDto userRealestate(String userName);
 
     List<AccountDto> getAccounts(int userId);
+
+    // 카테고리별 소비 지출
+    @MapKey("category")
+    List<Map<String, Object>> getCategoryExpenses(int userId);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,23 @@ public class MyAssetService {
         return myAssetDao.totalStock(userName);
     }
 
+    public BigDecimal getCurrentTotalStockValue(String userName) throws IOException {
+        List<StockHoldingsDto> userStocks = myAssetDao.userStockSymbol(userName);
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        for (StockHoldingsDto stock : userStocks) {
+            String stockSymbol = stock.getStockSymbol();
+            int quantity = stock.getQuantity();
+
+            String currentPriceStr = StockSymbolProcessor.recentStock(stockSymbol);
+            BigDecimal currentPrice = new BigDecimal(currentPriceStr.replace(",", ""));
+
+            totalValue = totalValue.add(currentPrice.multiply(BigDecimal.valueOf(quantity)));
+        }
+
+        return totalValue;
+    }
+
     public int totalRealestate(String userName) {
         return myAssetDao.totalRealestate(userName);
     }
@@ -75,6 +93,10 @@ public class MyAssetService {
 
     public List<Map<String, Object>> transactionTen(String userName) {
         return myAssetDao.transactionTen(userName);
+    }
+
+    public List<Map<String, Object>> getCategoryExpenses(int userId) {
+        return myAssetDao.getCategoryExpenses(userId);
     }
 
     public Map<String, Map<String, List<String>>> userStockSymbol(String userName) throws IOException {

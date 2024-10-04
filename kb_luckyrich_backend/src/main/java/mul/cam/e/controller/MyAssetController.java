@@ -10,12 +10,14 @@ import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.service.StockService;
 import mul.cam.e.util.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,7 +171,8 @@ public class MyAssetController {
         map.put("Stock Total", myAssetService.totalStock(userName));
         map.put("Car", myAssetService.totalCar(userName));
         map.put("real estate", myAssetService.totalRealestate(userName));
-        
+
+        System.out.println(map);
         return ResponseEntity.ok(map);
     }
 
@@ -214,4 +217,48 @@ public class MyAssetController {
         return ResponseEntity.ok(answer);
     }
 
+    @GetMapping("/getCategoryExpenses")
+    public ResponseEntity<Map<String, Object>> getCategoryExpenses() {
+        log.info("getCategoryExpenses execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        int userId = securityUserService.getUserId(userName);
+
+        List<Map<String, Object>> categoryExpenses = myAssetService.getCategoryExpenses(userId);
+
+        // 총 지출액 계산
+        double totalExpense = categoryExpenses.stream()
+                .mapToDouble(expense -> ((Number) expense.get("amount")).doubleValue())
+                .sum();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("categoryExpenses", categoryExpenses);
+        response.put("totalExpense", totalExpense);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/gettotalinvestment")
+    public ResponseEntity<Map<String, Object>> getCurrentTotalStockValue() {
+        log.info("getTotalInvestment execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            BigDecimal currentTotalStockValue = myAssetService.getCurrentTotalStockValue(userName);
+            response.put("currentTotalStockValue", currentTotalStockValue);
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            log.error("Error while fetching current total stock value for user: " + userName, e);
+            response.put("status", "error");
+            response.put("message", "Failed to fetch current stock value. Please try again later.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }

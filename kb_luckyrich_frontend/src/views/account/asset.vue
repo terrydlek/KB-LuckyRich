@@ -15,16 +15,12 @@
     <!-- 카드형 데이터 박스 -->
     <div class="data-cards">
       <div class="card">
-        <p>지난 주 review</p>
-        <p class="highlight">10.6% 성장했어요.</p>
-      </div>
-      <div class="card">
         <p>나의 총 자산</p>
-        <p class="amount">12,345,600원</p>
+        <p class="amount">{{ formatCurrency(totalAsset) }}원</p>
       </div>
       <div class="card">
         <p>나의 투자 금액</p>
-        <p class="amount">9,762,924원</p>
+        <p class="amount">{{ formatCurrency(investmentAmount) }}원</p>
       </div>
       <div class="card">
         <p>투자 성과 순위</p>
@@ -68,6 +64,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import totalChart from '@/components/account/chart/totalChart.vue';
 import goalChart from '@/components/account/chart/goalChart.vue';
 import assetGraph from '@/components/account/chart/assetGraph.vue';
@@ -75,7 +72,6 @@ import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 import Socket from '@/views/account/Socket.vue';
-import axios from 'axios';
 
 export default {
   components: {
@@ -85,18 +81,23 @@ export default {
     accountBookChart,
     assetcomparison,
     consumptionstatus,
-    Socket, // Socket 컴포넌트 추가
+    Socket,
   },
   data() {
     return {
-      showSocketComponent: false, // Socket 컴포넌트를 동적으로 추가
+      showSocketComponent: false,
+      totalAsset: 0,
+      investmentAmount: 0,
+      investmentRank: 0,
     };
+  },
+  mounted() {
+    this.fetchAssetData();
   },
   methods: {
     async generatePortfolioPDF() {
       try {
-
-        const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem('access_token');
 
         // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/publish)
         await axios.post(
@@ -104,17 +105,12 @@ export default {
           {},
           {
             headers: {
-              Authorization: `Bearer ${token}`, // 헤더에 토큰 추가
+              Authorization: `Bearer ${token}`,
             },
           }
-        )
-          .then(response => {
-            console.log('RabbitMQ에 발행 요청 성공:', response.data);
-          })
-          .catch(error => {
-            console.error('RabbitMQ 발행 요청 실패:', error);
-            return; // 요청 실패 시 더 진행하지 않음
-          });
+        );
+
+        console.log('RabbitMQ에 발행 요청 성공');
 
         // Socket 컴포넌트를 DOM에 추가하여 WebSocket 데이터 수신
         this.showSocketComponent = true;
@@ -124,16 +120,22 @@ export default {
           // WebSocket 데이터가 로드될 때까지 대기
           const checkDataLoaded = setInterval(() => {
             // 데이터가 로드되었는지 확인
-            if (socketComponent.portfolioData && Object.keys(socketComponent.portfolioData).length > 0) {
-              console.log("포트폴리오 데이터: ", socketComponent.portfolioData);
+            if (
+              socketComponent.portfolioData &&
+              Object.keys(socketComponent.portfolioData).length > 0
+            ) {
+              console.log('포트폴리오 데이터: ', socketComponent.portfolioData);
 
               // 필요한 데이터가 모두 있는지 확인
-              const hasAssetData = socketComponent.portfolioData.assetTotal && socketComponent.portfolioData.stockRevenue;
+              const hasAssetData =
+                socketComponent.portfolioData.assetTotal &&
+                socketComponent.portfolioData.stockRevenue;
 
               if (hasAssetData) {
                 clearInterval(checkDataLoaded); // 데이터 로딩이 완료되면 반복 종료
                 // PDF 생성 시도
-                socketComponent.generatePDF()
+                socketComponent
+                  .generatePDF()
                   .then(() => {
                     console.log('포트폴리오 다운로드 완료!');
                     this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
@@ -150,7 +152,53 @@ export default {
         console.error('포트폴리오 생성 중 오류 발생:', error);
       }
     },
-  }
+    async fetchAssetData() {
+      try {
+        const token = localStorage.getItem('access_token');
+        const totalResponse = await axios.get(
+          'http://localhost:8080/myasset/total',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const investmentResponse = await axios.get(
+          'http://localhost:8080/myasset/gettotalinvestment',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // 총 자산 계산
+        this.totalAsset =
+          totalResponse.data['Bank Balance'] +
+          totalResponse.data['Stock Total'] +
+          totalResponse.data['Car'] +
+          totalResponse.data['real estate'];
+
+        this.investmentAmount = investmentResponse.data.currentTotalStockValue;
+
+        // 투자 순위는 아직 구현되지 않았으므로 임시로 고정값 사용
+        this.investmentRank = 16;
+      } catch (error) {
+        console.error('자산 데이터 가져오기 실패: ', error);
+        if (error.response) {
+          console.error('Error status:', error.response.status);
+          console.error('Error data:', error.response.data);
+        } else if (error.request) {
+          console.error('No response received:', error.request);
+        } else {
+          console.error('Error setting up request:', error.message);
+        }
+      }
+    },
+    formatCurrency(value) {
+      return new Intl.NumberFormat('ko-KR').format(value);
+    },
+  },
 };
 </script>
 
