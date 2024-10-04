@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="deposit in paginatedDeposits" :key="deposit.prodname">
+          <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
             <td>
               <a
@@ -182,49 +182,6 @@ watch(searchQuery, () => {
 </script>
 
 <style scoped>
-.deposit-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.title {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.test-reset-button {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #d32f2f;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.test-reset-button:hover {
-  background-color: #b71c1c;
-}
-
-.search-container {
-  margin-bottom: 20px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.deposit-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -293,5 +250,22 @@ watch(searchQuery, () => {
   margin-top: 20px;
   font-size: 18px;
   color: #666;
+}
+
+input[type="text"] {
+  margin: 10px 0;
+  padding: 5px;
+  width: 50%;
+}
+
+button {
+  margin: 5px;
+  padding: 5px 10px;
+}
+
+button.active {
+  font-weight: bold;
+  background-color: #4caf50;
+  color: white;
 }
 </style>

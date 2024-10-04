@@ -1,5 +1,9 @@
 <template>
-  <highcharts :options="chartOptions" />
+  <div ref="chartContainer" class="chart-container">
+    <highcharts v-if="chartVisible" :options="chartOptions" />
+    <div v-else>Loading chart...</div>
+    <!-- 데이터 로딩 중 메시지 표시 -->
+  </div>
 </template>
 
 <script>
@@ -79,4 +83,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.chart-container {
+  /* 필요에 따라 스타일 추가 */
+}
+</style>

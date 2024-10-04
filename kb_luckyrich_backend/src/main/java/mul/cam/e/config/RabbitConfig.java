@@ -1,14 +1,13 @@
 package mul.cam.e.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +24,21 @@ public class RabbitConfig {
     private String username;
     @Value("${spring.rabbitmq.password}")
     private String password;
+
+    @Value("${rabbitmq.queue.name}")
+    private String queue;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
+
+    @Value("${rabbitmq.queue.json.name}")
+    private String jsonQueue;
+
+    @Value("${rabbitmq.routing.json.key}")
+    private String routingJsonKey;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -49,18 +63,21 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue userPortfolioQueue() {
-        return new Queue("user_portfolio");             // Queue 이름
+    public Queue queue() {
+        return new Queue(queue);             // Queue 이름
     }
 
-//    @Bean
-//    public TopicExchange userPortfolioExchange() {
-//        return new TopicExchange("user_portfolio");     // 교환기 이름
-//    }
-//
-//    @Bean
-//    public Binding binding(Queue userPortfolioQueue, TopicExchange userPortfolioExchange) {
-//        return BindingBuilder.bind(userPortfolioQueue).to(userPortfolioExchange).with("portfolio");        // with 는 라우팅 키?
-//    }
+    @Bean
+    public TopicExchange exchange() {
+        return new TopicExchange(exchange);     // 교환기 이름
+    }
+
+    // queue와 exchange 간의 라우팅키를 이용해 바인딩
+    @Bean
+    public Binding binding() {
+        return BindingBuilder.bind(queue())
+                .to(exchange())
+                .with(routingKey);
+    }
 
 }

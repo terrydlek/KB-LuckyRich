@@ -97,12 +97,7 @@ public class BoardController {
 
     @GetMapping("/checkAdmin")
     public ResponseEntity<String> checkAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (securityUserService.checkAuthority(authentication.getName()) > 0) {
-            log.info("yes");
-            return ResponseEntity.ok("yes");
-        }
-        return ResponseEntity.ok("no");
+        return ResponseEntity.ok("ok");
     }
 
     @PostMapping("/addComment")

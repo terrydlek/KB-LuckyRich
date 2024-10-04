@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="stock in paginatedStocks" :key="stock.stockCode">
+        <tr v-for="(stock, index) in paginatedStocks" :key="index">
           <td>
             <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
               stock.stockName
@@ -259,5 +259,22 @@ input[type='text'] {
 .pagination button:disabled {
   color: #ccc;
   cursor: not-allowed;
+}
+
+input[type="text"] {
+    margin: 10px 0;
+    padding: 5px;
+    width: 50%;
+}
+
+button {
+    margin: 5px;
+    padding: 5px 10px;
+}
+
+button.active {
+    font-weight: bold;
+    background-color: #4caf50;
+    color: white;
 }
 </style>

@@ -62,8 +62,4 @@ public class SecurityUserService implements UserDetailsService {
     public String getNickname(String userName) {
         return userDao.getNickname(userName);
     }
-
-    public int checkAuthority(String userName) {
-        return userDao.checkAuthority(userName);
-    }
 }
