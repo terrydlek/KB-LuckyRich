@@ -17,7 +17,6 @@ import StockDetail from '@/components/account/details/StockDetail.vue';
 import FundDetail from '@/components/account/details/FundDetail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
-import SelectRegion from '@/components/realestate/SelectRegion.vue';
 
 export default [
   {
@@ -94,11 +93,6 @@ export default [
     path: '/luckyrich/realestate',
     name: 'realestate',
     component: RealEstate,
-  },
-  {
-    path: '/luckyrich/selectregion',
-    name : 'selectregion',
-    component : SelectRegion,
   },
   {
     path: '/luckyrich/recommend/active/:stockCode',
