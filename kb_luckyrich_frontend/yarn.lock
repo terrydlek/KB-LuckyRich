@@ -671,10 +671,10 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chart.js@^4.4.4:
-  version "4.4.4"
-  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.4.4.tgz"
-  integrity sha512-emICKGBABnxhMjUjlYRR12PmOXhJ2eJjEHL2/dZlWjxRAZT1D8xplLFq5M0tMQK8ja+wBS/tuVEJB5C6r7VxJA==
+chart.js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.1.1.tgz"
+  integrity sha512-P0pCosNXp+LR8zO/QTkZKT6Hb7p0DPFtypEeVOf+6x06hX13NIb75R0DXUA4Ksx/+48chDQKtCCmRCviQRTqsA==
   dependencies:
     "@kurkle/color" "^0.3.0"
 
@@ -1305,6 +1305,11 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
+highcharts-accessibility@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/highcharts-accessibility/-/highcharts-accessibility-0.1.7.tgz"
+  integrity sha512-2hfAuQN8NtGCiq4+F4fG45LT6cwr9YJWAviMZdIlFUEMqn15MRzhuLtJthQU0UM5rfkjBe01/z6zfb7p1b9N4w==
+
 highcharts-vue@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/highcharts-vue/-/highcharts-vue-2.0.1.tgz"
@@ -1454,6 +1459,11 @@ jspdf@^2.3.1:
     dompurify "^2.5.4"
     html2canvas "^1.0.0-rc.5"
 
+kakao.maps.d.ts@^0.1.39:
+  version "0.1.40"
+  resolved "https://registry.npmjs.org/kakao.maps.d.ts/-/kakao.maps.d.ts-0.1.40.tgz"
+  integrity sha512-nX69MB1ok04epe3OqS+/tEeWBbU31GSQbvDPJmQRRltzzqn6t4jBsO5v1nzalUjCKzwcH2CptOc767NZ7Hbu3g==
+
 knitwork@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/knitwork/-/knitwork-1.1.0.tgz"
@@ -1483,6 +1493,11 @@ lodash.templatesettings@^4.0.0:
   integrity sha512-stgLz+i3Aa9mZgnjr/O+v9ruKZsPsndy7qPZOchbqk2cnTU1ZaldKK+v7m54WoKIyxiuMZTKT2H81F8BeAc3ZQ==
   dependencies:
     lodash._reinterpolate "^3.0.0"
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -1587,6 +1602,11 @@ minizlib@^2.1.1:
   dependencies:
     minipass "^3.0.0"
     yallist "^4.0.0"
+
+mitt@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/mitt/-/mitt-3.0.1.tgz"
+  integrity sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==
 
 mkdirp@^1.0.3:
   version "1.0.4"
@@ -2313,6 +2333,11 @@ vite@^5.0.0, vite@^5.3.1:
   optionalDependencies:
     fsevents "~2.3.3"
 
+vue-chartjs@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/vue-chartjs/-/vue-chartjs-5.3.1.tgz"
+  integrity sha512-rZjqcHBxKiHrBl0CIvcOlVEBwRhpWAVf6rDU3vUfa7HuSRmGtCslc0Oc8m16oAVuk0erzc1FCtH1VCriHsrz+A==
+
 vue-demi@*:
   version "0.14.10"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.10.tgz"
@@ -2335,7 +2360,7 @@ vue-router@^4.0.13:
   dependencies:
     "@vue/devtools-api" "^6.0.0"
 
-"vue@^2.6.14 || ^3.3.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.45, vue@^3.4.29, vue@>=3.0.0, vue@3.5.0:
+"vue@^2.6.14 || ^3.3.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", "vue@^3.0.0-0 || ^2.7.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.45, vue@^3.4.29, vue@>=3.0.0, vue@3.5.0:
   version "3.5.0"
   resolved "https://registry.npmjs.org/vue/-/vue-3.5.0.tgz"
   integrity sha512-1t70favYoFijwfWJ7g81aTd32obGaAnKYE9FNyMgnEzn3F4YncRi/kqAHHKloG0VXTD8vBYMhbgLKCA+Sk6QDw==
@@ -2352,6 +2377,13 @@ vue3-cookies@^1.0.6:
   integrity sha512-a1UvVD0qIgxyOqjlSOwnLnqAnz8ASltugEv8yX+96i/WGZAN9fEDci7xO4HIWZE1uToUnRq9JnFhvfDCSo45OA==
   dependencies:
     vue "^3.0.0"
+
+vue3-kakao-maps@^2.3.9:
+  version "2.3.9"
+  resolved "https://registry.npmjs.org/vue3-kakao-maps/-/vue3-kakao-maps-2.3.9.tgz"
+  integrity sha512-L+vtpfvmFslXI8nelxyTGfR8mhiJhYVkWyX7jaOLZJgDtj+4VlKoD73xIxEvVzd9qMfVyMDM6x/kNwD9jPuw/w==
+  dependencies:
+    kakao.maps.d.ts "^0.1.39"
 
 vue3-summernote-editor@^1.0.2:
   version "1.0.2"

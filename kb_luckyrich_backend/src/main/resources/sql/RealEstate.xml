@@ -10,6 +10,16 @@
             construction_time AS constructionTime, street_name AS streetName,
             transaction_type AS transactionType, brokerage_location AS brokerageLocation,
             house_type AS houseType
-        FROM sg_real;
+        FROM realestate_data;
+    </select>
+    <select id="getRealEstatesByRegion" resultType="mul.cam.e.dto.RealEstateDto">
+        SELECT no, city, street_number AS streetNumber, estate_name AS estateName,
+            exclusive_area AS exclusiveArea, contract_time AS contractTime,
+            transaction_amount AS transactionAmount, floor, buyer, bargainer,
+            construction_time AS constructionTime, street_name AS streetName,
+            transaction_type AS transactionType, brokerage_location AS brokerageLocation,
+            house_type AS houseType
+        FROM realestate_data
+        WHERE city LIKE CONCAT(#{region}, '%');
     </select>
 </mapper>

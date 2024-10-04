@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import KakaoMap from '@/components/KakaoMap.vue';
+import KakaoMap from '@/components/realestate/KakaoMap.vue';
+
 
 export default {
     name : "RealEstate",

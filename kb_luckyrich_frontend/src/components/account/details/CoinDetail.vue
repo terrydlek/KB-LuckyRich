@@ -1,5 +1,6 @@
 <template>
   <div v-if="coinData">
+    <button @click="goBack" class="back-button">뒤로 가기</button>
     <h1>{{ coinData.name }}({{ coinData.symbol }}) Metrics</h1>
 
     <div class="metrics">
@@ -31,12 +32,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import CoinChart from './CoinChart.vue';
 
 const route = useRoute();
+const router = useRouter();
 const coinData = ref(null);
+
+const goBack = () => {
+  router.go(-1);
+};
 
 const fetchCoinData = async () => {
   try {

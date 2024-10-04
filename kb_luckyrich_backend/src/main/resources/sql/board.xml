@@ -12,15 +12,22 @@
         order by created_at desc;
     </select>
 
+    <select id="getAdminBoardList" resultType="mul.cam.e.dto.BoardDto">
+        select a.board_num, a.user_name, b.nick_name, a.title, a.content, a.created_at
+        from board a join user b on a.user_name = b.user_name
+        order by created_at desc;
+    </select>
+
     <insert id="insertBoard" parameterType="mul.cam.e.dto.BoardDto">
-        insert into board(user_name, title, content, created_at)
-        values (#{userName}, #{title}, #{content}, #{createdAt});
+        insert into board(user_name, title, content, created_at, del)
+        values (#{userName}, #{title}, #{content}, #{createdAt}, 0);
     </insert>
 
     <select id="getBoard" parameterType="int" resultType="mul.cam.e.dto.BoardDto">
         select a.board_num, a.user_name, b.nick_name, a.title, a.content, a.created_at
         from board a join user b on a.user_name = b.user_name
-        where a.board_num = #{boardNum};
+        where a.board_num = #{boardNum}
+        order by 6 desc;
     </select>
 
 <!--    <delete id="deleteBoard" parameterType="int">-->
@@ -47,10 +54,22 @@
     </insert>
 
     <select id="getReply" parameterType="int" resultType="mul.cam.e.dto.BoardReplyDto">
-        select reply, reply_at
+        select reply_num, reply, reply_at
         from board_reply
         where board_num = #{boardNum}
-        order by 2;
+        order by 2 desc;
     </select>
+
+    <delete id="deleteBoardByIds" parameterType="int">
+        delete
+        from board
+        where board_num = #{boardNum};
+    </delete>
+
+    <delete id="deleteReplyById" parameterType="int">
+        delete
+        from board_reply
+        where reply_num = #{replyNum};
+    </delete>
 
 </mapper>

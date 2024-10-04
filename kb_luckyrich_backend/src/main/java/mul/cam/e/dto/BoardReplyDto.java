@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardReplyDto {
+    private int replyNum;
     private int boardNum;
     private String reply;
     private Timestamp replyAt;

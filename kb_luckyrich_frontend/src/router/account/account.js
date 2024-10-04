@@ -17,6 +17,7 @@ import StockDetail from '@/components/account/details/StockDetail.vue';
 import FundDetail from '@/components/account/details/FundDetail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
+import Socket from '@/views/account/Socket.vue';
 
 export default [
   {
@@ -113,5 +114,10 @@ export default [
     path: '/luckyrich/accountbook',
     name: 'accountBook',
     component: AccountBook,
+  },
+  {
+    path: '/luckyrich/portfolio',
+    name: 'Socket',
+    component: Socket,
   },
 ];

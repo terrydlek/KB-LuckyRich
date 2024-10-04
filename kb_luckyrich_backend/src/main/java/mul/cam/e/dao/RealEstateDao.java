@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface RealEstateDao {
     List<RealEstateDto> getRealEstates();
+
+    List<RealEstateDto> getRealEstatesByRegion(String region);
+
 }
