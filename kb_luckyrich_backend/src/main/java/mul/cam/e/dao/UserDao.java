@@ -22,7 +22,4 @@ public interface UserDao {
     int getUserId(String userName);
 
     String getNickname(String userName);
-
-    int checkAuthority(String userName);
-
 }
