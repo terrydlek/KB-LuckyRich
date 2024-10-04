@@ -20,12 +20,12 @@ public class InvestmentTestService {
         return resultDao.findByUserId(userId);
     }
 
-    public void deleteTestResult(int userId) {
+    public void deleteTestResult(String userName) {
         try {
-            resultDao.deleteByUserId(userId);
+            resultDao.deleteByUserId(userName);
         } catch (Exception e) {
             // 로그 기록
-            log.error("Error resetting test result for user " + userId, e);
+            log.error("Error resetting test result for user " + userName, e);
             // 예외를 다시 던져서 컨트롤러에서 처리할 수 있게 함
             throw new RuntimeException("Failed to reset test result", e);
         }

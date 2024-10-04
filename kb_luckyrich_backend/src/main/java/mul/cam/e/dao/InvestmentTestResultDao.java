@@ -7,5 +7,5 @@ public interface InvestmentTestResultDao {
 
     InvestmentTestResultDto findByUserId(int userId);
 
-    void deleteByUserId(int userId);
+    void deleteByUserId(String userName);
 }
