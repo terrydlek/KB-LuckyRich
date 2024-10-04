@@ -7,7 +7,12 @@
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
     </h2>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 상품명이 있나요?"
+        class="search-input"
+      />
     </div>
 
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
@@ -24,8 +29,11 @@
           <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
             <td>
-              <a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`" class="deposit-link">{{ deposit.prodname
-                }}</a>
+              <a
+                :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`"
+                class="deposit-link"
+                >{{ deposit.prodname }}</a
+              >
             </td>
             <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
           </tr>
@@ -33,19 +41,35 @@
       </table>
 
       <div v-if="filteredDeposits.length && totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
           이전
         </button>
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }" class="pagination-button">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
           다음
         </button>
       </div>
 
-      <div v-if="deposits.length && !filteredDeposits.length" class="no-results">
+      <div
+        v-if="deposits.length && !filteredDeposits.length"
+        class="no-results"
+      >
         검색 결과가 없습니다.
       </div>
       <div v-if="!deposits.length" class="no-data">

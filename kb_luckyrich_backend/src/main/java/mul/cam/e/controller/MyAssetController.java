@@ -169,7 +169,8 @@ public class MyAssetController {
         map.put("Stock Total", myAssetService.totalStock(userName));
         map.put("Car", myAssetService.totalCar(userName));
         map.put("real estate", myAssetService.totalRealestate(userName));
-        
+
+        System.out.println(map);
         return ResponseEntity.ok(map);
     }
 
@@ -212,6 +213,29 @@ public class MyAssetController {
         Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
 
         return ResponseEntity.ok(answer);
+    }
+
+    @GetMapping("/getCategoryExpenses")
+    public ResponseEntity<Map<String, Object>> getCategoryExpenses() {
+        log.info("getCategoryExpenses execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        int userId = securityUserService.getUserId(userName);
+
+        List<Map<String, Object>> categoryExpenses = myAssetService.getCategoryExpenses(userId);
+
+        // 총 지출액 계산
+        double totalExpense = categoryExpenses.stream()
+                .mapToDouble(expense -> ((Number) expense.get("amount")).doubleValue())
+                .sum();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("categoryExpenses", categoryExpenses);
+        response.put("totalExpense", totalExpense);
+
+        return ResponseEntity.ok(response);
     }
 
 }
