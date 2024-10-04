@@ -35,16 +35,28 @@
     <!-- 차트 섹션 -->
     <div>
       <div class="chart-row">
-        <section><totalChart /></section>
-        <section><goalChart /></section>
-        <section><assetGraph /></section>
+        <section>
+          <totalChart />
+        </section>
+        <section>
+          <goalChart />
+        </section>
+        <section>
+          <assetGraph />
+        </section>
       </div>
     </div>
     <div>
       <div class="chart-row">
-        <section><accountBookChart /></section>
-        <section><consumptionstatus /></section>
-        <section><assetcomparison /></section>
+        <section>
+          <accountBookChart />
+        </section>
+        <section>
+          <consumptionstatus />
+        </section>
+        <section>
+          <assetcomparison />
+        </section>
       </div>
     </div>
 
@@ -62,7 +74,8 @@ import assetGraph from '@/components/account/chart/assetGraph.vue';
 import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
-import Socket from './Socket.vue';
+import Socket from '@/views/account/Socket.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -82,18 +95,62 @@ export default {
   methods: {
     async generatePortfolioPDF() {
       try {
-        // Socket 컴포넌트를 DOM에 추가하고, 그 후 PDF 생성
+
+        const token = localStorage.getItem("access_token");
+
+        // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/publish)
+        await axios.post(
+          'http://localhost:8080/rabbit/publish',
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 헤더에 토큰 추가
+            },
+          }
+        )
+          .then(response => {
+            console.log('RabbitMQ에 발행 요청 성공:', response.data);
+          })
+          .catch(error => {
+            console.error('RabbitMQ 발행 요청 실패:', error);
+            return; // 요청 실패 시 더 진행하지 않음
+          });
+
+        // Socket 컴포넌트를 DOM에 추가하여 WebSocket 데이터 수신
         this.showSocketComponent = true;
-        this.$nextTick(async () => {
+        this.$nextTick(() => {
           const socketComponent = this.$refs.socketComponent;
-          await socketComponent.generatePDF();
-          this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
+
+          // WebSocket 데이터가 로드될 때까지 대기
+          const checkDataLoaded = setInterval(() => {
+            // 데이터가 로드되었는지 확인
+            if (socketComponent.portfolioData && Object.keys(socketComponent.portfolioData).length > 0) {
+              console.log("포트폴리오 데이터: ", socketComponent.portfolioData);
+
+              // 필요한 데이터가 모두 있는지 확인
+              const hasAssetData = socketComponent.portfolioData.assetTotal && socketComponent.portfolioData.stockRevenue;
+
+              if (hasAssetData) {
+                clearInterval(checkDataLoaded); // 데이터 로딩이 완료되면 반복 종료
+                // PDF 생성 시도
+                socketComponent.generatePDF()
+                  .then(() => {
+                    console.log('포트폴리오 다운로드 완료!');
+                    this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
+                  })
+                  .catch((error) => {
+                    console.error('PDF 생성 중 오류 발생:', error);
+                    alert('PDF 생성 중 오류가 발생했습니다.'); // 사용자에게 알림
+                  });
+              }
+            }
+          }, 1000); // 1초마다 데이터 로드 상태 체크
         });
       } catch (error) {
-        console.error('PDF 생성 중 오류 발생:', error);
+        console.error('포트폴리오 생성 중 오류 발생:', error);
       }
     },
-  },
+  }
 };
 </script>
 

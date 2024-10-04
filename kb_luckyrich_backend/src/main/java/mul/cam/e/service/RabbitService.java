@@ -61,7 +61,7 @@ public class RabbitService {
 
             rabbitTemplate.convertAndSend(userQueueName, jsonMessage);
             notificationController.notifyUser("Portfolio creation completed for user: " + userName);
-            fetchMessageFromQueue(userQueueName);
+            fetchMessageFromQueue(userQueueName, userName);
         } catch (JsonProcessingException e) {
             log.error("Error serializing portfolio data for user {}", userName, e);
         } catch (IOException e) {
@@ -82,7 +82,7 @@ public class RabbitService {
         log.info("Received Message: {}", message);
     }
 
-    public void fetchMessageFromQueue(String userQueueName) {
+    public void fetchMessageFromQueue(String userQueueName, String userName) {
         try {
             GetResponse response = rabbitTemplate.execute(channel -> channel.basicGet(userQueueName, false));
 
@@ -97,6 +97,8 @@ public class RabbitService {
                     channel.basicAck(deliveryTag, false);
                     return null;
                 });
+
+                notificationController.sendPortfolioUpdate(userName, messagePayload);
             } else {
                 log.info("No message available in queue {}", userQueueName);
             }

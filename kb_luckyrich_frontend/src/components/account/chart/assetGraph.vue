@@ -12,7 +12,8 @@ export default {
     name: 'AssetGrowthChart',
     data() {
         return {
-            assetData: {}
+            assetData: {},
+            dataLoaded: false // 데이터 로드 상태 추가
         };
     },
     mounted() {
@@ -29,8 +30,10 @@ export default {
                 });
                 this.assetData = response.data;
                 this.renderChart();
+                this.dataLoaded = true; // 데이터 로드 완료 시 true로 설정
             } catch (error) {
                 console.error('Error fetching asset data:', error);
+                this.dataLoaded = false; // 오류 발생 시 false로 설정
             }
         },
         renderChart() {
@@ -89,9 +92,31 @@ export default {
 };
 </script>
 
-<style>
-#container {
+
+<style scoped>
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-table {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.right-charts {
+    flex: 1;
+}
+
+.accountInfo {
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    margin-bottom: 20px;
+}
+
+.chart-container>* {
     width: 100%;
-    height: 400px;
 }
 </style>
