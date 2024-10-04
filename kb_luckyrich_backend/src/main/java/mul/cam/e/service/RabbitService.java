@@ -42,7 +42,7 @@ public class RabbitService {
     // 여기에서 포트폴리오 생성 로직 처리하면 됨
     public void createPortfolio(String userId) {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
             log.info("Portfolio created for user: {}", userId);
             Map<String, Integer> map = new HashMap<>();
             map.put("1", 1);
@@ -51,7 +51,9 @@ public class RabbitService {
 
 
             String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-            String userQueueName = "portfolio_" + userName;
+            // String userQueueName = "portfolio_" + userName;
+            String userQueueName = "portfolio";
+
 
             // 직렬화 한번 거쳐서 rabbit에 넣어줘야 함
             String json = objectMapper.writeValueAsString(map);
