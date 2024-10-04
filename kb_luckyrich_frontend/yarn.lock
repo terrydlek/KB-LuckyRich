@@ -1454,6 +1454,11 @@ jspdf@^2.3.1:
     dompurify "^2.5.4"
     html2canvas "^1.0.0-rc.5"
 
+kakao.maps.d.ts@^0.1.39:
+  version "0.1.40"
+  resolved "https://registry.npmjs.org/kakao.maps.d.ts/-/kakao.maps.d.ts-0.1.40.tgz"
+  integrity sha512-nX69MB1ok04epe3OqS+/tEeWBbU31GSQbvDPJmQRRltzzqn6t4jBsO5v1nzalUjCKzwcH2CptOc767NZ7Hbu3g==
+
 knitwork@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/knitwork/-/knitwork-1.1.0.tgz"
@@ -1483,6 +1488,11 @@ lodash.templatesettings@^4.0.0:
   integrity sha512-stgLz+i3Aa9mZgnjr/O+v9ruKZsPsndy7qPZOchbqk2cnTU1ZaldKK+v7m54WoKIyxiuMZTKT2H81F8BeAc3ZQ==
   dependencies:
     lodash._reinterpolate "^3.0.0"
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -2352,6 +2362,13 @@ vue3-cookies@^1.0.6:
   integrity sha512-a1UvVD0qIgxyOqjlSOwnLnqAnz8ASltugEv8yX+96i/WGZAN9fEDci7xO4HIWZE1uToUnRq9JnFhvfDCSo45OA==
   dependencies:
     vue "^3.0.0"
+
+vue3-kakao-maps@^2.3.9:
+  version "2.3.9"
+  resolved "https://registry.npmjs.org/vue3-kakao-maps/-/vue3-kakao-maps-2.3.9.tgz"
+  integrity sha512-L+vtpfvmFslXI8nelxyTGfR8mhiJhYVkWyX7jaOLZJgDtj+4VlKoD73xIxEvVzd9qMfVyMDM6x/kNwD9jPuw/w==
+  dependencies:
+    kakao.maps.d.ts "^0.1.39"
 
 vue3-summernote-editor@^1.0.2:
   version "1.0.2"

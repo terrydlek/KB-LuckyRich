@@ -29,6 +29,7 @@
     "vue": "^3.4.29",
     "vue-router": "^4.0.13",
     "vue3-cookies": "^1.0.6",
+    "vue3-kakao-maps": "^2.3.9",
     "vue3-summernote-editor": "^1.0.2",
     "webstomp-client": "^1.2.6",
     "xlsx": "^0.18.5",
