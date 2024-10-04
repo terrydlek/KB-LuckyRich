@@ -1,12 +1,11 @@
 <template>
     <highcharts :options="chartOptions" />
     <div class="asset-info">
-        <p>현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ (userGoal || 100000000).toLocaleString() }} 원</p>
+        <p>현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ userGoal.toLocaleString() }} 원</p>
     </div>
     <input v-model.number="userGoal" type="number" id="userGoal" :placeholder="placeholderText" />
     <button type="button" @click="updateGoal">수정</button>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -15,17 +14,24 @@ import Highcharts from 'highcharts';
 export default {
     name: 'GoalChart',
     mounted() {
+        this.fetchUserGoal(); 
         this.fetchTotalAssetData();
     },
     data() {
         return {
-            userGoal: null,
+            userGoal: 100000000, 
             placeholderText: '목표 금액 입력',
             currentAsset: 0,
             chartOptions: this.generateChartOptions(100000000, 0)
         }
     },
     methods: {
+        fetchUserGoal() {
+            const storedGoal = localStorage.getItem('user_goal');
+            if (storedGoal) {
+                this.userGoal = Number(storedGoal); 
+            }
+        },
         fetchTotalAssetData() {
             const token = localStorage.getItem('access_token');
             axios.get('http://localhost:8080/myasset/total', {
@@ -41,7 +47,7 @@ export default {
                 console.log("총 자산:", totalAsset);
 
                 // 차트 옵션 업데이트
-                this.chartOptions = this.generateChartOptions(this.userGoal || 100000000, totalAsset);
+                this.chartOptions = this.generateChartOptions(this.userGoal, totalAsset);
             })
             .catch(err => {
                 console.log(err);
@@ -110,12 +116,6 @@ export default {
                         valueSuffix: ' ₩'
                     },
                     dataLabels: {
-                        // format: '{y} 원',
-                        // borderWidth: 0,
-                        // color: '#333333',
-                        // style: {
-                        //     fontSize: '16px'
-                        // }
                         enabled: false
                     },
                     dial: {
@@ -134,11 +134,11 @@ export default {
         },
         updateGoal() {
             const newGoal = this.userGoal || 100000000;
+            localStorage.setItem('user_goal', newGoal); // 목표 자산을 로컬 스토리지에 저장
             this.chartOptions = this.generateChartOptions(newGoal, this.currentAsset);
         }
     }
 }
-
 </script>
 
 <style>

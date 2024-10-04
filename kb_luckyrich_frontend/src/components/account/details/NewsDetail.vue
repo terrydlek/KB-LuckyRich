@@ -10,7 +10,7 @@
         <p>{{ newsDetail.reporter }}</p>
 
         <!-- 이미지 출력 -->
-        <div>
+        <div v-if="newsDetail.imageUrl">
             <img :src="newsDetail.imageUrl" alt="뉴스 이미지" style="max-width: 100%; height: auto;">
             <!-- 이미지 설명 -->
             <p style="font-style: italic; margin-top: 0.5rem;">{{ newsDetail.imageDescription }}</p>
@@ -22,6 +22,7 @@
         </div>
     </div>
 </template>
+
 
 <script>
 import axios from 'axios';

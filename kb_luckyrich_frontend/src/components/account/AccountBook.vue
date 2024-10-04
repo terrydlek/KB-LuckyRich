@@ -23,6 +23,16 @@
       </div>
       <button @click="nextCard">→</button>
     </div>
+
+    <div class="circle-indicators">
+      <span
+        v-for="(card, index) in uniqueAccounts"
+        :key="index"
+        class="indicator"
+        :class="{ active: currentIndex === index }"
+      ></span>
+    </div>
+
     <div id="app">
       <div>
         <button @click="makeExcelFiles">거래 내역 다운받기</button>
@@ -497,5 +507,24 @@ const getCircleStyle = (bankName) => {
 .pagination button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.circle-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  border-radius: 50%;
+  background-color: lightgray;
+  transition: background-color 0.3s;
+}
+
+.indicator.active {
+  background-color: blue; /* 원하는 색상으로 변경 가능 */
 }
 </style>
