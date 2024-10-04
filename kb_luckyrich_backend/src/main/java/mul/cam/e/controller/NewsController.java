@@ -34,5 +34,16 @@ public class NewsController {
         String fullCode = code1 + "/" + code2;
         return ResponseEntity.ok(newsService.getNewsDetails(fullCode));
     }
-
+    @GetMapping("/getnewsestate")
+    public ResponseEntity<List<NewsDto>> getEstateNews() throws IOException {
+        return ResponseEntity.ok(newsService.getEstateNews());
+    }
+    @GetMapping("/getnewssecurities")
+    public ResponseEntity<List<NewsDto>> getsecuritiesNews() throws IOException {
+        return ResponseEntity.ok(newsService.getsecuritiesNews());
+    }
+    @GetMapping("/getnewspersonal")
+    public ResponseEntity<List<NewsDto>> getpersonalNews() throws IOException {
+        return ResponseEntity.ok(newsService.getpersonalNews());
+    }
 }
