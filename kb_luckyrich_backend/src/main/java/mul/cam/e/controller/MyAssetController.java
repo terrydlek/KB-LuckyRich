@@ -29,7 +29,6 @@ import java.util.Map;
 @Log4j
 @RequiredArgsConstructor
 @RequestMapping("/myasset")
-@Slf4j
 public class MyAssetController {
 
     private final MyAssetService myAssetService;

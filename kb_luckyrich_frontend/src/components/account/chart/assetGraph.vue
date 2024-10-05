@@ -1,50 +1,31 @@
 <template>
     <div>
-        <div id="container" style="width:100%; height:400px;"></div>
+        <div id="container" style="width:500px; height:400px;"></div>
     </div>
 </template>
 
 <script>
 import Highcharts from 'highcharts';
-import axios from 'axios';
+import html2canvas from 'html2canvas';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'AssetGrowthChart',
-    data() {
-        return {
-            assetData: {},
-            dataLoaded: false // 데이터 로드 상태 추가
-        };
-    },
-    mounted() {
-        this.fetchAssetData();
+    computed: {
+        ...mapGetters(['getAssetData']),  // Vuex에서 getter로 데이터 가져오기
     },
     methods: {
-        async fetchAssetData() {
-            const token = localStorage.getItem('access_token');
-            try {
-                const response = await axios.get('http://localhost:8080/myasset/idTrend', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                this.assetData = response.data;
-                this.renderChart();
-                this.dataLoaded = true; // 데이터 로드 완료 시 true로 설정
-            } catch (error) {
-                console.error('Error fetching asset data:', error);
-                this.dataLoaded = false; // 오류 발생 시 false로 설정
-            }
-        },
+        ...mapActions(['fetchAssetData']),  // Vuex에서 action 호출하기
         renderChart() {
-            const sortedData = Object.entries(this.assetData).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            // assetData는 Vuex로부터 가져온 데이터
+            const sortedData = Object.entries(this.getAssetData).sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             const categories = sortedData.map(item => item[0]);
             const data = sortedData.map(item => item[1]);
 
             Highcharts.chart('container', {
                 title: {
-                    text: '자산 증감 추이'
+                    text: '자본 증감 추이'
                 },
                 accessibility: {
                     point: {
@@ -64,7 +45,7 @@ export default {
                         text: 'Total Asset (in currency units)'
                     },
                     tickInterval: Math.max(...data) / 10,
-                    max: Math.max(...data)
+                    max: Math.max(...data) + 1
                 },
                 tooltip: {
                     headerFormat: '<b>{series.name}</b><br />',
@@ -87,6 +68,35 @@ export default {
                     }
                 }]
             });
+        },
+        saveChartImage() {
+            const container = document.getElementById('container');  // 차트의 DOM 요소 선택
+
+            html2canvas(container).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');  // 차트를 캡처하여 PNG로 변환
+
+                // 로컬스토리지에 이미지 저장
+                localStorage.setItem('assetGrowthChart', imgData);
+                console.log('차트 이미지가 로컬스토리지에 저장되었습니다.');
+            }).catch(error => {
+                console.error('차트 이미지를 저장하는 중 오류 발생:', error);
+            });
+        }
+    },
+    mounted() {
+        this.fetchAssetData();  // 데이터 요청
+    },
+    watch: {
+        getAssetData(newData) {
+            if (Object.keys(newData).length > 0) {
+                this.renderChart();  // 데이터가 업데이트되면 차트 렌더링
+                this.$nextTick(() => {
+                    // 3초 후에 차트 이미지를 로컬스토리지에 저장
+                    setTimeout(() => {
+                        this.saveChartImage();
+                    }, 2000);
+                });
+            }
         }
     }
 };
