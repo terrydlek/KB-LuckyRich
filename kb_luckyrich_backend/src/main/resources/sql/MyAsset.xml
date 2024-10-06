@@ -169,12 +169,11 @@
     </select>
 
     <select id="userAccounts" parameterType="string" resultType="mul.cam.e.dto.AccountDto">
-        select account_id, account_number, user_id, bank_id, account_type_id, sum(balance) as balance
+        select account_id, account_number, user_id, bank_id, account_type_id, balance
         from account
         where user_id = (select user_id
                          from user
-                         where user_name = #{userName})
-        group by bank_id;
+                         where user_name = #{userName});
     </select>
 
     <select id="transactionTen" parameterType="string" resultType="map">

@@ -66,7 +66,7 @@ public class FundSourceScraper {
 
                     // 국가, 발행사, 자산 클래스 정보는 이 테이블에 없으므로 별도로 처리해야 할 수 있습니다
                     fund.setCountry("South Korea"); // 예시
-                    log.info(fund);
+//                    log.info(fund);
 
                     funds.add(fund);
                 }

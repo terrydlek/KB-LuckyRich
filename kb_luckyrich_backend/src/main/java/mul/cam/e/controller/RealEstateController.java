@@ -23,11 +23,13 @@ public class RealEstateController {
         this.realEstateService = realEstateService;
     }
 
+    // 안쓰는 코드????
     @GetMapping("/getEstate")
     public ResponseEntity<List<RealEstateDto>> getEstate() {
         return ResponseEntity.ok(realEstateService.getEstate());
    }
-    @GetMapping("/getEstateByRegion")
+
+    @GetMapping("/")
     public ResponseEntity<List<RealEstateDto>> getEstateByRegion(@RequestParam String region) {
         return ResponseEntity.ok(realEstateService.getEstateByRegion(region));
     }

@@ -24,25 +24,25 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    @GetMapping("/getnews")
+    @GetMapping("/finance")
     public ResponseEntity<List<NewsDto>> getAllNews() throws IOException {
         return ResponseEntity.ok(newsService.getNews());
     }
 
-    @GetMapping("/getnews/{code1}/{code2}")
+    @GetMapping("/{code1}/{code2}")
     public ResponseEntity<NewsDetailDto> getNewsDetail(@PathVariable String code1, @PathVariable String code2) throws IOException {
         String fullCode = code1 + "/" + code2;
         return ResponseEntity.ok(newsService.getNewsDetails(fullCode));
     }
-    @GetMapping("/getnewsestate")
+    @GetMapping("/estate")
     public ResponseEntity<List<NewsDto>> getEstateNews() throws IOException {
         return ResponseEntity.ok(newsService.getEstateNews());
     }
-    @GetMapping("/getnewssecurities")
+    @GetMapping("/securities")
     public ResponseEntity<List<NewsDto>> getsecuritiesNews() throws IOException {
         return ResponseEntity.ok(newsService.getsecuritiesNews());
     }
-    @GetMapping("/getnewspersonal")
+    @GetMapping("/personal")
     public ResponseEntity<List<NewsDto>> getpersonalNews() throws IOException {
         return ResponseEntity.ok(newsService.getpersonalNews());
     }

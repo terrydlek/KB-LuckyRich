@@ -22,4 +22,6 @@ public interface UserDao {
     int getUserId(String userName);
 
     String getNickname(String userName);
+
+    boolean withdrawUser(int userId);
 }
