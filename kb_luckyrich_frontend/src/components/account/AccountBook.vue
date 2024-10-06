@@ -255,7 +255,7 @@ async function getMyBankTransaction() {
     if (currentMonth.value) params.month = currentMonth.value;
 
     const response = await axios.get(
-      'http://localhost:8080/myasset/getbanktransaction',
+      'http://localhost:8080/myasset/bankTransaction',
       {
         headers: {
           Authorization: `Bearer ${token}`,

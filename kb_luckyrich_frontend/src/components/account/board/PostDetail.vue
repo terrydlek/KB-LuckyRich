@@ -22,7 +22,12 @@
         <!-- 댓글 입력 부분 -->
         <div v-if="post" class="comment-section mt-4">
           <h5>댓글 작성</h5>
-          <textarea v-model="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
+          <textarea
+            v-model="comment"
+            class="form-control"
+            rows="3"
+            placeholder="댓글을 입력하세요"
+          ></textarea>
           <button class="btn btn-primary mt-3" @click="submitComment">
             댓글 달기
           </button>
@@ -32,10 +37,22 @@
         <div v-if="replies.length > 0" class="comment-list mt-4">
           <h5>댓글</h5>
           <ul class="list-group">
-            <li v-for="reply in replies" :key="reply.replyNum" class="list-group-item">
+            <li
+              v-for="reply in replies"
+              :key="reply.replyNum"
+              class="list-group-item"
+            >
               <p>{{ reply.reply }}</p>
-              <small class="text-muted">관리자 작성일: {{ new Date(reply.replyAt).toLocaleString() }}</small>
-              <button class="btn btn-danger btn-sm float-end" @click="deleteReply(reply.replyNum)">삭제</button>
+              <small class="text-muted"
+                >관리자 작성일:
+                {{ new Date(reply.replyAt).toLocaleString() }}</small
+              >
+              <button
+                class="btn btn-danger btn-sm float-end"
+                @click="deleteReply(reply.replyNum)"
+              >
+                삭제
+              </button>
             </li>
           </ul>
         </div>
@@ -45,11 +62,25 @@
 
         <center>
           <div class="mb-3">
-            <button id="bt2" v-if="post && post.userName === post.board.userName" class="btn btn-primary"
-              @click="edit">수정</button>
-            <button id="bt3" v-if="post && post.userName === post.board.userName" class="btn btn-primary"
-              @click="deletePost">삭제</button>
-            <button id="bt1" class="btn btn-primary" @click="goBack">목록으로</button>
+            <button
+              id="bt2"
+              v-if="post && post.userName === post.board.userName"
+              class="btn btn-primary"
+              @click="edit"
+            >
+              수정
+            </button>
+            <button
+              id="bt3"
+              v-if="post && post.userName === post.board.userName"
+              class="btn btn-primary"
+              @click="deletePost"
+            >
+              삭제
+            </button>
+            <button id="bt1" class="btn btn-primary" @click="goBack">
+              목록으로
+            </button>
           </div>
         </center>
       </div>
@@ -112,16 +143,12 @@ export default {
 
     deletePost() {
       const token = localStorage.getItem("access_token");
-      const boardNum = this.$route.params.boardNum;
 
-      console.log("boardNum: ", boardNum);
       console.log("boardNum Type: ", typeof boardNum);
       axios
-        .post(
-          `http://localhost:8080/board/deleteBoard`,
-          {
-            boardNum: boardNum
-          },
+        .put(
+          `http://localhost:8080/board/changeDel`, // PUT 요청으로 변경
+          { boardNum: this.$route.params.boardNum },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -130,6 +157,7 @@ export default {
         )
         .then((resp) => {
           if (resp.data === "ok") {
+            // 서버에서 보내는 메시지와 비교
             alert("게시글이 성공적으로 삭제되었습니다.");
             this.$router.push("/luckyrich/qa/ask");
           } else {
@@ -162,7 +190,7 @@ export default {
             // 댓글 작성 API 호출
             axios
               .post(
-                `http://localhost:8080/board/addComment`,
+                `http://localhost:8080/board/comments`,
                 {
                   boardNum: this.post.board.boardNum,
                   reply: this.comment,
@@ -210,7 +238,7 @@ export default {
           if (response.data === "ok") {
             // 권한이 있을 경우 댓글 삭제 API 호출
             axios
-              .delete(`http://localhost:8080/admin/deleteReply/${replyNum}`, {
+              .delete(`http://localhost:8080/admin/reply/${replyNum}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },

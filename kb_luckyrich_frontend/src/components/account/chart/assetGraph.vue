@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="container" style="width:500px; height:400px;"></div>
+        <div id="container" style="width:600px; height:400px;"></div>
     </div>
 </template>
 
@@ -91,7 +91,7 @@ export default {
             if (Object.keys(newData).length > 0) {
                 this.renderChart();  // 데이터가 업데이트되면 차트 렌더링
                 this.$nextTick(() => {
-                    // 3초 후에 차트 이미지를 로컬스토리지에 저장
+                    // 2초 후에 차트 이미지를 로컬스토리지에 저장
                     setTimeout(() => {
                         this.saveChartImage();
                     }, 2000);

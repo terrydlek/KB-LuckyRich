@@ -42,7 +42,7 @@ export default {
         }
         // 서버에서 뉴스 상세 데이터를 가져옴
         axios
-            .get(`http://localhost:8080/news/getnews/${code1}/${code2}`,{
+            .get(`http://localhost:8080/news/${code1}/${code2}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

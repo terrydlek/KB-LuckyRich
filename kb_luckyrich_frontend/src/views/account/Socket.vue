@@ -97,6 +97,7 @@
           <thead>
             <tr>
               <th>은행명</th>
+              <th>계좌 유형</th>
               <th>계좌번호</th>
               <th>잔액 (₩)</th>
             </tr>
@@ -108,6 +109,13 @@
                 <span v-else-if="account.bankId === 2">카카오뱅크</span>
                 <span v-else-if="account.bankId === 3">신한은행</span>
                 <span v-else>알 수 없음</span> <!-- 다른 bankId의 경우 -->
+              </td>
+              <td>
+                <span v-if="account.accountTypeId === 1">청년도약</span>
+                <span v-if="account.accountTypeId === 2">주택청약</span>
+                <span v-if="account.accountTypeId === 3">자유적금</span>
+                <span v-if="account.accountTypeId === 4">입출금통장</span>
+                <span v-if="account.accountTypeId === 5">비상금통장</span>
               </td>
               <td>{{ account.accountNumber }}</td>
               <td>{{ account.balance.toLocaleString() }} 원</td>
@@ -265,7 +273,7 @@ export default {
             console.log(json);
 
             portfolioData.value = json;
-            alert(portfolioData.value);
+            alert("비동기통신으로 쌈뽕하게 포트폴리오 생성중입니다");
             isDataLoaded.value = true;  // 데이터 로딩 완료
           });
         },
@@ -277,7 +285,7 @@ export default {
 
     function fetchUserInfo() {
       axios
-        .get('http://localhost:8080/user/inf', {
+        .get('http://localhost:8080/user', {
           headers: {
             Authorization: `Bearer ${getToken()}`,
           },
