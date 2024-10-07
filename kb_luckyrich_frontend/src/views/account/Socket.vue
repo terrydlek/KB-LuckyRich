@@ -273,7 +273,7 @@ export default {
             console.log(json);
 
             portfolioData.value = json;
-            alert("비동기통신으로 쌈뽕하게 포트폴리오 생성중입니다");
+            alert("포트폴리오 생성중입니다");
             isDataLoaded.value = true;  // 데이터 로딩 완료
           });
         },
