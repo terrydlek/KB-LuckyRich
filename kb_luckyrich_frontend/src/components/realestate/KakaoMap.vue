@@ -231,7 +231,7 @@ export default {
         },
         addCityHallMarker(coords, region) {
             const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; // 파란색 별 모양 마커 이미지
-            const imageSize = new kakao.maps.Size(24, 35); 
+            const imageSize = new kakao.maps.Size(40, 35); 
             const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             // 마커 생성
