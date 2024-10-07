@@ -359,11 +359,24 @@ const getCircleStyle = (bankName) => {
 </script>
 
 <style>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#accountbook {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .cards-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  margin-bottom: 30px;
 }
 
 .accounts {
@@ -373,158 +386,156 @@ const getCircleStyle = (bankName) => {
 }
 
 .card {
-  width: 400px;
-  height: 200px !important;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  width: 300px;
+  height: 180px !important;
+  padding: 20px;
+  border: none;
+  border-radius: 15px;
   cursor: pointer;
-  text-align: center;
-  transition: transform 0.2s;
+  text-align: left;
+  transition: all 0.3s ease;
   position: relative;
   margin-top: 10%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card.active {
-  border-color: #007bff;
   transform: scale(1.05);
 }
 
 .card-header {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-body {
+  font-size: 1rem;
 }
 
 .circle {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.transactions {
-  margin-top: 1rem;
+button {
+  background-color: #3dd451;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.transactions table {
-  width: 100%;
-  border-collapse: collapse;
+button:hover {
+  background-color: #e0e0e0;
 }
 
-.transactions th,
-.transactions td {
-  padding: 8px;
+select {
+  padding: 8px 12px;
+  border-radius: 20px;
   border: 1px solid #ddd;
-  text-align: left;
-}
-
-.currentmonth {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.filters {
-  margin-bottom: 20px;
-}
-
-.filters select,
-.filters input {
-  margin-right: 10px;
-  padding: 5px;
+  font-size: 0.9rem;
+  background-color: white;
 }
 
 .transactions {
-  max-height: 500px;
-  overflow-y: auto;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .transaction-item {
   border-bottom: 1px solid #eee;
-  padding: 10px 0;
+  padding: 15px 0;
 }
 
 .transaction-date {
   font-size: 0.9em;
   color: #888;
+  margin-bottom: 5px;
 }
 
 .transaction-details {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
 }
 
 .income {
   color: #4caf50;
+  font-weight: bold;
 }
 
 .expense {
   color: #f44336;
+  font-weight: bold;
 }
 
 .category {
   background-color: #f0f0f0;
-  padding: 2px 5px;
-  border-radius: 3px;
+  margin-left: 7px;
+  padding: 4px 10px;
+  border-radius: 10px;
   font-size: 0.8em;
 }
 
 .description {
   flex-grow: 1;
-  margin-left: 10px;
-  font-size: 0.9em;
-}
-
-.loading,
-.no-data {
-  text-align: center;
-  padding: 20px;
-  color: #888;
+  margin-left: 7px;
+  font-size: 0.95em;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .pagination button {
   margin: 0 10px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 8px 15px;
+  background-color: #f0f0f0;
+  color: #333;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #e0e0e0;
 }
 
 .pagination button:disabled {
-  background-color: #cccccc;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .circle-indicators {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .indicator {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   margin: 0 5px;
   border-radius: 50%;
-  background-color: lightgray;
+  background-color: #ddd;
   transition: background-color 0.3s;
 }
 
 .indicator.active {
-  background-color: blue; /* 원하는 색상으로 변경 가능 */
+  background-color: #007bff;
 }
 </style>

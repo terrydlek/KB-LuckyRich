@@ -1,0 +1,74 @@
+/* 폰트 설정 */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Pretendard.woff2') format('woff2-variations');
+}
+
+/* 기본 스타일 초기화 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 글로벌 스타일 */
+:root {
+  --max-width: 1200px; /* 최대 너비 설정 */
+  --padding-horizontal: 50px;
+  --header-height: 80px;
+  --color-bg: #ffffff;
+  --color-font: #000000;
+  --color-primary: #3498db;
+  --color-container: #f9f9f9;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-font);
+  padding-top: var(--header-height); /* 헤더 높이만큼 패딩 추가 */
+}
+
+/* 버튼 스타일 */
+button {
+  background-color: #34c759;
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  border: none;
+  font-size: 14px;
+}
+
+/* 홈 컨테이너 스타일 */
+.home-container {
+  max-width: var(--max-width);
+  margin: 0 auto; /* 상단 여백은 다른 방식으로 처리하고 좌우 여백만 설정 */
+  padding: 20px;
+}
+
+/* 사이드바 스타일 */
+.left-sidebar,
+.right-sidebar {
+  padding: 20%;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+  padding: 20px;
+  margin-top: 10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 10px;
+    margin-top: 20px; /* 모바일에서 여백을 줄일 수 있음 */
+  }
+}
