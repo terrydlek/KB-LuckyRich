@@ -8,7 +8,7 @@
 
 <script>
 import HighchartsVue from 'highcharts-vue';
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'AssetComparisonChart',
@@ -20,6 +20,7 @@ export default {
       theirChartOptions: {
         chart: {
           type: 'pie',
+          height: '400px',
         },
         title: {
           text: '내 또래의 자산 분포',
@@ -51,43 +52,30 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(['getTheirAssets']),
+  },
+  watch: {
+    getTheirAssets(newData) {
+      if (Object.keys(newData).length) {
+        this.updateChartData(newData);
+      }
+    }
+  },
   mounted() {
-    this.fetchTheirData();
+    this.fetchTheirAssets();
   },
   methods: {
-    fetchTheirData() {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        console.error('토큰을 찾을 수 없습니다.');
-        return;
-      }
-      axios
-        .get('http://localhost:8080/myasset/their-assets', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log('Their Assets Data:', response.data);
-          const theirAssets = response.data;
-          const chartData = Object.entries(theirAssets).map(([key, value]) => ({
-            name: key,
-            y: value,
-          }));
-          this.theirChartOptions.series[0].data = chartData;
-        })
-        .catch((error) => {
-          console.error('Error fetching their assets:', error);
-          if (error.response) {
-            console.error('Error data:', error.response.data);
-            console.error('Error status:', error.response.status);
-            console.error('Error headers:', error.response.headers);
-          } else if (error.request) {
-            console.error('Error request:', error.request);
-          } else {
-            console.error('Error message:', error.message);
-          }
-        });
+    ...mapActions(['fetchTheirAssets']),
+
+    updateChartData(theirAssets) {
+      const chartData = Object.entries(theirAssets).map(([key, value]) => ({
+        name: key,
+        y: value,
+      }));
+
+      this.theirChartOptions.series[0].data = chartData;  // 차트 데이터 업데이트
+      this.$forceUpdate();  // 강제로 업데이트해버림
     },
   },
 };

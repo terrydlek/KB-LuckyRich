@@ -15,13 +15,13 @@ public class InvestTestController {
     @Autowired
     private InvestmentTestService testService;
 
-    @PostMapping("/saveResult")
+    @PostMapping
     public ResponseEntity<String> saveResult(@RequestBody InvestmentTestResultDto result) {
         testService.saveTestResult(result);
         return ResponseEntity.ok("success save test result");
     }
 
-    @GetMapping("/getResult")
+    @GetMapping
     public InvestmentTestResultDto getResult(@RequestParam int userId) {
         return testService.getInvestmentTestResult(userId);
     }

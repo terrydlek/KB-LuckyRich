@@ -3,7 +3,12 @@
         <div class="left-section">
             <div class="chart-container">
                 <button @click="prevChart">←</button>
-                <component :is="currentChart" />
+                <!-- v-if로 currentChart가 설정되었을 때만 차트 렌더링 -->
+                <component :is="currentChart" v-if="currentChart" />
+                <!-- v-else로 대체 콘텐츠 렌더링 (로딩 중 등) -->
+                <div v-else>
+                    <p>차트를 불러오는 중입니다...</p>
+                </div>
                 <button @click="nextChart">→</button>
             </div>
         </div>

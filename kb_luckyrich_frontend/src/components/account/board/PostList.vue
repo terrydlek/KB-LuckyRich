@@ -94,7 +94,7 @@ export default {
     // 데이터 가져오기
     fetchPosts() {
       axios
-        .get('http://localhost:8080/board/getList', {
+        .get('http://localhost:8080/board', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },

@@ -199,7 +199,7 @@ const submitTest = async () => {
     }
 
     const response = await axios.post(
-      'http://localhost:8080/investment/saveResult',
+      'http://localhost:8080/investment',
       {
         userId: userId.value,
         investmentType: computedInvestmentType.value,
@@ -228,7 +228,7 @@ const checkTestResult = async () => {
   try {
     const token = localStorage.getItem('access_token');
     const response = await axios.get(
-      'http://localhost:8080/investment/getResult',
+      'http://localhost:8080/investment',
       {
         params: { userId: userId.value },
         headers: {
@@ -259,7 +259,7 @@ onMounted(async () => {
   }
 
   try {
-    const userResponse = await axios.get('http://localhost:8080/user/inf', {
+    const userResponse = await axios.get('http://localhost:8080/user', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -270,7 +270,7 @@ onMounted(async () => {
 
       // 서버에서 테스트 결과 확인
       const testResultResponse = await axios.get(
-        'http://localhost:8080/investment/getResult',
+        'http://localhost:8080/investment',
         {
           params: { userId: userId.value },
           headers: {

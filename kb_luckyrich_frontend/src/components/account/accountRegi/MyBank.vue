@@ -48,7 +48,7 @@ function formatBalance(balance) {
 
 function getMyAccount() {
     const token = getToken();
-    axios.get('http://localhost:8080/myasset/getMyAccount', {
+    axios.get('http://localhost:8080/myasset/myAccount', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -79,7 +79,7 @@ function isSelected(account) {
 }
 
 function goToAccountFetch() {
-    axios.post("http://localhost:8080/myasset/fetchaccount", selectedAccounts.value, {
+    axios.post("http://localhost:8080/myasset/myAccount", selectedAccounts.value, {
         headers: {
             'Authorization': `Bearer ${getToken()}`
         }

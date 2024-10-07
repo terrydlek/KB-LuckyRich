@@ -28,7 +28,7 @@ export default {
       const token = localStorage.getItem('access_token');
       try {
         const response = await axios.post(
-          'http://localhost:8080/board/created',
+          'http://localhost:8080/board',
           {
             title: this.title,
             content: this.content

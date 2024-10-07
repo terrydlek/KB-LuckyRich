@@ -174,10 +174,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@esbuild/win32-x64@0.21.5":
+"@esbuild/darwin-arm64@0.21.5":
   version "0.21.5"
-  resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.21.5.tgz"
-  integrity sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw==
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.21.5.tgz"
+  integrity sha512-DwqXqZyuk5AiWWf3UfLiRDJ5EDd49zg6O9wclZ7kUMv2WRFr4HKjXp/5t8JZ11QbQfUS6/cRCKGwYhtNAY88kQ==
 
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
@@ -293,10 +293,10 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@rollup/rollup-win32-x64-msvc@4.21.2":
+"@rollup/rollup-darwin-arm64@4.21.2":
   version "4.21.2"
-  resolved "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.21.2.tgz"
-  integrity sha512-6UUxd0+SKomjdzuAcp+HAmxw1FlGBnl1v2yEPSabtx4lBfdXHDVsW7+lQkgz9cNFJGY3AWR7+V8P5BqkD9L9nA==
+  resolved "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.21.2.tgz"
+  integrity sha512-99AhQ3/ZMxU7jw34Sq8brzXqWH/bMnf7ZVhvLk9QU2cOepbQSVTns6qoErJmSiAvU3InRqC2RRZ5ovh1KN0d0Q==
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.2"
@@ -389,7 +389,7 @@
     "@vue/compiler-dom" "3.5.0"
     "@vue/shared" "3.5.0"
 
-"@vue/devtools-api@^6.0.0", "@vue/devtools-api@^6.6.3":
+"@vue/devtools-api@^6.0.0", "@vue/devtools-api@^6.0.0-beta.11", "@vue/devtools-api@^6.6.3":
   version "6.6.3"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.6.3.tgz"
   integrity sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==
@@ -671,10 +671,10 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chart.js@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.1.1.tgz"
-  integrity sha512-P0pCosNXp+LR8zO/QTkZKT6Hb7p0DPFtypEeVOf+6x06hX13NIb75R0DXUA4Ksx/+48chDQKtCCmRCviQRTqsA==
+chart.js@^4.1.1, chart.js@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.4.4.tgz"
+  integrity sha512-emICKGBABnxhMjUjlYRR12PmOXhJ2eJjEHL2/dZlWjxRAZT1D8xplLFq5M0tMQK8ja+wBS/tuVEJB5C6r7VxJA==
   dependencies:
     "@kurkle/color" "^0.3.0"
 
@@ -1196,6 +1196,11 @@ fs-minipass@^2.0.0:
   dependencies:
     minipass "^3.0.0"
 
+fsevents@~2.3.2, fsevents@~2.3.3:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -1310,6 +1315,16 @@ highcharts-accessibility@^0.1.7:
   resolved "https://registry.npmjs.org/highcharts-accessibility/-/highcharts-accessibility-0.1.7.tgz"
   integrity sha512-2hfAuQN8NtGCiq4+F4fG45LT6cwr9YJWAviMZdIlFUEMqn15MRzhuLtJthQU0UM5rfkjBe01/z6zfb7p1b9N4w==
 
+highcharts-export-data@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/highcharts-export-data/-/highcharts-export-data-0.1.7.tgz"
+  integrity sha512-0/WqwU06HR/KB2bgh2xbVPYftsyDUkpt9IF56XAoKAckVMIIiNCnhY5abBc8x552iTMX/zE3y+GA6UyUPcmJDw==
+
+highcharts-exporting@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/highcharts-exporting/-/highcharts-exporting-0.1.7.tgz"
+  integrity sha512-f+M2vuJA84LufzmpCD/E2AgIyiOrM/F6nru2lbvjZLj3N0VHjhhVyQkkAcQN0cWHR4xwGqLvcljc1tPX2VEi3w==
+
 highcharts-vue@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/highcharts-vue/-/highcharts-vue-2.0.1.tgz"
@@ -1320,7 +1335,7 @@ highcharts@^11.4.8, highcharts@>=5.0.0:
   resolved "https://registry.npmjs.org/highcharts/-/highcharts-11.4.8.tgz"
   integrity sha512-5Tke9LuzZszC4osaFisxLIcw7xgNGz4Sy3Jc9pRMV+ydm6sYqsPYdU8ELOgpzGNrbrRNDRBtveoR5xS3SzneEA==
 
-html2canvas@^1.0.0, html2canvas@^1.0.0-rc.5:
+html2canvas@^1.0.0, html2canvas@^1.0.0-rc.5, html2canvas@^1.4.1:
   version "1.4.1"
   resolved "https://registry.npmjs.org/html2canvas/-/html2canvas-1.4.1.tgz"
   integrity sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==
@@ -1493,11 +1508,6 @@ lodash.templatesettings@^4.0.0:
   integrity sha512-stgLz+i3Aa9mZgnjr/O+v9ruKZsPsndy7qPZOchbqk2cnTU1ZaldKK+v7m54WoKIyxiuMZTKT2H81F8BeAc3ZQ==
   dependencies:
     lodash._reinterpolate "^3.0.0"
-
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -2384,6 +2394,13 @@ vue3-summernote-editor@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/vue3-summernote-editor/-/vue3-summernote-editor-1.0.2.tgz"
   integrity sha512-zTTIrvLw0QGazAtClrVEVi90In4IWhG2aLalQZ2eoL91/xcgXe62wrMn9b7R250WTTb2V1DnJvRhWWsxcWa7aw==
+
+vuex@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/vuex/-/vuex-4.1.0.tgz"
+  integrity sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==
+  dependencies:
+    "@vue/devtools-api" "^6.0.0-beta.11"
 
 webpack-virtual-modules@^0.6.2:
   version "0.6.2"

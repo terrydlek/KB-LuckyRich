@@ -2,9 +2,9 @@
     <highcharts :options="chartOptions" />
     <div class="asset-info">
         <p>현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ userGoal.toLocaleString() }} 원</p>
+        <input v-model.number="userGoal" type="number" id="userGoal" :placeholder="placeholderText" />
+        <button type="button" @click="updateGoal">수정</button>
     </div>
-    <input v-model.number="userGoal" type="number" id="userGoal" :placeholder="placeholderText" />
-    <button type="button" @click="updateGoal">수정</button>
 </template>
 
 <script>
@@ -64,7 +64,7 @@ export default {
                     plotBackgroundImage: null,
                     plotBorderWidth: 0,
                     plotShadow: false,
-                    height: '100%'
+                    height: '400px'
                 },
                 title: {
                     text: '목표 자산까지!!!'

@@ -38,7 +38,7 @@ const currentStockInfo = ref([]);
 
 function getStocks() {
     const token = getToken();
-    axios.get('http://localhost:8080/myasset/getstock', {
+    axios.get('http://localhost:8080/myasset/stock', {
         headers: {
             'Authorization': `Bearer ${token}`
         }

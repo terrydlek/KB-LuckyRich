@@ -34,7 +34,7 @@ function handleGoogleLoginCallback() {
         console.log(accountNum);
         
         if (accountNum > 0) {
-            router.push({name: 'home'});
+            router.push({name: 'about'});
             return;
         }
         router.push({ name: 'myDataAgree' });
