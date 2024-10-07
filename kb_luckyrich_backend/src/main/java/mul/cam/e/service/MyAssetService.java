@@ -53,7 +53,16 @@ public class MyAssetService {
     }
         
     public List<BankTransactionDto> getBankTransactions(int userId) {
-        return myAssetDao.getBankTransactions(userId);
+
+        List<BankTransactionDto> bankTransactions = myAssetDao.getBankTransactions(userId);
+
+        for (BankTransactionDto account : bankTransactions) {
+            String decryptedAccountNumber = account.getDecryptedAccountNumber(keyDecrypt);
+            System.out.println(decryptedAccountNumber);
+            account.setAccountNumber(decryptedAccountNumber);
+        }
+
+        return bankTransactions;
     }
 
     public int totalAccount(String userName) {

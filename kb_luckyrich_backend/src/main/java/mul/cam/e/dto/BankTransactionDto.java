@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import mul.cam.e.util.KeyDecrypt;
 
 import java.sql.Timestamp;
 
@@ -12,11 +13,15 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class BankTransactionDto {
     private int accountId;
-    private  String accountNumber;
+    private String accountNumber;
     private long amount;
     private String transactionType;
     private String category;
     private String description;
     private Timestamp transactionDate;
     private int bankId;
+
+    public String getDecryptedAccountNumber(KeyDecrypt keyDecrypt) {
+        return keyDecrypt.decrypt(this.accountNumber);
+    }
 }
