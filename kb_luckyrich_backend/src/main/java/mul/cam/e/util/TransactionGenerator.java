@@ -35,3 +35,7 @@ public class TransactionGenerator {
         return categories[index];
     }
 }
+
+
+// transaction amount 1-2
+// car

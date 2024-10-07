@@ -59,6 +59,7 @@ const navigate = () => {
     border: none;
     font-size: 18px;
     cursor: pointer;
+    color: black;
 }
 
 .content {
