@@ -88,7 +88,7 @@ export default {
   },
   mounted() {
     axios
-      .get('http://localhost:8080/myasset/getMyAccount')
+      .get('http://localhost:8080/myasset/myAccount')
       .then((response) => {
         console.log(response.data);
         this.accounts = response.data;

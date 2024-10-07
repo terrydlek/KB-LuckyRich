@@ -45,4 +45,10 @@
 <!--        where user_name = #{userName} and role = "ADMIN"-->
 <!--    </select>-->
 
+    <delete id="withdrawUser" parameterType="int">
+        delete
+        from user
+        where user_id = #{userId};
+    </delete>
+
 </mapper>

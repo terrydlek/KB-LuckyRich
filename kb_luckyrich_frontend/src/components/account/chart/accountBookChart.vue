@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import Highcharts from 'highcharts'
+import Highcharts from 'highcharts';
 import HighchartsVue from 'highcharts-vue';
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'AccountBookChart',
@@ -14,13 +14,13 @@ export default {
             chartOptions: {
                 chart: {
                     type: 'pie',
-                    height: '70%'
+                    height: '400px'
                 },
                 title: {
                     text: '계좌 보유 잔액'
                 },
                 tooltip: {
-                    valueSuffix: '$'
+                    valueSuffix: ' 원' // 단위를 '원'으로 수정
                 },
                 plotOptions: {
                     pie: {
@@ -44,29 +44,36 @@ export default {
             }
         };
     },
+    computed: {
+        ...mapGetters(['getAccountData']),
+    },
+    watch: {
+        getAccountData(newData) {
+            if (newData && newData.length) {
+                this.updateChartData(newData);
+            }
+        }
+    },
     mounted() {
         this.fetchAccountData();
     },
     methods: {
-        fetchAccountData() {
-            const token = localStorage.getItem('access_token');
-            axios.get('http://localhost:8080/myasset/accounts', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-                .then(response => {
-                    const assets = response.data;
-                    console.log(assets);
-                    const chartData = Object.keys(assets).map(key => ({
-                        name: key,
-                        y: assets[key],
-                    }));
-                    this.chartOptions.series[0].data = chartData;
-                })
-                .catch(error => {
-                    console.error('Error fetching asset data: ', error);
-                });
+        ...mapActions(['fetchAccountData']),
+
+        updateChartData(assets) {
+            const bankNameMap = {
+                1: "국민은행",
+                2: "카카오뱅크",
+                3: "신한은행"
+            };
+
+            const chartData = assets.map(account => ({
+                name: bankNameMap[account.bankId] || `Unknown Bank`,
+                y: account.balance
+            }));
+
+            this.chartOptions.series[0].data = chartData;
+            this.$forceUpdate();  // 강제로 업데이트해버림
         }
     }
 }

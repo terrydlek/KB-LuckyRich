@@ -6,13 +6,11 @@ import mul.cam.e.dto.BoardReplyDto;
 import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.BoardService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +28,17 @@ public class BoardController {
         this.securityUserService = securityUserService;
     }
 
-    @GetMapping("/getList")
+    // 모든 게시글의 목록을 가져오는 메서드
+    @GetMapping
     public ResponseEntity<List<BoardDto>> getBoardList() {
         return ResponseEntity.ok(boardService.getBoardList());
     }
 
-    @PostMapping("/created")
+    // 새 게시글을 생성하는 메서드
+    @PostMapping
     public ResponseEntity<String> createBoard(@RequestBody BoardDto boardDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+        // 인증된 사용자의 이름을 가져옴
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 
         boardDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         boardDto.setUserName(userName);
@@ -52,25 +52,19 @@ public class BoardController {
         return ResponseEntity.ok("fail");
     }
 
+    // 특정 게시글을 번호로 가져오는 메서드
     @GetMapping("/{boardNum}")
     public ResponseEntity<Map<String, Object>> getBoard(@PathVariable int boardNum) {
         BoardDto board = boardService.getBoard(boardNum);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> map = new HashMap<>();
         map.put("board", board);
         map.put("userName", userName);
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/getName")
-    public ResponseEntity<String> getBoardName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        return ResponseEntity.ok(userName);
-    }
-
-    @PostMapping("/deleteBoard")
+    // 게시글의 del 컬럼을 1로 수정하는 메서드
+    @PutMapping("/changeDel")
     public ResponseEntity<String> deleteBoard(@RequestBody BoardDto boardDto) {
         log.info("execute deleteBoard~~~");
         int boardId = boardDto.getBoardNum();
@@ -83,7 +77,8 @@ public class BoardController {
         return ResponseEntity.ok("fail");
     }
 
-    @PostMapping("/updateBoard")
+    // 기존 게시글을 업데이트하는 메서드
+    @PutMapping
     public ResponseEntity<String> updateBoard(@RequestBody BoardDto boardDto) {
         log.info("execute updateBoard~~~");
         try {
@@ -95,12 +90,14 @@ public class BoardController {
         return ResponseEntity.ok("fail");
     }
 
+    // 사용자가 관리자 권한이 있는지 확인하는 메서드
     @GetMapping("/checkAdmin")
     public ResponseEntity<String> checkAdmin() {
         return ResponseEntity.ok("ok");
     }
 
-    @PostMapping("/addComment")
+    // 게시글에 댓글을 추가하는 메서드
+    @PostMapping("/comments")
     public ResponseEntity<String> addComment(@RequestBody BoardReplyDto boardReplyDto) {
         log.info("execute addComment~~~");
         boardReplyDto.setReplyAt(new Timestamp(System.currentTimeMillis()));
@@ -113,11 +110,10 @@ public class BoardController {
         return ResponseEntity.ok("fail");
     }
 
+    // 특정 게시글에 대한 댓글을 가져오는 메서드
     @GetMapping("/reply/{boardNum}")
     public ResponseEntity<List<BoardReplyDto>> getReply(@PathVariable int boardNum) {
         log.info("execute getReply~~~");
         return ResponseEntity.ok(boardService.getReply(boardNum));
     }
-
-
 }

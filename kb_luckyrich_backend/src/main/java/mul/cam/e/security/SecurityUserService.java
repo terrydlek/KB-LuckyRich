@@ -62,4 +62,8 @@ public class SecurityUserService implements UserDetailsService {
     public String getNickname(String userName) {
         return userDao.getNickname(userName);
     }
+
+    public boolean withdrawUser(int userId) {
+        return userDao.withdrawUser(userId);
+    }
 }

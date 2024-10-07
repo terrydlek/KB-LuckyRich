@@ -71,13 +71,13 @@ export default {
       }
     },
     async updatePost() {
-      const postId = this.$route.params.boardNum;
+      const boardNum = this.$route.params.boardNum;
       const token = localStorage.getItem("access_token");
       try {
-        const response = await axios.post(
-          "http://localhost:8080/board/updateBoard",
+        const response = await axios.put(
+          `http://localhost:8080/board`, // URL에 postId를 포함
           {
-            boardNum: postId,
+            boardNum : this.$route.params.boardNum,
             title: this.post.board.title,
             content: this.post.board.content,
           },
@@ -88,9 +88,10 @@ export default {
           }
         );
         alert("게시글이 성공적으로 수정되었습니다.", response.data);
-        this.$router.push(`/luckyrich/qa/ask/${postId}`);
+        this.$router.push(`/luckyrich/qa/ask/${boardNum}`);
       } catch (error) {
         console.error("게시글 수정 중 오류가 발생했습니다.", error);
+        alert("게시글 수정에 실패하였습니다."); // 실패 시 알림 추가
       }
     },
   },

@@ -23,8 +23,11 @@
       />
     </div>
     <div class="button-group">
-      <button v-if="!updating" @click="setUpdate">Update</button>
-      <button v-else @click="updateUserInfo">Save</button>
+      <button v-if="!updating" @click="setUpdate">수정</button>
+      <button v-else @click="updateUserInfo">저장</button>
+    </div>
+    <div class="button-group">
+      <button @click="withdrawUser">탈퇴</button>
     </div>
   </div>
 </template>
@@ -37,6 +40,7 @@ const username = ref('');
 const email = ref('');
 const age = ref('');
 const gender = ref('');
+const userId = ref('');
 
 const updating = ref(false);
 
@@ -53,7 +57,7 @@ function getToken() {
 function updateUserInfo() {
   axios
     .post(
-      'http://localhost:8080/user/update',
+      'http://localhost:8080/user',
       {
         age: age.value,
         gender: gender.value,
@@ -73,10 +77,33 @@ function updateUserInfo() {
     });
 }
 
+function withdrawUser() {
+  alert(userId.value);
+  axios.delete(`http://localhost:8080/user/withdrawUser/${userId.value}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    }
+  })
+  .then((res) => {
+    if (res.data === 'ok') {
+      alert('성공적으로 탈퇴되었습니다.');
+      localStorage.removeItem("access_token");
+      window.location.href = 'http://localhost:5173/';
+    } else {
+      alert('탈퇴에 실패하였습니다.')
+    }
+  })
+  .catch((err) => {
+    console.error('회원 탈퇴 실패: ', err);
+    alert('탈퇴에 실패하였습니다.');
+  })
+}
+
+
 // 유저 정보를 가져오기
 function fetchUserInfo() {
   axios
-    .get('http://localhost:8080/user/inf', {
+    .get('http://localhost:8080/user', {
       headers: {
         Authorization: `Bearer ${getToken()}`,
       },
@@ -89,6 +116,7 @@ function fetchUserInfo() {
       email.value = data.email;
       age.value = data.age;
       gender.value = data.gender;
+      userId.value = data.userId;
     })
     .catch((err) => {
       console.log(err);

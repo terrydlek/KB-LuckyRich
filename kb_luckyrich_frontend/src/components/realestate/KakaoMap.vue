@@ -134,7 +134,7 @@ export default {
             }
 
             const token = localStorage.getItem('access_token');
-            axios.get(`http://localhost:8080/realestate/getEstateByRegion?region=${region}`, {
+            axios.get(`http://localhost:8080/realestate/?region=${region}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

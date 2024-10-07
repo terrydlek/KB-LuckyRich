@@ -21,7 +21,7 @@ export function handleNaverLoginCallback() {
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
                 console.log('NaverAccess Token:', accessToken);
                 if (accountNum > 1) {
-                    router.push('/luckyrich');
+                    router.push('/');
                 }else {
                     router.push({ name: 'myDataAgree' });
                 }

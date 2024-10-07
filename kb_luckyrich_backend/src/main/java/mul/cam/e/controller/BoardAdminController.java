@@ -30,10 +30,11 @@ public class BoardAdminController {
         return ResponseEntity.ok(boardService.getAdminBoardList());
     }
 
-    @PostMapping("/boards/deleteBoardByIds")
-    public ResponseEntity<String> delete(@RequestBody List<Integer> ids) {
+    @DeleteMapping("/boards")
+    public ResponseEntity<String> delete(@RequestBody List<Integer> data) {
+        System.out.println(data);
         try {
-            for (Integer boardNum: ids) {
+            for (Integer boardNum: data) {
                 boardService.deleteBoardByIds(boardNum);
             }
             return ResponseEntity.ok("ok");
@@ -42,7 +43,7 @@ public class BoardAdminController {
         }
     }
 
-    @DeleteMapping("/deleteReply/{replyNum}")
+    @DeleteMapping("/reply/{replyNum}")
     public ResponseEntity<String> deleteReply(@PathVariable Integer replyNum) {
         try {
             boardService.deleteReplyById(replyNum);
@@ -51,7 +52,5 @@ public class BoardAdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 중 오류가 발생했습니다.");
         }
     }
-
-
 
 }

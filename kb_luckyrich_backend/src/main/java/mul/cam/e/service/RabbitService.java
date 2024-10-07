@@ -129,7 +129,7 @@ public class RabbitService {
         log.info("Executing userDetailAsset for user: {}", userName);
         Map<String, Object> detailAsset = new HashMap<>();
 
-        detailAsset.put("userAccount", myAssetDao.userAccounts(userName));
+        detailAsset.put("userAccount", myAssetService.userAccounts(userName));
         detailAsset.put("userStock", myAssetDao.userStockSymbol(userName));
         detailAsset.put("userCar", myAssetDao.userCar(userName));
         detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));

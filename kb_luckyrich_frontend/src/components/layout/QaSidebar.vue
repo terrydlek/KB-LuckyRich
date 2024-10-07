@@ -47,6 +47,7 @@ export default {
   color: white;
   border-radius: 8px;
   max-height: 190px;
+  width: 250px;
 }
 
 .sidebar ul {

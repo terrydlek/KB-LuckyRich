@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mul.cam.e.util.KeyDecrypt;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +24,9 @@ public class AccountDto {
         this.bankId = bankId;
         this.accountTypeId = accountTypeId;
         this.balance = balance;
+    }
+
+    public String getDecryptedAccountNumber(KeyDecrypt keyDecrypt) {
+        return keyDecrypt.decrypt(this.accountNumber);
     }
 }
