@@ -20,19 +20,19 @@
           <tbody>
             <tr>
               <td>총 계좌 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString() }}</td>
+              <td>{{ portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString() }} 원</td>
             </tr>
             <tr>
               <td>총 부동산 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString() }}</td>
+              <td>{{ portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString() }} 원</td>
             </tr>
             <tr>
               <td>총 차량 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalCar.toLocaleString() }}</td>
+              <td>{{ portfolioData.assetTotal.assetTotal.totalCar.toLocaleString() }} 원</td>
             </tr>
             <tr>
               <td>총 주식 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalStock.toLocaleString() }}</td>
+              <td>{{ portfolioData.assetTotal.assetTotal.totalStock.toLocaleString() }} 원</td>
             </tr>
           </tbody>
         </table>
@@ -85,7 +85,7 @@
             </tr>
             <tr>
               <td>차량 가격</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }}</td>
+              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }} 원</td>
             </tr>
           </tbody>
         </table>
@@ -96,14 +96,29 @@
           v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userAccount">
           <thead>
             <tr>
+              <th>은행명</th>
+              <th>계좌 유형</th>
               <th>계좌번호</th>
               <th>잔액 (₩)</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="account in portfolioData.detailAsset.detailAsset.userAccount" :key="account.accountId">
+              <td>
+                <span v-if="account.bankId === 1">국민은행</span>
+                <span v-else-if="account.bankId === 2">카카오뱅크</span>
+                <span v-else-if="account.bankId === 3">신한은행</span>
+                <span v-else>알 수 없음</span> <!-- 다른 bankId의 경우 -->
+              </td>
+              <td>
+                <span v-if="account.accountTypeId === 1">청년도약</span>
+                <span v-if="account.accountTypeId === 2">주택청약</span>
+                <span v-if="account.accountTypeId === 3">자유적금</span>
+                <span v-if="account.accountTypeId === 4">입출금통장</span>
+                <span v-if="account.accountTypeId === 5">비상금통장</span>
+              </td>
               <td>{{ account.accountNumber }}</td>
-              <td>{{ account.balance.toLocaleString() }}</td>
+              <td>{{ account.balance.toLocaleString() }} 원</td>
             </tr>
           </tbody>
         </table>
@@ -124,10 +139,61 @@
               <td>{{ stock.stockName }}</td>
               <td>{{ stock.quantity }}</td>
               <td>{{ stock.purchasePrice.toLocaleString() }}</td>
-              <td>{{ stock.revenue }}</td>
+              <td>
+                <span v-if="stock.revenue.startsWith('-')" style="color: red;">
+                  ▼ {{ stock.revenue }}
+                </span>
+                <span v-else style="color: green;">
+                  ▲ {{ stock.revenue }}
+                </span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <!-- 자산 변동 내역 -->
+        <h4>자산 변동 내역</h4>
+        <table v-if="portfolioData.idTrend">
+          <thead>
+            <tr>
+              <th>날짜</th>
+              <th>자산 금액 (₩)</th>
+              <th>변동</th>
+              <th>변동률 (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(date, index) in sortedDates" :key="date">
+              <td>{{ date }}</td>
+              <td>{{ portfolioData.idTrend[date].toLocaleString() }}</td>
+              <td>
+                <span v-if="index > 0">
+                  <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
+                    style="color: green;">▲ {{ (portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
+                      1]]).toLocaleString() }}</span>
+                  <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
+                    style="color: red;">▼ {{ (portfolioData.idTrend[sortedDates[index + 1]] -
+                      portfolioData.idTrend[date]).toLocaleString() }}</span>
+                  <span v-else>= 0</span>
+                </span>
+              </td>
+              <td>
+                <span v-if="index > 0">
+                  <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
+                    style="color: green;">+{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
+                      1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
+                  <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
+                    style="color: red;">{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
+                      1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
+                  <span v-else>0%</span>
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
+
+
       </div>
 
       <!-- 오른쪽 기존 차트 -->
@@ -136,10 +202,11 @@
           <totalChart ref="totalChart" />
         </div>
         <div class="chart-container">
-          <assetGraph ref="assetGraph" />
+          <img :src="savedChartImage" alt="Saved Chart Image" v-if="savedChartImage" />
+          <p v-else>저장된 차트 이미지가 없습니다.</p>
         </div>
         <div class="chart-container">
-          <consumptionstatus ref="consumptionstatus"/>
+          <consumptionstatus ref="consumptionstatus" />
         </div>
       </div>
     </div>
@@ -150,13 +217,11 @@
 
 <script>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import html2pdf from 'html2pdf.js';
 import totalChart from '@/components/account/chart/totalChart.vue';
-import goalChart from '@/components/account/chart/goalChart.vue';
 import assetGraph from '@/components/account/chart/assetGraph.vue';
-import accountBookChart from '@/components/account/chart/accountBookChart.vue';
-import assetcomparison from '@/components/account/chart/assetComparison.vue';
+import goalChart from '@/components/account/chart/goalChart.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 
 import SockJS from 'sockjs-client';
@@ -170,11 +235,9 @@ function getToken() {
 export default {
   components: {
     totalChart,
-    goalChart,
     assetGraph,
-    accountBookChart,
-    assetcomparison,
     consumptionstatus,
+    goalChart
   },
   setup(props, { root }) {
     const username = ref('');
@@ -183,6 +246,7 @@ export default {
     const gender = ref('');
     const portfolioData = ref({});
     const isDataLoaded = ref(false);  // 데이터를 다 받아왔는지 상태를 저장
+    const savedChartImage = ref(null);    // 로컬스토리지에서 불러온 이미지를 저장할 ref
 
     // WebSocket 메시지 수신 처리 함수
     function connectWebSocket() {
@@ -209,7 +273,7 @@ export default {
             console.log(json);
 
             portfolioData.value = json;
-            alert(portfolioData.value);
+            alert("포트폴리오 생성중입니다");
             isDataLoaded.value = true;  // 데이터 로딩 완료
           });
         },
@@ -221,7 +285,7 @@ export default {
 
     function fetchUserInfo() {
       axios
-        .get('http://localhost:8080/user/inf', {
+        .get('http://localhost:8080/user', {
           headers: {
             Authorization: `Bearer ${getToken()}`,
           },
@@ -236,11 +300,22 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    }
+    };
+
+    function loadChartImage() {
+      const savedImage = localStorage.getItem('assetGrowthChart');  // 로컬스토리지에서 이미지 가져오기
+      if (savedImage) {
+        savedChartImage.value = savedImage;  // 가져온 이미지를 chartImage에 저장
+      } else {
+        console.log('저장된 차트 이미지가 없습니다.');
+      }
+    };
+
 
     onMounted(() => {
       connectWebSocket();
       fetchUserInfo();
+      loadChartImage();
     });
 
     return {
@@ -250,6 +325,7 @@ export default {
       gender,
       portfolioData,
       isDataLoaded,
+      savedChartImage
     };
   },
   methods: {
@@ -282,7 +358,16 @@ export default {
         }, 1000); // 렌더링 지연을 위한 1초 대기
       });
     },
+    previousValue(index) {
+      const dates = Object.keys(this.portfolioData.idTrend);
+      return this.portfolioData.idTrend[dates[index - 1]];
+    }
   },
+  computed: {
+    sortedDates() {
+      return Object.keys(this.portfolioData.idTrend).sort((a, b) => new Date(b) - new Date(a));
+    }
+  }
 };
 </script>
 

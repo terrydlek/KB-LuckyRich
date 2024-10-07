@@ -44,7 +44,7 @@ export default {
       personalNews: [],
       selectedCategory: 'finance',
       currentPage: 1,
-      itemsPerPage: 5, 
+      itemsPerPage: 10,
     };
   },
   mounted() {
@@ -78,7 +78,7 @@ export default {
     async getNews() {
       const token = localStorage.getItem('access_token');
       try {
-        const res = await axios.get('http://localhost:8080/news/getnews', {
+        const res = await axios.get('http://localhost:8080/news/finance', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         this.news = res.data;
@@ -89,7 +89,7 @@ export default {
     async getEstateNews() {
       const token = localStorage.getItem('access_token');
       try {
-        const res = await axios.get('http://localhost:8080/news/getnewsestate', {
+        const res = await axios.get('http://localhost:8080/news/estate', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         this.estateNews = res.data;
@@ -100,7 +100,7 @@ export default {
     async getSecuritiesNews() {
       const token = localStorage.getItem('access_token');
       try {
-        const res = await axios.get('http://localhost:8080/news/getnewssecurities', {
+        const res = await axios.get('http://localhost:8080/news/securities', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         this.securitiesNews = res.data;
@@ -111,7 +111,7 @@ export default {
     async getPersonalNews() {
       const token = localStorage.getItem('access_token');
       try {
-        const res = await axios.get('http://localhost:8080/news/getnewspersonal', {
+        const res = await axios.get('http://localhost:8080/news/personal', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         this.personalNews = res.data;

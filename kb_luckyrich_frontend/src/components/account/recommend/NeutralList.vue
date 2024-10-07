@@ -25,7 +25,7 @@
             <th>최근가</th>
             <th>변동률</th>
             <th>총 자산</th>
-            <th>갱신 시간</th>
+            <!-- <th>갱신 시간</th> -->
           </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@
               {{ fund.changePercent }}
             </td>
             <td>{{ formatNumber(fund.totalAssets) }}</td>
-            <td>{{ fund.lastUpdate }}</td>
+            <!-- <td>{{ fund.lastUpdate }}</td> -->
           </tr>
         </tbody>
       </table>

@@ -114,11 +114,12 @@ export default {
                 alert('삭제할 게시글을 선택하세요.');
                 return;
             }
+    
             alert(this.selectedPosts);
             axios
-                .post('http://localhost:8080/admin/boards/deleteBoardByIds', 
-                this.selectedPosts, // 배열 전송
+                .delete('http://localhost:8080/admin/boards', // DELETE 요청으로 변경
                 {
+                    data: this.selectedPosts, // 요청 본문에 배열 전송
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                     },

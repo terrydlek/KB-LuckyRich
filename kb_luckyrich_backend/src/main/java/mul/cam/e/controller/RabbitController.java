@@ -19,7 +19,7 @@ public class RabbitController {
         this.rabbitService = rabbitService;
     }
 
-    @PostMapping("/publish")
+    @PostMapping("/portfolios")
     public ResponseEntity<String> sendMessage() throws InterruptedException {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         rabbitService.createPortfolio(userName);

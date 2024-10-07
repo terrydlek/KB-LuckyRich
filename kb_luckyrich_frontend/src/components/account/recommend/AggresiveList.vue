@@ -208,7 +208,7 @@ onMounted(async () => {
   const token = localStorage.getItem('access_token');
   if (token) {
     try {
-      const response = await axios.get('http://localhost:8080/user/inf', {
+      const response = await axios.get('http://localhost:8080/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

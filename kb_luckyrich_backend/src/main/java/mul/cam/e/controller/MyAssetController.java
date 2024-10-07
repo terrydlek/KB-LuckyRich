@@ -10,12 +10,14 @@ import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.MyAssetService;
 import mul.cam.e.service.StockService;
 import mul.cam.e.util.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,6 @@ import java.util.Map;
 @Log4j
 @RequiredArgsConstructor
 @RequestMapping("/myasset")
-@Slf4j
 public class MyAssetController {
 
     private final MyAssetService myAssetService;
@@ -35,8 +36,9 @@ public class MyAssetController {
     private final RandUtils randUtils;
     private final TransactionGenerator transactionGenerator;
     private final StockService stockService;
+    private final KeyEncrypt keyEncrypt;
 
-    @GetMapping("/getMyAccount")
+    @GetMapping("/myAccount")
     public ResponseEntity<List<Map<String, Object>>> getMyAccount() {
         log.info("getMyAccount --------------------");
 
@@ -63,7 +65,7 @@ public class MyAssetController {
         return ResponseEntity.ok(accounts);
     }
 
-    @PostMapping("fetchaccount")
+    @PostMapping("/myAccount")
     public ResponseEntity<String> updateUserInfo(@RequestBody List<Map<String, Object>> requestBody) {
         log.info("fetchAccount -------------------------");
 
@@ -74,7 +76,7 @@ public class MyAssetController {
         List<Map<String, Object>> accounts = requestBody;
 
         for (Map<String, Object> account : accounts) {
-            String accountNum = (String) account.get("accountNumber");
+            String accountNum = keyEncrypt.encrypt((String) account.get("accountNumber"));
             String bankName = (String) account.get("bankName");
             String accountType = (String) account.get("accountType");
             int balance = (int) account.get("balance");
@@ -120,7 +122,7 @@ public class MyAssetController {
         return ResponseEntity.ok("User information updated successfully");
     }
 
-    @GetMapping("gettransaction")
+    @GetMapping("/transaction")
     ResponseEntity<List<TransactionDto>> getTransaction() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -131,7 +133,7 @@ public class MyAssetController {
         return ResponseEntity.ok(transactions);
     }
 
-    @GetMapping("getstock")
+    @GetMapping("/stock")
     ResponseEntity<Map<String, Object>> getStock() throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -148,7 +150,7 @@ public class MyAssetController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("getbanktransaction")
+    @GetMapping("/bankTransaction")
     ResponseEntity<List<BankTransactionDto>> getBankTransaction() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -175,7 +177,7 @@ public class MyAssetController {
     }
 
     @GetMapping("/accounts")
-    public ResponseEntity<Map<String, Object>> accounts() {
+    public ResponseEntity<List<AccountDto>> accounts() {
         log.info("accounts execute~~~~~");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -183,18 +185,21 @@ public class MyAssetController {
 
         List<AccountDto> dto = myAssetService.userAccounts(userName);
 
-        Map<String, Object> map = new HashMap<>();
-        for (AccountDto account : dto) {
-            if (account.getBankId() == 1) {
-                map.put("국민은행", account.getBalance());
-            } else if (account.getBankId() == 2) {
-                map.put("카카오뱅크", account.getBalance());
-            } else if (account.getBankId() == 3) {
-                map.put("신한은행", account.getBalance());
-            }
-        }
-        log.info(map);
-        return ResponseEntity.ok(map);
+//        System.out.println(dto + "              ~~``dckqopckqdwopdwcqkopdwkcopcwdqkpdcwqkpodcwq ");
+//
+//        Map<String, Object> map = new HashMap<>();
+//        for (AccountDto account : dto) {
+//            if (account.getBankId() == 1) {
+//                map.put("국민은행", account.getBalance());
+//            } else if (account.getBankId() == 2) {
+//                map.put("카카오뱅크", account.getBalance());
+//            } else if (account.getBankId() == 3) {
+//                map.put("신한은행", account.getBalance());
+//            }
+//        }
+//        log.info(map);
+        System.out.println(dto + "       ~~~~~~~~~~~~~~");
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/idTrend")
@@ -215,7 +220,7 @@ public class MyAssetController {
         return ResponseEntity.ok(answer);
     }
 
-    @GetMapping("/getCategoryExpenses")
+    @GetMapping("/categoryExpenses")
     public ResponseEntity<Map<String, Object>> getCategoryExpenses() {
         log.info("getCategoryExpenses execute~~~~~");
 
@@ -238,4 +243,25 @@ public class MyAssetController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/totalInvestment")
+    public ResponseEntity<Map<String, Object>> getCurrentTotalStockValue() {
+        log.info("getTotalInvestment execute~~~~~");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            BigDecimal currentTotalStockValue = myAssetService.getCurrentTotalStockValue(userName);
+            response.put("currentTotalStockValue", currentTotalStockValue);
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            log.error("Error while fetching current total stock value for user: " + userName, e);
+            response.put("status", "error");
+            response.put("message", "Failed to fetch current stock value. Please try again later.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }

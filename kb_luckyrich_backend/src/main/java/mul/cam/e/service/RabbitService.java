@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -29,17 +30,19 @@ public class RabbitService {
     private final ObjectMapper objectMapper;
     private final UserDao userDao;
     private final MyAssetDao myAssetDao;
+    private final MyAssetService myAssetService;
 
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
     public RabbitService(RabbitTemplate rabbitTemplate, Queue queue, NotificationController notificationController,
-                         ObjectMapper objectMapper, UserDao userDao, MyAssetDao myAssetDao) {
+                         ObjectMapper objectMapper, UserDao userDao, MyAssetDao myAssetDao, MyAssetService myAssetService) {
         this.rabbitTemplate = rabbitTemplate;
         this.notificationController = notificationController;
         this.objectMapper = objectMapper;
         this.userDao = userDao;
         this.myAssetDao = myAssetDao;
+        this.myAssetService = myAssetService;
     }
 
     // 포트폴리오 생성 메서드
@@ -74,6 +77,7 @@ public class RabbitService {
         data.put("assetTotal", userAssetTotal(userName));
         data.put("detailAsset", userDetailAsset(userName));
         data.put("stockRevenue", userStockRevenue(userName));
+        data.put("idTrend", idTrend(userName));
         return data;
     }
 
@@ -125,7 +129,7 @@ public class RabbitService {
         log.info("Executing userDetailAsset for user: {}", userName);
         Map<String, Object> detailAsset = new HashMap<>();
 
-        detailAsset.put("userAccount", myAssetDao.userAccounts(userName));
+        detailAsset.put("userAccount", myAssetService.userAccounts(userName));
         detailAsset.put("userStock", myAssetDao.userStockSymbol(userName));
         detailAsset.put("userCar", myAssetDao.userCar(userName));
         detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));
@@ -163,5 +167,16 @@ public class RabbitService {
         }
 
         return Collections.singletonMap("stockRevenue", stockRevenue);
+    }
+
+    // 자산 증감 추이
+    public Map<String, BigInteger> idTrend(String userName) throws IOException {
+
+        List<Map<String, Object>> transaction = myAssetService.transactionTen(userName);
+        Map<String, Map<String, List<String>>> symbol = myAssetService.userStockSymbol(userName);
+
+        Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
+
+        return answer;
     }
 }

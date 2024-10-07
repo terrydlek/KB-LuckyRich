@@ -21,6 +21,7 @@ export default defineComponent({
       chartOptions: {
         chart: {
           type: 'pie',
+          height: '400px',
           plotBackgroundColor: null,
           plotBorderWidth: 0,
           plotShadow: false,
@@ -81,7 +82,7 @@ export default defineComponent({
 
       try {
         const response = await axios.get(
-          'http://localhost:8080/myasset/getCategoryExpenses',
+          'http://localhost:8080/myasset/categoryExpenses',
           {
             headers: {
               Authorization: `Bearer ${token}`,

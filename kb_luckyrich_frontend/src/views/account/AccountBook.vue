@@ -58,7 +58,7 @@ const nextMonth = () => {
 
 function getTransactions() {
     const token = getToken();
-    axios.get('http://localhost:8080/myasset/gettransaction', {
+    axios.get('http://localhost:8080/myasset/transaction', {
         headers: {
             'Authorization': `Bearer ${token}`
         }

@@ -147,7 +147,6 @@ public class RecommendController {
         return ResponseEntity.ok(stockService.getStockDetailTime(stockCode));
     }
 
-
     @GetMapping("/steadiness")
     public ResponseEntity<List<DepositDto>> getSteadinessDeposits() throws IOException {
         return ResponseEntity.ok(depositService.getDeposit());
@@ -158,6 +157,7 @@ public class RecommendController {
         return ResponseEntity.ok(depositService.getDepositDetail(prodname));
     }
 
+    // 나중에 플젝 끝날 때쯤 지우면 됨.
     @GetMapping("/delete")
     public void delete() {
         redisService.invalidateCache("depositList");
@@ -191,6 +191,19 @@ public class RecommendController {
         );
 
         return ResponseEntity.ok(gptResponse);
+    }
+    
+    // 암호화 테스트용
+    @GetMapping("/crypto")
+    public void crypto() {
+        String text = "hello";
+        System.out.println("1. " + text);
+
+        String en = keyEncrypt.encrypt(text);
+        System.out.println("2. " + en);
+
+        String de = keyDecrypt.decrypt(en);
+        System.out.println("3. " + de);
     }
 
 }

@@ -21,7 +21,7 @@ public class UserController {
         this.securityUserService = securityUserService;
     }
 
-    @GetMapping("inf")
+    @GetMapping
     public ResponseEntity<SecurityUser> fetchUserInfo() {
         log.info("fetchUserInfo -------------------------");
 
@@ -37,7 +37,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("update")
+    @PostMapping
     public ResponseEntity<String> updateUserInfo(@RequestBody Map<String, String> request) {
         log.info("updateUserInfo -------------------------");
 
@@ -50,6 +50,19 @@ public class UserController {
             return ResponseEntity.ok("User information updated successfully");
         } else {
             return ResponseEntity.status(500).body("Failed to update user information");
+        }
+    }
+
+    @DeleteMapping("/withdrawUser/{userId}")
+    public ResponseEntity<String> withdrawUser(@PathVariable("userId") String userId) {
+        log.info("withdrawUser -------------------------");
+
+        boolean isWithdraw = securityUserService.withdrawUser(Integer.parseInt(userId));
+
+        if (isWithdraw) {
+            return ResponseEntity.ok("ok");
+        } else {
+            return ResponseEntity.status(500).body("Failed to withdraw user");
         }
     }
 }
