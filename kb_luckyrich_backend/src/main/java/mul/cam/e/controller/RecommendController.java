@@ -2,6 +2,8 @@ package mul.cam.e.controller;
 
 import lombok.extern.log4j.Log4j;
 import mul.cam.e.dto.*;
+import mul.cam.e.gpt.GPTRequest;
+import mul.cam.e.gpt.GPTResponse;
 import mul.cam.e.service.*;
 import mul.cam.e.util.KeyDecrypt;
 import mul.cam.e.util.KeyEncrypt;
@@ -10,8 +12,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,8 +35,15 @@ public class RecommendController {
     private final KeyEncrypt keyEncrypt;
     private final KeyDecrypt keyDecrypt;
 
+    @Value("${gpt.model}")
+    private String model;
+
+    @Value("${gpt.api.url}")
+    private String apiUrl;
+    private final RestTemplate restTemplate;
+
     @Autowired
-    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService, FundService fundService, StockService stockService, DepositService depositService, KeyEncrypt keyEncrypt, KeyDecrypt keyDecrypt) {
+    public RecommendController(RedisService redisService, RecommendService recommendService, RabbitService rabbitService, FundService fundService, StockService stockService, DepositService depositService, KeyEncrypt keyEncrypt, KeyDecrypt keyDecrypt, RestTemplate restTemplate) {
         this.redisService = redisService;
         this.recommendService = recommendService;
         this.rabbitService = rabbitService;
@@ -41,6 +52,7 @@ public class RecommendController {
         this.depositService = depositService;
         this.keyEncrypt = keyEncrypt;
         this.keyDecrypt = keyDecrypt;
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/conservative")
@@ -161,5 +173,24 @@ public class RecommendController {
 //        System.out.println("di : " + di);
 //        return "dd";
 //    }
+
+    @GetMapping("/gpt")
+    public ResponseEntity<GPTResponse> getGPTRecommend(){
+        log.info("Gpt Recommend");
+
+        // TODO prompt 생성
+        String prompt = "";
+
+        GPTRequest request = new GPTRequest(
+                model,prompt,1,256,1,0,0);
+
+        GPTResponse gptResponse = restTemplate.postForObject(
+                apiUrl
+                , request
+                , GPTResponse.class
+        );
+
+        return ResponseEntity.ok(gptResponse);
+    }
 
 }

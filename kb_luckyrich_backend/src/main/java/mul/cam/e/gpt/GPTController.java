@@ -26,6 +26,12 @@ public class GPTController {
     public String chat(@RequestParam("prompt") String prompt){
         log.info("GPT TEST");
 
+        /**
+         * temperature: 다양성 (높을수록 무작위성 상승)
+         * max_tokens: 답변 최대길이
+         * topP : 텍스트 다양성 증가
+         * *_Penalty: 같은 단어나 구 반복 억제
+         */
         GPTRequest request = new GPTRequest(
                 model,prompt,1,256,1,0,0);
 
