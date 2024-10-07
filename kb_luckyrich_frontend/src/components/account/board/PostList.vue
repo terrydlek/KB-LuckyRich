@@ -7,7 +7,12 @@
       <h2 class="mb-4">Q & A</h2>
 
       <!-- 검색 입력 필드 -->
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 제목 또는 글쓴이가 있나요?" class="form-control mb-4" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 제목 또는 글쓴이가 있나요?"
+        class="form-control mb-4"
+      />
 
       <table class="table table-striped">
         <thead class="thead-dark">
@@ -21,7 +26,11 @@
         <tbody v-if="filteredPosts.length">
           <tr v-for="(post, index) in paginatedPosts" :key="index">
             <td>{{ post.boardNum }}</td>
-            <td><a :href="`/luckyrich/qa/ask/${post.boardNum}`">{{ post.title }}</a></td>
+            <td>
+              <a :href="`/luckyrich/qa/ask/${post.boardNum}`">{{
+                post.title
+              }}</a>
+            </td>
             <td>{{ post.nickName }}</td>
             <td>{{ new Date(post.createdAt).toLocaleString() }}</td>
           </tr>
@@ -30,18 +39,28 @@
 
       <!-- 페이지네이션 -->
       <div v-if="totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
+        <button @click="currentPage--" :disabled="currentPage === 1">
+          이전
+        </button>
 
         <!-- 페이지 번호 표시 -->
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+        >
           {{ page }}
         </button>
 
-        <button @click="currentPage++" :disabled="currentPage === totalPages">다음</button>
+        <button @click="currentPage++" :disabled="currentPage === totalPages">
+          다음
+        </button>
       </div>
 
-      <a href="/luckyrich/qa/ask/create" id="bt" class="btn btn-primary">글쓰기</a>
+      <a href="/luckyrich/qa/ask/create" id="bt" class="btn btn-primary"
+        >글쓰기</a
+      >
     </div>
   </div>
 </template>
@@ -82,9 +101,17 @@ export default {
     },
     // 페이지 번호 계산
     pageNumbers() {
-      const rangeStart = Math.floor((this.currentPage - 1) / this.pageRange) * this.pageRange + 1;
-      const rangeEnd = Math.min(rangeStart + this.pageRange - 1, this.totalPages);
-      return Array.from({ length: rangeEnd - rangeStart + 1 }, (_, i) => rangeStart + i);
+      const rangeStart =
+        Math.floor((this.currentPage - 1) / this.pageRange) * this.pageRange +
+        1;
+      const rangeEnd = Math.min(
+        rangeStart + this.pageRange - 1,
+        this.totalPages
+      );
+      return Array.from(
+        { length: rangeEnd - rangeStart + 1 },
+        (_, i) => rangeStart + i
+      );
     },
   },
   mounted() {

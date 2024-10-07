@@ -57,7 +57,7 @@ export default {
       if (Object.keys(newData).length) {
         this.updateChartData(newData);
       }
-    }
+    },
   },
   mounted() {
     this.fetchTotalAssets();
