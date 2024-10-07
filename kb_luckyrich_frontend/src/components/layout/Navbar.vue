@@ -1,14 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <router-link to="/luckyrich">Home</router-link>
-    </div>
-
-    <div class="middle">
-      <center>
-        <h2>Lucky Rich</h2>
-      </center>
-      <p>MZ 세대를 위한 스마트 자산 관리 플랫폼. 맞춤형 투자 상품 추천, 실시간 자산 정보 및 더 나은 재정 계획을 위한 도구들을 제공합니다.</p>
+      <router-link to="/luckyrich">Lucky Rich</router-link>
     </div>
 
     <div class="navbar-right">
