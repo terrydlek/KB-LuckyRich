@@ -64,7 +64,7 @@ export default {
                     plotBackgroundImage: null,
                     plotBorderWidth: 0,
                     plotShadow: false,
-                    height: '400px'
+                    height: '280px'
                 },
                 title: {
                     text: '목표 자산까지!!!'

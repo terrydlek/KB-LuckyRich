@@ -1,8 +1,8 @@
 <template>
-  <div class="qa-page">
-    <div class="sidebar">
+  <!-- <div class="qa-page"> -->
+    <!-- <div class="sidebar">
       <Sidebar />
-    </div>
+    </div> -->
     <div class="container mt-5">
       <h2 class="mb-4">Q & A</h2>
 
@@ -62,7 +62,7 @@
         >글쓰기</a
       >
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -146,22 +146,125 @@ export default {
 <style scoped>
 .qa-page {
   display: flex;
-  padding: 20px 40px;
+  justify-content: center; /* 페이지 가운데 정렬 */
+  padding: 0px 30px;
+  background-color: #f4f7f9; /* 배경색 추가 */
+  min-height: 100vh; /* 화면 전체 높이 차지 */
 }
 
-#bt {
-  margin-top: 20px;
+.container {
+  width: 100%;
+  max-width: 1200px; /* 최대 너비 설정 */
+  background: white; /* 흰색 배경 */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  border-radius: 12px; /* 모서리 둥글게 */
+  padding: 40px;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
   margin-bottom: 20px;
+  text-align: center; /* 제목 가운데 정렬 */
+}
+
+input[type="text"] {
+  border-radius: 8px; /* 입력 필드 모서리 둥글게 */
+  border: 1px solid #ccc;
+  padding: 12px 20px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff; /* 포커스 시 파란색으로 변경 */
+  outline: none;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+thead {
+  background-color: #007bff; /* 테이블 헤더 배경색 */
+  color: white;
+  text-align: left;
+}
+
+th, td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+td a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+td a:hover {
+  color: #0056b3; /* 링크 마우스 오버 시 색상 변경 */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .pagination button {
   margin: 5px;
-  padding: 5px 10px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: white;
 }
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #007bff;
   color: white;
 }
+
+.pagination button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+#bt {
+  display: block;
+  width: 150px;
+  margin: 30px auto;
+  padding: 12px;
+  text-align: center;
+  background-color: #28a745; /* 글쓰기 버튼 배경색 */
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+#bt:hover {
+  background-color: #218838; /* 마우스 오버 시 배경색 변경 */
+}
+
 </style>

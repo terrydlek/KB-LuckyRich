@@ -1,8 +1,6 @@
 <template>
   <div class="coins">
-    <button @click="resetTest" class="test-reset-button">
-      테스트 다시하기
-    </button>
+
     <h3>
       당신의 투자 성향은 공격투자형입니다. 암호화폐 상품 TOP 100을
       추천해드릴게요.
@@ -13,11 +11,7 @@
       <button @click="refreshPage">새로고침</button>
     </div>
     <div class="search">
-      <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="검색하고 싶은 종목명이 있나요?"
-      />
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
     </div>
     <div class="result">
       <span v-if="loading" class="loader">Loading...</span>
@@ -77,8 +71,24 @@
               <td>
                 {{ (coin.quotes.KRW.volume_24h / 1000000000000).toFixed(2) }}T
               </td>
-              <td>{{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%</td>
-              <td>{{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%</td>
+              <td>
+                <span v-if="coin.quotes.KRW.percent_change_24h < 0" style="color: #d32f2f; font-size: 15px;">
+                  ▼ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
+                </span>
+                <span v-else style="color: #388e3c; font-size: 15px;">
+                  ▲ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
+                </span>
+              </td>
+
+              <td>
+                <span v-if="coin.quotes.KRW.percent_change_7d < 0" style="color: #d32f2f; font-size: 15px;">
+                  ▼ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
+                </span>
+                <span v-else style="color: #388e3c; font-size: 15px;">
+                  ▲ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
+                </span>
+              </td>
+
             </tr>
           </tbody>
         </table>
@@ -87,18 +97,19 @@
           <button @click="currentPage--" :disabled="currentPage === 1">
             이전
           </button>
-          <button
-            v-for="page in pageNumbers"
-            :key="page"
-            @click="currentPage = page"
-            :class="{ active: currentPage === page }"
-          >
+          <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+            :class="{ active: currentPage === page }">
             {{ page }}
           </button>
           <button @click="currentPage++" :disabled="currentPage === totalPages">
             다음
           </button>
         </div>
+        <center>
+          <button @click="resetTest" class="test-reset-button">
+            테스트 다시하기
+          </button>
+        </center>
 
         <p v-if="coins.length && !filteredCoins.length">
           찾으시는 종목명은 TOP 100에 없습니다.
@@ -266,7 +277,8 @@ input[type='text'] {
 }
 
 .test-reset-button {
-  margin: 20px;
+  margin-top: 20px;
+  /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;

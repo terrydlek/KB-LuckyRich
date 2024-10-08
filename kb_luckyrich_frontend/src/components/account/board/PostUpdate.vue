@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <!-- <div class="container mt-5"> -->
     <h2 class="mb-4">게시글 수정</h2>
 
     <div v-if="loading" class="alert alert-info">로딩 중...</div>
@@ -28,7 +28,7 @@
       </div>
       <button type="submit" class="btn btn-primary">수정 완료</button>
     </form>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -101,11 +101,88 @@ export default {
 <style scoped>
 .container {
   max-width: 600px;
+  margin: 50px auto; /* Center container with margin from top */
+  background-color: #ffffff;
+  padding: 40px; /* Increased padding for better aesthetics */
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.15); /* Soft shadow for elevation */
+  border-radius: 12px; /* Rounded corners */
 }
 
-button {
-  margin-top: 20px;
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 10px;
+  display: block;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px; /* Rounded corners */
+  transition: border-color 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: #007bff; /* Blue border on focus */
+  background-color: #ffffff; /* White background on focus */
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #007bff; /* Primary button color */
+  border: none;
+  color: white;
+  border-radius: 8px; /* Rounded button */
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.alert {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.alert-info {
+  background-color: #e9f7fd;
+  color: #007bff;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
 </style>
 
 <!-- <template>
