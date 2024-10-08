@@ -60,6 +60,16 @@
         <option value="입금">입금</option>
         <option value="출금">출금</option>
       </select>
+      <select v-model="selectedCategory">
+        <option value="">모든 유형</option>
+        <option
+          v-for="category in uniqueCategories"
+          :key="category"
+          :value="category"
+        >
+          {{ category }}
+        </option>
+      </select>
     </div>
 
     <div class="transactions">
@@ -82,7 +92,7 @@
             {{ formatCurrency(transaction.amount) }}원
           </span>
           <span class="category">{{ transaction.category }}</span>
-          <span class="description">{{ transaction.description }}</span>
+          <!-- <span class="description">{{ transaction.description }}</span> -->
         </div>
       </div>
       <div v-if="isLoading" class="loading">데이터 로딩 중...</div>
@@ -123,6 +133,7 @@ const maxAmount = ref('');
 const isLoading = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = 10;
+const selectedCategory = ref('');
 
 const makeExcelFiles = () => {
   const excelData = filteredTransactions.value.map((transaction) => ({
@@ -186,24 +197,30 @@ const resetAndFetchTransactions = () => {
   getMyBankTransaction();
 };
 
+const uniqueCategories = computed(() => {
+  const categories = new Set(transactions.value.map((t) => t.category));
+  return Array.from(categories);
+});
+
 const filteredTransactions = computed(() => {
   return transactions.value.filter((t) => {
     const typeMatch =
       !selectedType.value || t.transactionType === selectedType.value;
+    const categoryMatch =
+      !selectedCategory.value || t.category === selectedCategory.value;
     const amountMatch =
       (!minAmount.value || t.amount >= minAmount.value) &&
       (!maxAmount.value || t.amount <= maxAmount.value);
     const accountMatch =
       !selectedAccount.value || t.accountNumber === selectedAccount.value;
     const dateMatch =
-      !currentYear.value ||
-      !currentMonth.value ||
-      isSameYearAndMonth(
-        t.transactionDate,
-        currentYear.value,
-        currentMonth.value
-      );
-    return typeMatch && amountMatch && accountMatch && dateMatch;
+      (!currentYear.value ||
+        t.transactionDate.getFullYear() === currentYear.value) &&
+      (!currentMonth.value ||
+        t.transactionDate.getMonth() + 1 === currentMonth.value);
+    return (
+      typeMatch && categoryMatch && amountMatch && accountMatch && dateMatch
+    );
   });
 });
 
@@ -238,9 +255,19 @@ function formatCurrency(amount) {
   return new Intl.NumberFormat('ko-KR').format(amount);
 }
 
-watch([selectedType, minAmount, maxAmount, currentYear, currentMonth], () => {
-  currentPage.value = 1;
-});
+watch(
+  [
+    selectedType,
+    minAmount,
+    maxAmount,
+    currentYear,
+    currentMonth,
+    selectedCategory,
+  ],
+  () => {
+    currentPage.value = 1;
+  }
+);
 
 async function getMyBankTransaction() {
   isLoading.value = true;
@@ -358,7 +385,7 @@ const getCircleStyle = (bankName) => {
 };
 </script>
 
-<style>
+<style scoped>
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f5f5f5;
@@ -369,20 +396,18 @@ body {
   max-width: 100%;
   /* margin: 0 auto; */
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cards-container {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
   margin-bottom: 30px;
-}
-
-.accounts {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .card {
@@ -395,8 +420,7 @@ body {
   text-align: left;
   transition: all 0.3s ease;
   position: relative;
-  margin-top: 10%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card.active {
@@ -424,49 +448,79 @@ body {
 }
 
 button {
-  background-color: #3dd451;
+  background-color: #3498db;
   border: none;
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  color: white;
 }
 
 button:hover {
-  background-color: #e0e0e0;
+  background-color: #2980b9;
 }
 
 select {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 20px;
   border: 1px solid #ddd;
   font-size: 0.9rem;
   background-color: white;
 }
 
+.date-selector,
+.filters {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 .transactions {
+  width: 100%;
   background-color: white;
   border-radius: 15px;
-  padding: 20px;
+  padding: 15px 30px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .transaction-item {
-  border-bottom: 1px solid #eee;
   padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
 }
 
 .transaction-date {
+  flex: 1 0 auto;
   font-size: 0.9em;
   color: #888;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .transaction-details {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+}
+
+.income,
+.expense {
+  margin-right: 20px;
+  min-width: 100px;
+}
+
+.transaction-details .category {
+  margin-right: auto; /* 왼쪽 끝에 위치 */
+}
+
+.transaction-details .description {
+  margin-left: auto; /* 오른쪽 끝에 위치 */
 }
 
 .income {
@@ -481,10 +535,10 @@ select {
 
 .category {
   background-color: #f0f0f0;
-  margin-left: 7px;
+  margin-right: auto;
   padding: 4px 10px;
   border-radius: 10px;
-  font-size: 0.8em;
+  font-size: 0.85em;
 }
 
 .description {
@@ -494,10 +548,12 @@ select {
 }
 
 .pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
+  flex: 1 1 auto;
+  text-align: right;
+  font-size: 0.95em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pagination button {

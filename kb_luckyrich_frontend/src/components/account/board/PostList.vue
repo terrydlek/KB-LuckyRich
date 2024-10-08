@@ -1,10 +1,7 @@
 <template>
-  <!-- <div class="qa-page"> -->
-    <!-- <div class="sidebar">
-      <Sidebar />
-    </div> -->
+  <div class="qa-page">
     <div class="container mt-5">
-      <h2 class="mb-4">Q & A</h2>
+      <h2 class="faq-heading mb-4">게시판</h2>
 
       <!-- 검색 입력 필드 -->
       <input
@@ -62,7 +59,7 @@
         >글쓰기</a
       >
     </div>
-  <!-- </div> -->
+  </div>
 </template>
 
 <script>
@@ -152,24 +149,20 @@ export default {
   min-height: 100vh; /* 화면 전체 높이 차지 */
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px; /* 최대 너비 설정 */
-  background: white; /* 흰색 배경 */
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  border-radius: 12px; /* 모서리 둥글게 */
-  padding: 40px;
+.faq-heading {
+  font-size: 2.5rem;
+  color: #343a40;
+  margin-bottom: 30px;
+  font-weight: 700;
 }
 
-h2 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+#bt {
+  margin-top: 20px;
   margin-bottom: 20px;
   text-align: center; /* 제목 가운데 정렬 */
 }
 
-input[type="text"] {
+input[type='text'] {
   border-radius: 8px; /* 입력 필드 모서리 둥글게 */
   border: 1px solid #ccc;
   padding: 12px 20px;
@@ -177,7 +170,7 @@ input[type="text"] {
   transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus {
+input[type='text']:focus {
   border-color: #007bff; /* 포커스 시 파란색으로 변경 */
   outline: none;
 }
@@ -195,7 +188,8 @@ thead {
   text-align: left;
 }
 
-th, td {
+th,
+td {
   padding: 15px;
   text-align: center;
   border-bottom: 1px solid #ddd;
@@ -266,5 +260,4 @@ td a:hover {
 #bt:hover {
   background-color: #218838; /* 마우스 오버 시 배경색 변경 */
 }
-
 </style>
