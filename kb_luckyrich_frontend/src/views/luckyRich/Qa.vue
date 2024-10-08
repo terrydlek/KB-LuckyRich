@@ -1,8 +1,5 @@
 <template>
   <div class="faq-page">
-    <div>
-      <QaSidebar />
-    </div>
     <div class="faq-content">
       <section id="faq">
         <h1 class="fade-in">자주 묻는 질문</h1>

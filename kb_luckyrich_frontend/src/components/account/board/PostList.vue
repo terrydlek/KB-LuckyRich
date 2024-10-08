@@ -1,10 +1,7 @@
 <template>
   <div class="qa-page">
-    <div class="sidebar">
-      <Sidebar />
-    </div>
     <div class="container mt-5">
-      <h2 class="mb-4">Q & A</h2>
+      <h2 class="faq-heading mb-4">게시판</h2>
 
       <!-- 검색 입력 필드 -->
       <input
@@ -147,6 +144,13 @@ export default {
 .qa-page {
   display: flex;
   padding: 20px 40px;
+}
+
+.faq-heading {
+  font-size: 2.5rem;
+  color: #343a40;
+  margin-bottom: 30px;
+  font-weight: 700;
 }
 
 #bt {
