@@ -5,15 +5,25 @@
     </div>
     <div class="faq-content">
       <section id="faq">
-        <h1>자주 묻는 질문</h1>
+        <h1 class="fade-in">자주 묻는 질문</h1>
         <div class="faq-item" v-for="(faq, index) in faqs" :key="index">
-          <div class="faq-question" @click="toggleFaq(index)">
+          <div
+            class="faq-question"
+            @click="toggleFaq(index)"
+            :class="{ active: activeFaq === index }"
+          >
             <h2>{{ faq.question }}</h2>
-            <span v-if="activeFaq === index">▲</span>
-            <span v-else>▼</span>
+            <span class="toggle-icon" :class="{ rotate: activeFaq === index }"
+              >▼</span
+            >
           </div>
-          <div class="faq-answer" v-if="activeFaq === index">
-            <p>{{ faq.answer }}</p>
+          <div
+            class="faq-answer-wrapper"
+            :style="{ maxHeight: activeFaq === index ? '1000px' : '0' }"
+          >
+            <div class="faq-answer">
+              <p>{{ faq.answer }}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -85,45 +95,125 @@ const toggleFaq = (index) => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
 .faq-page {
   display: flex;
-  padding: 20px 40px;
+  padding: 40px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 .faq-content {
-  flex: 7;
+  flex: 1;
   padding-left: 40px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .faq-content h1 {
   font-size: 2.5rem;
-  color: #f8b400;
-  margin-bottom: 20px;
+  color: #343a40;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
 }
 
 .faq-item {
   margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .faq-question {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
   cursor: pointer;
-  background-color: #f8b400;
-  color: white;
-  padding: 15px;
-  border-radius: 8px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-.faq-question:hover {
-  background-color: #e69c00;
+.faq-question.active {
+  background-color: #f8b400;
+}
+
+.faq-question h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #343a40;
+  transition: color 0.3s ease;
+}
+
+.faq-question.active h2 {
+  color: #ffffff;
+}
+
+.toggle-icon {
+  font-size: 1rem;
+  color: #f8b400;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.toggle-icon.rotate {
+  transform: rotate(180deg);
+  color: #ffffff;
 }
 
 .faq-answer {
-  padding: 15px;
-  background-color: #fff;
-  border-left: 4px solid #f8b400;
-  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+  line-height: 1.6;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.faq-answer-wrapper {
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .faq-page {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .faq-content {
+    padding-left: 0;
+  }
+
+  .faq-content h1 {
+    font-size: 2rem;
+  }
 }
 </style>

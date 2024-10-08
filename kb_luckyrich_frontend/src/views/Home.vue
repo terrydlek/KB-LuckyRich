@@ -1,117 +1,101 @@
 <template>
-    <div class="home">
-        <div class="left-section">
-            <div class="chart-container">
-                <button @click="prevChart">←</button>
-                <!-- v-if로 currentChart가 설정되었을 때만 차트 렌더링 -->
-                <component :is="currentChart" v-if="currentChart" />
-                <!-- v-else로 대체 콘텐츠 렌더링 (로딩 중 등) -->
-                <div v-else>
-                    <p>차트를 불러오는 중입니다...</p>
-                </div>
-                <button @click="nextChart">→</button>
-            </div>
+  <div class="home-container">
+    <main class="main-content">
+      <div class="chart-section">
+        <h4>Graph</h4>
+        <component :is="currentChart" v-if="currentChart" />
+        <div v-else>
+          <p>차트를 불러오는 중입니다...</p>
         </div>
-
-        <!-- 오른쪽 섹션: 2x2 그리드 -->
-        <div class="right-section">
-            <ServiceComponent serviceName="한눈에 내 자산 확인하기" route="asset">
-                <img src="../assets/images/checkAsset.jpg" class="service-image">
-            </ServiceComponent>
-
-            <ServiceComponent serviceName="나에게 맞는 투자 상품은?" route="test">
-                <img src="../assets/images/test.jpg" class="service-image">
-            </ServiceComponent>
-
-            <ServiceComponent serviceName="거래 내역 조회" route="accountBook">
-                <img src="../assets/images/credit.jpg" class="service-image">
-            </ServiceComponent>
-
-            <ServiceComponent serviceName="부동산" route="realestate">
-                <img src="../assets/images/realEstate.png" alt="Real Estate" class="service-image" />
-            </ServiceComponent>
-
-            <ServiceComponent serviceName="금융 뉴스" route="financenews">
-                <img src="../assets/images/news.jpg" class="service-image">
-            </ServiceComponent>
-
-            <ServiceComponent serviceName="Q&A 게시판" route="qa">
-                <img src="../assets/images/qa.jpg" class="service-image">
-            </ServiceComponent>
-        </div>
-    </div>
+        <button @click="prevChart">←</button>
+        <button @click="nextChart">→</button>
+      </div>
+    </main>
+  </div>
 </template>
 
 <script setup>
-import ServiceComponent from '@/components/ServiceComponent.vue';
-import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
-import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
 import { ref } from 'vue';
 import totalChart from '@/components/account/chart/totalChart.vue';
-import goalChart from "@/components/account/chart/goalChart.vue";
-import assetGraph from "@/components/account/chart/assetGraph.vue";
-import accountBookChart from "@/components/account/chart/accountBookChart.vue";
-import assetcomparison from "@/components/account/chart/assetComparison.vue";
-import consumptionstatus from "@/components/account/chart/consumptionstatus.vue";
+import goalChart from '@/components/account/chart/goalChart.vue';
+import assetGraph from '@/components/account/chart/assetGraph.vue';
+import accountBookChart from '@/components/account/chart/accountBookChart.vue';
+import assetcomparison from '@/components/account/chart/assetComparison.vue';
+import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 
-const charts = [totalChart, goalChart, assetGraph, accountBookChart, assetcomparison, consumptionstatus];
+const charts = [
+  totalChart,
+  goalChart,
+  assetGraph,
+  accountBookChart,
+  assetcomparison,
+  consumptionstatus,
+];
 const currentIndex = ref(0);
 const currentChart = ref(charts[currentIndex.value]);
 
 const nextChart = () => {
-    currentIndex.value = (currentIndex.value + 1) % charts.length;
-    currentChart.value = charts[currentIndex.value];
+  currentIndex.value = (currentIndex.value + 1) % charts.length;
+  currentChart.value = charts[currentIndex.value];
 };
 
 const prevChart = () => {
-    currentIndex.value = (currentIndex.value - 1 + charts.length) % charts.length;
-    currentChart.value = charts[currentIndex.value];
+  currentIndex.value = (currentIndex.value - 1 + charts.length) % charts.length;
+  currentChart.value = charts[currentIndex.value];
 };
-
-
-const router = useRouter();
-onMounted(() => {
-    handleNaverLoginCallback();
-    handleKakaoLoginCallback();
-});
 </script>
 
-<style>
-.home {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    /* 좌우 섹션 간격 */
-    padding: 20px;
+<style scoped>
+/* 전체 레이아웃 */
+.home-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
 }
 
-.left-section {
-    margin-top: 100px;
-    /* 왼쪽 섹션이 더 넓게 */
-    margin-left: 70px;
+.image-section {
+  text-align: center;
 }
 
-.right-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 1px;
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
 
-.service-image {
-    height: auto;
-    max-width: 100%;
-    object-fit: cover;
-    border-radius: 8px;
+.image-caption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
 }
 
-.chart-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+.progress-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.chart-section button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chart-section button:hover {
+  background-color: #27ae60;
 }
 </style>
