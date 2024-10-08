@@ -1,8 +1,5 @@
 <template>
   <div class="fund-container">
-    <button @click="resetTest" class="test-reset-button">
-      테스트 다시하기
-    </button>
     <h2 class="title">
       당신의 투자 성향은 위험중립형입니다. 재간접 펀드 상품을 추천해드릴게요.
     </h2>
@@ -43,11 +40,19 @@
             <td>{{ formatNumber(fund.lastPrice) }}</td>
             <td
               :class="{
-                'text-green-500': parseFloat(fund.changePercent) > 0,
+                'text-green-500': parseFloat(fund.changePercent) >= 0,
                 'text-red-500': parseFloat(fund.changePercent) < 0,
               }"
             >
-              {{ formatChangePercent(fund.changePercent) }}
+              <span
+                v-if="parseFloat(fund.changePercent) >= 0"
+                style="font-size: 15px"
+              >
+                ▲ {{ fund.changePercent }}
+              </span>
+              <span v-else style="font-size: 15px">
+                ▼ {{ fund.changePercent }}
+              </span>
             </td>
             <td>{{ formatNumber(fund.totalAssets) }}</td>
             <!-- <td>{{ fund.lastUpdate }}</td> -->
@@ -80,6 +85,12 @@
           다음
         </button>
       </div>
+
+      <br />
+
+      <button @click="resetTest" class="test-reset-button">
+        테스트 다시하기
+      </button>
 
       <div v-if="funds.length && !filteredFunds.length" class="no-results">
         검색 결과가 없습니다.

@@ -393,8 +393,8 @@ body {
 }
 
 #accountbook {
-  max-width: 1000px;
-  margin: 0 auto;
+  max-width: 100%;
+  /* margin: 0 auto; */
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -411,8 +411,8 @@ body {
 }
 
 .card {
-  width: 400px;
-  height: 200px;
+  width: 300px !important;
+  height: 180px !important;
   padding: 20px;
   border: none;
   border-radius: 15px;
@@ -595,36 +595,12 @@ select {
   background-color: #007bff;
 }
 
-.loading,
-.no-data {
-  text-align: center;
-  padding: 20px;
-  font-style: italic;
-  color: #888;
+.transaction-item {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
 }
 
-#app {
-  margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-  .card {
-    width: 250px;
-  }
-
-  .transactions {
-    padding: 15px;
-  }
-
-  .transaction-details {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .category,
-  .description {
-    margin-left: 0;
-    margin-top: 5px;
-  }
+.transaction-item:last-child {
+  border-bottom: none;
 }
 </style>

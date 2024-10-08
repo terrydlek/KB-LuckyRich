@@ -1,8 +1,5 @@
 <template>
   <div class="funds">
-    <button @click="resetTest" class="test-reset-button">
-      테스트 다시하기
-    </button>
     <h2>
       당신의 투자 성향은 안정추구형입니다. 채권형 펀드 상품을 추천해드릴게요.
     </h2>
@@ -46,12 +43,21 @@
               <td>{{ formatNumber(fund.lastPrice) }}</td>
               <td
                 :class="{
-                  'text-green-500': parseFloat(fund.changePercent) > 0,
+                  'text-green-500': parseFloat(fund.changePercent) >= 0,
                   'text-red-500': parseFloat(fund.changePercent) < 0,
                 }"
               >
-                {{ formatChangePercent(fund.changePercent) }}
+                <span
+                  v-if="parseFloat(fund.changePercent) >= 0"
+                  style="font-size: 15px"
+                >
+                  ▲ {{ fund.changePercent }}
+                </span>
+                <span v-else style="font-size: 15px">
+                  ▼ {{ fund.changePercent }}
+                </span>
               </td>
+
               <td>{{ formatNumber(fund.totalAssets) }}</td>
               <!-- <td>{{ fund.lastUpdate }}</td> -->
             </tr>
@@ -74,6 +80,11 @@
             다음
           </button>
         </div>
+        <center>
+          <button @click="resetTest" class="test-reset-button">
+            테스트 다시하기
+          </button>
+        </center>
 
         <div v-if="funds.length && !filteredFunds.length">
           검색 결과가 없습니다.
@@ -231,6 +242,8 @@ input[type='text'] {
 }
 
 .test-reset-button {
+  margin-top: 20px;
+  /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;
