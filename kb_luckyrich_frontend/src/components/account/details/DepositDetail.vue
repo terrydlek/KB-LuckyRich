@@ -1,4 +1,5 @@
 <template>
+  <button @click="goBack" class="back-button">목록으로</button>
   <div v-if="deposit" class="container mt-5">
     <h2 class="mb-4">{{ deposit.prodname }} 상품 상세 정보</h2>
     <ul class="list-group mb-4">
@@ -74,9 +75,9 @@
   </div>
   <p v-else>상품 정보를 불러오는 중입니다...</p>
   <center>
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <button class="btn btn-primary" @click="goBack">목록으로</button>
-    </div>
+    </div> -->
   </center>
 </template>
 
@@ -99,7 +100,7 @@ export default {
     axios
       .get(`http://localhost:8080/recommend/steadiness/${prodname}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }) // 상품명에 따라 상세 정보 요청
       .then((response) => {
@@ -135,3 +136,29 @@ export default {
   },
 };
 </script>
+<style scoped>
+.back-button {
+  width: 10%;
+  height: 30px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn {
+  height: 40px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+</style>
