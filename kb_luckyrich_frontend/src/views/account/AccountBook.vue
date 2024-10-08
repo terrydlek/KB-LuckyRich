@@ -1,5 +1,5 @@
 <template>
-    <div id="accountbook">
+    <div id="accountbook" style="width: 100px;">
         <div class="currentmonth">
             <button @click="prevMonth">Previous Month</button>
             <span>{{ currentMonth }}, {{ currentYear }}</span>
@@ -64,12 +64,11 @@ function getTransactions() {
         }
     })
         .then((response) => {
-            // console.log(response.data)
-            transactions.value = response.data
+            transactions.value = response.data;
         })
         .catch((error) => {
-            console.error(error)
-        })
+            console.error(error);
+        });
 };
 
 function getToken() {
@@ -84,10 +83,14 @@ function formatDate(timestamp) {
 onMounted(() => {
     getTransactions();
 })
-
 </script>
 
 <style>
+#accountbook {
+    max-width: 800px;
+    padding: 20px;
+}
+
 .currentmonth {
     position: sticky;
     top: 0;
@@ -98,5 +101,14 @@ onMounted(() => {
 .transactions {
     overflow-y: auto;
     flex-grow: 1;
+}
+
+.transaction-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
 }
 </style>

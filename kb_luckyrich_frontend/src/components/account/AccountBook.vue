@@ -366,8 +366,8 @@ body {
 }
 
 #accountbook {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 100%;
+  /* margin: 0 auto; */
   padding: 20px;
 }
 
@@ -386,7 +386,7 @@ body {
 }
 
 .card {
-  width: 300px;
+  width: 300px !important;
   height: 180px !important;
   padding: 20px;
   border: none;
@@ -537,5 +537,14 @@ select {
 
 .indicator.active {
   background-color: #007bff;
+}
+
+.transaction-item {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
 }
 </style>
