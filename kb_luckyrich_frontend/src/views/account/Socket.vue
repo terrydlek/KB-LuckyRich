@@ -488,7 +488,7 @@ button:hover {
   background-color: #3498db;
 }
 
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .content-wrapper {
     flex-direction: column;
   }
@@ -497,5 +497,5 @@ button:hover {
   .right-charts {
     width: 100%;
   }
-}
+} */
 </style>
