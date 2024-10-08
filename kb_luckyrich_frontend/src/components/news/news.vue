@@ -2,21 +2,47 @@
   <div>
     <div class="sidebar">
       <ul>
-        <li @click="showNews('finance')" :class="{ active: selectedCategory === 'finance' }">금융</li>
-        <li @click="showNews('estate')" :class="{ active: selectedCategory === 'estate' }">부동산</li>
-        <li @click="showNews('securities')" :class="{ active: selectedCategory === 'securities' }">증권</li>
-        <li @click="showNews('personal')" :class="{ active: selectedCategory === 'personal' }">생활경제</li>
+        <li
+          @click="showNews('finance')"
+          :class="{ active: selectedCategory === 'finance' }"
+        >
+          금융
+        </li>
+        <li
+          @click="showNews('estate')"
+          :class="{ active: selectedCategory === 'estate' }"
+        >
+          부동산
+        </li>
+        <li
+          @click="showNews('securities')"
+          :class="{ active: selectedCategory === 'securities' }"
+        >
+          증권
+        </li>
+        <li
+          @click="showNews('personal')"
+          :class="{ active: selectedCategory === 'personal' }"
+        >
+          생활경제
+        </li>
       </ul>
     </div>
 
     <div class="news-container">
-      <div v-for="newsItem in paginatedNews" :key="newsItem.title" class="news-item">
+      <div
+        v-for="newsItem in paginatedNews"
+        :key="newsItem.title"
+        class="news-item"
+      >
         <div class="news-image" v-if="newsItem.imageUrl">
           <img :src="newsItem.imageUrl" alt="news image" />
         </div>
         <div class="news-content">
           <h3 class="news-title">
-            <a :href="`/luckyrich/financenews/${newsItem.code}`">{{ newsItem.title }}</a>
+            <a :href="`/luckyrich/financenews/${newsItem.code}`">{{
+              newsItem.title
+            }}</a>
           </h3>
           <p class="news-description">{{ newsItem.description }}</p>
         </div>
@@ -26,7 +52,9 @@
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages">
+        다음
+      </button>
     </div>
   </div>
 </template>
@@ -38,8 +66,8 @@ export default {
   name: 'News',
   data() {
     return {
-      news: [], 
-      estateNews: [], 
+      news: [],
+      estateNews: [],
       securitiesNews: [],
       personalNews: [],
       selectedCategory: 'finance',
@@ -72,14 +100,14 @@ export default {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.filteredNews.slice(start, end);
-    }
+    },
   },
   methods: {
     async getNews() {
       const token = localStorage.getItem('access_token');
       try {
         const res = await axios.get('http://localhost:8080/news/finance', {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         this.news = res.data;
       } catch (err) {
@@ -90,7 +118,7 @@ export default {
       const token = localStorage.getItem('access_token');
       try {
         const res = await axios.get('http://localhost:8080/news/estate', {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         this.estateNews = res.data;
       } catch (err) {
@@ -101,7 +129,7 @@ export default {
       const token = localStorage.getItem('access_token');
       try {
         const res = await axios.get('http://localhost:8080/news/securities', {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         this.securitiesNews = res.data;
       } catch (err) {
@@ -112,7 +140,7 @@ export default {
       const token = localStorage.getItem('access_token');
       try {
         const res = await axios.get('http://localhost:8080/news/personal', {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         this.personalNews = res.data;
       } catch (err) {
@@ -121,7 +149,7 @@ export default {
     },
     showNews(category) {
       this.selectedCategory = category;
-      this.currentPage = 1; 
+      this.currentPage = 1;
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
@@ -132,8 +160,8 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -166,6 +194,7 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   margin-left: 220px;
+  padding: 20px;
 }
 
 .news-item {
@@ -189,11 +218,13 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
+  text-align: left;
 }
 
 .news-description {
   font-size: 14px;
   line-height: 1.5;
+  text-align: left;
 }
 
 .pagination {

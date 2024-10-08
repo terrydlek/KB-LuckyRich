@@ -1,11 +1,15 @@
 <template>
   <div class="fund-container">
-
     <h2 class="title">
       당신의 투자 성향은 위험중립형입니다. 재간접 펀드 상품을 추천해드릴게요.
     </h2>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 펀드명이 있나요?" class="search-input" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 펀드명이 있나요?"
+        class="search-input"
+      />
     </div>
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -25,19 +29,28 @@
           <tr v-for="fund in paginatedFunds" :key="fund.url">
             <td>{{ fund.country }}</td>
             <td>
-              <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(
-                fund.url
-              )}`" class="fund-link">{{ fund.name }}</a>
+              <a
+                :href="`/luckyrich/recommend/funds/${encodeURIComponent(
+                  fund.url
+                )}`"
+                class="fund-link"
+                >{{ fund.name }}</a
+              >
             </td>
             <td>{{ formatNumber(fund.lastPrice) }}</td>
-            <td :class="{
-              'text-green-500': parseFloat(fund.changePercent) >= 0,
-              'text-red-500': parseFloat(fund.changePercent) < 0,
-            }">
-              <span v-if="parseFloat(fund.changePercent) >= 0" style="font-size: 15px;">
+            <td
+              :class="{
+                'text-green-500': parseFloat(fund.changePercent) >= 0,
+                'text-red-500': parseFloat(fund.changePercent) < 0,
+              }"
+            >
+              <span
+                v-if="parseFloat(fund.changePercent) >= 0"
+                style="font-size: 15px"
+              >
                 ▲ {{ fund.changePercent }}
               </span>
-              <span v-else style="font-size: 15px;">
+              <span v-else style="font-size: 15px">
                 ▼ {{ fund.changePercent }}
               </span>
             </td>
@@ -48,19 +61,32 @@
       </table>
 
       <div v-if="filteredFunds.length && totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
           이전
         </button>
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }" class="pagination-button">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
           다음
         </button>
       </div>
 
-      <br>
+      <br />
 
       <button @click="resetTest" class="test-reset-button">
         테스트 다시하기
@@ -172,6 +198,15 @@ const pageNumbers = computed(() => {
     (_, i) => rangeStart + i
   );
 });
+
+const formatChangePercent = (value) => {
+  const numValue = parseFloat(value);
+  if (numValue > 0) {
+    return `▲ ${value}`;
+  } else if (numValue < 0) {
+    return `▼ ${value}`;
+  } else return value;
+};
 
 onMounted(fetchFunds);
 
