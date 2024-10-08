@@ -17,11 +17,27 @@
                         </tr>
                         <tr>
                             <th>전일대비</th>
-                            <td>{{ timeData.diff }}</td>
+                            <td>
+                                <span v-if="timeData.diff.includes('하락')" style="color: #d32f2f; font-size: 18px;">
+                                    ▼ {{ timeData.diff }}
+                                </span>
+                                <span v-else style="color: #388e3c; font-size: 18px;">
+                                    ▲ {{ timeData.diff }}
+                                </span>
+                            </td>
+
                         </tr>
                         <tr>
                             <th>등락률(%)</th>
-                            <td>{{ timeData.rate }}</td>
+                            <td>
+                                <span v-if="timeData.rate.includes('하락')" style="color: #d32f2f; font-size: 18px;">
+                                    ▼ {{ timeData.rate }}
+                                </span>
+                                <span v-else style="color: #388e3c; font-size: 18px;">
+                                    ▲ {{ timeData.rate }}
+                                </span>
+                            </td>
+
                         </tr>
                         <tr>
                             <th>거래량</th>
@@ -83,7 +99,16 @@
                         </tr>
                         <tr>
                             <th>매도호가</th>
-                            <td>{{ timeData.sellingPrice }}</td>
+                            <td>
+                                <span v-if="timeData.sellingPrice.startsWith('-')"
+                                    style="color: #d32f2f; font-size: 18px;">
+                                    ▼ {{ timeData.sellingPrice }}
+                                </span>
+                                <span v-else style="color: #388e3c; font-size: 18px;">
+                                    ▲ {{ timeData.sellingPrice }}
+                                </span>
+                            </td>
+
                         </tr>
                         <tr>
                             <th>매수호가</th>
