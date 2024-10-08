@@ -308,19 +308,19 @@ const getCardStyle = (bankName) => {
   switch (bankName) {
     case '국민은행':
       return {
-        backgroundColor: 'orange',
+        backgroundImage: 'url(/src/assets/images/orangecard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       };
     case '카카오뱅크':
       return {
-        backgroundColor: 'yellow',
+        backgroundImage: 'url(/src/assets/images/yellowcard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       };
     case '신한은행':
       return {
-        backgroundColor: 'skyblue',
+        backgroundImage: 'url(/src/assets/images/bluecard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: 'black',
