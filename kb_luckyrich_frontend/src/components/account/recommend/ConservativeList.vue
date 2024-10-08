@@ -50,7 +50,7 @@
                   'text-red-500': parseFloat(fund.changePercent) < 0,
                 }"
               >
-                {{ fund.changePercent }}
+                {{ formatChangePercent(fund.changePercent) }}
               </td>
               <td>{{ formatNumber(fund.totalAssets) }}</td>
               <!-- <td>{{ fund.lastUpdate }}</td> -->
@@ -180,6 +180,15 @@ const pageNumbers = computed(() => {
     (_, i) => rangeStart + i
   );
 });
+
+const formatChangePercent = (value) => {
+  const numValue = parseFloat(value);
+  if (numValue > 0) {
+    return `▲ ${value}`;
+  } else if (numValue < 0) {
+    return `▼ ${value}`;
+  } else return value;
+};
 
 onMounted(fetchFunds);
 

@@ -53,7 +53,7 @@ const goToMyPage = () => {
   width: 100%; /* 전체 화면 너비 */
   background-color: #ffffff;
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -70,12 +70,13 @@ const goToMyPage = () => {
   height: 80px;
   padding-left: 0; /* 왼쪽 패딩 제거 */
   padding-right: 0; /* 오른쪽 패딩 제거 */
+  gap: 20px;
 }
 
 .navbar-left .logo {
   font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
-  font-size: 24px;
+  font-weight: 500;
+  font-size: 30px;
   color: #f8b400;
   text-decoration: none;
 }
