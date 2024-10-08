@@ -311,19 +311,22 @@ const getCardStyle = (bankName) => {
         backgroundImage: 'url(/src/assets/images/orangecard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+
       };
     case '카카오뱅크':
       return {
         backgroundImage: 'url(/src/assets/images/yellowcard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        
+
       };
     case '신한은행':
       return {
         backgroundImage: 'url(/src/assets/images/bluecard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        color: 'black',
+        color: 'white',
       };
     default:
       return {};
@@ -334,7 +337,7 @@ const getCircleStyle = (bankName) => {
   switch (bankName) {
     case '국민은행':
       return {
-        backgroundImage: 'url(/src/assets/images/국민은행.png)',
+        backgroundImage: 'url(/src/assets/images/국민은행로고.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       };
@@ -386,8 +389,8 @@ body {
 }
 
 .card {
-  width: 300px !important;
-  height: 180px !important;
+  width: 400px !important;
+  height: 200px !important;
   padding: 20px;
   border: none;
   border-radius: 15px;
@@ -410,7 +413,9 @@ body {
 }
 
 .card-body {
-  font-size: 1rem;
+  font-size: 1.4rem;
+  position: relative;
+  top: 50px;
 }
 
 .circle {
@@ -418,7 +423,7 @@ body {
   height: 50px;
   border-radius: 50%;
   position: absolute;
-  top: 20px;
+  top: 130px;
   right: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
