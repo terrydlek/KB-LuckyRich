@@ -1,67 +1,67 @@
 <template>
   <!-- <div class="row"> -->
-    <!-- <div class="col-md-3">
+  <!-- <div class="col-md-3">
         <Sidebar />
       </div> -->
-    <div>
-      <div v-if="post" class="card">
-        <div class="card-header">
-          <h2>{{ post.board.title }}</h2>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">작성자: {{ post.board.nickName }}</h5>
-          <p class="card-text">{{ post.board.content }}</p>
-        </div>
-        <div class="card-footer text-muted">
-          작성일: {{ new Date(post.board.createdAt).toLocaleString() }}
-        </div>
+  <div>
+    <div v-if="post" class="card">
+      <div class="card-header">
+        <h2>{{ post.board.title }}</h2>
       </div>
-      <p v-else>게시글을 불러오는 중입니다...</p>
+      <div class="card-body">
+        <h5 class="card-title">작성자: {{ post.board.nickName }}</h5>
+        <p class="card-text">{{ post.board.content }}</p>
+      </div>
+      <div class="card-footer text-muted">
+        작성일: {{ new Date(post.board.createdAt).toLocaleString() }}
+      </div>
+    </div>
+    <p v-else>게시글을 불러오는 중입니다...</p>
 
-      <!-- 댓글 입력 부분 -->
-      <div v-if="post" class="comment-section mt-4">
-        <h5>댓글 작성</h5>
-        <textarea v-model="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
-        <button class="btn btn-primary mt-3" @click="submitComment">
-          댓글 달기
+    <!-- 댓글 입력 부분 -->
+    <div v-if="post" class="comment-section mt-4">
+      <h5>댓글 작성</h5>
+      <textarea v-model="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
+      <button class="btn btn-primary mt-3" @click="submitComment">
+        댓글 달기
+      </button>
+    </div>
+
+    <center>
+      <div class="mb-3">
+        <button id="bt2" v-if="post && post.userName === post.board.userName" class="btn btn-primary" @click="edit">
+          수정
+        </button>
+        <button id="bt3" v-if="post && post.userName === post.board.userName" class="btn btn-primary"
+          @click="deletePost">
+          삭제
+        </button>
+        <button id="bt1" class="btn btn-primary" @click="goBack">
+          목록으로
         </button>
       </div>
+    </center>
 
-      <center>
-        <div class="mb-3">
-          <button id="bt2" v-if="post && post.userName === post.board.userName" class="btn btn-primary" @click="edit">
-            수정
-          </button>
-          <button id="bt3" v-if="post && post.userName === post.board.userName" class="btn btn-primary"
-            @click="deletePost">
+    <!-- 댓글 리스트 출력 부분 -->
+    <div v-if="replies.length > 0" class="comment-list mt-4">
+      <h5>댓글</h5>
+      <ul class="list-group">
+        <li v-for="reply in replies" :key="reply.replyNum" class="list-group-item">
+          <p>{{ reply.reply }}</p>
+          <small class="text-muted">관리자 작성일:
+            {{ new Date(reply.replyAt).toLocaleString() }}</small>
+          <button class="btn btn-danger btn-sm float-end" @click="deleteReply(reply.replyNum)">
             삭제
           </button>
-          <button id="bt1" class="btn btn-primary" @click="goBack">
-            목록으로
-          </button>
-        </div>
-      </center>
-
-      <!-- 댓글 리스트 출력 부분 -->
-      <div v-if="replies.length > 0" class="comment-list mt-4">
-        <h5>댓글</h5>
-        <ul class="list-group">
-          <li v-for="reply in replies" :key="reply.replyNum" class="list-group-item">
-            <p>{{ reply.reply }}</p>
-            <small class="text-muted">관리자 작성일:
-              {{ new Date(reply.replyAt).toLocaleString() }}</small>
-            <button class="btn btn-danger btn-sm float-end" @click="deleteReply(reply.replyNum)">
-              삭제
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div v-else class="mt-4">
-        <p>댓글이 없습니다.</p>
-      </div>
-
-      
+        </li>
+      </ul>
     </div>
+    <div v-else class="mt-4">
+      <p>댓글이 없습니다.</p>
+    </div>
+
+
+  </div>
   <!-- </div> -->
 </template>
 
@@ -244,8 +244,8 @@ export default {
 };
 </script>
 
-<style>
-/* 컨테이너 및 레이아웃 */
+<style scoped>
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -272,8 +272,8 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 100%;
-  min-height: 100%;
+  width: 100% !important;
+  min-height: 80%;
   margin-top: 0;
 }
 
