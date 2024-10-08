@@ -428,7 +428,7 @@ export default {
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
+  gap: 10px;
   margin-bottom: 20px;
   width: 1px;
 }
@@ -439,8 +439,8 @@ export default {
   border-radius: 16px;
   text-align: center;
   margin-right: 1px;
-  width: 300px;
-  margin-left: 20px;
+  width: 200px;
+  margin-left: 10px;
 }
 
 .card .amount {
@@ -496,7 +496,7 @@ export default {
   background-color: #f4f4f4;
 }
 
-.dashboard-container {
-  width: 1100px;
-}
+/* .dashboard-container {
+  width: 1000px;
+} */
 </style>
