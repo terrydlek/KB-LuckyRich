@@ -17,26 +17,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const isLoggedIn = ref(false);
 const router = useRouter();
+const route = useRoute();
 
-onMounted(() => {
+// onMounted(() => {
+//   checkLoginStatus();
+// });
+
+watch(route, () => {
   checkLoginStatus();
 });
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  isLoggedIn.value = !!token;
+  isLoggedIn.value = !!token; // Update the login status
 }
 
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
-    checkLoginStatus();
+    isLoggedIn.value = false; // Immediately update login status
     router.push('/');
   } else {
     router.push({ name: 'login' });

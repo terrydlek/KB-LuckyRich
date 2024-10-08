@@ -169,6 +169,7 @@ export default {
 .sidebar {
   width: 200px;
   float: left;
+  position: fixed; /* 사이드바를 고정 */
 }
 
 .sidebar ul {
