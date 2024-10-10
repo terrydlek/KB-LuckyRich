@@ -48,29 +48,66 @@
             <li @click="goTo('PostList')">게시판</li>
           </ul>
         </li>
+        <li @click="goTo('adminBoard')">관리자 페이지</li>
       </ul>
     </nav>
   </div>
 </template>
+
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
+const isAdmin = ref(false);
 const isSubmenuVisible = ref({
   luckyRich: false,
   qa: false,
 });
 
-// 클릭 시 해당 경로로 이동하는 함수
+const checkAdminStatus = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('토큰이 없습니다. 로그인이 필요합니다.');
+      return;
+    }
+
+    const response = await axios.get('http://localhost:8080/user/role', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const userRole = response.data;
+    isAdmin.value = userRole === 'ADMIN';
+    localStorage.setItem('user_role', userRole); // 역할 정보를 로컬 스토리지에 저장
+  } catch (error) {
+    console.error('사용자 역할 확인 중 오류 발생:', error);
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_role');
+      router.push('/luckyrich/login');
+    }
+  }
+};
+
 const goTo = (route) => {
+  if (route === 'adminBoard' && !isAdmin.value) {
+    alert('관리자만 접근할 수 있습니다.');
+    return;
+  }
   router.push({ name: route });
 };
 
-// Q&A 서브메뉴 표시 및 숨김 제어
 const toggleSubmenu = (menu, isVisible) => {
   isSubmenuVisible.value[menu] = isVisible;
 };
+
+onMounted(() => {
+  checkAdminStatus();
+});
 </script>
 
 <style scoped>

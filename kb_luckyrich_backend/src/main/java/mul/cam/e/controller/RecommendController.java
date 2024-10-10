@@ -55,6 +55,15 @@ public class RecommendController {
         this.restTemplate = restTemplate;
     }
 
+    @GetMapping("/funds")
+    public ResponseEntity<List<FundDto>> getFunds(@RequestParam(required = false) Integer riskRating) throws IOException {
+        if (riskRating == null) {
+            log.info("Risk rating is null");
+            return null;
+        }
+        return ResponseEntity.ok(fundService.getFundsByRiskRating(riskRating));
+    }
+
     @GetMapping("/conservative")
     public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
 //        redisService.invalidateCache("riskRating: 2");
