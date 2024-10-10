@@ -1,216 +1,252 @@
 <template>
-  <div id="element-to-print" style="padding: 20px; border: 1px solid #ccc">
-    <h3>자산 포트폴리오</h3>
-    <div class="accountInfo" v-if="username && age && email && gender">
-      이름: {{ username }} 나이: {{ age }} 이메일: {{ email }} 성별: {{ gender }}
-    </div>
-
-    <!-- 왼쪽 자산 표 -->
-    <div class="content-wrapper">
-      <div class="left-table">
-        <!-- 총 자산 -->
-        <h4>총 자산</h4>
-        <table v-if="portfolioData.assetTotal && portfolioData.assetTotal.assetTotal">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th>금액 (₩)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>총 계좌 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString() }} 원</td>
-            </tr>
-            <tr>
-              <td>총 부동산 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString() }} 원</td>
-            </tr>
-            <tr>
-              <td>총 차량 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalCar.toLocaleString() }} 원</td>
-            </tr>
-            <tr>
-              <td>총 주식 자산</td>
-              <td>{{ portfolioData.assetTotal.assetTotal.totalStock.toLocaleString() }} 원</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 부동산 정보 -->
-        <h4>부동산 정보</h4>
-        <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userRealestate">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th>세부 정보</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>부동산 위치</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.city }}, {{
-                portfolioData.detailAsset.detailAsset.userRealestate.streetName }}</td>
-            </tr>
-            <tr>
-              <td>부동산 이름</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.estateName }}</td>
-            </tr>
-            <tr>
-              <td>거래 금액</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount.toLocaleString() }}</td>
-            </tr>
-            <tr>
-              <td>전용 면적 (㎡)</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.exclusiveArea }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 차량 정보 -->
-        <h4>차량 정보</h4>
-        <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userCar">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th>세부 정보</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>차량 모델</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carModel }}</td>
-            </tr>
-            <tr>
-              <td>차량 가격</td>
-              <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }} 원</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 계좌 정보 -->
-        <h4>계좌 정보</h4>
-        <table
-          v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userAccount">
-          <thead>
-            <tr>
-              <th>은행명</th>
-              <th>계좌 유형</th>
-              <th>계좌번호</th>
-              <th>잔액 (₩)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="account in portfolioData.detailAsset.detailAsset.userAccount" :key="account.accountId">
-              <td>
-                <span v-if="account.bankId === 1">국민은행</span>
-                <span v-else-if="account.bankId === 2">카카오뱅크</span>
-                <span v-else-if="account.bankId === 3">신한은행</span>
-                <span v-else>알 수 없음</span> <!-- 다른 bankId의 경우 -->
-              </td>
-              <td>
-                <span v-if="account.accountTypeId === 1">청년도약</span>
-                <span v-if="account.accountTypeId === 2">주택청약</span>
-                <span v-if="account.accountTypeId === 3">자유적금</span>
-                <span v-if="account.accountTypeId === 4">입출금통장</span>
-                <span v-if="account.accountTypeId === 5">비상금통장</span>
-              </td>
-              <td>{{ account.accountNumber }}</td>
-              <td>{{ account.balance.toLocaleString() }} 원</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- 주식 보유 현황 -->
-        <h4>주식 보유 현황</h4>
-        <table v-if="portfolioData.stockRevenue && portfolioData.stockRevenue.stockRevenue">
-          <thead>
-            <tr>
-              <th>종목명</th>
-              <th>보유수량</th>
-              <th>매입가 (₩)</th>
-              <th>수익률</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(stock, index) in portfolioData.stockRevenue.stockRevenue" :key="index">
-              <td>{{ stock.stockName }}</td>
-              <td>{{ stock.quantity }}</td>
-              <td>{{ stock.purchasePrice.toLocaleString() }}</td>
-              <td>
-                <span v-if="stock.revenue.startsWith('-')" style="color: red;">
-                  ▼ {{ stock.revenue }}
-                </span>
-                <span v-else style="color: green;">
-                  ▲ {{ stock.revenue }}
-                </span>
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
-
-        <!-- 자산 변동 내역 -->
-        <h4>자산 변동 내역</h4>
-        <table v-if="portfolioData.idTrend">
-          <thead>
-            <tr>
-              <th>날짜</th>
-              <th>자산 금액 (₩)</th>
-              <th>변동</th>
-              <th>변동률 (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(date, index) in sortedDates" :key="date">
-              <td>{{ date }}</td>
-              <td>{{ portfolioData.idTrend[date].toLocaleString() }}</td>
-              <td>
-                <span v-if="index > 0">
-                  <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
-                    style="color: green;">▲ {{ (portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
-                      1]]).toLocaleString() }}</span>
-                  <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
-                    style="color: red;">▼ {{ (portfolioData.idTrend[sortedDates[index + 1]] -
-                      portfolioData.idTrend[date]).toLocaleString() }}</span>
-                  <span v-else>= 0</span>
-                </span>
-              </td>
-              <td>
-                <span v-if="index > 0">
-                  <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
-                    style="color: green;">+{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
-                      1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
-                  <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
-                    style="color: red;">{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
-                      1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
-                  <span v-else>0%</span>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-
+  <center>
+    <div id="element-to-print" style="padding: 20px; border: 1px solid #ccc">
+      <h3>자산 포트폴리오</h3>
+      <div class="accountInfo" v-if="username && age && email && gender">
+        이름: {{ username }} 나이: {{ age }} 이메일: {{ email }} 성별: {{ gender }}
       </div>
 
-      <!-- 오른쪽 기존 차트 -->
-      <div class="right-charts">
-        <div class="chart-container">
-          <totalChart ref="totalChart" />
+      <!-- 왼쪽 자산 표 -->
+      <div class="content-wrapper">
+        <div class="left-table">
+          <!-- 총 자산 -->
+          <h4>총 자산</h4>
+          <table v-if="portfolioData.assetTotal && portfolioData.assetTotal.assetTotal">
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>금액 (₩)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>총 계좌 자산</td>
+                <td>{{ portfolioData.assetTotal.assetTotal.totalAccount.toLocaleString() }} 원</td>
+              </tr>
+              <tr>
+                <td>총 부동산 자산</td>
+                <td>{{ portfolioData.assetTotal.assetTotal.totalRealestate.toLocaleString() }} 원</td>
+              </tr>
+              <tr>
+                <td>총 차량 자산</td>
+                <td>{{ portfolioData.assetTotal.assetTotal.totalCar.toLocaleString() }} 원</td>
+              </tr>
+              <tr>
+                <td>총 주식 자산</td>
+                <td>{{ portfolioData.assetTotal.assetTotal.totalStock.toLocaleString() }} 원</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 부동산 정보 -->
+          <h4>부동산 정보</h4>
+          <table
+            v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userRealestate">
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>세부 정보</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>부동산 위치</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.city }}, {{
+                  portfolioData.detailAsset.detailAsset.userRealestate.streetName }}</td>
+              </tr>
+              <tr>
+                <td>부동산 이름</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.estateName }}</td>
+              </tr>
+              <tr>
+                <td>거래 금액</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount.toLocaleString() }}</td>
+              </tr>
+              <tr>
+                <td>전용 면적 (㎡)</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.exclusiveArea }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 차량 정보 -->
+          <h4>차량 정보</h4>
+          <table
+            v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userCar">
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>세부 정보</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>차량 모델</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userCar.carModel }}</td>
+              </tr>
+              <tr>
+                <td>차량 가격</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }} 원</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 계좌 정보 -->
+          <h4>계좌 정보</h4>
+          <table
+            v-if="portfolioData.detailAsset && portfolioData.detailAsset.detailAsset && portfolioData.detailAsset.detailAsset.userAccount">
+            <thead>
+              <tr>
+                <th>은행명</th>
+                <th>계좌 유형</th>
+                <th>계좌번호</th>
+                <th>잔액 (₩)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="account in portfolioData.detailAsset.detailAsset.userAccount" :key="account.accountId">
+                <td>
+                  <span v-if="account.bankId === 1">국민은행</span>
+                  <span v-else-if="account.bankId === 2">카카오뱅크</span>
+                  <span v-else-if="account.bankId === 3">신한은행</span>
+                  <span v-else>알 수 없음</span> <!-- 다른 bankId의 경우 -->
+                </td>
+                <td>
+                  <span v-if="account.accountTypeId === 1">청년도약</span>
+                  <span v-if="account.accountTypeId === 2">주택청약</span>
+                  <span v-if="account.accountTypeId === 3">자유적금</span>
+                  <span v-if="account.accountTypeId === 4">입출금통장</span>
+                  <span v-if="account.accountTypeId === 5">비상금통장</span>
+                </td>
+                <td>{{ account.accountNumber }}</td>
+                <td>{{ account.balance.toLocaleString() }} 원</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 주식 보유 현황 -->
+          <h4>주식 보유 현황</h4>
+          <table v-if="portfolioData.stockRevenue && portfolioData.stockRevenue.stockRevenue">
+            <thead>
+              <tr>
+                <th>종목명</th>
+                <th>보유수량</th>
+                <th>매입가 (₩)</th>
+                <th>수익률</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(stock, index) in portfolioData.stockRevenue.stockRevenue" :key="index">
+                <td>{{ stock.stockName }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.purchasePrice.toLocaleString() }}</td>
+                <td>
+                  <span v-if="stock.revenue.startsWith('-')" style="color: red;">
+                    ▼ {{ stock.revenue }}
+                  </span>
+                  <span v-else style="color: green;">
+                    ▲ {{ stock.revenue }}
+                  </span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <!-- 자산 변동 내역 -->
+          <h4>자산 변동 내역</h4>
+          <table v-if="portfolioData.idTrend">
+            <thead>
+              <tr>
+                <th>날짜</th>
+                <th>자산 금액 (₩)</th>
+                <th>변동</th>
+                <th>변동률 (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(date, index) in sortedDates" :key="date">
+                <td>{{ date }}</td>
+                <td>{{ portfolioData.idTrend[date].toLocaleString() }}</td>
+                <td>
+                  <span v-if="index > 0">
+                    <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
+                      style="color: green;">▲ {{ (portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index
+                        +
+                        1]]).toLocaleString() }}</span>
+                    <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
+                      style="color: red;">▼ {{ (portfolioData.idTrend[sortedDates[index + 1]] -
+                        portfolioData.idTrend[date]).toLocaleString() }}</span>
+                    <span v-else>= 0</span>
+                  </span>
+                </td>
+                <td>
+                  <span v-if="index > 0">
+                    <span v-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] > 0"
+                      style="color: green;">+{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index
+                        +
+                        1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
+                    <span v-else-if="portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index + 1]] < 0"
+                      style="color: red;">{{ (((portfolioData.idTrend[date] - portfolioData.idTrend[sortedDates[index +
+                        1]]) / portfolioData.idTrend[sortedDates[index + 1]]) * 100).toFixed(2) }}%</span>
+                    <span v-else>0%</span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="chart-container">
-          <img :src="savedChartImage" alt="Saved Chart Image" v-if="savedChartImage" />
-          <p v-else>저장된 차트 이미지가 없습니다.</p>
-        </div>
-        <div class="chart-container">
-          <consumptionstatus ref="consumptionstatus" />
+
+        <!-- 오른쪽 기존 차트 -->
+        <div class="right-charts">
+          <div class="chart-container">
+            <totalChart ref="totalChart" />
+          </div>
+          <div class="chart-container">
+            <img :src="savedChartImage" alt="Saved Chart Image" v-if="savedChartImage" />
+            <p v-else>저장된 차트 이미지가 없습니다.</p>
+          </div>
+          <div class="chart-container">
+            <consumptionstatus ref="consumptionstatus" />
+          </div>
+          <div class="chart-container">
+            <accountBookChart ref="accountBookChart" />
+          </div>
         </div>
       </div>
+
+
+      <!-- <div class="advice-section" v-if="portfolioData.advice">
+      <div class="advice-box">
+        <h4>AI's 재정 조언</h4>
+        <p>{{ portfolioData.advice.financePlan }}</p>
+      </div>
+      <div class="advice-box">
+        <h4>AI's 투자 조언</h4>
+        <p>{{ portfolioData.advice.investPlan }}</p>
+      </div>
+    </div> -->
+
+
+      <div class="advice-section">
+        <div class="advice-box">
+          <h4>Lucky Rich AI's 재정 조언</h4>
+          <p>현재 자산 총액은 6,970,000원이며, 이 중 주식에 2,364,240원이 투자되어있습니다. 부동산과 차량에는 자산이 없는 상태입니다. 재무 계획은 다음과 같습니다. 먼저, 투자 포트폴리오
+            다변화를 위해 부동산 또는 투자 신탁 상품에 일부 자산을 배분하는 것을 고려하세요. 또한, 주식 시장의 변동성에 대비해 안전 자산인 채권이나 예금 상품에 분산 투자하는 방법을 추천합니다.
+            중장기적으로는 재무 목표를 설정하고, 매월 일정 금액을 적립하여 비상 자금을 마련하는 것이 중요합니다. 이를 통해 안정적인 재무 기반을 구축할 수 있을 것입니다. 전문가의 조언을 받아 정기적으로
+            포트폴리오를 점검하고 조정하는 것도 잊지 마세요.</p>
+        </div>
+        <div class="advice-box">
+          <h4>Lucky Rich AI's 투자 조언</h4>
+          <p>현재 데이터는 특정 날짜에 따른 투자 지표를 보여줍니다. 특히 2024년 10월 4일의 급격한 하락(2789440)은 주목할 필요가 있으며, 이는 시장의 변동성을 나타냅니다. 반면, 10월
+            7일에는 다시 상승세(3421440)를 보였습니다. 이는 일시적인 조정일 가능성이 있으므로 투자 포지션을 점검하고, 리스크 관리를 강화하는 것이 중요합니다. 또한, 안정적인 기업이나 자산으로의
+            분산
+            투자 전략을 고려해보시는 것이 좋습니다. 시장 트렌드와 경제 지표에 주의하며, 적절한 시점에 추가 매수 또는 매도를 결정하는 것이 바람직합니다.</p>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </center>
 </template>
 
 
@@ -223,6 +259,7 @@ import totalChart from '@/components/account/chart/totalChart.vue';
 import assetGraph from '@/components/account/chart/assetGraph.vue';
 import goalChart from '@/components/account/chart/goalChart.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
+import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
@@ -237,7 +274,8 @@ export default {
     totalChart,
     assetGraph,
     consumptionstatus,
-    goalChart
+    goalChart,
+    accountBookChart
   },
   setup(props, { root }) {
     const username = ref('');
@@ -342,7 +380,7 @@ export default {
             filename: 'asset_portfolio.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a1', orientation: 'landscape' },
+            jsPDF: { unit: 'in', format: 'a1', orientation: 'landscape', margin: { right: 1, left: 1 } },
           };
           html2pdf()
             .from(element)
@@ -377,6 +415,10 @@ export default {
   background-color: #f9f9f9;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  width: 70%;
+  /* 또는 원하는 비율 또는 고정 넓이(px)로 설정 */
+  /* max-width: 966px; */
+  margin: 0;
 }
 
 h3 {
@@ -460,7 +502,7 @@ table tr:hover td {
 }
 
 .right-charts {
-  width: 35%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -488,6 +530,10 @@ button:hover {
   background-color: #3498db;
 }
 
+.gpt {
+  margin-top: 20px;
+}
+
 /* @media (max-width: 1200px) {
   .content-wrapper {
     flex-direction: column;
@@ -498,4 +544,30 @@ button:hover {
     width: 100%;
   }
 } */
+
+.advice-section {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.advice-box {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.advice-box h4 {
+  font-size: 18px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.advice-box p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+}
 </style>

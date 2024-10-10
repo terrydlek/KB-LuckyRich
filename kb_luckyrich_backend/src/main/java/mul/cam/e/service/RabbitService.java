@@ -8,6 +8,7 @@ import mul.cam.e.controller.NotificationController;
 import mul.cam.e.dao.MyAssetDao;
 import mul.cam.e.dao.UserDao;
 import mul.cam.e.dto.StockHoldingsDto;
+import mul.cam.e.gpt.GPTController;
 import mul.cam.e.util.StockSymbolProcessor;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -31,18 +32,20 @@ public class RabbitService {
     private final UserDao userDao;
     private final MyAssetDao myAssetDao;
     private final MyAssetService myAssetService;
+    private final GPTController gptController;
 
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
     public RabbitService(RabbitTemplate rabbitTemplate, Queue queue, NotificationController notificationController,
-                         ObjectMapper objectMapper, UserDao userDao, MyAssetDao myAssetDao, MyAssetService myAssetService) {
+                         ObjectMapper objectMapper, UserDao userDao, MyAssetDao myAssetDao, MyAssetService myAssetService, GPTController gptController) {
         this.rabbitTemplate = rabbitTemplate;
         this.notificationController = notificationController;
         this.objectMapper = objectMapper;
         this.userDao = userDao;
         this.myAssetDao = myAssetDao;
         this.myAssetService = myAssetService;
+        this.gptController = gptController;
     }
 
     // 포트폴리오 생성 메서드
@@ -78,6 +81,8 @@ public class RabbitService {
         data.put("detailAsset", userDetailAsset(userName));
         data.put("stockRevenue", userStockRevenue(userName));
         data.put("idTrend", idTrend(userName));
+        // TODO      **사용할 때 주석 풀면 됩니다.**
+//        data.put("advice", advice(userName));
         return data;
     }
 
@@ -178,5 +183,17 @@ public class RabbitService {
         Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
 
         return answer;
+    }
+
+    public Map<String, Object> advice(String userName) throws IOException {
+        Map<String, Object> advice = new HashMap<>();
+
+        String financePlan = gptController.chat(userAssetTotal(userName) + " 재무설계사처럼 재무계획을 300자 이내로 작성해줘");
+        String investPlan = gptController.chat(idTrend(userName) + " 투자전문가처럼 조언을 300자 이내로 자세하게 작성해줘 ");
+
+        advice.put("financePlan", financePlan);
+        advice.put("investPlan", investPlan);
+
+        return advice;
     }
 }

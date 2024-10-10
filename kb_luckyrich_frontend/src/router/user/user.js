@@ -13,6 +13,7 @@ import PostCreate from '@/components/account/board/PostCreate.vue';
 import PostDetail from '@/components/account/board/PostDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import AdminBoard from '@/views/luckyRich/AdminBoard.vue';
+import NotFound from '@/views/luckyRich/NotFound.vue';
 
 export default [
   {
@@ -95,4 +96,9 @@ export default [
     name: 'termsOfService',
     component: TermsOfService,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
+  }
 ];

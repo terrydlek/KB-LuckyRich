@@ -27,7 +27,7 @@ export default defineComponent({
           plotShadow: false,
         },
         title: {
-          text: '카테고리별<br>소비 현황',
+          text: '.<br>소비 분석',
           align: 'center',
           verticalAlign: 'middle',
           y: 60,
@@ -48,7 +48,7 @@ export default defineComponent({
           pie: {
             dataLabels: {
               enabled: true,
-              distance: 30,
+              distance: -30,
               style: {
                 fontWeight: 'bold',
                 color: 'black',
@@ -61,6 +61,7 @@ export default defineComponent({
             innerSize: '50%',
           },
         },
+        colors: ['#1EAAAA', '#FFC7AD', '#93DAFF', '#FFE150', '#FFAFE6', '#96C7ED', '#FF5675', '#C8FAC8'],
         series: [
           {
             name: '소비 비율',

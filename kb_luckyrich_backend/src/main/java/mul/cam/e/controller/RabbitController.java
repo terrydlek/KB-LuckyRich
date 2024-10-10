@@ -26,4 +26,12 @@ public class RabbitController {
         return ResponseEntity.ok("Message sent to RabbitMQ");
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test() throws IOException {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Map<String, Object> answer = rabbitService.advice(userName);
+        System.out.println(answer);
+        return ResponseEntity.ok(answer);
+    }
+
 }
