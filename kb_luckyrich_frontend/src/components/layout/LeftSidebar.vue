@@ -62,9 +62,24 @@ const isSubmenuVisible = ref({
   qa: false,
 });
 
+const getAccessToken = () => {
+  return localStorage.getItem('access_token'); 
+};
+
 // 클릭 시 해당 경로로 이동하는 함수
 const goTo = (route) => {
-  router.push({ name: route });
+  const accessToken = getAccessToken();
+
+  // 회원만 접근 가능한 경로는 토큰 여부 확인
+  const restrictedRoutes = ['asset', 'test', 'accountBook'];
+
+  if (restrictedRoutes.includes(route) && !accessToken) {
+    // 토큰이 없으면 로그인 페이지로 이동
+    router.push({ name: 'login' });
+  } else {
+    // 토큰이 있으면 해당 페이지로 이동
+    router.push({ name: route });
+  }
 };
 
 // Q&A 서브메뉴 표시 및 숨김 제어
