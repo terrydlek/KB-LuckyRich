@@ -2,8 +2,8 @@
 import News from '@/components/news/news.vue';
 
 
-export default{
-    components : {
+export default {
+    components: {
         News
     }
 }
@@ -18,6 +18,5 @@ export default{
 
 
 <style>
-
 
 </style>

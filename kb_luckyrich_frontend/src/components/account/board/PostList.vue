@@ -4,12 +4,7 @@
       <h2 class="faq-heading mb-4">게시판</h2>
 
       <!-- 검색 입력 필드 -->
-      <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="검색하고 싶은 제목 또는 글쓴이가 있나요?"
-        class="form-control mb-4"
-      />
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 제목 또는 글쓴이가 있나요?" class="form-control mb-4" />
 
       <table class="table table-striped">
         <thead class="thead-dark">
@@ -22,11 +17,9 @@
         </thead>
         <tbody v-if="filteredPosts.length">
           <tr v-for="(post, index) in paginatedPosts" :key="index">
-            <td>{{ post.boardNum }}</td>
+            <td>{{ getIndex(index) }}</td> <!-- No 값 -->
             <td>
-              <a :href="`/luckyrich/qa/ask/${post.boardNum}`">{{
-                post.title
-              }}</a>
+              <a :href="`/luckyrich/qa/ask/${post.boardNum}`">{{ post.title }}</a>
             </td>
             <td>{{ post.nickName }}</td>
             <td>{{ new Date(post.createdAt).toLocaleString() }}</td>
@@ -41,12 +34,8 @@
         </button>
 
         <!-- 페이지 번호 표시 -->
-        <button
-          v-for="page in pageNumbers"
-          :key="page"
-          @click="currentPage = page"
-          :class="{ active: currentPage === page }"
-        >
+        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+          :class="{ active: currentPage === page }">
           {{ page }}
         </button>
 
@@ -56,7 +45,6 @@
       </div>
 
       <a v-if="isLoggedIn" href="/luckyrich/qa/ask/create" id="bt" class="btn btn-primary">글쓰기</a>
-
     </div>
   </div>
 </template>
@@ -78,12 +66,16 @@ export default {
     };
   },
   computed: {
+    // 작성일 기준으로 오름차순 정렬된 게시물 리스트
+    sortedPosts() {
+      return this.posts.slice().sort((a, b) =>  new Date(b.createdAt) - new Date(a.createdAt));
+
     isLoggedIn() {
       return !!this.accessToken; // accessToken이 있으면 true 반환
     },
     // 검색된 게시물 리스트
     filteredPosts() {
-      return this.posts.filter(
+      return this.sortedPosts.filter(
         (post) =>
           post.title.includes(this.searchQuery) ||
           post.nickName.includes(this.searchQuery)
@@ -133,6 +125,10 @@ export default {
           console.error('There was an error fetching the posts:', error);
         });
     },
+    // No 값 계산
+    getIndex(index) {
+      return (this.currentPage - 1) * this.itemsPerPage + index + 1;
+    },
   },
   watch: {
     // 검색어가 변경되면 페이지를 처음으로 초기화
@@ -143,13 +139,17 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .qa-page {
   display: flex;
-  justify-content: center; /* 페이지 가운데 정렬 */
+  justify-content: center;
+  /* 페이지 가운데 정렬 */
   padding: 0px 30px;
-  background-color: #f4f7f9; /* 배경색 추가 */
-  min-height: 100vh; /* 화면 전체 높이 차지 */
+  background-color: #f4f7f9;
+  /* 배경색 추가 */
+  min-height: 100vh;
+  /* 화면 전체 높이 차지 */
 }
 
 .faq-heading {
@@ -162,11 +162,13 @@ export default {
 #bt {
   margin-top: 20px;
   margin-bottom: 20px;
-  text-align: center; /* 제목 가운데 정렬 */
+  text-align: center;
+  /* 제목 가운데 정렬 */
 }
 
 input[type='text'] {
-  border-radius: 8px; /* 입력 필드 모서리 둥글게 */
+  border-radius: 8px;
+  /* 입력 필드 모서리 둥글게 */
   border: 1px solid #ccc;
   padding: 12px 20px;
   font-size: 1rem;
@@ -174,7 +176,8 @@ input[type='text'] {
 }
 
 input[type='text']:focus {
-  border-color: #007bff; /* 포커스 시 파란색으로 변경 */
+  border-color: #007bff;
+  /* 포커스 시 파란색으로 변경 */
   outline: none;
 }
 
@@ -186,7 +189,8 @@ table {
 }
 
 thead {
-  background-color: #007bff; /* 테이블 헤더 배경색 */
+  background-color: #007bff;
+  /* 테이블 헤더 배경색 */
   color: white;
   text-align: left;
 }
@@ -210,7 +214,8 @@ td a {
 }
 
 td a:hover {
-  color: #0056b3; /* 링크 마우스 오버 시 색상 변경 */
+  color: #0056b3;
+  /* 링크 마우스 오버 시 색상 변경 */
 }
 
 .pagination {
@@ -251,7 +256,8 @@ td a:hover {
   margin: 30px auto;
   padding: 12px;
   text-align: center;
-  background-color: #28a745; /* 글쓰기 버튼 배경색 */
+  background-color: #28a745;
+  /* 글쓰기 버튼 배경색 */
   color: white;
   font-weight: bold;
   text-transform: uppercase;
@@ -261,6 +267,7 @@ td a:hover {
 }
 
 #bt:hover {
-  background-color: #218838; /* 마우스 오버 시 배경색 변경 */
+  background-color: #218838;
+  /* 마우스 오버 시 배경색 변경 */
 }
 </style>
