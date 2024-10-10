@@ -73,7 +73,7 @@ const updateClock = () => {
     image.value = "https://s3.amazonaws.com/media.skillcrush.com/skillcrush/wp-content/uploads/2016/09/cat3.jpg";
     messageText.value = "Sleep tight!";
   } else if (time < 12) {
-    image.value = "https://pbs.twimg.com/profile_images/378800000532546226/dbe5f0727b69487016ffd67a6689e75a.jpeg";
+    image.value = "http://image.dongascience.com/Photo/2020/10/8a5748b94df480da7df06adcdaa417c9.jpg";
     messageText.value = "Good morning!";
   } else if (time >= 18) {
     image.value = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cat_sleep.jpg";
@@ -181,5 +181,9 @@ onMounted(() => {
   border-radius: 50%;
   z-index: 1;
   /* Ensure the center is above the hands */
+}
+
+#lolcatImage {
+  border-radius: 30px;
 }
 </style>

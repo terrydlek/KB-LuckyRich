@@ -167,7 +167,7 @@ export default {
             // 댓글 작성 API 호출
             axios
               .post(
-                `http://localhost:8080/board/comments`,
+                `http://localhost:8080/board/reply`,
                 {
                   boardNum: this.post.board.boardNum,
                   reply: this.comment,

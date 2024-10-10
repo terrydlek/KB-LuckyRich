@@ -107,7 +107,7 @@
         <!-- {{ products }} -->
         <!-- <p>은행 잔고 + 총 보유 주식: {{ totalAssets['Bank Balance'] + totalAssets['Stock Total'] }}</p> -->
         <h5>고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.</h5>
-        <table v-if="products.length" style="width: 600px;">
+        <table v-if="products.length" style="width: 400px;">
           <thead>
             <tr>
               <th style="width: 200px;">상품명</th>
@@ -116,7 +116,7 @@
           </thead>
           <tbody>
             <tr v-for="(product, index) in products" :key="index">
-              <td> <a :href="`${product.link}`">{{ product.name }}</a></td>
+              <td><a :href="`${product.link}`">{{ truncatedName(product.name) }}</a></td>
               <td>{{ product.performance }}</td>
             </tr>
           </tbody>
@@ -190,15 +190,15 @@ export default {
       });
     },
     totalAssetsValue() {
-      // return 1;
-      return this.totalAssets['Bank Balance'] + this.totalAssets['Stock Total'];
+      return 20000000;
+      // return this.totalAssets['Bank Balance'] + this.totalAssets['Stock Total'];
     },
   },
   methods: {
     ...mapActions(['fetchAssetData', 'fetchAccountData', 'fetchTotalAssets']),
     formatCurrency(value) {
       return new Intl.NumberFormat('ko-KR').format(value);
-    }
+    },
   },
   mounted() {
     this.fetchAssetData();
@@ -227,7 +227,9 @@ export default {
   },
   methods: {
     ...mapActions(['fetchTotalAssets']),
-
+    truncatedName(name) {
+      return name.length > 25 ? name.slice(0, 25) + '...' : name;
+    },
     async fetchProducts() {
       try {
         this.loading = true;
@@ -439,7 +441,7 @@ export default {
   border-radius: 16px;
   text-align: center;
   margin-right: 1px;
-  width: 200px;
+  width: 300px;
   margin-left: 10px;
 }
 
