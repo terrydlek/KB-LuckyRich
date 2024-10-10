@@ -174,6 +174,7 @@ public class RecommendController {
 //        return "dd";
 //    }
 
+    // TODO 삭제해도 되나요?
     @GetMapping("/gpt")
     public ResponseEntity<GPTResponse> getGPTRecommend(){
         log.info("Gpt Recommend");
@@ -193,7 +194,7 @@ public class RecommendController {
         return ResponseEntity.ok(gptResponse);
     }
     
-    // 암호화 테스트용
+    // 암호화 테스트용 삭제해도 됨
     @GetMapping("/crypto")
     public void crypto() {
         String text = "hello";

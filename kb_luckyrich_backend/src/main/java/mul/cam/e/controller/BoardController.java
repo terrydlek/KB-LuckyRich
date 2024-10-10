@@ -97,7 +97,7 @@ public class BoardController {
     }
 
     // 게시글에 댓글을 추가하는 메서드
-    @PostMapping("/comments")
+    @PostMapping("/reply")
     public ResponseEntity<String> addComment(@RequestBody BoardReplyDto boardReplyDto) {
         log.info("execute addComment~~~");
         boardReplyDto.setReplyAt(new Timestamp(System.currentTimeMillis()));
