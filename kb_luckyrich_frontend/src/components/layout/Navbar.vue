@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <router-link to="/luckyrich" class="logo">LuckyRich</router-link>
+        <a @click="handleLogoClick" class="logo">LuckyRich</a>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -34,7 +34,7 @@ watch(route, () => {
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  isLoggedIn.value = !!token; // Update the login status
+  isLoggedIn.value = !!token;
 }
 
 const handleAuth = () => {
@@ -50,6 +50,15 @@ const handleAuth = () => {
 
 const goToMyPage = () => {
   router.push('/luckyrich/userUpdate');
+};
+
+// 로고 클릭 시 경로 설정
+const handleLogoClick = () => {
+  if (isLoggedIn.value) {
+    router.push('/luckyrich');
+  } else {
+    router.push('/');
+  }
 };
 </script>
 
@@ -83,6 +92,11 @@ const goToMyPage = () => {
   font-weight: 500;
   font-size: 30px;
   color: #f8b400;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo:hover {
   text-decoration: none;
 }
 
