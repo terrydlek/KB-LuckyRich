@@ -70,8 +70,7 @@ const checkAdminStatus = async () => {
   try {
     const token = localStorage.getItem('access_token');
     if (!token) {
-      console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
-      router.push('/luckyrich/login');
+      console.error('토큰이 없습니다. 로그인이 필요합니다.');
       return;
     }
 

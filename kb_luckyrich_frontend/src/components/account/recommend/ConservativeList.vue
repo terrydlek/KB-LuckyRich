@@ -112,14 +112,24 @@ const pageRange = 10;
 const fetchFunds = async () => {
   try {
     loading.value = true;
+    const token = localStorage.getItem('access_token'); // 토큰을 로컬 스토리지에서 가져옵니다.
     const response = await axios.get(
-      'http://localhost:8080/recommend/conservative'
+      'http://localhost:8080/recommend/conservative',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 추가합니다.
+        },
+      }
     );
     funds.value = response.data;
   } catch (err) {
     console.error('펀드 데이터를 불러오는 데 실패했습니다.', err);
     error.value =
       '펀드 데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.';
+    if (err.response && err.response.status === 401) {
+      // 인증 오류 시 로그인 페이지로 리다이렉트
+      router.push('/login');
+    }
   } finally {
     loading.value = false;
   }

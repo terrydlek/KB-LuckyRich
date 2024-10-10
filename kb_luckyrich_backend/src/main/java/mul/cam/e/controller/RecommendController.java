@@ -66,8 +66,8 @@ public class RecommendController {
 
     @GetMapping("/conservative")
     public ResponseEntity<List<FundDto>> getConservativeFunds() throws IOException {
-        redisService.invalidateCache("riskRating: 2");
-        redisService.invalidateCache("riskRating: 3");
+//        redisService.invalidateCache("riskRating: 2");
+//        redisService.invalidateCache("riskRating: 3");
         return ResponseEntity.ok(fundService.getFundsByRiskRating(2));
     }
 
