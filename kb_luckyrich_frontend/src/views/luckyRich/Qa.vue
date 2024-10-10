@@ -136,7 +136,7 @@ const toggleFaq = (index) => {
 }
 
 .faq-question.active {
-  background-color: #f8b400;
+  background-color: #FFD232;
 }
 
 .faq-question h2 {
@@ -152,7 +152,7 @@ const toggleFaq = (index) => {
 
 .toggle-icon {
   font-size: 1rem;
-  color: #f8b400;
+  color: #FFD232;
   transition: transform 0.3s ease, color 0.3s ease;
 }
 

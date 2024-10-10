@@ -381,4 +381,13 @@ tr:hover {
   color: #2980b9;
   transform: scale(1.2);
 }
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 </style>

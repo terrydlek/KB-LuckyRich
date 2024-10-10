@@ -7,11 +7,7 @@
   <section class="fund-tracker">
     <div class="controls">
       <div class="search">
-        <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="검색하고 싶은 펀드명이 있나요?"
-        />
+        <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 펀드명이 있나요?" />
       </div>
     </div>
     <div class="result">
@@ -33,24 +29,16 @@
             <tr v-for="fund in paginatedFunds" :key="fund.url">
               <td>{{ fund.country }}</td>
               <td>
-                <a
-                  :href="`/luckyrich/recommend/funds/${encodeURIComponent(
-                    fund.url
-                  )}`"
-                  >{{ fund.name }}</a
-                >
+                <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(
+                  fund.url
+                )}`">{{ fund.name }}</a>
               </td>
               <td>{{ formatNumber(fund.lastPrice) }}</td>
-              <td
-                :class="{
-                  'text-green-500': parseFloat(fund.changePercent) >= 0,
-                  'text-red-500': parseFloat(fund.changePercent) < 0,
-                }"
-              >
-                <span
-                  v-if="parseFloat(fund.changePercent) >= 0"
-                  style="font-size: 15px"
-                >
+              <td :class="{
+                'text-green-500': parseFloat(fund.changePercent) >= 0,
+                'text-red-500': parseFloat(fund.changePercent) < 0,
+              }">
+                <span v-if="parseFloat(fund.changePercent) >= 0" style="font-size: 15px">
                   ▲ {{ fund.changePercent }}
                 </span>
                 <span v-else style="font-size: 15px">
@@ -68,12 +56,8 @@
           <button @click="currentPage--" :disabled="currentPage === 1">
             이전
           </button>
-          <button
-            v-for="page in pageNumbers"
-            :key="page"
-            @click="currentPage = page"
-            :class="{ active: currentPage === page }"
-          >
+          <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+            :class="{ active: currentPage === page }">
             {{ page }}
           </button>
           <button @click="currentPage++" :disabled="currentPage === totalPages">
@@ -328,5 +312,14 @@ tr:hover {
 
 .text-red-500 {
   color: #ef4444;
+}
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>

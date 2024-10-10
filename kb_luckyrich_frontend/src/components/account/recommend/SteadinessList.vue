@@ -1,8 +1,8 @@
 <template>
   <div class="deposit-container">
-    <h2 class="title">
+    <h3 class="title">
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
-    </h2>
+    </h3>
     <div class="search-container">
       <input
         type="text"
@@ -300,5 +300,14 @@ watch(searchQuery, () => {
 .refresh-icon:hover .refresh-icon {
   color: #2980b9;
   transform: scale(1.2);
+}
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>
