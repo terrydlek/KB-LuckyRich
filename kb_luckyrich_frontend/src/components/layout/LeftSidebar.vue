@@ -66,6 +66,10 @@ const isSubmenuVisible = ref({
   qa: false,
 });
 
+const getAccessToken = () => {
+  return localStorage.getItem('access_token'); 
+};
+
 const checkAdminStatus = async () => {
   try {
     const token = localStorage.getItem('access_token');
@@ -98,7 +102,18 @@ const goTo = (route) => {
     alert('관리자만 접근할 수 있습니다.');
     return;
   }
-  router.push({ name: route });
+  const accessToken = getAccessToken();
+
+  // 회원만 접근 가능한 경로는 토큰 여부 확인
+  const restrictedRoutes = ['asset', 'test', 'accountBook'];
+
+  if (restrictedRoutes.includes(route) && !accessToken) {
+    // 토큰이 없으면 로그인 페이지로 이동
+    router.push({ name: 'login' });
+  } else {
+    // 토큰이 있으면 해당 페이지로 이동
+    router.push({ name: route });
+  }
 };
 
 const toggleSubmenu = (menu, isVisible) => {

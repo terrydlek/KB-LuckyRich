@@ -131,7 +131,7 @@ const goToLogin = () => {
 }
 
 .hero-section {
-  background-image: url('@/assets/images/represent.jpg');
+  background-image: url('@/assets/images/aboutDetail.png');
   background-size: cover;
   background-position: center;
   height: 70vh;
