@@ -2,14 +2,13 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <a @click="handleLogoClick" class="logo">LuckyRich</a>
-        <router-link to="/luckyrich" class="logo">
+        <a @click="handleLogoClick" class="logo">
           <img
             src="/src/assets/images/KLlogo3.png"
             alt="LuckyRich Logo"
             class="logo-image"
           />
-        </router-link>
+        </a>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -45,7 +44,10 @@ const handleAuth = () => {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
     isLoggedIn.value = false;
-    router.push('/');
+    checkLoginStatus();
+    router.push('/').then(() => {
+      router.go(0); // 페이지를 강제로 새로고침하여 상태 반영
+    });
   } else {
     router.push({ name: 'login' });
   }
@@ -97,6 +99,12 @@ const handleLogoClick = () => {
   color: #f8b400;
   text-decoration: none;
   cursor: pointer;
+}
+
+.logo-image {
+  width: 170px; /* 원하는 크기로 설정 */
+  height: auto;
+  cursor: pointer; /* 손가락 모양 커서 */
 }
 
 .logo:hover {
