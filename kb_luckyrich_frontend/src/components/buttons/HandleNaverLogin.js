@@ -7,25 +7,27 @@ export function handleNaverLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const NaverCode = urlParams.get('code');
     const service = urlParams.get('service');
-    console.log('naverCode',NaverCode)
+    // console.log('naverCode', NaverCode)
     const router = useRouter();
 
     if (NaverCode) {
         axios.get(`http://localhost:8080/api/login/naver?code=${NaverCode}&state=STATE_STRING`)
             .then(res => {
-                const accessToken = res.data.accessToken;
+                const accessToken = res.data.access_token;
+                const refreshToken = res.data.refresh_token;
                 const accountNum = res.data.account_num;
-                console.log(accountNum)
+                // console.log(accountNum)
                 localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
 
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
-                console.log('NaverAccess Token:', accessToken);
+                // console.log('NaverAccess Token:', accessToken);
                 if (accountNum > 1) {
                     router.push('/');
-                }else {
+                } else {
                     router.push({ name: 'myDataAgree' });
                 }
-                
+
                 window.history.replaceState({}, document.title, '/luckyrich');
 
             })
