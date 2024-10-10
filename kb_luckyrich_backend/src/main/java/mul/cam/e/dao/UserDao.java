@@ -26,6 +26,8 @@ public interface UserDao {
 
     boolean withdrawUser(int userId);
 
+    String getUserRole(String userName);
+    
     String getRefreshToken(int userId);
 
     void updateRefreshToken(@Param("userId") int userId, @Param("refreshToken") String refreshToken);

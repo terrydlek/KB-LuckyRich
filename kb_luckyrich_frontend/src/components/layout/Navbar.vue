@@ -2,8 +2,13 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
+        <a @click="handleLogoClick" class="logo">LuckyRich</a>
         <router-link to="/luckyrich" class="logo">
-          <img src="/src/assets/images/KLlogo3.png" alt="LuckyRich Logo" class="logo-image" />
+          <img
+            src="/src/assets/images/KLlogo3.png"
+            alt="LuckyRich Logo"
+            class="logo-image"
+          />
         </router-link>
       </div>
       <div class="navbar-right">
@@ -49,6 +54,15 @@ const handleAuth = () => {
 const goToMyPage = () => {
   router.push('/luckyrich/userUpdate');
 };
+
+// 로고 클릭 시 경로 설정
+const handleLogoClick = () => {
+  if (isLoggedIn.value) {
+    router.push('/luckyrich');
+  } else {
+    router.push('/');
+  }
+};
 </script>
 
 <style scoped>
@@ -76,12 +90,17 @@ const goToMyPage = () => {
   gap: 20px;
 }
 
-.logo {
-  
+.navbar-left .logo {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+  color: #f8b400;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.logo-image {
-  height: 100px; /* 기존보다 더 큰 이미지 높이 */
+.logo:hover {
+  text-decoration: none;
 }
 
 .navbar-right {
