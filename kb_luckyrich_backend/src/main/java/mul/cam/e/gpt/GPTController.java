@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
-@RequestMapping("/gpt")
+//@RequestMapping("/gpt")
 @RequiredArgsConstructor
 public class GPTController {
     @Value("${gpt.model}")
@@ -22,8 +22,9 @@ public class GPTController {
     private final RestTemplate restTemplate;
 
 
-    @GetMapping("/chat")
-    public String chat(@RequestParam("prompt") String prompt){
+    //    @GetMapping("/chat")
+//    public String chat(@RequestParam("prompt") String prompt){
+    public String chat(String prompt) {
         log.info("GPT TEST");
 
         /**
@@ -33,7 +34,7 @@ public class GPTController {
          * *_Penalty: 같은 단어나 구 반복 억제
          */
         GPTRequest request = new GPTRequest(
-                model,prompt,1,256,1,0,0);
+                model, prompt, 1, 256, 1, 0, 0);
 
         GPTResponse gptResponse = restTemplate.postForObject(
                 apiUrl

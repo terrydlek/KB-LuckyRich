@@ -8,8 +8,7 @@
 
         <!-- 소개 섹션 -->
         <section class="policy-introduction">
-            <br>
-            <h1>소개</h1>
+            <h2>소개</h2>
             <p>
                 Lucky Rich에서는 귀하의 개인정보를 보호하기 위해 최선을 다하고 있습니다.
                 본 개인정보 보호정책은 저희가 수집하는 데이터의 종류, 사용 방법, 그리고 귀하의 정보를 안전하게 보호하기 위한 조치를 설명합니다.
@@ -133,41 +132,53 @@
 
 <style scoped>
 .privacy-policy-page {
-    font-family: 'Arial', sans-serif;
-    color: #333;
+    font-family: 'Noto Sans KR', sans-serif;
     line-height: 1.6;
-    padding: 20px 40px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .policy-hero-section {
-    background-color: #f8b400;
+    background-color: #6c63ff;
     color: white;
     text-align: center;
-    padding: 50px 0;
+    padding: 40px 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
 }
 
 .policy-hero-section h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
 .policy-hero-section p {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
+.policy-introduction,
 .policy-section {
-    margin: 40px 0;
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .policy-section h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #f8b400;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #333;
 }
 
 .policy-section p,
 .policy-section ul {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    color: #555;
 }
 
 .policy-section ul {
@@ -175,15 +186,17 @@
 }
 
 .policy-section ul li {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
-address {
+.policy-section address {
     font-style: normal;
+    line-height: 1.6;
 }
 
 a {
-    color: #f8b400;
+    color: #6c63ff;
+    text-decoration: none;
 }
 
 a:hover {

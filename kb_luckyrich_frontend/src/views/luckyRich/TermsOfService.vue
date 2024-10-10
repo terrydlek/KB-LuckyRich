@@ -93,7 +93,7 @@
         </section>
 
         <!-- Contact Us -->
-        <section class="terms-section">
+        <section class="terms-section contact-section">
             <h2>문의하기</h2>
             <p>
                 본 이용 약관에 대한 질문이나 문의가 있으시면, 아래의 연락처로 문의해 주세요:
@@ -101,75 +101,83 @@
             <address>
                 Lucky Rich, Inc.<br />
                 부자 스트리트 123, 금융시티, 재정주 45678<br />
-                이메일: <a href="https://github.com/terrydlek/KB-LuckyRich">https://github.com/terrydlek/KB-LuckyRich</a><br />
+                이메일: <a
+                    href="https://github.com/terrydlek/KB-LuckyRich">https://github.com/terrydlek/KB-LuckyRich</a><br />
             </address>
         </section>
     </div>
 </template>
 
 <style scoped>
-.privacy-policy-page {
-    font-family: 'Arial', sans-serif; /* 글꼴 설정 */
-    color: #f8b400; /* 텍스트 색상 */
-    line-height: 1.6; /* 줄 간격 조정 */
-    padding: 20px; /* 패딩 추가 */
-    background-color: #333; /* 배경 색상 */
-    min-height: 100vh; /* 최소 높이 설정 */
+.terms-of-service-page {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .terms-hero-section {
-    background-color: #f8b400; /* 배경 색상 */
-    color: white; /* 텍스트 색상 */
-    text-align: center; /* 중앙 정렬 */
-    padding: 50px 0; /* 패딩 설정 */
-    margin-bottom: 40px; /* 아래쪽 여백 */
+    background-color: #6c63ff;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
 }
 
-.policy-hero-section h1 {
-    font-size: 3rem; /* 제목 크기 */
-    margin-bottom: 10px; /* 아래쪽 여백 */
+.terms-hero-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
 }
 
-.policy-hero-section p {
-    font-size: 1.5rem; /* 부제목 크기 */
+.terms-hero-section p {
+    font-size: 1.2rem;
 }
 
-.policy-section {
-    margin: 40px 0; /* 여백 설정 */
-    padding: 20px; /* 패딩 추가 */
-    color: #f8b400; /* 텍스트 색상 */
+.terms-introduction,
+.terms-section {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.policy-section h2 {
-    font-size: 2rem; /* 섹션 제목 크기 */
-    margin-bottom: 20px; /* 아래쪽 여백 */
-    color: #f8b400; /* 섹션 제목 색상 */
+.terms-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #333;
 }
 
-.policy-section p,
-.policy-section ul {
-    font-size: 1.1rem; /* 기본 텍스트 크기 */
+.terms-section p,
+.terms-section ul {
+    font-size: 1rem;
+    color: #555;
 }
 
-.policy-section ul {
-    padding-left: 20px; /* 왼쪽 여백 */
+.terms-section ul {
+    padding-left: 20px;
 }
 
-.policy-section ul li {
-    margin-bottom: 10px; /* 아래쪽 여백 */
+.terms-section ul li {
+    margin-bottom: 8px;
 }
 
-address {
-    font-style: normal; /* 주소 스타일 제거 */
-    color: #f8b400; /* 주소 색상 */
-    margin-top: 10px; /* 위쪽 여백 */
+.contact-section address {
+    font-style: normal;
+    line-height: 1.6;
 }
 
-a {
-    color: #f8b400; /* 링크 색상 */
+.contact-section a {
+    color: #6c63ff;
+    text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
+.contact-section a:hover {
+    text-decoration: underline;
 }
 </style>

@@ -2,14 +2,15 @@
   <div class="home-container">
     <main class="main-content">
       <div class="chart-section">
-        <h4>Graph</h4>
-        <component :is="currentChart" v-if="currentChart" />
-        <div v-else>
-          <p>차트를 불러오는 중입니다...</p>
-        </div>
-        <button @click="prevChart">←</button>
-        <button @click="nextChart">→</button>
+        <component :is="totalChart" class="rounded-chart" style="width: 430px;" />
+        <component :is="assetGraph" class="rounded-chart" style="width: 430px;" />
       </div>
+
+      <div class="chart-section">
+        <component :is="consumptionstatus" class="rounded-chart" style="width: 430px;" />
+        <component :is="accountBookChart" class="rounded-chart" style="width: 430px;" />
+      </div>
+      
     </main>
   </div>
 </template>
@@ -23,33 +24,35 @@ import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 
-const charts = [
-  totalChart,
-  goalChart,
-  assetGraph,
-  accountBookChart,
-  assetcomparison,
-  consumptionstatus,
-];
-const currentIndex = ref(0);
-const currentChart = ref(charts[currentIndex.value]);
+// const charts = [
+//   totalChart,
+//   goalChart,
+//   assetGraph,
+//   accountBookChart,
+//   assetcomparison,
+//   consumptionstatus,
+// ];
+// const currentIndex = ref(0);
+// const currentChart = ref(charts[currentIndex.value]);
 
-const nextChart = () => {
-  currentIndex.value = (currentIndex.value + 1) % charts.length;
-  currentChart.value = charts[currentIndex.value];
-};
+// const nextChart = () => {
+//   currentIndex.value = (currentIndex.value + 1) % charts.length;
+//   currentChart.value = charts[currentIndex.value];
+// };
 
-const prevChart = () => {
-  currentIndex.value = (currentIndex.value - 1 + charts.length) % charts.length;
-  currentChart.value = charts[currentIndex.value];
-};
+// const prevChart = () => {
+//   currentIndex.value = (currentIndex.value - 1 + charts.length) % charts.length;
+//   currentChart.value = charts[currentIndex.value];
+// };
 </script>
 
 <style scoped>
 /* 전체 레이아웃 */
 .home-container {
+  width: 100% !important;
+
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  /* grid-template-columns: 1fr 5fr 1fr; */
   gap: 20px;
   padding: 20px;
   background-color: #f9f9f9;
@@ -80,9 +83,10 @@ const prevChart = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .chart-section button {
@@ -97,5 +101,20 @@ const prevChart = () => {
 
 .chart-section button:hover {
   background-color: #27ae60;
+}
+
+.chart-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.rounded-chart {
+  border-radius: 130px;
+  /* 둥근 모서리 적용 */
+  overflow: hidden;
+  /* 둥근 모서리를 넘어가는 콘텐츠를 숨김 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 살짝의 그림자 효과 */
 }
 </style>
