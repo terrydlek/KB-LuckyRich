@@ -1,37 +1,46 @@
 <template>
   <div class="test-wrapper">
-    <h2 v-if="!testCompleted">투자 성향 테스트</h2>
-    <hr v-if="!testCompleted" />
-
-    <div v-if="!testCompleted && currentQuestionIndex < questions.length">
-      <div class="index">
-        {{ currentQuestionIndex + 1 }} / {{ questions.length }}
-      </div>
-      <div class="question">Q. {{ questions[currentQuestionIndex].text }}</div>
-      <div>
+    <h2 v-if="!testCompleted" class="test-title">투자 성향 테스트</h2>
+    <div
+      v-if="!testCompleted && currentQuestionIndex < questions.length"
+      class="question-container"
+    >
+      <div class="progress-bar">
         <div
-          class="answers"
+          class="progress"
+          :style="{
+            width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`,
+          }"
+        ></div>
+      </div>
+      <div class="question-number">
+        질문 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
+      </div>
+      <div class="question">{{ questions[currentQuestionIndex].text }}</div>
+      <div class="options">
+        <label
           v-for="(option, index) in questions[currentQuestionIndex].options"
           :key="index"
+          class="option"
+          :class="{ selected: answers[currentQuestionIndex] === index }"
         >
           <input
             type="radio"
             :id="'option' + index"
             :value="index"
             v-model="answers[currentQuestionIndex]"
+            class="hidden-radio"
           />
-          <label :for="'option' + index">{{ option.text }}</label>
-        </div>
+          {{ option.text }}
+        </label>
       </div>
-      <div>
-        <button
-          class="button"
-          @click="nextQuestion"
-          :disabled="answers[currentQuestionIndex] === null"
-        >
-          {{ isLastQuestion ? '결과 보기' : '다음 질문' }}
-        </button>
-      </div>
+      <button
+        class="next-button"
+        @click="nextQuestion"
+        :disabled="answers[currentQuestionIndex] === null"
+      >
+        {{ isLastQuestion ? '결과 보기' : '다음 질문' }}
+      </button>
     </div>
   </div>
 </template>
@@ -227,15 +236,12 @@ const submitTest = async () => {
 const checkTestResult = async () => {
   try {
     const token = localStorage.getItem('access_token');
-    const response = await axios.get(
-      'http://localhost:8080/investment',
-      {
-        params: { userId: userId.value },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get('http://localhost:8080/investment', {
+      params: { userId: userId.value },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.data && response.data.investmentType) {
       testCompleted.value = true;
@@ -302,20 +308,129 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
 .test-wrapper {
+  font-family: 'Noto Sans KR', sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.test-title {
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.question-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
 }
 
-.index,
-.question,
-.answer,
-.button {
-  margin: 30px 0;
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.question-number {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.question {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.option {
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
+}
+
+.option.selected {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+}
+
+.hidden-radio {
+  display: none;
+}
+
+.next-button {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: #45a049;
+}
+
+.next-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .test-wrapper {
+    padding: 1rem;
+  }
+
+  .test-title {
+    font-size: 1.5rem;
+  }
+
+  .question {
+    font-size: 1rem;
+  }
+
+  .option {
+    padding: 0.8rem;
+  }
+
+  .next-button {
+    padding: 0.6rem 1.5rem;
+  }
 }
 </style>

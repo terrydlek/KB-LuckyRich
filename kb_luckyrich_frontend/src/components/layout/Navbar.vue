@@ -41,7 +41,7 @@ const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
-    isLoggedIn.value = false; // Immediately update login status
+    isLoggedIn.value = false;
     router.push('/');
   } else {
     router.push({ name: 'login' });

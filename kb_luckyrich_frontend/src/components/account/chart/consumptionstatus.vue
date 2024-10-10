@@ -31,6 +31,10 @@ export default defineComponent({
           align: 'center',
           verticalAlign: 'middle',
           y: 60,
+          style: {
+            fontSize: '12px', // 툴팁 폰트 크기
+            fontFamily: 'Noto Sans',
+          },
         },
         tooltip: {
           pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
