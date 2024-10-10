@@ -14,9 +14,9 @@
     <!-- 오른쪽 사이드바 -->
     <RightSidebar />
 
-    <!-- 다크 모드 토글 버튼 -->
+    <!-- 다크 모드 토글 버튼 (아이콘 추가) -->
     <button class="dark-mode-toggle" @click="toggleDarkMode">
-      {{ isDarkMode ? '라이트 모드' : '다크 모드' }}
+      <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
     </button>
   </div>
 </template>
@@ -26,6 +26,7 @@ import { ref, onMounted } from 'vue';
 import Navbar from './components/layout/Navbar.vue';
 import LeftSidebar from './components/layout/LeftSidebar.vue';
 import RightSidebar from './components/layout/RightSidebar.vue';
+import '@fortawesome/fontawesome-free/css/all.css'; // Font Awesome 스타일 추가
 
 // 다크 모드 상태 관리
 const isDarkMode = ref(false);
@@ -87,5 +88,6 @@ onMounted(() => {
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
+  font-size: 20px; /* 아이콘 크기 조절 */
 }
 </style>

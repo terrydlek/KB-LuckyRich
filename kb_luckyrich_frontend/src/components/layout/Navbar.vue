@@ -94,7 +94,7 @@ const goToMyPage = () => {
   font-weight: 600;
   font-size: 16px;
   color: #ffffff;
-  background-color: #f8b400;
+  background-color: #FFD232;
   padding: 10px 20px;
   border: none;
   border-radius: 25px;

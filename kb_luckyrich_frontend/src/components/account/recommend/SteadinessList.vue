@@ -1,9 +1,9 @@
 <template>
   <div class="deposit-container">
 
-    <h2 class="title">
+    <h3 class="title">
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
-    </h2>
+    </h3>
     <div class="search-container">
       <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
     </div>
@@ -270,5 +270,14 @@ watch(searchQuery, () => {
   margin-top: 20px;
   font-size: 18px;
   color: #666;
+}
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>

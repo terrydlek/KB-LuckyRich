@@ -248,4 +248,13 @@ export default {
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 </style>
