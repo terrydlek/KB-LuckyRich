@@ -14,10 +14,10 @@
           <th>현재가</th>
           <th>전일비</th>
           <th>등락률</th>
-          <th>거래량</th>
+          <!-- <th>거래량</th> -->
           <th>시가총액</th>
           <th>매출액</th>
-          <th>영업이익</th>
+          <!-- <th>영업이익</th> -->
           <th>주당 순 이익</th>
           <th>PER</th>
           <th>ROE</th>
@@ -50,10 +50,10 @@
             </span>
           </td>
 
-          <td>{{ stock.tradingVolume }}</td>
+          <!-- <td>{{ stock.tradingVolume }}</td> -->
           <td>{{ stock.marketCapitalization }}</td>
           <td>{{ stock.salesAmount }}</td>
-          <td>{{ stock.operatingProfit }}</td>
+          <!-- <td>{{ stock.operatingProfit }}</td> -->
           <td>{{ stock.earningsPerShare }}</td>
           <td>
             <span v-if="stock.per.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
@@ -304,5 +304,14 @@ button.active {
   font-weight: bold;
   background-color: #4caf50;
   color: white;
+}
+
+a {
+    color: #6c63ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 </style>

@@ -321,7 +321,7 @@ export default {
     async generatePortfolioPDF() {
       try {
         const token = localStorage.getItem('access_token');
-
+        alert("포트폴리오 생성중입니다... 잠시만 기다려주세요.");
         // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/portfolios)
         await axios.post(
           'http://localhost:8080/rabbit/portfolios',
@@ -360,6 +360,7 @@ export default {
                 socketComponent
                   .generatePDF()
                   .then(() => {
+                    alert("포트폴리오 다운로드 완료!");
                     console.log('포트폴리오 다운로드 완료!');
                     this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
                   })
@@ -520,4 +521,13 @@ export default {
 /* .dashboard-container {
   width: 1000px;
 } */
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 </style>

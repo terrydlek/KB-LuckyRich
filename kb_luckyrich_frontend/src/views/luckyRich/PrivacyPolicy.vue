@@ -143,7 +143,7 @@
 }
 
 .policy-hero-section {
-    background-color: #6c63ff;
+    background-color: #FFD232;
     color: white;
     text-align: center;
     padding: 40px 20px;
