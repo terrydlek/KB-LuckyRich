@@ -3,6 +3,7 @@ package mul.cam.e.dao;
 import mul.cam.e.dto.*;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -73,4 +74,10 @@ public interface MyAssetDao {
     // 카테고리별 소비 지출
     @MapKey("category")
     List<Map<String, Object>> getCategoryExpenses(int userId);
+
+    List<Integer> getCars();
+
+    void setRealAsset(@Param("randCarNo") int randCarNo, @Param("randEstateNo") int randEstateNo, @Param("userId") int userId);
+
+    List<Integer> getReals();
 }

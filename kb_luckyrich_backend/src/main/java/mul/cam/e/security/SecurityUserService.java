@@ -20,24 +20,6 @@ public class SecurityUserService implements UserDetailsService {
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SecurityUser user = userDao.findByUsername(username);
-//        log.info("Found user: {}", user);
-
-        /*
-        if (user != null) {
-            SecurityUser authUser = SecurityUser.builder()
-                    .userName(user.getUsername())
-                    .nickName(user.getNickName())
-                    .email(user.getEmail())
-                    .gender(user.getGender())
-                    .age(user.getAge())
-                    .role(user.getRole())
-                    .build();
-
-            log.info("authUser : " + authUser);
-            return authUser;
-        }
-        */
-
         return user;
     }
 
@@ -57,7 +39,9 @@ public class SecurityUserService implements UserDetailsService {
         return userDao.getAccountNum(id);
     }
 
-    public int getUserId(String name) { return userDao.getUserId(name); }
+    public int getUserId(String name) {
+        return userDao.getUserId(name);
+    }
 
     public String getNickname(String userName) {
         return userDao.getNickname(userName);
@@ -65,5 +49,13 @@ public class SecurityUserService implements UserDetailsService {
 
     public boolean withdrawUser(int userId) {
         return userDao.withdrawUser(userId);
+    }
+
+    public void updateRefreshToken(int userId, String refreshToken) {
+        userDao.updateRefreshToken(userId, refreshToken);
+    }
+
+    public String getRefreshToken(int userId) {
+        return userDao.getRefreshToken(userId);
     }
 }

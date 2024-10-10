@@ -5,16 +5,11 @@ import mul.cam.e.dao.MyAssetDao;
 import mul.cam.e.dto.*;
 import mul.cam.e.util.KeyDecrypt;
 import mul.cam.e.util.StockSymbolProcessor;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,5 +127,17 @@ public class MyAssetService {
             }
         }
         return map;
+    }
+
+    public void setRealAsset(int randCarNo, int randEstateNo, int userId) {
+        myAssetDao.setRealAsset(randCarNo, randEstateNo, userId);
+    }
+
+    public List<Integer> getCars() {
+        return myAssetDao.getCars();
+    }
+
+    public List<Integer> getReals() {
+        return myAssetDao.getReals();
     }
 }

@@ -26,6 +26,13 @@
         values (#{userId}, #{stockSymbol}, #{stockName}, #{purchasePrice}, #{quantity}, #{purchaseDate})
     </update>
 
+    <update id="setRealAsset">
+        update user
+        set realestate_no = #{randEstateNo},
+            car_no = #{randCarNo}
+        where user_id = #{userId}
+    </update>
+
     <select id="getTransactions" resultType="mul.cam.e.dto.TransactionDto">
         select t.account_id,
                t.amount,
@@ -246,6 +253,14 @@
         join account a on t.account_id = a.account_id where a.user_id = #{userId} and t.transaction_type = '출금'
         group by t.category
         order by amount desc
+    </select>
+
+    <select id="getCars" resultType="java.lang.Integer">
+        select car_no from car
+    </select>
+
+    <select id="getReals" resultType="java.lang.Integer">
+        select no from sg_real
     </select>
 
 </mapper>

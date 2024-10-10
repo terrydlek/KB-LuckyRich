@@ -3,6 +3,7 @@ package mul.cam.e.dao;
 import mul.cam.e.security.SecurityUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,8 @@ public interface UserDao {
     String getNickname(String userName);
 
     boolean withdrawUser(int userId);
+
+    String getRefreshToken(int userId);
+
+    void updateRefreshToken(@Param("userId") int userId, @Param("refreshToken") String refreshToken);
 }

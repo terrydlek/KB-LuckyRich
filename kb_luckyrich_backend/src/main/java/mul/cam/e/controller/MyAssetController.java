@@ -2,7 +2,6 @@ package mul.cam.e.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dto.*;
 import mul.cam.e.enumrate.AccountType;
 import mul.cam.e.enumrate.BankName;
@@ -118,6 +117,13 @@ public class MyAssetController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // random car
+        List<Integer> cars = myAssetService.getCars();
+        List<Integer> sgreals = myAssetService.getReals();
+        int randCarNo = randUtils.getRandomId(cars);
+        int randEstateNo = randUtils.getRandomId(sgreals);
+        myAssetService.setRealAsset(randCarNo, randEstateNo, userId);
 
         return ResponseEntity.ok("User information updated successfully");
     }
