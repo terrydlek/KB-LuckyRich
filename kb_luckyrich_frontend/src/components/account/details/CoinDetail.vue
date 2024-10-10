@@ -73,7 +73,6 @@ onMounted(() => {
 <style scoped>
 .back-button {
   width: 10%;
-  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
@@ -85,7 +84,7 @@ onMounted(() => {
 }
 
 .back-button:hover {
-  background-color: #2980b9;
+  background-color: #32d43ace;
 }
 
 h1 {

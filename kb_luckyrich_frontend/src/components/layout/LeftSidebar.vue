@@ -1,6 +1,6 @@
 <template lang="">
   <div class="left-sidebar">
-    <div class="profile-card">
+    <!-- <div class="profile-card">
       <img
         src="../assets/images/profile.png"
         alt="Profile"
@@ -9,7 +9,7 @@
       <div class="profile-info">
         <h3>GRAVITY SKIN 29</h3>
       </div>
-    </div>
+    </div> -->
 
     <nav class="category-list">
       <h4>Category</h4>

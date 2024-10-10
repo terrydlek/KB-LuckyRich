@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div :class="['layout-container', { 'dark-mode': isDarkMode }]">
     <!-- 상단 네비게이션 바 -->
     <navbar />
 
@@ -13,13 +13,35 @@
 
     <!-- 오른쪽 사이드바 -->
     <RightSidebar />
+
+    <!-- 다크 모드 토글 버튼 -->
+    <button class="dark-mode-toggle" @click="toggleDarkMode">
+      {{ isDarkMode ? '라이트 모드' : '다크 모드' }}
+    </button>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import Navbar from './components/layout/Navbar.vue';
 import LeftSidebar from './components/layout/LeftSidebar.vue';
 import RightSidebar from './components/layout/RightSidebar.vue';
+
+// 다크 모드 상태 관리
+const isDarkMode = ref(false);
+
+// 다크 모드 토글 함수
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value;
+  localStorage.setItem('darkMode', isDarkMode.value);
+  document.body.classList.toggle('dark-mode', isDarkMode.value);
+};
+
+// 페이지 로드 시 저장된 다크 모드 상태를 불러옴
+onMounted(() => {
+  isDarkMode.value = localStorage.getItem('darkMode') === 'true';
+  document.body.classList.toggle('dark-mode', isDarkMode.value);
+});
 </script>
 
 <style scoped>
@@ -38,7 +60,6 @@ import RightSidebar from './components/layout/RightSidebar.vue';
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,5 +74,18 @@ import RightSidebar from './components/layout/RightSidebar.vue';
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   min-height: 100vh;
+}
+
+/* 다크 모드 토글 버튼 스타일 */
+.dark-mode-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-primary);
+  color: var(--color-font);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 </style>
