@@ -223,7 +223,6 @@ watch(searchQuery, () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .fund-tracker {
@@ -241,6 +240,9 @@ watch(searchQuery, () => {
 
 .search {
   flex-grow: 1;
+  width: 80%;
+  margin: 10px auto;
+  margin-bottom: 10px;
 }
 
 input[type='text'] {
@@ -252,14 +254,14 @@ input[type='text'] {
 }
 
 .test-reset-button {
-  margin-top: 20px;
-  /* margin-left: 850px; */
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -289,7 +291,7 @@ tr:hover {
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -299,7 +301,7 @@ tr:hover {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -310,9 +312,9 @@ tr:hover {
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination button:disabled {

@@ -147,7 +147,7 @@ const itemsPerPage = 10;
 const pageRange = 10; // 한번에 보여줄 페이지 번호 개수
 
 const refreshPage = () => {
-  console.log('새로고침 아이콘 클릭됨!');
+  console.log('Refresh page.');
   window.location.reload();
 };
 
@@ -260,13 +260,13 @@ h3 {
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-bottom: 0;
 }
 
 .coins {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin-bottom: 20px; */
 }
 
 .coin-tracker {
@@ -285,7 +285,8 @@ h3 {
 .search {
   width: 80%;
   flex-grow: 1;
-  margin: 20px auto;
+  margin: 0 auto; /* 타이틀과 검색창 사이 여백 제거 */
+  margin-bottom: 20px; /* 필요시 검색창과 다른 요소 간 여백을 남겨둠 */
 }
 
 input[type='text'] {
@@ -297,14 +298,14 @@ input[type='text'] {
 }
 
 .test-reset-button {
-  margin-top: 20px;
-  /* margin-left: 850px; */
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -334,7 +335,7 @@ tr:hover {
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -344,7 +345,7 @@ tr:hover {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -355,9 +356,9 @@ tr:hover {
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination button:disabled {
@@ -368,7 +369,7 @@ tr:hover {
 .refresh-icon {
   font-size: 24px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 2px;
   color: #3498db;
   transition: color 0.3s, transform 0.2s ease;
   display: inline-block; /* 클릭할 수 있도록 영역 확장 */

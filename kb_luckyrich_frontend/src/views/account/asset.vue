@@ -435,6 +435,18 @@ export default {
 .header h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header a {
