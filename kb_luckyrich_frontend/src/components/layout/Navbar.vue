@@ -2,7 +2,9 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <router-link to="/luckyrich" class="logo">LuckyRich</router-link>
+        <router-link to="/luckyrich" class="logo">
+          <img src="/src/assets/images/KLlogo3.png" alt="LuckyRich Logo" class="logo-image" />
+        </router-link>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -24,24 +26,20 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const route = useRoute();
 
-// onMounted(() => {
-//   checkLoginStatus();
-// });
-
 watch(route, () => {
   checkLoginStatus();
 });
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  isLoggedIn.value = !!token; // Update the login status
+  isLoggedIn.value = !!token;
 }
 
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
-    isLoggedIn.value = false; // Immediately update login status
+    isLoggedIn.value = false;
     router.push('/');
   } else {
     router.push({ name: 'login' });
@@ -55,7 +53,7 @@ const goToMyPage = () => {
 
 <style scoped>
 .navbar {
-  width: 100%; /* 전체 화면 너비 */
+  width: 100%;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
@@ -67,23 +65,23 @@ const goToMyPage = () => {
 }
 
 .navbar-inner {
-  max-width: 1200px; /* 콘텐츠와 동일한 최대 너비 */
+  max-width: 1200px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  padding-left: 0; /* 왼쪽 패딩 제거 */
-  padding-right: 0; /* 오른쪽 패딩 제거 */
+  padding-left: 0;
+  padding-right: 0;
   gap: 20px;
 }
 
-.navbar-left .logo {
-  font-family: 'Pretendard', sans-serif;
-  font-weight: 500;
-  font-size: 30px;
-  color: #f8b400;
-  text-decoration: none;
+.logo {
+  
+}
+
+.logo-image {
+  height: 100px; /* 기존보다 더 큰 이미지 높이 */
 }
 
 .navbar-right {
