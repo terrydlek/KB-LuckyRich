@@ -12,8 +12,8 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final String SECRET_KEY = "pomqi1baytc1t2xsdtw3df44ffe5gs76hsr7je08kn9";
-//    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000; // 1시간
-    private static final long ACCESS_TOKEN_VALIDITY = 60 * 1000;
+    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000; // 1시간
+//    private static final long ACCESS_TOKEN_VALIDITY = 60 * 1000;
     private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000; // 1주일
 
     // 액세스 토큰 생성
