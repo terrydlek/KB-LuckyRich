@@ -69,7 +69,7 @@ export default {
     // 작성일 기준으로 오름차순 정렬된 게시물 리스트
     sortedPosts() {
       return this.posts.slice().sort((a, b) =>  new Date(b.createdAt) - new Date(a.createdAt));
-
+    },
     isLoggedIn() {
       return !!this.accessToken; // accessToken이 있으면 true 반환
     },
