@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/withdrawUser/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<String> withdrawUser(@PathVariable("userId") String userId) {
         log.info("withdrawUser -------------------------");
 

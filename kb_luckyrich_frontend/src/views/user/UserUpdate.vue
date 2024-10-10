@@ -124,7 +124,7 @@ function updateUserInfo() {
 
 function withdrawUser() {
   alert(userId.value);
-  axios.delete(`http://localhost:8080/user/withdrawUser/${userId.value}`, {
+  axios.delete(`http://localhost:8080/user/${userId.value}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
     }
