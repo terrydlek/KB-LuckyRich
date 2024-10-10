@@ -3,6 +3,13 @@
     <div class="navbar-inner">
       <div class="navbar-left">
         <a @click="handleLogoClick" class="logo">LuckyRich</a>
+        <router-link to="/luckyrich" class="logo">
+          <img
+            src="/src/assets/images/KLlogo3.png"
+            alt="LuckyRich Logo"
+            class="logo-image"
+          />
+        </router-link>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -23,10 +30,6 @@ import { useRouter, useRoute } from 'vue-router';
 const isLoggedIn = ref(false);
 const router = useRouter();
 const route = useRoute();
-
-// onMounted(() => {
-//   checkLoginStatus();
-// });
 
 watch(route, () => {
   checkLoginStatus();
@@ -64,7 +67,7 @@ const handleLogoClick = () => {
 
 <style scoped>
 .navbar {
-  width: 100%; /* 전체 화면 너비 */
+  width: 100%;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
@@ -76,14 +79,14 @@ const handleLogoClick = () => {
 }
 
 .navbar-inner {
-  max-width: 1200px; /* 콘텐츠와 동일한 최대 너비 */
+  max-width: 1200px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  padding-left: 0; /* 왼쪽 패딩 제거 */
-  padding-right: 0; /* 오른쪽 패딩 제거 */
+  padding-left: 0;
+  padding-right: 0;
   gap: 20px;
 }
 

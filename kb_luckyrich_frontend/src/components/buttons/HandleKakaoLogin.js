@@ -17,19 +17,21 @@ export function handleKakaoLoginCallback() {
             .then(res => {
                 console.log(res)
                 const accessToken = res.data.access_token;
+                const refreshToken = res.data.refresh_token;
                 const accountNum = res.data.account_num;
                 console.log(accountNum)
 
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
                 localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
 
                 if (accountNum > 1) {
-                     router.push('/'); // 루트 경로로 이동
+                    router.push('/'); // 루트 경로로 이동
                 } else {
-                     router.push({ name: 'myDataAgree' }); // 'myDataAgree'로 이동
+                    router.push({ name: 'myDataAgree' }); // 'myDataAgree'로 이동
                 }
-                
-                
+
+
                 window.history.replaceState({}, document.title, '/luckyrich');
 
             })

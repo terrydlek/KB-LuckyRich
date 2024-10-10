@@ -12,13 +12,26 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final String SECRET_KEY = "pomqi1baytc1t2xsdtw3df44ffe5gs76hsr7je08kn9";
+//    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000; // 1시간
+    private static final long ACCESS_TOKEN_VALIDITY = 60 * 1000;
+    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000; // 1주일
 
-    // 토큰 생성
-    public static String createToken(String id) {    // String username) {
+    // 액세스 토큰 생성
+    public static String createToken(String id) {
+        return createToken(id, ACCESS_TOKEN_VALIDITY);
+    }
+
+    // 리프레시 토큰 생성
+    public static String createRefreshToken(String id) {
+        return createToken(id, REFRESH_TOKEN_VALIDITY);
+    }
+
+    // 공통 토큰 생성 메소드
+    private static String createToken(String id, long validityPeriod) {
         Claims claims = Jwts.claims().setSubject(id);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 60 * 60 * 1000); // 1시간 유효
+        Date validity = new Date(now.getTime() + validityPeriod);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -32,15 +45,20 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token);
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    // 토큰으로 이메일 확인
+    // 리프레시 토큰 검사
+    public boolean validateRefreshToken(String token) {
+        return validateToken(token);  // 동일한 검증 로직 사용
+    }
+
+    // 토큰으로 사용자 ID 확인
     public String getId(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
@@ -48,6 +66,13 @@ public class JwtTokenProvider {
                 .getBody()
                 .getSubject();
     }
+
+    // 리프레시 토큰으로 사용자 ID 확인
+    public String getIdFromRefreshToken(String token) {
+        return getId(token);  // 동일한 로직 사용
+    }
+}
+
 
     /*
     public static String httpHeaderKey = "Authorization"; // 허가
@@ -110,6 +135,5 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(securityKey).parseClaimsJws(token).getBody().getSubject();
     }
     */
-}
 
 

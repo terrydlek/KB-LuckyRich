@@ -114,6 +114,11 @@ public class RandUtils {
     public int getRandomNumber() {
         return random.nextInt(30) + 1;
     }
+
+    public int getRandomId(List<Integer> n) {
+        int randIndex = random.nextInt(n.size());
+        return n.get(randIndex);
+    }
 }
 
 
