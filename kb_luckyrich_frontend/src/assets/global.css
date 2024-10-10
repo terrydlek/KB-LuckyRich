@@ -23,23 +23,60 @@
   --max-width: 1200px; /* 최대 너비 설정 */
   --padding-horizontal: 50px;
   --header-height: 80px;
-  --color-bg: #ffffff;
-  --color-font: #000000;
-  --color-primary: #3498db;
-  --color-container: #f9f9f9;
+  --color-bg: #ffffff; /* 기본 배경색 */
+  --color-font: #000000; /* 기본 글자색 */
+  --color-primary: #3498db; /* 기본 primary 색상 */
+  --color-container: #f9f9f9; /* 컨테이너 배경색 */
+  --color-button-bg: #34c759; /* 버튼 배경색 */
+  --color-button-font: #ffffff; /* 버튼 글자색 */
+}
+
+/* 다크 모드에서 배경 및 글자색 변경 */
+.dark-mode {
+  --color-bg: #333333;
+  --color-font: #cfcfcf;
+  --color-container: #444444;
+  --color-button-bg: #555555;
+  --color-button-font: #cfcfcf;
+}
+
+/* 다크 모드에서 버튼 스타일 */
+.dark-mode button {
+  background-color: var(--color-button-bg);
+  color: var(--color-button-font);
+}
+
+/* 다크 모드에서 차트 및 메인 컨텐츠 */
+.dark-mode .main-content {
+  background-color: var(--color-container);
+}
+
+.dark-mode .left-sidebar,
+.dark-mode .right-sidebar {
+  background-color: var(--color-container);
+  color: var(--color-font);
+}
+
+.dark-mode .navbar {
+  background-color: var(--color-container);
+  color: var(--color-font);
+}
+
+.dark-mode a {
+  color: #3498db; /* 링크 색상 다크 모드에 맞게 변경 */
 }
 
 body {
   font-family: 'Pretendard', sans-serif;
-  background-color: var(--color-bg);
-  color: var(--color-font);
+  background-color: var(--color-bg); /* 배경색 변경 */
+  color: var(--color-font); /* 글자색 변경 */
   padding-top: var(--header-height); /* 헤더 높이만큼 패딩 추가 */
 }
 
 /* 버튼 스타일 */
 button {
-  background-color: #34c759;
-  color: white;
+  background-color: var(--color-button-bg); /* 다크/라이트 모드에 맞춘 배경색 */
+  color: var(--color-button-font); /* 다크/라이트 모드에 맞춘 글자색 */
   border-radius: 10px;
   padding: 10px 20px;
   border: none;
@@ -48,27 +85,31 @@ button {
 
 /* 홈 컨테이너 스타일 */
 .home-container {
-  max-width: var(--max-width);
-  margin: 0 auto; /* 상단 여백은 다른 방식으로 처리하고 좌우 여백만 설정 */
+  max-width: var(--max-width); /* 고정된 너비 */
+  margin: 0 auto; /* 가운데 정렬 */
   padding: 20px;
+  background-color: var(--color-container); /* 컨테이너 배경색 */
 }
 
 /* 사이드바 스타일 */
 .left-sidebar,
 .right-sidebar {
   padding: 20%;
+  background-color: var(--color-container); /* 다크/라이트 모드에 맞춘 배경색 */
+  color: var(--color-font); /* 글자색 */
 }
 
 /* 메인 콘텐츠 스타일 */
 .main-content {
   padding: 20px;
   margin-top: 10px;
+  background-color: var(--color-container); /* 다크/라이트 모드에 맞춘 배경색 */
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .home-container {
     padding: 10px;
-    margin-top: 20px; /* 모바일에서 여백을 줄일 수 있음 */
+    margin-top: 20px;
   }
 }

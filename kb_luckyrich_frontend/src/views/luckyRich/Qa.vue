@@ -185,7 +185,12 @@ const toggleFaq = (index) => {
 
 .faq-answer-wrapper {
   overflow: hidden;
-  transition: max-height 0.5s ease;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.faq-question.active + .faq-answer-wrapper {
+  max-height: 500px;
 }
 
 @keyframes fadeIn {
