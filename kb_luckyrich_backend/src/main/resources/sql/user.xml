@@ -51,4 +51,9 @@
         where user_id = #{userId};
     </delete>
 
+    <select id="getUserRole" resultType="java.lang.String">
+        select role
+        from user
+        where user_name=#{userName}
+    </select>
 </mapper>

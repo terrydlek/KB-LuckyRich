@@ -113,7 +113,7 @@ const fetchFunds = async () => {
   try {
     loading.value = true;
     const response = await axios.get(
-      'http://localhost:8080/api/funds?riskRating=2'
+      'http://localhost:8080/recommend/conservative'
     );
     funds.value = response.data;
   } catch (err) {

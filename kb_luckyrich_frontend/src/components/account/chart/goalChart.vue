@@ -20,135 +20,70 @@ import axios from 'axios';
 import Highcharts from 'highcharts';
 
 export default {
-    name: 'GoalChart',
-    mounted() {
-        this.fetchUserGoal();
-        this.fetchTotalAssetData();
+  name: 'GoalChart',
+  mounted() {
+    this.fetchUserGoal();
+    this.fetchTotalAssetData();
+  },
+  data() {
+    return {
+      userGoal: 100000000,
+      placeholderText: '목표 금액 입력',
+      currentAsset: 0,
+      chartOptions: this.generateChartOptions(100000000, 0),
+    };
+  },
+  methods: {
+    fetchUserGoal() {
+      const storedGoal = localStorage.getItem('user_goal');
+      if (storedGoal) {
+        this.userGoal = Number(storedGoal);
+      }
     },
-    data() {
-        return {
-            userGoal: 100000000,
-            placeholderText: '목표 금액 입력',
-            currentAsset: 0,
-            chartOptions: this.generateChartOptions(100000000, 0)
-        }
+    fetchTotalAssetData() {
+      const token = localStorage.getItem('access_token');
+      axios
+        .get('http://localhost:8080/myasset/total', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          const totalAsset =
+            res.data.Car +
+            res.data['real estate'] +
+            res.data['Bank Balance'] +
+            res.data['Stock Total'];
+
+          // 총 자산을 currentAsset에 저장
+          this.currentAsset = totalAsset;
+          console.log('총 자산:', totalAsset);
+
+          // 차트 옵션 업데이트
+          this.chartOptions = this.generateChartOptions(
+            this.userGoal,
+            totalAsset
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    methods: {
-        fetchUserGoal() {
-            const storedGoal = localStorage.getItem('user_goal');
-            if (storedGoal) {
-                this.userGoal = Number(storedGoal);
-            }
+    generateChartOptions(goalAsset, currentAsset) {
+      const tickInterval = Math.floor(goalAsset / 8); // 8부분으로 나눠서 표시
+      const cappedAsset = Math.min(currentAsset, goalAsset);
+
+      return {
+        chart: {
+          type: 'gauge',
+          plotBackgroundColor: null,
+          plotBackgroundImage: null,
+          plotBorderWidth: 0,
+          plotShadow: false,
+          height: '280px',
         },
-        fetchTotalAssetData() {
-            const token = localStorage.getItem('access_token');
-            axios.get('http://localhost:8080/myasset/total', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-                .then(res => {
-                    const totalAsset = res.data.Car + res.data['real estate'] + res.data['Bank Balance'] + res.data['Stock Total'];
-
-                    // 총 자산을 currentAsset에 저장
-                    this.currentAsset = totalAsset;
-                    console.log("총 자산:", totalAsset);
-
-                    // 차트 옵션 업데이트
-                    this.chartOptions = this.generateChartOptions(this.userGoal, totalAsset);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        },
-        generateChartOptions(goalAsset, currentAsset) {
-            const tickInterval = Math.floor(goalAsset / 8); // 8부분으로 나눠서 표시
-            const cappedAsset = Math.min(currentAsset, goalAsset);
-
-            return {
-                chart: {
-                    type: 'gauge',
-                    plotBackgroundColor: null,
-                    plotBackgroundImage: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    height: '280px'
-                },
-                title: {
-                    text: '목표 자산까지!!!'
-                },
-                pane: {
-                    startAngle: -90,
-                    endAngle: 90,
-                    background: null,
-                    center: ['50%', '75%'],
-                    size: '110%'
-                },
-                yAxis: {
-                    min: 0,
-                    max: goalAsset, // 목표 자산이 최대값
-                    tickPixelInterval: 72,
-                    tickPosition: 'inside',
-                    tickLength: 20,
-                    tickWidth: 1,
-                    minorTickInterval: null,
-                    tickInterval: tickInterval, // 8단계로 나눠서 표현
-                    labels: {
-                        distance: 20,
-                        style: {
-                            fontSize: '14px'
-                        }
-                    },
-                    lineWidth: 0,
-                    plotBands: [{
-                        from: 0,
-                        to: goalAsset * 0.2,
-                        color: '#FFFF96',
-                        thickness: 20
-                    }, {
-                        from: goalAsset * 0.2,
-                        to: goalAsset * 0.4,
-                        color: '#FFF978',
-                        thickness: 20
-                    }, {
-                        from: goalAsset * 0.4,
-                        to: goalAsset * 0.6,
-                        color: '#FFE65A',
-                        thickness: 20
-                    }, {
-                        from: goalAsset * 0.6,
-                        to: goalAsset * 0.8,
-                        color: '#FFD700',
-                        thickness: 20
-                    }, {
-                        from: goalAsset * 0.8,
-                        to: goalAsset,
-                        color: '#FFB900',
-                        thickness: 20
-                    }]
-                },
-                series: [{
-                    name: 'Total Asset',
-                    data: [cappedAsset],
-                    tooltip: {
-                        valueSuffix: ' ₩'
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    dial: {
-                        radius: '100%',
-                        backgroundColor: 'gray',
-                        baseWidth: 12,
-                        baseLength: '0%',
-                        rearLength: '0%'
-                    },
-                    pivot: {
-                        backgroundColor: '#000000',
-                        radius: 6
-                    }
-                }]
-            };
+        title: {
+          text: '목표 자산까지!!!',
         },
         pane: {
           startAngle: -90,
@@ -176,20 +111,32 @@ export default {
           plotBands: [
             {
               from: 0,
+              to: goalAsset * 0.2,
+              color: '#FFFF96',
+              thickness: 20,
+            },
+            {
+              from: goalAsset * 0.2,
+              to: goalAsset * 0.4,
+              color: '#FFF978',
+              thickness: 20,
+            },
+            {
+              from: goalAsset * 0.4,
               to: goalAsset * 0.6,
-              color: '#55BF3B', // Green for lower part
+              color: '#FFE65A',
               thickness: 20,
             },
             {
               from: goalAsset * 0.6,
               to: goalAsset * 0.8,
-              color: '#DDDF0D', // Yellow for medium
+              color: '#FFD700',
               thickness: 20,
             },
             {
               from: goalAsset * 0.8,
               to: goalAsset,
-              color: '#DF5353', // Red for upper part
+              color: '#FFB900',
               thickness: 20,
             },
           ],
@@ -212,7 +159,7 @@ export default {
               rearLength: '0%',
             },
             pivot: {
-              backgroundColor: 'orange',
+              backgroundColor: '#000000',
               radius: 6,
             },
           },

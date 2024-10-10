@@ -66,4 +66,6 @@ public class SecurityUserService implements UserDetailsService {
     public boolean withdrawUser(int userId) {
         return userDao.withdrawUser(userId);
     }
+
+    public String getUserRole(String userName) { return userDao.getUserRole(userName); }
 }

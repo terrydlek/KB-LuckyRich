@@ -24,4 +24,6 @@ public interface UserDao {
     String getNickname(String userName);
 
     boolean withdrawUser(int userId);
+
+    String getUserRole(String userName);
 }
