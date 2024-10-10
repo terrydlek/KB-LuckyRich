@@ -8,7 +8,7 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import naverLoginImage from '@/assets/images/naver-login.png';
+import naverLoginImage from '@/assets/images/NaverLoginB.png';
 import axios from 'axios';
 
 function loginWithNaver() {
@@ -63,8 +63,8 @@ button {
 
 button img {
     /* 이미지 크기 조정 */
-    width: 150px;
-    height: auto;
+    width: 300px;
+    height: 50px;
     
 }
 </style>
