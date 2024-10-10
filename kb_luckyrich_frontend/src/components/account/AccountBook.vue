@@ -482,6 +482,7 @@ select {
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  margin-top :5px
 }
 
 .transactions {
@@ -584,7 +585,8 @@ select {
 .circle-indicators {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top : -15px;
+  margin-bottom: 5%;
 }
 
 .indicator {

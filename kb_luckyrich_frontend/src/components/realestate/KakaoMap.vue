@@ -125,7 +125,6 @@ export default {
                 level: 4,
             };
             this.map = new kakao.maps.Map(mapContainer, mapOptions);
-            this.addGovernmentMarkers();
         },
         fetchRealEstateData(region) {
             // isLoading은 처음 로딩 때만 사용 (서울특별시)
@@ -134,8 +133,8 @@ export default {
             }
 
             const token = localStorage.getItem('access_token');
-             //axios.get(`http://localhost:8080/realestate/?region=${region}`, {
-                 axios.get(`http://localhost:8080/realestate/?region=서울특별시`, {
+             axios.get(`http://localhost:8080/realestate/?region=${region}`, {
+                 //axios.get(`http://localhost:8080/realestate/?region=서울특별시`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

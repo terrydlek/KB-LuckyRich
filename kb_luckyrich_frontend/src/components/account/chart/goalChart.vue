@@ -150,83 +150,15 @@ export default {
                 }]
             };
         },
-        pane: {
-          startAngle: -90,
-          endAngle: 90,
-          background: null,
-          center: ['50%', '75%'],
-          size: '110%',
+        updateGoal() {
+            const newGoal = this.userGoal || 100000000;
+            localStorage.setItem('user_goal', newGoal); // 목표 자산을 로컬 스토리지에 저장
+            this.chartOptions = this.generateChartOptions(newGoal, this.currentAsset);
         },
-        yAxis: {
-          min: 0,
-          max: goalAsset, // 목표 자산이 최대값
-          tickPixelInterval: 72,
-          tickPosition: 'inside',
-          tickLength: 20,
-          tickWidth: 1,
-          minorTickInterval: null,
-          tickInterval: tickInterval, // 8단계로 나눠서 표현
-          labels: {
-            distance: 20,
-            style: {
-              fontSize: '14px',
-            },
-          },
-          lineWidth: 0,
-          plotBands: [
-            {
-              from: 0,
-              to: goalAsset * 0.6,
-              color: '#55BF3B', // Green for lower part
-              thickness: 20,
-            },
-            {
-              from: goalAsset * 0.6,
-              to: goalAsset * 0.8,
-              color: '#DDDF0D', // Yellow for medium
-              thickness: 20,
-            },
-            {
-              from: goalAsset * 0.8,
-              to: goalAsset,
-              color: '#DF5353', // Red for upper part
-              thickness: 20,
-            },
-          ],
-        },
-        series: [
-          {
-            name: 'Total Asset',
-            data: [cappedAsset],
-            tooltip: {
-              valueSuffix: ' ₩',
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            dial: {
-              radius: '100%',
-              backgroundColor: 'gray',
-              baseWidth: 12,
-              baseLength: '0%',
-              rearLength: '0%',
-            },
-            pivot: {
-              backgroundColor: 'orange',
-              radius: 6,
-            },
-          },
-        ],
-      };
-    },
-    updateGoal() {
-      const newGoal = this.userGoal || 100000000;
-      localStorage.setItem('user_goal', newGoal); // 목표 자산을 로컬 스토리지에 저장
-      this.chartOptions = this.generateChartOptions(newGoal, this.currentAsset);
-    },
-  },
+    }
 };
 </script>
+
 
 <style>
 .asset-info {
