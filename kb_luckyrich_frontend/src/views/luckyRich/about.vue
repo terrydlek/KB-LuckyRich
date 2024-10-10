@@ -4,10 +4,9 @@
       <div class="hero-overlay">
         <h1 class="hero-title">Lucky Rich에 오신 것을 환영합니다.</h1>
         <p class="hero-subtitle">자산 관리의 자유를 위한 모든 것</p>
-      </div>
-      <div class="login">
-        <button @click="handleAuth" class="btn auth">
-          {{ isLoggedIn ? 'Logout' : 'Login' }}
+
+        <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">
+          세상에 단 하나뿐인 자산 관리 시작하기
         </button>
       </div>
     </section>
@@ -96,7 +95,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
 import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 import { ref, onMounted, watch } from 'vue';
@@ -106,11 +105,23 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const route = useRoute();
 
-export default {
-  mounted() {
-    handleKakaoLoginCallback();
-    handleNaverLoginCallback();
-  },
+onMounted(() => {
+  handleKakaoLoginCallback();
+  handleNaverLoginCallback();
+  checkLoginStatus();
+});
+
+function checkLoginStatus() {
+  const token = localStorage.getItem('access_token');
+  isLoggedIn.value = !!token;
+}
+
+watch(route, () => {
+  checkLoginStatus();
+});
+
+const goToLogin = () => {
+  router.push({ name: 'login' });
 };
 </script>
 
@@ -120,7 +131,7 @@ export default {
 }
 
 .hero-section {
-  background-image: url('@/assets/images/represent.jpg');
+  background-image: url('@/assets/images/aboutDetail.png');
   background-size: cover;
   background-position: center;
   height: 70vh;

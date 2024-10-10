@@ -44,7 +44,7 @@
         </button>
       </div>
 
-      <a href="/luckyrich/qa/ask/create" id="bt" class="btn btn-primary">글쓰기</a>
+      <a v-if="isLoggedIn" href="/luckyrich/qa/ask/create" id="bt" class="btn btn-primary">글쓰기</a>
     </div>
   </div>
 </template>
@@ -62,12 +62,16 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       pageRange: 5, // 한 번에 보여줄 페이지 번호 개수
+      accessToken: localStorage.getItem('access_token'),
     };
   },
   computed: {
     // 작성일 기준으로 오름차순 정렬된 게시물 리스트
     sortedPosts() {
       return this.posts.slice().sort((a, b) =>  new Date(b.createdAt) - new Date(a.createdAt));
+
+    isLoggedIn() {
+      return !!this.accessToken; // accessToken이 있으면 true 반환
     },
     // 검색된 게시물 리스트
     filteredPosts() {

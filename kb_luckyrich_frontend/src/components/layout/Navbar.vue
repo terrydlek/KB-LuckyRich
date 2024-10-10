@@ -2,9 +2,13 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <router-link to="/luckyrich" class="logo">
-          <img src="/src/assets/images/KLlogo3.png" alt="LuckyRich Logo" class="logo-image" />
-        </router-link>
+        <a @click="handleLogoClick" class="logo">
+          <img
+            src="/src/assets/images/KLlogo3.png"
+            alt="LuckyRich Logo"
+            class="logo-image"
+          />
+        </a>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -40,7 +44,10 @@ const handleAuth = () => {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
     isLoggedIn.value = false;
-    router.push('/');
+    checkLoginStatus();
+    router.push('/').then(() => {
+      router.go(0); // 페이지를 강제로 새로고침하여 상태 반영
+    });
   } else {
     router.push({ name: 'login' });
   }
@@ -48,6 +55,15 @@ const handleAuth = () => {
 
 const goToMyPage = () => {
   router.push('/luckyrich/userUpdate');
+};
+
+// 로고 클릭 시 경로 설정
+const handleLogoClick = () => {
+  if (isLoggedIn.value) {
+    router.push('/luckyrich');
+  } else {
+    router.push('/');
+  }
 };
 </script>
 
@@ -76,12 +92,23 @@ const goToMyPage = () => {
   gap: 20px;
 }
 
-.logo {
-  
+.navbar-left .logo {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+  color: #f8b400;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .logo-image {
-  height: 100px; /* 기존보다 더 큰 이미지 높이 */
+  width: 170px; /* 원하는 크기로 설정 */
+  height: auto;
+  cursor: pointer; /* 손가락 모양 커서 */
+}
+
+.logo:hover {
+  text-decoration: none;
 }
 
 .navbar-right {

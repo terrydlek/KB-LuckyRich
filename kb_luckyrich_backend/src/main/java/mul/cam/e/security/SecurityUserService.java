@@ -51,6 +51,8 @@ public class SecurityUserService implements UserDetailsService {
         return userDao.withdrawUser(userId);
     }
 
+    public String getUserRole(String userName) { return userDao.getUserRole(userName); }
+    
     public void updateRefreshToken(int userId, String refreshToken) {
         userDao.updateRefreshToken(userId, refreshToken);
     }
