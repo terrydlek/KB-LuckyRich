@@ -21,7 +21,7 @@
             house_type AS houseType
         FROM realestate_data
         WHERE city LIKE CONCAT(#{region}, '%')
-            LIMIT 50;
+            LIMIT 10;
     </select>
 
 </mapper>
