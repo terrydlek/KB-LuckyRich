@@ -55,6 +55,7 @@ button {
   background: none;
   padding: 0;
   cursor: pointer;
+  
 }
 
 button img {

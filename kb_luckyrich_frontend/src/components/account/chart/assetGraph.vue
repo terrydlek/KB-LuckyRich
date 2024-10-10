@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="container" style="width:600px; height:400px;"></div>
+        <div id="container" style=" height:400px;"></div>
     </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
                 yAxis: {
                     type: 'linear',
                     title: {
-                        text: 'Total Asset (in currency units)'
+                        text: '전체 자산'
                     },
                     tickInterval: Math.max(...data) / 10,
                     max: Math.max(...data) + 1
@@ -52,7 +52,7 @@ export default {
                     pointFormat: '{point.y} currency unit(s)'
                 },
                 series: [{
-                    name: 'Asset Growth',
+                    name: '증감 추이',
                     data: data,
                     color: {
                         linearGradient: {
@@ -62,8 +62,8 @@ export default {
                             y2: 0
                         },
                         stops: [
-                            [0, '#0000ff'],
-                            [1, '#ff0000']
+                            [0, '#FFB900'],
+                            [1, '#00CDFF']
                         ]
                     }
                 }]

@@ -1,17 +1,14 @@
 <template>
   <div class="coins">
-    <button @click="resetTest" class="test-reset-button">
-      테스트 다시하기
-    </button>
     <h3>
       당신의 투자 성향은 공격투자형입니다. 암호화폐 상품 TOP 100을
       추천해드릴게요.
+      <div @click="refreshPage" class="refresh-icon">
+        <i class="fas fa-sync-alt"></i>
+      </div>
     </h3>
   </div>
   <section class="coin-tracker">
-    <div class="btn">
-      <button @click="refreshPage">새로고침</button>
-    </div>
     <div class="search">
       <input
         type="text"
@@ -77,8 +74,29 @@
               <td>
                 {{ (coin.quotes.KRW.volume_24h / 1000000000000).toFixed(2) }}T
               </td>
-              <td>{{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%</td>
-              <td>{{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%</td>
+              <td>
+                <span
+                  v-if="coin.quotes.KRW.percent_change_24h < 0"
+                  style="color: #d32f2f; font-size: 15px"
+                >
+                  ▼ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
+                </span>
+                <span v-else style="color: #388e3c; font-size: 15px">
+                  ▲ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
+                </span>
+              </td>
+
+              <td>
+                <span
+                  v-if="coin.quotes.KRW.percent_change_7d < 0"
+                  style="color: #d32f2f; font-size: 15px"
+                >
+                  ▼ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
+                </span>
+                <span v-else style="color: #388e3c; font-size: 15px">
+                  ▲ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -99,6 +117,11 @@
             다음
           </button>
         </div>
+        <center>
+          <button @click="resetTest" class="test-reset-button">
+            테스트 다시하기
+          </button>
+        </center>
 
         <p v-if="coins.length && !filteredCoins.length">
           찾으시는 종목명은 TOP 100에 없습니다.
@@ -124,6 +147,7 @@ const itemsPerPage = 10;
 const pageRange = 10; // 한번에 보여줄 페이지 번호 개수
 
 const refreshPage = () => {
+  console.log('새로고침 아이콘 클릭됨!');
   window.location.reload();
 };
 
@@ -231,11 +255,18 @@ watch(searchQuery, () => {
 </script>
 
 <style scoped>
+h3 {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .coins {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .coin-tracker {
@@ -248,13 +279,13 @@ watch(searchQuery, () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 0 30px;
 }
 
 .search {
+  width: 80%;
   flex-grow: 1;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
 }
 
 input[type='text'] {
@@ -266,7 +297,8 @@ input[type='text'] {
 }
 
 .test-reset-button {
-  margin: 20px;
+  margin-top: 20px;
+  /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;
@@ -331,5 +363,21 @@ tr:hover {
 .pagination button:disabled {
   color: #ccc;
   cursor: not-allowed;
+}
+
+.refresh-icon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 10px;
+  color: #3498db;
+  transition: color 0.3s, transform 0.2s ease;
+  display: inline-block; /* 클릭할 수 있도록 영역 확장 */
+  position: relative;
+  z-index: 1000; /* 다른 요소 위에 위치 */
+}
+
+.refresh-icon:hover .refresh-icon {
+  color: #2980b9;
+  transform: scale(1.2);
 }
 </style>

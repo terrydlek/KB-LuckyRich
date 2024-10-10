@@ -84,8 +84,17 @@
     </div>
 </template>
 
-<script setup>
+<script>
+import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
+import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
 
+export default {
+    mounted() {
+        handleKakaoLoginCallback();
+        handleNaverLoginCallback();
+    }
+
+}
 </script>
 
 <style scoped>

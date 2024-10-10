@@ -27,8 +27,8 @@ export function handleNaverLoginCallback() {
                 } else {
                     router.push({ name: 'myDataAgree' });
                 }
-
-                window.history.replaceState({}, document.title, '/luckyrich');
+                
+                window.history.replaceState({}, document.title, '/');
 
             })
             .catch(err => {

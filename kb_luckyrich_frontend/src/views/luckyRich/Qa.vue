@@ -1,8 +1,5 @@
 <template>
   <div class="faq-page">
-    <div>
-      <QaSidebar />
-    </div>
     <div class="faq-content">
       <section id="faq">
         <h1 class="fade-in">자주 묻는 질문</h1>
@@ -78,7 +75,7 @@ const faqs = ref([
   {
     question: '고객 지원은 어디서 받을 수 있나요?',
     answer:
-      '고객 지원은 마이페이지의 고객센터에서 채팅 상담을 통해 받으실 수 있으며, 상담 가능 시간은 월-금 오전 9시부터 오후 6시까지입니다.',
+      '고객 지원은 Q&A 게시판을 통해 질문과 답변을 받을 수 있습니다. 고객의 문의 사항을 해결하고, 동일한 질문에 대한 답변을 여러 고객이 쉽게 확인할 수 있습니다.',
   },
   {
     question: '투자 위험 관리는 어떻게 이루어지나요?',

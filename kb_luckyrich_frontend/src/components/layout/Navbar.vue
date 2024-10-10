@@ -17,26 +17,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const isLoggedIn = ref(false);
 const router = useRouter();
+const route = useRoute();
 
-onMounted(() => {
+// onMounted(() => {
+//   checkLoginStatus();
+// });
+
+watch(route, () => {
   checkLoginStatus();
 });
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  isLoggedIn.value = !!token;
+  isLoggedIn.value = !!token; // Update the login status
 }
 
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
-    checkLoginStatus();
+    isLoggedIn.value = false; // Immediately update login status
     router.push('/');
   } else {
     router.push({ name: 'login' });
@@ -53,7 +58,7 @@ const goToMyPage = () => {
   width: 100%; /* 전체 화면 너비 */
   background-color: #ffffff;
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -70,12 +75,13 @@ const goToMyPage = () => {
   height: 80px;
   padding-left: 0; /* 왼쪽 패딩 제거 */
   padding-right: 0; /* 오른쪽 패딩 제거 */
+  gap: 20px;
 }
 
 .navbar-left .logo {
   font-family: 'Pretendard', sans-serif;
-  font-weight: 700;
-  font-size: 24px;
+  font-weight: 500;
+  font-size: 30px;
   color: #f8b400;
   text-decoration: none;
 }

@@ -1,17 +1,11 @@
 <template>
   <div class="stocks">
-    <button @click="resetTest" class="reset-test-button">
-      테스트 다시하기
-    </button>
+
     <h3>
       당신의 투자 성향은 적극 투자형입니다. 주식 상품 TOP 100을 추천해드릴게요.
     </h3>
 
-    <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="검색하고 싶은 종목명이 있나요?"
-    />
+    <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
 
     <table v-if="filteredStocks.length" class="stock-table">
       <thead>
@@ -31,39 +25,72 @@
       </thead>
       <tbody>
         <tr v-for="(stock, index) in paginatedStocks" :key="index">
-          <td>
-            <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
-              stock.stockName
-            }}</a>
-          </td>
+          <td><a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{ stock.stockName }}</a></td>
           <td>{{ stock.stockPrice }}</td>
-          <td>{{ stock.comparePre }}</td>
-          <td>{{ stock.fluctuationRate }}</td>
+          <td>
+            <span v-if="stock.comparePre.includes('하락')" style="color: #d32f2f; font-size: 15px;">
+              ▼ {{ stock.comparePre.replace('하락', '-') }}
+            </span>
+            <span v-else-if="stock.comparePre.includes('보합')" style="color: #388e3c; font-size: 15px;">
+              ▲ {{ stock.comparePre.replace('보합', '+') }}
+            </span>
+            <span v-else style="color: #388e3c; font-size: 15px;">
+              ▲ {{ stock.comparePre.replace('상승', '+') }}
+            </span>
+
+          </td>
+
+
+          <td>
+            <span v-if="stock.fluctuationRate.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
+              ▼ {{ stock.fluctuationRate }}
+            </span>
+            <span v-else style="color: #388e3c; font-size: 15px;">
+              ▲ {{ stock.fluctuationRate }}
+            </span>
+          </td>
+
           <td>{{ stock.tradingVolume }}</td>
           <td>{{ stock.marketCapitalization }}</td>
           <td>{{ stock.salesAmount }}</td>
           <td>{{ stock.operatingProfit }}</td>
           <td>{{ stock.earningsPerShare }}</td>
-          <td>{{ stock.per }}</td>
-          <td>{{ stock.roe }}</td>
+          <td>
+            <span v-if="stock.per.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
+              ▼ {{ stock.per }}
+            </span>
+            <span v-else style="color: #388e3c; font-size: 15px;">
+              ▲ {{ stock.per }}
+            </span>
+          </td>
+
+          <td>
+            <span v-if="stock.roe.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
+              ▼ {{ stock.roe }}
+            </span>
+            <span v-else style="color: #388e3c; font-size: 15px;">
+              ▲ {{ stock.roe }}
+            </span>
+          </td>
+
         </tr>
       </tbody>
     </table>
 
     <div v-if="filteredStocks.length && totalPages > 1" class="pagination">
       <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
-      <button
-        v-for="page in pageNumbers"
-        :key="page"
-        @click="currentPage = page"
-        :class="{ active: currentPage === page }"
-      >
+      <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+        :class="{ active: currentPage === page }">
         {{ page }}
       </button>
       <button @click="currentPage++" :disabled="currentPage === totalPages">
         다음
       </button>
     </div>
+
+    <button @click="resetTest" class="reset-test-button">
+      테스트 다시하기
+    </button>
 
     <p v-if="stocks.length && !filteredStocks.length">
       찾으시는 종목명은 TOP 100에 없습니다.
@@ -185,7 +212,8 @@ watch(searchQuery, () => {
 }
 
 .reset-test-button {
-  margin-bottom: 20px;
+  margin-top: 20px;
+  /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;
@@ -262,19 +290,19 @@ input[type='text'] {
 }
 
 input[type="text"] {
-    margin: 10px 0;
-    padding: 5px;
-    width: 50%;
+  margin: 10px 0;
+  padding: 5px;
+  width: 50%;
 }
 
 button {
-    margin: 5px;
-    padding: 5px 10px;
+  margin: 5px;
+  padding: 5px 10px;
 }
 
 button.active {
-    font-weight: bold;
-    background-color: #4caf50;
-    color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  color: white;
 }
 </style>

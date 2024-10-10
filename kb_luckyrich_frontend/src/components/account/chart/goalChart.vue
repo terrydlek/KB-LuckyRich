@@ -1,7 +1,8 @@
 <template>
     <highcharts :options="chartOptions" />
     <div class="asset-info">
-        <p>현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ userGoal.toLocaleString() }} 원</p>
+        <p style="font-size: 12px;">현재 자산: {{ currentAsset.toLocaleString() }} 원 / 목표 자산: {{ userGoal.toLocaleString()
+            }} 원</p>
         <input v-model.number="userGoal" type="number" id="userGoal" :placeholder="placeholderText" />
         <button type="button" @click="updateGoal">수정</button>
     </div>
@@ -14,12 +15,12 @@ import Highcharts from 'highcharts';
 export default {
     name: 'GoalChart',
     mounted() {
-        this.fetchUserGoal(); 
+        this.fetchUserGoal();
         this.fetchTotalAssetData();
     },
     data() {
         return {
-            userGoal: 100000000, 
+            userGoal: 100000000,
             placeholderText: '목표 금액 입력',
             currentAsset: 0,
             chartOptions: this.generateChartOptions(100000000, 0)
@@ -29,7 +30,7 @@ export default {
         fetchUserGoal() {
             const storedGoal = localStorage.getItem('user_goal');
             if (storedGoal) {
-                this.userGoal = Number(storedGoal); 
+                this.userGoal = Number(storedGoal);
             }
         },
         fetchTotalAssetData() {
@@ -39,19 +40,19 @@ export default {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then(res => {
-                const totalAsset = res.data.Car + res.data['real estate'] + res.data['Bank Balance'] + res.data['Stock Total'];
-                
-                // 총 자산을 currentAsset에 저장
-                this.currentAsset = totalAsset;
-                console.log("총 자산:", totalAsset);
+                .then(res => {
+                    const totalAsset = res.data.Car + res.data['real estate'] + res.data['Bank Balance'] + res.data['Stock Total'];
 
-                // 차트 옵션 업데이트
-                this.chartOptions = this.generateChartOptions(this.userGoal, totalAsset);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                    // 총 자산을 currentAsset에 저장
+                    this.currentAsset = totalAsset;
+                    console.log("총 자산:", totalAsset);
+
+                    // 차트 옵션 업데이트
+                    this.chartOptions = this.generateChartOptions(this.userGoal, totalAsset);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         },
         generateChartOptions(goalAsset, currentAsset) {
             const tickInterval = Math.floor(goalAsset / 8); // 8부분으로 나눠서 표시
@@ -64,7 +65,7 @@ export default {
                     plotBackgroundImage: null,
                     plotBorderWidth: 0,
                     plotShadow: false,
-                    height: '400px'
+                    height: '280px'
                 },
                 title: {
                     text: '목표 자산까지!!!'
@@ -94,24 +95,34 @@ export default {
                     lineWidth: 0,
                     plotBands: [{
                         from: 0,
+                        to: goalAsset * 0.2,
+                        color: '#FFFF96',
+                        thickness: 20
+                    }, {
+                        from: goalAsset * 0.2,
+                        to: goalAsset * 0.4,
+                        color: '#FFF978',
+                        thickness: 20
+                    }, {
+                        from: goalAsset * 0.4,
                         to: goalAsset * 0.6,
-                        color: '#55BF3B', // Green for lower part
+                        color: '#FFE65A',
                         thickness: 20
                     }, {
                         from: goalAsset * 0.6,
                         to: goalAsset * 0.8,
-                        color: '#DDDF0D', // Yellow for medium
+                        color: '#FFD700',
                         thickness: 20
                     }, {
                         from: goalAsset * 0.8,
                         to: goalAsset,
-                        color: '#DF5353', // Red for upper part
+                        color: '#FFB900',
                         thickness: 20
                     }]
                 },
                 series: [{
                     name: 'Total Asset',
-                    data: [cappedAsset], 
+                    data: [cappedAsset],
                     tooltip: {
                         valueSuffix: ' ₩'
                     },
@@ -126,7 +137,7 @@ export default {
                         rearLength: '0%'
                     },
                     pivot: {
-                        backgroundColor: 'orange',
+                        backgroundColor: '#000000',
                         radius: 6
                     }
                 }]

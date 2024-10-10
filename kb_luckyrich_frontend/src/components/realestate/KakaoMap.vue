@@ -134,7 +134,8 @@ export default {
             }
 
             const token = localStorage.getItem('access_token');
-            axios.get(`http://localhost:8080/realestate/?region=${region}`, {
+             //axios.get(`http://localhost:8080/realestate/?region=${region}`, {
+                 axios.get(`http://localhost:8080/realestate/?region=서울특별시`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -312,6 +313,8 @@ export default {
     display: flex;
     width: 100%;
     height: 100vh;
+    position: relative;
+
 }
 
 .loading-overlay {
@@ -333,14 +336,29 @@ export default {
 }
 
 .region-panel {
-    width: 300px;
-    padding: 20px;
-    background-color: white;
-    z-index: 1000;
     position: absolute;
-    margin-top: 70px;
-    top: 10px;
-    left: 10px;
+    left: 20px; /* 지도 왼쪽에서 약간의 여백 */
+    top: 20px;  /* 지도 상단에서 약간의 여백 */
+    z-index: 1000;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.9); /* 살짝 투명한 흰색 배경 */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.region-panel select {
+    background-color: rgba(255, 255, 255, 0); /* 살짝 투명한 흰색 */
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+}
+
+.region-panel select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* 선택 시 강조 효과 */
 }
 
 #map {

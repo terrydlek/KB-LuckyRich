@@ -3,14 +3,14 @@
     <!-- 상단 타이틀과 설명 -->
     <div class="header">
       <h1>내 자산을 쉽고 똑똑하게 관리하세요.</h1>
-      <!-- <router-link to="/asset/accountupdate">자산 등록 또는 수정</router-link> -->
     </div>
-
-    <div id="app">
-      <div>
-        <button @click="generatePortfolioPDF">자산 포트폴리오 다운로드</button>
+    <center>
+      <div id="app">
+        <div>
+          <button @click="generatePortfolioPDF">자산 포트폴리오 다운로드</button>
+        </div>
       </div>
-    </div>
+    </center>
 
     <!-- 카드형 데이터 박스 -->
     <div class="data-cards">
@@ -33,7 +33,7 @@
     <div class="data-tables" style="display: flex;">
       <!-- 왼쪽 섹션 -->
       <div class="left-section" style="flex: 3; margin-right: 10px;">
-        <h2>총 자산 정보</h2>
+        <h5>총 자산 정보</h5>
         <table>
           <thead>
             <tr>
@@ -61,7 +61,7 @@
           </tbody>
         </table>
 
-        <h2>계좌 보유 잔액</h2>
+        <h5>계좌 보유 잔액</h5>
         <table>
           <thead>
             <tr>
@@ -83,7 +83,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>자본 증감 추이 (주식 + 은행 잔고)</h2>
+        <h5>자본 증감 추이 (주식 + 은행 잔고)</h5>
         <table>
           <thead>
             <tr>
@@ -106,8 +106,8 @@
         <p>.</p> <br> -->
         <!-- {{ products }} -->
         <!-- <p>은행 잔고 + 총 보유 주식: {{ totalAssets['Bank Balance'] + totalAssets['Stock Total'] }}</p> -->
-        <h2>고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.</h2>
-        <table v-if="products.length" style="width: 600px;">
+        <h5>고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.</h5>
+        <table v-if="products.length" style="width: 400px;">
           <thead>
             <tr>
               <th style="width: 200px;">상품명</th>
@@ -116,7 +116,7 @@
           </thead>
           <tbody>
             <tr v-for="(product, index) in products" :key="index">
-              <td> <a :href="`${product.link}`">{{ product.name }}</a></td>
+              <td><a :href="`${product.link}`">{{ truncatedName(product.name) }}</a></td>
               <td>{{ product.performance }}</td>
             </tr>
           </tbody>
@@ -190,15 +190,15 @@ export default {
       });
     },
     totalAssetsValue() {
-      // return 1;
-      return this.totalAssets['Bank Balance'] + this.totalAssets['Stock Total'];
+      return 20000000;
+      // return this.totalAssets['Bank Balance'] + this.totalAssets['Stock Total'];
     },
   },
   methods: {
     ...mapActions(['fetchAssetData', 'fetchAccountData', 'fetchTotalAssets']),
     formatCurrency(value) {
       return new Intl.NumberFormat('ko-KR').format(value);
-    }
+    },
   },
   mounted() {
     this.fetchAssetData();
@@ -227,12 +227,14 @@ export default {
   },
   methods: {
     ...mapActions(['fetchTotalAssets']),
-
+    truncatedName(name) {
+      return name.length > 25 ? name.slice(0, 25) + '...' : name;
+    },
     async fetchProducts() {
       try {
         this.loading = true;
         const token = localStorage.getItem('access_token');
-        
+
         if (this.totalAssetsValue < 5000000) {
           // 예적금 상품 20개
           const response = await axios.get('http://localhost:8080/recommend/steadiness', {
@@ -425,19 +427,22 @@ export default {
 
 /* 데이터 카드 */
 .data-cards {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  /* margin-bottom: 40px; */
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 1px;
 }
 
 .card {
   background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 45px;
+  border-radius: 16px;
   text-align: center;
   margin-right: 1px;
-  width: 500px;
+  width: 300px;
+  margin-left: 10px;
 }
 
 .card .amount {
@@ -482,7 +487,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.data-tables th, .data-tables td {
+.data-tables th,
+.data-tables td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -491,4 +497,8 @@ export default {
 .data-tables th {
   background-color: #f4f4f4;
 }
+
+/* .dashboard-container {
+  width: 1000px;
+} */
 </style>

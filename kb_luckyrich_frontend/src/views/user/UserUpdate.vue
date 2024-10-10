@@ -25,8 +25,7 @@
     <div class="button-group">
       <button v-if="!updating" @click="setUpdate">수정</button>
       <button v-else @click="updateUserInfo">저장</button>
-    </div>
-    <div class="button-group">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <button @click="withdrawUser">탈퇴</button>
     </div>
   </div>
@@ -79,7 +78,7 @@ function updateUserInfo() {
 
 function withdrawUser() {
   alert(userId.value);
-  axios.delete(`http://localhost:8080/user/withdrawUser/${userId.value}`, {
+  axios.delete(`http://localhost:8080/user/${userId.value}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
     }
@@ -128,9 +127,11 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style>
 .user-info-container {
-  max-width: 400px;
+  /* max-width: 400px; */
+  width: 80%;
+
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;

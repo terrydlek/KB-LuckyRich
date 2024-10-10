@@ -35,9 +35,13 @@ export default {
                 color: 'black',
                 fontSize: '14px',
               },
+              distance: -70, // 레이블을 차트 안쪽으로 이동
             },
+            size: '100%',
+            innerSize: '30%'
           },
         },
+        colors: ['#1EAAAA', '#FFC7AD', '#93DAFF', '#FFE150', '#FFAFE6', '#96C7ED', '#FF5675'],
         series: [
           {
             name: 'Total Assets',
@@ -79,4 +83,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>

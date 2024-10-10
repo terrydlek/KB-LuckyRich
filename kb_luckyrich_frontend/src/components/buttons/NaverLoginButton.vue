@@ -65,5 +65,6 @@ button img {
     /* 이미지 크기 조정 */
     width: 150px;
     height: auto;
+    
 }
 </style>
