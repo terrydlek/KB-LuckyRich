@@ -27,6 +27,12 @@
         WHERE user_name=#{user_name}
     </update>
 
+    <update id="updateRefreshToken">
+        UPDATE user
+        SET refresh_token=#{refreshToken}
+        WHERE user_id=#{userId}
+    </update>
+
     <select id="getUserId" resultType="java.lang.Integer">
         select user_id
         from user
@@ -39,7 +45,13 @@
         where user_name=#{userName}
     </select>
 
-<!--    <select id="checkAuthority" parameterType="string" resultType="int">-->
+    <select id="getRefreshToken" resultType="java.lang.String">
+        select refresh_token
+        from user
+        where user_id=#{userId}
+    </select>
+
+    <!--    <select id="checkAuthority" parameterType="string" resultType="int">-->
 <!--        select count(*)-->
 <!--        from user-->
 <!--        where user_name = #{userName} and role = "ADMIN"-->

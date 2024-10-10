@@ -19,24 +19,23 @@ public class SecurityUser implements UserDetails {
     private String gender;
     private int age;
     private String role;
+    private String refreshToken;
 
     @Builder()
-    public SecurityUser(String userName, String nickName, String email, String gender, int age, String role) {
-//        this.user_id = user_id;
+    public SecurityUser(String userName, String nickName, String email, String gender, int age, String role, String refreshToken) {
         this.userName = userName;
         this.nickName = nickName;
         this.email = email;
         this.gender = gender;
         this.age = age;
         this.role = role;
+        this.refreshToken = refreshToken;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-
         return authorities;
     }
 
@@ -50,27 +49,24 @@ public class SecurityUser implements UserDetails {
         return userName;
     }
 
-    // 계정만료
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // 계정잠김여부
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 비밀번호 만료여부
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // 사용자 활성화 여부
     @Override
     public boolean isEnabled() {
         return true;
     }
 }
+

@@ -82,8 +82,7 @@ public class ApiController {
     }
 
     @GetMapping("/login/google")
-    public void getUserCode(@RequestParam("code") String code, HttpServletResponse response) throws Exception {
-        GoogleResponseDto res_body = apiService.getAccessToken(code);
+    public void getUserCode(@RequestParam("code") String code, HttpServletResponse response) throws Exception {    GoogleResponseDto res_body = apiService.getAccessToken(code);
 
         // Decode Id_Token
         GoogleUserInfDto userInf = TokenDecoder.decodeIdToken(res_body.getId_token());
@@ -94,7 +93,7 @@ public class ApiController {
         if(customUserDetail == null) {
             SecurityUser user = SecurityUser.builder()
                     .userName(userInf.getSub())
-                    .nickName(userInf.getFamily_name()+userInf.getGiven_name())
+                    .nickName(userInf.getFamily_name() + userInf.getGiven_name())
                     .email(userInf.getEmail())
                     .gender(null)
                     .age(0)
@@ -108,10 +107,13 @@ public class ApiController {
 
         // JWT 토큰 생성
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
+        String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
+
+        // 새로 발급한 refreshToken을 데이터베이스에 저장
+        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
-//        System.out.println(account_num);
 
         int userId = customUserDetail.getUserId();
         List<AccountDto> accounts = myAssetService.getAccounts(userId);
@@ -125,16 +127,19 @@ public class ApiController {
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
-                "account_num=" + account_num);
+                "account_num=" + account_num + "&" +
+                "refresh_token=" + refreshToken);
 
-        // Access_Token을 이용한 방법
-        // id, email, verified_email, name, given_name, family_name, picture, locale 반환
-        // apiService.getGoogleUserInf(res_body.getAccess_token());
+//        Map<String, Object> responseBody = new HashMap<>();
+//        responseBody.put("access_token", jwtToken);
+//        responseBody.put("refresh_token", refreshToken);
+//        responseBody.put("account_num", account_num);
+
+//        return ResponseEntity.ok(responseBody);
     }
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code){
-//        System.out.println("kakao login execute~~~~~~~~");
+    public ResponseEntity<Map<String, Object>> getKakaoUserCode(@RequestParam("code") String code) {
         KakaoResponseDto res_body = apiService.getKakaoToken(code);
         String accessToken = res_body.getAccess_token();
 
@@ -157,6 +162,10 @@ public class ApiController {
         }
 
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
+        String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
+
+        // 새로 발급한 refreshToken을 데이터베이스에 저장
+        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
@@ -171,14 +180,13 @@ public class ApiController {
         }
 
         Map<String, Object> map = new HashMap<>();
-//        map.put("name", userInfo.getName());
-//        map.put("email", userInfo.getEmail());
         map.put("access_token", jwtToken);
+        map.put("refresh_token", refreshToken);
         map.put("account_num", account_num);
 
-        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환합니다.
-
+        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환
     }
+
 
     @GetMapping("/login/naver")
     public ResponseEntity<Map<String, Object>> naverUserCode(@RequestParam("code") String code, @RequestParam(name = "state") String state, HttpServletResponse response) throws Exception {
@@ -210,6 +218,10 @@ public class ApiController {
             customUserDetail = securityUserService.loadUserByUsername(userInfo.getId());
         }
         String jwtToken = JwtTokenProvider.createToken(customUserDetail.getUsername());
+        String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
+
+        // 새로 발급한 refreshToken을 데이터베이스에 저장
+        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
@@ -224,14 +236,11 @@ public class ApiController {
         }
 
         Map<String, Object> map = new HashMap<>();
-        map.put("id", userInfo.getId());
-        map.put("name", userInfo.getName());
-        map.put("email", userInfo.getEmail());
-        map.put("gender", userInfo.getGender());
-        map.put("accessToken", jwtToken);
+        map.put("access_token", jwtToken);
+        map.put("refresh_token", refreshToken);
         map.put("account_num", account_num);
 
-        return new ResponseEntity<>(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환
     }
 
     // 로그아웃

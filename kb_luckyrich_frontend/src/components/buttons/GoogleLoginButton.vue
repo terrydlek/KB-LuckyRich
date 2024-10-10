@@ -28,8 +28,10 @@ function handleGoogleLoginCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
     const accountNum = urlParams.get('account_num');
+    const refreshToken = urlParams.get('refresh_token');
     if (accessToken) {
         localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
         // userStore.login();
         console.log(accountNum);
         
@@ -48,7 +50,6 @@ onMounted(() => {
     handleGoogleLoginCallback();
 });
 </script>
-
 
 <style scoped>
 button {
