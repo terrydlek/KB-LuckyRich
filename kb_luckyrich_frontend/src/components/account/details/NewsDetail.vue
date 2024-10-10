@@ -25,7 +25,7 @@
 
     <!-- 뉴스 텍스트 내용 -->
     <div>
-      <p v-html="filteredArticleText"></p> <!-- 필터링된 텍스트를 사용 -->
+      <p v-html="filteredArticleText"></p> 
     </div>
   </div>
 </template>
@@ -41,10 +41,17 @@ export default {
   },
   computed: {
     filteredArticleText() {
-      if (this.newsDetail.imageDescription) {
-        return this.newsDetail.articleText.replace(this.newsDetail.imageDescription, '');
+    if (this.newsDetail.articleText) {
+      let sentences = this.newsDetail.articleText.split(/(?<=\.)\s+/);
+      
+      let paragraphs = [];
+      for (let i = 0; i < sentences.length; i += 3) {
+        paragraphs.push(sentences.slice(i, i + 3).join(' ')); 
       }
-      return this.newsDetail.articleText;
+
+      return paragraphs.map(paragraph => `<p>${paragraph}</p>`).join('');
+    }
+    return '';
     },
   },
   methods: {

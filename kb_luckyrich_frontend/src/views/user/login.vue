@@ -54,7 +54,7 @@ import KakaoLoginButton from '@/components/buttons/KakaoLoginButton.vue';
   font-weight: bold;
 }
 
-.google {
+/* .google {
   background-color: #f2f2f2;
   border: 1px solid #ccc;
   color: #444;
@@ -70,5 +70,5 @@ import KakaoLoginButton from '@/components/buttons/KakaoLoginButton.vue';
   background-color: #03c75a;
   border: none;
   color: white;
-}
+} */
 </style>
