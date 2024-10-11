@@ -1,13 +1,13 @@
 <template>
-    <div>
-        <h2 class="mb-4">게시판 관리</h2>
+    <div class="board-management">
+        <h2 class="title mb-4">게시판 관리</h2>
 
         <!-- 검색 입력 필드 -->
-        <input type="text" v-model="searchQuery" placeholder="제목 또는 글쓴이 검색" class="form-control mb-4" />
+        <input type="text" v-model="searchQuery" placeholder="제목 또는 글쓴이 검색" class="search-bar mb-4" />
 
         <!-- 게시글 목록 테이블 -->
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead>
                 <tr>
                     <th><input type="checkbox" @click="toggleSelectAll" /></th> <!-- 전체 선택 체크박스 -->
                     <th>No</th>
@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody v-if="paginatedPosts.length">
-                <tr v-for="(post, index) in paginatedPosts" :key="post.boardNum">
+                <tr v-for="(post, index) in paginatedPosts" :key="post.boardNum" class="table-row">
                     <td>
                         <input type="checkbox" v-model="selectedPosts" :value="post.boardNum" />
                     </td>
@@ -31,19 +31,16 @@
 
         <!-- 페이지네이션 -->
         <div v-if="totalPages > 1" class="pagination">
-            <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
-
-            <!-- 페이지 번호 표시 -->
+            <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">이전</button>
             <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-                :class="{ active: currentPage === page }">
+                :class="{ active: currentPage === page }" class="pagination-button">
                 {{ page }}
             </button>
-
-            <button @click="currentPage++" :disabled="currentPage === totalPages">다음</button>
+            <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">다음</button>
         </div>
 
         <!-- 게시글 삭제 버튼 -->
-        <button @click="deleteSelectedPosts" class="btn btn-danger mb-4">
+        <button @click="deleteSelectedPosts" class="btn btn-danger mb-4 delete-button">
             선택한 게시글 삭제
         </button>
     </div>
@@ -114,16 +111,16 @@ export default {
                 alert('삭제할 게시글을 선택하세요.');
                 return;
             }
-    
+
             alert(this.selectedPosts);
             axios
                 .delete('http://localhost:8080/admin/boards', // DELETE 요청으로 변경
-                {
-                    data: this.selectedPosts, // 요청 본문에 배열 전송
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                    },
-                })
+                    {
+                        data: this.selectedPosts, // 요청 본문에 배열 전송
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                        },
+                    })
                 .then(() => {
                     alert('관리자 권한으로 게시글이 삭제되었습니다.');
                     this.fetchPosts(); // 게시글 다시 불러오기
@@ -152,14 +149,120 @@ export default {
 </script>
 
 <style scoped>
-.pagination button {
-    margin: 5px;
-    padding: 5px 10px;
+.board-management {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
 }
 
-.pagination button.active {
+.title {
+    color: #333;
+    font-size: 1.8em;
     font-weight: bold;
-    background-color: #4caf50;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table thead {
+    background-color: #333;
     color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+.table-row {
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.table-row:hover {
+    background-color: #f1f1f1;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.table a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.table a:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-button.active {
+    background-color: #0056b3;
+    font-weight: bold;
+}
+
+.pagination-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.delete-button:disabled {
+    background-color: #aaa;
 }
 </style>
