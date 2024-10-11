@@ -24,10 +24,10 @@
         <p>나의 투자 금액</p>
         <p class="amount">{{ formatCurrency(investmentAmount) }}원</p>
       </div>
-      <div class="card">
+      <!-- <div class="card">
         <p>투자 성과 순위</p>
         <p class="highlight">상위 16%</p>
-      </div>
+      </div> -->
     </div>
 
     <!-- 자산 관련 데이터 테이블 -->
@@ -321,7 +321,7 @@ export default {
     async generatePortfolioPDF() {
       try {
         const token = localStorage.getItem('access_token');
-        alert("포트폴리오 생성중입니다... 잠시만 기다려주세요.");
+        alert('포트폴리오 생성중입니다... 잠시만 기다려주세요.');
         // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/portfolios)
         await axios.post(
           'http://localhost:8080/rabbit/portfolios',
@@ -360,7 +360,7 @@ export default {
                 socketComponent
                   .generatePDF()
                   .then(() => {
-                    alert("포트폴리오 다운로드 완료!");
+                    alert('포트폴리오 다운로드 완료!');
                     console.log('포트폴리오 다운로드 완료!');
                     this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
                   })
