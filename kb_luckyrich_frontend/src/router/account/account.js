@@ -1,7 +1,6 @@
 import asset from '@/views/account/asset.vue';
 import AccountUpdate from '@/views/account/AccountUpdate.vue';
 import AccountTotal from '@/views/account/AccountTotal.vue';
-import test from '@/views/account/test.vue';
 import SteadinessList from '@/components/account/recommend/SteadinessList.vue';
 import ConservativeList from '@/components/account/recommend/ConservativeList.vue';
 import NeutralList from '@/components/account/recommend/NeutralList.vue';
@@ -18,6 +17,7 @@ import FundDetail from '@/components/account/details/FundDetail.vue';
 import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import Socket from '@/views/account/Socket.vue';
+import test from '@/views/account/test.vue';
 
 export default [
   {
@@ -29,11 +29,6 @@ export default [
     path: '/luckyrich/asset',
     name: 'asset',
     component: asset,
-  },
-  {
-    path: '/luckyrich/recommend',
-    name: 'test',
-    component: test,
   },
   {
     path: '/luckyrich/recommend/steadiness',
@@ -119,5 +114,10 @@ export default [
     path: '/luckyrich/portfolio',
     name: 'Socket',
     component: Socket,
+  },
+  {
+    path: '/luckyrich/recommend',
+    name: 'test',
+    component: test,
   },
 ];
