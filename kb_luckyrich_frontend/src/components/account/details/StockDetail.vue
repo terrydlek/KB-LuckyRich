@@ -94,7 +94,6 @@ export default {
 
 .back-button {
   width: 10%;
-  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
@@ -102,5 +101,9 @@ export default {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #32d43ace;
 }
 </style>

@@ -37,6 +37,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/role")
+    public ResponseEntity<String> getUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        String userRole = securityUserService.getUserRole(userName);
+
+        if (userRole != null) {
+            return ResponseEntity.ok(userRole);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<String> updateUserInfo(@RequestBody Map<String, String> request) {
         log.info("updateUserInfo -------------------------");

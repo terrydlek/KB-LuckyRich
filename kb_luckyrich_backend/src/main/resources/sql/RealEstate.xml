@@ -20,6 +20,8 @@
             transaction_type AS transactionType, brokerage_location AS brokerageLocation,
             house_type AS houseType
         FROM realestate_data
-        WHERE city LIKE CONCAT(#{region}, '%');
+        WHERE city LIKE CONCAT(#{region}, '%')
+            LIMIT 10;
     </select>
+
 </mapper>

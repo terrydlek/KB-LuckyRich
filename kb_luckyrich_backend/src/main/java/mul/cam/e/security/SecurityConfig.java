@@ -46,6 +46,9 @@ public class SecurityConfig {
                         // api login -> 권한 상관 없이 진입 가능
                         .antMatchers("/api/**").permitAll()
                         .antMatchers("/rabbit/**").permitAll()
+                        .antMatchers("/news/**").permitAll()
+                        .antMatchers("/realestate/**").permitAll()
+                        .antMatchers("/board/**").permitAll()
                         .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
 //                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()

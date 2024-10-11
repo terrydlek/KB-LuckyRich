@@ -17,15 +17,15 @@
         alt="뉴스 이미지"
         style="max-width: 100%; height: auto"
       />
-      <!-- 이미지 설명 -->
-      <p style="font-style: italic; margin-top: 0.5rem">
+      <!-- 이미지 설명을 별도로 출력 -->
+      <p v-if="newsDetail.imageDescription" style="font-style: italic; margin-top: 0.5rem">
         {{ newsDetail.imageDescription }}
       </p>
     </div>
 
     <!-- 뉴스 텍스트 내용 -->
     <div>
-      <p v-html="newsDetail.articleText"></p>
+      <p v-html="filteredArticleText"></p> 
     </div>
   </div>
 </template>
@@ -36,8 +36,23 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      newsDetail: {}, // 빈 객체로 초기화
+      newsDetail: {}, 
     };
+  },
+  computed: {
+    filteredArticleText() {
+    if (this.newsDetail.articleText) {
+      let sentences = this.newsDetail.articleText.split(/(?<=\.)\s+/);
+      
+      let paragraphs = [];
+      for (let i = 0; i < sentences.length; i += 3) {
+        paragraphs.push(sentences.slice(i, i + 3).join(' ')); 
+      }
+
+      return paragraphs.map(paragraph => `<p>${paragraph}</p>`).join('');
+    }
+    return '';
+    },
   },
   methods: {
     goBack() {
@@ -48,10 +63,6 @@ export default {
     const code1 = this.$route.params.code1;
     const code2 = this.$route.params.code2;
     const token = localStorage.getItem('access_token');
-    if (!token) {
-      throw new Error('토큰없음');
-    }
-    // 서버에서 뉴스 상세 데이터를 가져옴
     axios
       .get(`http://localhost:8080/news/${code1}/${code2}`, {
         headers: {
@@ -59,7 +70,8 @@ export default {
         },
       })
       .then((res) => {
-        this.newsDetail = res.data; // 데이터를 newsDetail에 저장
+        this.newsDetail = res.data;
+        console.log(res.data)
         console.log(this.newsDetail);
       })
       .catch((err) => {
@@ -87,7 +99,6 @@ img {
 
 .back-button {
   width: 10%;
-  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
@@ -95,5 +106,9 @@ img {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #32d43ace;
 }
 </style>

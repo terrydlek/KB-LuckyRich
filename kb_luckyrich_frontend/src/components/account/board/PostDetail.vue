@@ -1,8 +1,4 @@
 <template>
-  <!-- <div class="row"> -->
-  <!-- <div class="col-md-3">
-        <Sidebar />
-      </div> -->
   <div>
     <div v-if="post" class="card">
       <div class="card-header">
@@ -17,15 +13,6 @@
       </div>
     </div>
     <p v-else>게시글을 불러오는 중입니다...</p>
-
-    <!-- 댓글 입력 부분 -->
-    <div v-if="post" class="comment-section mt-4">
-      <h5>댓글 작성</h5>
-      <textarea v-model="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
-      <button class="btn btn-primary mt-3" @click="submitComment">
-        댓글 달기
-      </button>
-    </div>
 
     <center>
       <div class="mb-3">
@@ -42,9 +29,17 @@
       </div>
     </center>
 
+    <!-- 댓글 입력 부분 -->
+    <div v-if="post" class="comment-section mt-4">
+      <h5>댓글 작성</h5>
+      <textarea v-model="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
+      <button class="btn btn-primary mt-3" @click="submitComment">
+        댓글 달기
+      </button>
+    </div>
+
     <!-- 댓글 리스트 출력 부분 -->
     <div v-if="replies.length > 0" class="comment-list mt-4">
-      <h5>댓글</h5>
       <ul class="list-group">
         <li v-for="reply in replies" :key="reply.replyNum" class="list-group-item">
           <p>{{ reply.reply }}</p>
@@ -62,7 +57,6 @@
 
 
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -245,7 +239,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -283,7 +276,7 @@ export default {
 }
 
 .card-header {
-  background-color: #4a90e2;
+  background-color: #FFD232;
   color: white;
   border-radius: 10px 10px 0 0;
   padding: 15px;
@@ -363,7 +356,7 @@ textarea.form-control:focus {
 
 /* 댓글 리스트 */
 .comment-list {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .list-group-item {

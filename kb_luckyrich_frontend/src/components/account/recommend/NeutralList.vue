@@ -4,12 +4,7 @@
       당신의 투자 성향은 위험중립형입니다. 재간접 펀드 상품을 추천해드릴게요.
     </h2>
     <div class="search-container">
-      <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="검색하고 싶은 펀드명이 있나요?"
-        class="search-input"
-      />
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 펀드명이 있나요?" class="search-input" />
     </div>
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -29,25 +24,16 @@
           <tr v-for="fund in paginatedFunds" :key="fund.url">
             <td>{{ fund.country }}</td>
             <td>
-              <a
-                :href="`/luckyrich/recommend/funds/${encodeURIComponent(
-                  fund.url
-                )}`"
-                class="fund-link"
-                >{{ fund.name }}</a
-              >
+              <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(
+                fund.url
+              )}`" class="fund-link">{{ fund.name }}</a>
             </td>
             <td>{{ formatNumber(fund.lastPrice) }}</td>
-            <td
-              :class="{
-                'text-green-500': parseFloat(fund.changePercent) >= 0,
-                'text-red-500': parseFloat(fund.changePercent) < 0,
-              }"
-            >
-              <span
-                v-if="parseFloat(fund.changePercent) >= 0"
-                style="font-size: 15px"
-              >
+            <td :class="{
+              'text-green-500': parseFloat(fund.changePercent) >= 0,
+              'text-red-500': parseFloat(fund.changePercent) < 0,
+            }">
+              <span v-if="parseFloat(fund.changePercent) >= 0" style="font-size: 15px">
                 ▲ {{ fund.changePercent }}
               </span>
               <span v-else style="font-size: 15px">
@@ -61,27 +47,14 @@
       </table>
 
       <div v-if="filteredFunds.length && totalPages > 1" class="pagination">
-        <button
-          @click="currentPage--"
-          :disabled="currentPage === 1"
-          class="pagination-button"
-        >
+        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
           이전
         </button>
-        <button
-          v-for="page in pageNumbers"
-          :key="page"
-          @click="currentPage = page"
-          :class="{ active: currentPage === page }"
-          class="pagination-button"
-        >
+        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+          :class="{ active: currentPage === page }" class="pagination-button">
           {{ page }}
         </button>
-        <button
-          @click="currentPage++"
-          :disabled="currentPage === totalPages"
-          class="pagination-button"
-        >
+        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
           다음
         </button>
       </div>
@@ -119,14 +92,24 @@ const pageRange = 10;
 const fetchFunds = async () => {
   try {
     loading.value = true;
+    const token = localStorage.getItem('access_token'); // 토큰을 로컬 스토리지에서 가져옵니다.
     const response = await axios.get(
-      'http://localhost:8080/api/funds?riskRating=3'
+      'http://localhost:8080/recommend/neutral',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // 요청 헤더에 토큰을 추가합니다.
+        },
+      }
     );
     funds.value = response.data;
   } catch (err) {
     console.error('펀드 데이터를 불러오는 데 실패했습니다.', err);
     error.value =
       '펀드 데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.';
+    if (err.response && err.response.status === 401) {
+      // 인증 오류 시 로그인 페이지로 리다이렉트
+      router.push('/login');
+    }
   } finally {
     loading.value = false;
   }
@@ -336,5 +319,14 @@ watch(searchQuery, () => {
   margin-top: 20px;
   font-size: 18px;
   color: #666;
+}
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>

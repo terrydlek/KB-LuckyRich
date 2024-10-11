@@ -7,7 +7,9 @@
     <center>
       <div id="app">
         <div>
-          <button @click="generatePortfolioPDF">자산 포트폴리오 다운로드</button>
+          <button @click="generatePortfolioPDF">
+            자산 포트폴리오 다운로드
+          </button>
         </div>
       </div>
     </center>
@@ -28,11 +30,10 @@
       </div>
     </div>
 
-
     <!-- 자산 관련 데이터 테이블 -->
-    <div class="data-tables" style="display: flex;">
+    <div class="data-tables" style="display: flex">
       <!-- 왼쪽 섹션 -->
-      <div class="left-section" style="flex: 3; margin-right: 10px;">
+      <div class="left-section" style="flex: 3; margin-right: 10px">
         <h5>총 자산 정보</h5>
         <table>
           <thead>
@@ -101,22 +102,30 @@
       </div>
 
       <!-- 오른쪽 섹션 -->
-      <div class="right-section" style="flex: 2; margin-left: 20px;">
+      <div class="right-section" style="flex: 2; margin-left: 20px">
         <!-- <p>.</p> <br>
         <p>.</p> <br> -->
         <!-- {{ products }} -->
         <!-- <p>은행 잔고 + 총 보유 주식: {{ totalAssets['Bank Balance'] + totalAssets['Stock Total'] }}</p> -->
-        <h5>고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.</h5>
-        <table v-if="products.length" style="width: 400px;">
+        <h5>
+          고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.
+        </h5>
+        <table v-if="products.length" style="width: 400px">
           <thead>
             <tr>
-              <th style="width: 200px;">상품명</th>
-              <th style="width: 100px;">{{ totalAssetsValue < 5000000 ? '이자' : '가격' }}</th>
+              <th style="width: 200px">상품명</th>
+              <th style="width: 100px">
+                {{ totalAssetsValue < 5000000 ? '이자' : '가격' }}
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(product, index) in products" :key="index">
-              <td><a :href="`${product.link}`">{{ truncatedName(product.name) }}</a></td>
+              <td>
+                <a :href="`${product.link}`">{{
+                  truncatedName(product.name)
+                }}</a>
+              </td>
               <td>{{ product.performance }}</td>
             </tr>
           </tbody>
@@ -186,7 +195,7 @@ export default {
       return Object.entries(this.assetData).sort((a, b) => {
         const dateA = new Date(a[0]);
         const dateB = new Date(b[0]);
-        return dateB - dateA;  // 내림차순 정렬
+        return dateB - dateA; // 내림차순 정렬
       });
     },
     totalAssetsValue() {
@@ -234,56 +243,72 @@ export default {
       try {
         this.loading = true;
         const token = localStorage.getItem('access_token');
+        let response = null;
 
         if (this.totalAssetsValue < 5000000) {
           // 예적금 상품 20개
-          const response = await axios.get('http://localhost:8080/recommend/steadiness', {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          response = await axios.get(
+            'http://localhost:8080/recommend/steadiness',
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           this.products = response.data.slice(0, 20).map((item) => ({
             name: item.prodname,
             category: '예적금',
             performance: item.bestinterest,
-            link: "/luckyrich/recommend/steadiness/" + item.prodname,
+            link: `/luckyrich/recommend/steadiness/${item.prodname}`,
           }));
-        } else if (this.totalAssetsValue >= 5000000 && this.totalAssetsValue < 20000000) {
+        } else if (this.totalAssetsValue < 20000000) {
           // 재간접 펀드 20개
-          const response = await axios.get('http://localhost:8080/api/funds?riskRating=2');
+          response = await axios.get(
+            'http://localhost:8080/recommend/conservative',
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           this.products = response.data.slice(0, 20).map((item) => ({
             name: item.name,
             category: '재간접 펀드',
             performance: item.lastPrice,
-            link: "/luckyrich/recommend/funds/" + encodeURIComponent(item.url),
+            link: `/luckyrich/recommend/funds/${encodeURIComponent(item.url)}`,
           }));
-        } else if (this.totalAssetsValue >= 20000000 && this.totalAssetsValue < 50000000) {
+        } else if (this.totalAssetsValue < 50000000) {
           // 채권형 펀드 20개
-          const response = await axios.get('http://localhost:8080/api/funds?riskRating=3');
+          response = await axios.get(
+            'http://localhost:8080/recommend/neutral',
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           this.products = response.data.slice(0, 20).map((item) => ({
             name: item.name,
             category: '채권형 펀드',
             performance: item.lastPrice,
-            link: "/luckyrich/recommend/funds/" + encodeURIComponent(item.url),
+            link: `/luckyrich/recommend/funds/${encodeURIComponent(item.url)}`,
           }));
-        } else if (this.totalAssetsValue >= 50000000 && this.totalAssetsValue < 100000000) {
+        } else if (this.totalAssetsValue < 100000000) {
           // 주식 20개
-          const response = await axios.get('http://localhost:8080/recommend/active', {
+          response = await axios.get('http://localhost:8080/recommend/active', {
             headers: { Authorization: `Bearer ${token}` },
           });
           this.products = response.data.slice(0, 20).map((item) => ({
             name: item.stockName,
             category: '주식',
             performance: item.stockPrice,
-            link: "/luckyrich/recommend/active/" + item.stockCode,
+            link: `/luckyrich/recommend/active/${item.stockCode}`,
           }));
         } else {
           // 암호화폐 20개
-          const response = await fetch('https://api.coinpaprika.com/v1/tickers?quotes=KRW');
+          const response = await fetch(
+            'https://api.coinpaprika.com/v1/tickers?quotes=KRW'
+          );
           const data = await response.json();
           this.products = data.slice(0, 20).map((item) => ({
             name: item.name,
             category: '암호화폐',
             performance: item.quotes.KRW.percent_change_24h + '%',
-            link: '/luckyrich/coin/' + item.id,
+            link: `/luckyrich/coin/${item.id}`,
           }));
         }
       } catch (error) {
@@ -292,17 +317,11 @@ export default {
       } finally {
         this.loading = false;
       }
-      console.log(this.products);
     },
-
-
-
-
-
     async generatePortfolioPDF() {
       try {
         const token = localStorage.getItem('access_token');
-
+        alert("포트폴리오 생성중입니다... 잠시만 기다려주세요.");
         // RabbitMQ에 메시지 발행 요청 (http://localhost:8080/rabbit/portfolios)
         await axios.post(
           'http://localhost:8080/rabbit/portfolios',
@@ -341,6 +360,7 @@ export default {
                 socketComponent
                   .generatePDF()
                   .then(() => {
+                    alert("포트폴리오 다운로드 완료!");
                     console.log('포트폴리오 다운로드 완료!');
                     this.showSocketComponent = false; // PDF 생성 후 Socket 컴포넌트 제거
                   })
@@ -501,4 +521,13 @@ export default {
 /* .dashboard-container {
   width: 1000px;
 } */
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 </style>

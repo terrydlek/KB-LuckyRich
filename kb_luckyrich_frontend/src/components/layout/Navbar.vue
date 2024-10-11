@@ -2,7 +2,13 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <router-link to="/luckyrich" class="logo">LuckyRich</router-link>
+        <a @click="handleLogoClick" class="logo">
+          <img
+            src="/src/assets/images/KLlogo3.png"
+            alt="LuckyRich Logo"
+            class="logo-image"
+          />
+        </a>
       </div>
       <div class="navbar-right">
         <button v-if="isLoggedIn" @click="goToMyPage" class="btn my-page">
@@ -24,25 +30,24 @@ const isLoggedIn = ref(false);
 const router = useRouter();
 const route = useRoute();
 
-// onMounted(() => {
-//   checkLoginStatus();
-// });
-
 watch(route, () => {
   checkLoginStatus();
 });
 
 function checkLoginStatus() {
   const token = localStorage.getItem('access_token');
-  isLoggedIn.value = !!token; // Update the login status
+  isLoggedIn.value = !!token;
 }
 
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
     alert('로그아웃 되었습니다.');
-    isLoggedIn.value = false; // Immediately update login status
-    router.push('/');
+    isLoggedIn.value = false;
+    checkLoginStatus();
+    router.push('/').then(() => {
+      router.go(0); // 페이지를 강제로 새로고침하여 상태 반영
+    });
   } else {
     router.push({ name: 'login' });
   }
@@ -51,11 +56,20 @@ const handleAuth = () => {
 const goToMyPage = () => {
   router.push('/luckyrich/userUpdate');
 };
+
+// 로고 클릭 시 경로 설정
+const handleLogoClick = () => {
+  if (isLoggedIn.value) {
+    router.push('/luckyrich');
+  } else {
+    router.push('/');
+  }
+};
 </script>
 
 <style scoped>
 .navbar {
-  width: 100%; /* 전체 화면 너비 */
+  width: 100%;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
@@ -67,14 +81,14 @@ const goToMyPage = () => {
 }
 
 .navbar-inner {
-  max-width: 1200px; /* 콘텐츠와 동일한 최대 너비 */
+  max-width: 1200px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  padding-left: 0; /* 왼쪽 패딩 제거 */
-  padding-right: 0; /* 오른쪽 패딩 제거 */
+  padding-left: 0;
+  padding-right: 0;
   gap: 20px;
 }
 
@@ -83,6 +97,17 @@ const goToMyPage = () => {
   font-weight: 500;
   font-size: 30px;
   color: #f8b400;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo-image {
+  width: 170px; /* 원하는 크기로 설정 */
+  height: auto;
+  cursor: pointer; /* 손가락 모양 커서 */
+}
+
+.logo:hover {
   text-decoration: none;
 }
 
@@ -96,7 +121,7 @@ const goToMyPage = () => {
   font-weight: 600;
   font-size: 16px;
   color: #ffffff;
-  background-color: #f8b400;
+  background-color: #FFD232;
   padding: 10px 20px;
   border: none;
   border-radius: 25px;

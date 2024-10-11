@@ -82,7 +82,7 @@ public class RabbitService {
         data.put("stockRevenue", userStockRevenue(userName));
         data.put("idTrend", idTrend(userName));
         // TODO      **사용할 때 주석 풀면 됩니다.**
-//        data.put("advice", advice(userName));
+        data.put("advice", advice(userName));
         return data;
     }
 
@@ -190,9 +190,19 @@ public class RabbitService {
 
         String financePlan = gptController.chat(userAssetTotal(userName) + " 재무설계사처럼 재무계획을 300자 이내로 작성해줘");
         String investPlan = gptController.chat(idTrend(userName) + " 투자전문가처럼 조언을 300자 이내로 자세하게 작성해줘 ");
+        String stockPlan = gptController.chat(userStockRevenue(userName) + " 주식전문가처럼 조언을 300자 이내로 자세하게 작성해줘");
+        String mzTrend = gptController.chat("MZ 세대의 자산 관리 트렌드에 대해 300자 이내로 자세하게 작성해줘.");
+        String financeTrend = gptController.chat("현재 금융 시장의 트렌드에 대해 300자 이내로 자세하게 작성해줘");
+        String investAdvice = gptController.chat("투자 시장의 트렌드에 맞게 투자 상품을 300자 이내로 자세하게 추천해줘");
+
 
         advice.put("financePlan", financePlan);
         advice.put("investPlan", investPlan);
+        advice.put("stockPlan", stockPlan);
+        advice.put("mzTrend", mzTrend);
+        advice.put("financeTrend", financeTrend);
+        advice.put("investAdvice", investAdvice);
+
 
         return advice;
     }

@@ -74,11 +74,6 @@
     </div>
   </div>
   <p v-else>상품 정보를 불러오는 중입니다...</p>
-  <center>
-    <!-- <div class="mb-3">
-      <button class="btn btn-primary" @click="goBack">목록으로</button>
-    </div> -->
-  </center>
 </template>
 
 <script>
@@ -140,7 +135,6 @@ export default {
 .back-button {
   width: 10%;
   height: 30px;
-  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
@@ -150,9 +144,11 @@ export default {
   transition: background-color 0.3s ease;
 }
 
+.back-button:hover {
+  background-color: #32d43ace;
+}
+
 .btn {
-  height: 40px;
-  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
