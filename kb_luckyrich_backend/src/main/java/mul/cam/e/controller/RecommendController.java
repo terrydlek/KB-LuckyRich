@@ -167,53 +167,9 @@ public class RecommendController {
     }
 
     // 나중에 플젝 끝날 때쯤 지우면 됨.
-    @GetMapping("/delete")
-    public void delete() {
-        redisService.invalidateCache("depositList");
-    }
-
-//    @GetMapping("/cipher")
-//    public String cipher() {
-//        String text = "hello";
-//        System.out.println("text : " + text);
-//        String ci = keyEncrypt.encrypt(text);
-//        System.out.println("cipher : " + ci);
-//        String di = keyDecrypt.decrypt(ci);
-//        System.out.println("di : " + di);
-//        return "dd";
+//    @GetMapping("/delete")
+//    public void delete() {
+//        redisService.invalidateCache("depositList");
 //    }
-
-    // TODO 삭제해도 되나요?
-    @GetMapping("/gpt")
-    public ResponseEntity<GPTResponse> getGPTRecommend(){
-        log.info("Gpt Recommend");
-
-        // TODO prompt 생성
-        String prompt = "";
-
-        GPTRequest request = new GPTRequest(
-                model,prompt,1,256,1,0,0);
-
-        GPTResponse gptResponse = restTemplate.postForObject(
-                apiUrl
-                , request
-                , GPTResponse.class
-        );
-
-        return ResponseEntity.ok(gptResponse);
-    }
-    
-    // 암호화 테스트용 삭제해도 됨
-    @GetMapping("/crypto")
-    public void crypto() {
-        String text = "hello";
-        System.out.println("1. " + text);
-
-        String en = keyEncrypt.encrypt(text);
-        System.out.println("2. " + en);
-
-        String de = keyDecrypt.decrypt(en);
-        System.out.println("3. " + de);
-    }
 
 }
