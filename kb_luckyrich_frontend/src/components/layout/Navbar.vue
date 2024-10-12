@@ -4,7 +4,7 @@
       <div class="navbar-left">
         <a @click="handleLogoClick" class="logo">
           <img
-            src="/src/assets/images/KLlogo3.png"
+            src="/src/assets/images/LuckyRichLogo.png"
             alt="LuckyRich Logo"
             class="logo-image"
           />
