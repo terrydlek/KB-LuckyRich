@@ -34,7 +34,7 @@ public class RealEstateService {
         List<RealEstateDto> estateList = redisService.getRealEstateData(redisKey);
         if (estateList == null || estateList.isEmpty()) {
             estateList = realEstateDao.getRealEstatesByRegion(region);
-            redisService.setData(redisKey, estateList, 1);
+            redisService.setData(redisKey, estateList, 1000);
         }
         return estateList;
     }
