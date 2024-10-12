@@ -178,7 +178,7 @@ public class MyAssetController {
         map.put("Car", myAssetService.totalCar(userName));
         map.put("real estate", myAssetService.totalRealestate(userName));
 
-        System.out.println(map);
+//        System.out.println(map);
         return ResponseEntity.ok(map);
     }
 
@@ -204,7 +204,7 @@ public class MyAssetController {
 //            }
 //        }
 //        log.info(map);
-        System.out.println(dto + "       ~~~~~~~~~~~~~~");
+//        System.out.println(dto + "       ~~~~~~~~~~~~~~");
         return ResponseEntity.ok(dto);
     }
 
@@ -216,10 +216,10 @@ public class MyAssetController {
         String userName = authentication.getName();
 
         List<Map<String, Object>> transaction = myAssetService.transactionTen(userName);
-        log.info(transaction);
+//        log.info(transaction);
 
         Map<String, Map<String, List<String>>> symbol = myAssetService.userStockSymbol(userName);
-        log.info(symbol);
+//        log.info(symbol);
 
         Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
 

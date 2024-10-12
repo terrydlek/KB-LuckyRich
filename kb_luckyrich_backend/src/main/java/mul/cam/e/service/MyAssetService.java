@@ -98,7 +98,7 @@ public class MyAssetService {
 
         for (AccountDto account : accounts) {
             String decryptedAccountNumber = account.getDecryptedAccountNumber(keyDecrypt);
-            System.out.println(decryptedAccountNumber);
+//            System.out.println(decryptedAccountNumber);
             account.setAccountNumber(decryptedAccountNumber);
         }
 

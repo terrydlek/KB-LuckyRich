@@ -110,7 +110,7 @@ public class ApiController {
         String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
 
         // 새로 발급한 refreshToken을 데이터베이스에 저장
-        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
+        securityUserService.updateRefreshToken(customUserDetail.getUsername(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
@@ -165,7 +165,7 @@ public class ApiController {
         String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
 
         // 새로 발급한 refreshToken을 데이터베이스에 저장
-        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
+        securityUserService.updateRefreshToken(customUserDetail.getUsername(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());
@@ -221,7 +221,7 @@ public class ApiController {
         String refreshToken = JwtTokenProvider.createRefreshToken(customUserDetail.getUsername());
 
         // 새로 발급한 refreshToken을 데이터베이스에 저장
-        securityUserService.updateRefreshToken(customUserDetail.getUserId(), refreshToken);
+        securityUserService.updateRefreshToken(customUserDetail.getUsername(), refreshToken);
 
         // 계좌 갯수 확인
         int account_num = securityUserService.getAccountNum(customUserDetail.getUsername());

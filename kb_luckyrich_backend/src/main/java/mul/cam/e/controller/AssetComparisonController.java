@@ -29,11 +29,11 @@ public class AssetComparisonController {
         String userName = authentication.getName();
         int userId = securityUserService.getUserId(userName); // securityUserService 사용
 
-        System.out.println("User ID: " + userId);
+//        System.out.println("User ID: " + userId);
 
         Map<String, Double> peerAverageAssets = assetComparisonService.getPeerAverageAssets(userId);
 
-        System.out.println("Peer Average Assets: " + peerAverageAssets);
+//        System.out.println("Peer Average Assets: " + peerAverageAssets);
 
         return ResponseEntity.ok(peerAverageAssets);
     }
