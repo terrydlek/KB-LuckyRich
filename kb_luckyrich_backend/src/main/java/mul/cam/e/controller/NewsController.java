@@ -46,4 +46,12 @@ public class NewsController {
     public ResponseEntity<List<NewsDto>> getpersonalNews() throws IOException {
         return ResponseEntity.ok(newsService.getpersonalNews());
     }
+    @GetMapping("/globaleconomy")
+    public ResponseEntity<List<NewsDto>> getglobaleconomyNews() throws IOException {
+        return ResponseEntity.ok(newsService.getglobaleconomyNews());
+    }
+    @GetMapping("/economy")
+    public ResponseEntity<List<NewsDto>> geteconomyNews() throws IOException {
+        return ResponseEntity.ok(newsService.geteconomyNews());
+    }
 }
