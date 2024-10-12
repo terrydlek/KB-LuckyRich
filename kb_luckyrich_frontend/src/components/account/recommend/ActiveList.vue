@@ -1,102 +1,130 @@
 <template>
   <div class="stocks">
-
     <h3>
       당신의 투자 성향은 적극 투자형입니다. 주식 상품 TOP 100을 추천해드릴게요.
+      <div @click="refreshPage" class="refresh-icon">
+        <i class="fas fa-sync-alt"></i>
+      </div>
     </h3>
+  </div>
+  <div class="search">
+    <input
+      type="text"
+      v-model="searchQuery"
+      placeholder="검색하고 싶은 종목명이 있나요?"
+    />
+  </div>
 
-    <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
+  <table v-if="filteredStocks.length" class="stock-table">
+    <thead>
+      <tr>
+        <th>종목명</th>
+        <th>현재가</th>
+        <th>전일비</th>
+        <th>등락률</th>
+        <!-- <th>거래량</th> -->
+        <th>시가총액</th>
+        <th>매출액</th>
+        <!-- <th>영업이익</th> -->
+        <th>주당 순 이익</th>
+        <th>PER</th>
+        <th>ROE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(stock, index) in paginatedStocks" :key="index">
+        <td>
+          <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
+            stock.stockName
+          }}</a>
+        </td>
+        <td>{{ stock.stockPrice }}</td>
+        <td>
+          <span
+            v-if="stock.comparePre.includes('하락')"
+            style="color: #d32f2f; font-size: 15px"
+          >
+            ▼ {{ stock.comparePre.replace('하락', '-') }}
+          </span>
+          <span
+            v-else-if="stock.comparePre.includes('보합')"
+            style="color: #388e3c; font-size: 15px"
+          >
+            ▲ {{ stock.comparePre.replace('보합', '+') }}
+          </span>
+          <span v-else style="color: #388e3c; font-size: 15px">
+            ▲ {{ stock.comparePre.replace('상승', '+') }}
+          </span>
+        </td>
 
-    <table v-if="filteredStocks.length" class="stock-table">
-      <thead>
-        <tr>
-          <th>종목명</th>
-          <th>현재가</th>
-          <th>전일비</th>
-          <th>등락률</th>
-          <!-- <th>거래량</th> -->
-          <th>시가총액</th>
-          <th>매출액</th>
-          <!-- <th>영업이익</th> -->
-          <th>주당 순 이익</th>
-          <th>PER</th>
-          <th>ROE</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(stock, index) in paginatedStocks" :key="index">
-          <td><a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{ stock.stockName }}</a></td>
-          <td>{{ stock.stockPrice }}</td>
-          <td>
-            <span v-if="stock.comparePre.includes('하락')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.comparePre.replace('하락', '-') }}
-            </span>
-            <span v-else-if="stock.comparePre.includes('보합')" style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.comparePre.replace('보합', '+') }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.comparePre.replace('상승', '+') }}
-            </span>
+        <td>
+          <span
+            v-if="stock.fluctuationRate.startsWith('-')"
+            style="color: #d32f2f; font-size: 15px"
+          >
+            ▼ {{ stock.fluctuationRate }}
+          </span>
+          <span v-else style="color: #388e3c; font-size: 15px">
+            ▲ {{ stock.fluctuationRate }}
+          </span>
+        </td>
 
-          </td>
+        <!-- <td>{{ stock.tradingVolume }}</td> -->
+        <td>{{ stock.marketCapitalization }}</td>
+        <td>{{ stock.salesAmount }}</td>
+        <!-- <td>{{ stock.operatingProfit }}</td> -->
+        <td>{{ stock.earningsPerShare }}</td>
+        <td>
+          <span
+            v-if="stock.per.startsWith('-')"
+            style="color: #d32f2f; font-size: 15px"
+          >
+            ▼ {{ stock.per }}
+          </span>
+          <span v-else style="color: #388e3c; font-size: 15px">
+            ▲ {{ stock.per }}
+          </span>
+        </td>
 
+        <td>
+          <span
+            v-if="stock.roe.startsWith('-')"
+            style="color: #d32f2f; font-size: 15px"
+          >
+            ▼ {{ stock.roe }}
+          </span>
+          <span v-else style="color: #388e3c; font-size: 15px">
+            ▲ {{ stock.roe }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-          <td>
-            <span v-if="stock.fluctuationRate.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.fluctuationRate }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.fluctuationRate }}
-            </span>
-          </td>
-
-          <!-- <td>{{ stock.tradingVolume }}</td> -->
-          <td>{{ stock.marketCapitalization }}</td>
-          <td>{{ stock.salesAmount }}</td>
-          <!-- <td>{{ stock.operatingProfit }}</td> -->
-          <td>{{ stock.earningsPerShare }}</td>
-          <td>
-            <span v-if="stock.per.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.per }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.per }}
-            </span>
-          </td>
-
-          <td>
-            <span v-if="stock.roe.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.roe }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.roe }}
-            </span>
-          </td>
-
-        </tr>
-      </tbody>
-    </table>
-
-    <div v-if="filteredStocks.length && totalPages > 1" class="pagination">
-      <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
-      <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-        :class="{ active: currentPage === page }">
-        {{ page }}
-      </button>
-      <button @click="currentPage++" :disabled="currentPage === totalPages">
-        다음
-      </button>
-    </div>
-
+  <div v-if="filteredStocks.length && totalPages > 1" class="pagination">
+    <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
+    <button
+      v-for="page in pageNumbers"
+      :key="page"
+      @click="currentPage = page"
+      :class="{ active: currentPage === page }"
+    >
+      {{ page }}
+    </button>
+    <button @click="currentPage++" :disabled="currentPage === totalPages">
+      다음
+    </button>
+  </div>
+  <center>
     <button @click="resetTest" class="reset-test-button">
       테스트 다시하기
     </button>
+  </center>
 
-    <p v-if="stocks.length && !filteredStocks.length">
-      찾으시는 종목명은 TOP 100에 없습니다.
-    </p>
-    <p v-else-if="!stocks.length">주식 데이터를 불러오는 중입니다...</p>
-  </div>
+  <p v-if="stocks.length && !filteredStocks.length">
+    찾으시는 종목명은 TOP 100에 없습니다.
+  </p>
+  <p v-else-if="!stocks.length">주식 데이터를 불러오는 중입니다...</p>
 </template>
 
 <script setup>
@@ -110,6 +138,11 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const pageRange = 10; // 한번에 보여줄 페이지 번호 개수
+
+const refreshPage = () => {
+  console.log('Refresh page.');
+  window.location.reload();
+};
 
 // 검색된 종목 리스트
 const filteredStocks = computed(() => {
@@ -211,15 +244,23 @@ watch(searchQuery, () => {
   align-items: center;
 }
 
+.search {
+  width: 100%;
+  display: flex; /* flex를 사용해 자식 요소 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  margin: 0 auto;
+  /* margin-bottom: 20px; */
+}
+
 .reset-test-button {
-  margin-top: 20px;
-  /* margin-left: 850px; */
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -250,15 +291,15 @@ watch(searchQuery, () => {
 }
 
 input[type='text'] {
-  margin: 10px 0;
   padding: 10px;
-  width: 50%;
+  width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 16px;
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -268,7 +309,7 @@ input[type='text'] {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -279,9 +320,9 @@ input[type='text'] {
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination button:disabled {
@@ -289,7 +330,7 @@ input[type='text'] {
   cursor: not-allowed;
 }
 
-input[type="text"] {
+input[type='text'] {
   margin: 10px 0;
   padding: 5px;
   width: 50%;
@@ -300,18 +341,25 @@ button {
   padding: 5px 10px;
 }
 
-button.active {
+.refresh-icon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 2px;
+  color: #3498db;
+  transition: color 0.3s, transform 0.2s ease;
+  display: inline-block; /* 클릭할 수 있도록 영역 확장 */
+  position: relative;
+  z-index: 1000; /* 다른 요소 위에 위치 */
+}
+
+.refresh-icon:hover .refresh-icon {
+  color: #2980b9;
+  transform: scale(1.2);
+}
+
+/* button.active {
   font-weight: bold;
   background-color: #4caf50;
   color: white;
-}
-
-a {
-    color: #6c63ff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
+}*/
 </style>

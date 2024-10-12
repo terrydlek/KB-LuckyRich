@@ -1,11 +1,15 @@
 <template>
   <div class="deposit-container">
-
     <h3 class="title">
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
     </h3>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 상품명이 있나요?"
+        class="search-input"
+      />
     </div>
 
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
@@ -22,8 +26,11 @@
           <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
             <td>
-              <a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`" class="deposit-link">{{ deposit.prodname
-                }}</a>
+              <a
+                :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`"
+                class="deposit-link"
+                >{{ deposit.prodname }}</a
+              >
             </td>
             <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
           </tr>
@@ -31,14 +38,27 @@
       </table>
 
       <div v-if="filteredDeposits.length && totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
           이전
         </button>
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }" class="pagination-button">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
           다음
         </button>
       </div>
@@ -48,7 +68,10 @@
         </button>
       </center>
 
-      <div v-if="deposits.length && !filteredDeposits.length" class="no-results">
+      <div
+        v-if="deposits.length && !filteredDeposits.length"
+        class="no-results"
+      >
         검색 결과가 없습니다.
       </div>
       <div v-if="!deposits.length" class="no-data">
@@ -175,14 +198,14 @@ watch(searchQuery, () => {
 }
 
 .test-reset-button {
-  margin-top: 20px;
+  margin-top: 30px;
   /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -205,14 +228,16 @@ watch(searchQuery, () => {
 
 .deposit-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* 테두리 합치기 */
   margin-bottom: 20px;
+  border: 1px solid #ddd; /* 테이블 전체 테두리 */
 }
 
 .deposit-table th,
 .deposit-table td {
   padding: 12px;
   text-align: left;
+  border: 1px solid #ddd; /* 각 셀에 테두리 추가 */
 }
 
 .deposit-table th {
@@ -220,7 +245,7 @@ watch(searchQuery, () => {
 }
 
 .deposit-table tr:nth-child(even) {
-  background-color: #f8f8f8;
+  background-color: #f8f8f8; /* 짝수 행 배경색 */
 }
 
 .deposit-link {
@@ -242,20 +267,20 @@ watch(searchQuery, () => {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.pagination-button:hover:not(:disabled) {
+/* .pagination-button:hover:not(:disabled) {
   background-color: #e8e8e8;
-}
+} */
 
-.pagination-button.active {
+.pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination-button:disabled {
@@ -270,6 +295,11 @@ watch(searchQuery, () => {
   margin-top: 20px;
   font-size: 18px;
   color: #666;
+}
+
+.refresh-icon:hover .refresh-icon {
+  color: #2980b9;
+  transform: scale(1.2);
 }
 
 a {
