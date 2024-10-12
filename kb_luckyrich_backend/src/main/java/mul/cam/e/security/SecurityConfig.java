@@ -44,7 +44,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
                         // api login -> 권한 상관 없이 진입 가능
-                        .antMatchers("/api/**").permitAll()
+                        .antMatchers("/api/**", "/auth/**").permitAll()
                         .antMatchers("/rabbit/**").permitAll()
                         .antMatchers("/news/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
@@ -52,7 +52,6 @@ public class SecurityConfig {
                         .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
 //                       .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()
-//                      .antMatchers("/board/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)

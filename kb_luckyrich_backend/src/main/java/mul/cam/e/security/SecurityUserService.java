@@ -53,11 +53,11 @@ public class SecurityUserService implements UserDetailsService {
 
     public String getUserRole(String userName) { return userDao.getUserRole(userName); }
     
-    public void updateRefreshToken(int userId, String refreshToken) {
-        userDao.updateRefreshToken(userId, refreshToken);
+    public void updateRefreshToken(String userName, String refreshToken) {
+        userDao.updateRefreshToken(userName, refreshToken);
     }
 
-    public String getRefreshToken(int userId) {
-        return userDao.getRefreshToken(userId);
+    public String getRefreshToken(String userName) {
+        return userDao.getRefreshToken(userName);
     }
 }

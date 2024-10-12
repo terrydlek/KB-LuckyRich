@@ -2,7 +2,7 @@
   <div class="left-sidebar">
     <!-- <div class="profile-card">
       <img
-        src="../assets/images/profile.png"
+        src="@/assets/images/profile.png"
         alt="Profile"
         class="profile-image"
       />
