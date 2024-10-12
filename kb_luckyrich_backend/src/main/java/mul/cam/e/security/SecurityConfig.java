@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .antMatchers("/realestate/**").permitAll()
                         .antMatchers("/board/**").permitAll()
                         .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
-//                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
+//                       .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin().disable()

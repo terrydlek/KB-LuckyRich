@@ -17,6 +17,10 @@
         <button @click="handleAuth" class="btn auth">
           {{ isLoggedIn ? 'Logout' : 'Login' }}
         </button>
+        <!-- 다크 모드 토글 버튼 (아이콘 추가) -->
+        <button class="dark-mode-toggle" @click="toggleDarkMode">
+          <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+        </button>
       </div>
     </div>
   </nav>
@@ -25,10 +29,19 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import '@fortawesome/fontawesome-free/css/all.css'; // Font Awesome 스타일 추가
 
 const isLoggedIn = ref(false);
 const router = useRouter();
 const route = useRoute();
+const isDarkMode = ref(false);
+
+// 다크 모드 토글 함수
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value;
+  localStorage.setItem('darkMode', isDarkMode.value);
+  document.body.classList.toggle('dark-mode', isDarkMode.value);
+};
 
 watch(route, () => {
   checkLoginStatus();
@@ -65,6 +78,12 @@ const handleLogoClick = () => {
     router.push('/');
   }
 };
+
+// 페이지 로드 시 저장된 다크 모드 상태를 불러옴
+onMounted(() => {
+  isDarkMode.value = localStorage.getItem('darkMode') === 'true';
+  document.body.classList.toggle('dark-mode', isDarkMode.value);
+});
 </script>
 
 <style scoped>
@@ -101,6 +120,20 @@ const handleLogoClick = () => {
   cursor: pointer;
 }
 
+/* 다크 모드 토글 버튼 스타일 */
+.dark-mode-toggle {
+  /* position: fixed;
+  bottom: 20px;
+  right: 20px; */
+  background-color: var(--color-primary);
+  color: var(--color-font);
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 20px; /* 아이콘 크기 조절 */
+}
+
 .logo-image {
   width: 170px; /* 원하는 크기로 설정 */
   height: auto;
@@ -121,7 +154,7 @@ const handleLogoClick = () => {
   font-weight: 600;
   font-size: 16px;
   color: #ffffff;
-  background-color: #FFD232;
+  background-color: #ffd232;
   padding: 10px 20px;
   border: none;
   border-radius: 25px;

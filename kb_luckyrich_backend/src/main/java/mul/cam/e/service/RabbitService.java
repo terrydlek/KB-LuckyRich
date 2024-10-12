@@ -10,12 +10,8 @@ import mul.cam.e.dao.UserDao;
 import mul.cam.e.dto.StockHoldingsDto;
 import mul.cam.e.gpt.GPTController;
 import mul.cam.e.util.StockSymbolProcessor;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -37,7 +33,7 @@ public class RabbitService {
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
-    public RabbitService(RabbitTemplate rabbitTemplate, Queue queue, NotificationController notificationController,
+    public RabbitService(RabbitTemplate rabbitTemplate, NotificationController notificationController,
                          ObjectMapper objectMapper, UserDao userDao, MyAssetDao myAssetDao, MyAssetService myAssetService, GPTController gptController) {
         this.rabbitTemplate = rabbitTemplate;
         this.notificationController = notificationController;
@@ -53,21 +49,26 @@ public class RabbitService {
         log.info("Creating portfolio for user: {}", userName);
 
         try {
+            // 포트폴리오 데이터 생성
             Map<String, Object> portfolioData = generatePortfolioData(userName);
-            // 직렬화 한번 거쳐야 함
-            String jsonMessage = objectMapper.writeValueAsString(portfolioData);
-            String userQueueName = "portfolio_" + userName;
 
+            // 직렬화
+            String jsonMessage = objectMapper.writeValueAsString(portfolioData);
+
+            // 유저별 큐와 바인딩 동적 생성
             rabbitTemplate.execute(channel -> {
-                channel.queueDeclare(userQueueName, true, false, false, null);
+                channel.queueDeclare("portfolio_" + userName, true, false, false, null);
                 return null;
             });
-                // 1. a 엄청 많은 작업을 요청
-                // 2. 바로 직후에 b 사용자가 시간이 엄청 적게 걸리는 작업 요청
 
-            rabbitTemplate.convertAndSend(userQueueName, jsonMessage);
+            // Exchange와 유저 큐 바인딩 동적 설정
+            createUserBinding(userName);
+
+            // 메시지 전송
+            rabbitTemplate.convertAndSend("userPortfolioExchange", "portfolio_" + userName, jsonMessage);
+
             notificationController.notifyUser("Portfolio creation completed for user: " + userName);
-            fetchMessageFromQueue(userQueueName, userName);
+            fetchMessageFromQueue("portfolio_" + userName, userName);
         } catch (JsonProcessingException e) {
             log.error("Error serializing portfolio data for user {}", userName, e);
         } catch (IOException e) {
@@ -75,29 +76,26 @@ public class RabbitService {
         }
     }
 
+    // 포트폴리오 데이터 생성
     private Map<String, Object> generatePortfolioData(String userName) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("assetTotal", userAssetTotal(userName));
         data.put("detailAsset", userDetailAsset(userName));
         data.put("stockRevenue", userStockRevenue(userName));
         data.put("idTrend", idTrend(userName));
-        // TODO      **사용할 때 주석 풀면 됩니다.**
-        data.put("advice", advice(userName));
+        // TODO gpt 사용할 때는 풀고 사용하시면 됩니다.
+        // data.put("advice", advice(userName));
         return data;
     }
 
-    @RabbitListener(queues = "q.test")
-    public void receiveMessage(String message) {
-        log.info("Received Message: {}", message);
-    }
-
+    // 큐에서 메시지 가져오기
     public void fetchMessageFromQueue(String userQueueName, String userName) {
         try {
             GetResponse response = rabbitTemplate.execute(channel -> channel.basicGet(userQueueName, false));
 
             if (response != null) {
                 String messageBody = new String(response.getBody(), StandardCharsets.UTF_8);
-                // 받을 때는 역직렬화 한번 거쳐야 함
+                // 역직렬화
                 Map<String, Object> messagePayload = objectMapper.readValue(messageBody, Map.class);
                 log.info("Fetched message from queue {}: {}", userQueueName, messagePayload);
 
@@ -116,16 +114,14 @@ public class RabbitService {
         }
     }
 
-    // 자산 총액
+    // 자산 총액 계산
     public Map<String, Object> userAssetTotal(String userName) {
         log.info("Executing userAssetTotal for user: {}", userName);
         Map<String, Object> assetTotal = new HashMap<>();
-
         assetTotal.put("totalAccount", myAssetDao.totalAccount(userName));
         assetTotal.put("totalStock", myAssetDao.totalStock(userName));
         assetTotal.put("totalRealestate", myAssetDao.totalRealestate(userName));
         assetTotal.put("totalCar", myAssetDao.totalCar(userName));
-
         return Collections.singletonMap("assetTotal", assetTotal);
     }
 
@@ -133,16 +129,14 @@ public class RabbitService {
     public Map<String, Object> userDetailAsset(String userName) {
         log.info("Executing userDetailAsset for user: {}", userName);
         Map<String, Object> detailAsset = new HashMap<>();
-
         detailAsset.put("userAccount", myAssetService.userAccounts(userName));
         detailAsset.put("userStock", myAssetDao.userStockSymbol(userName));
         detailAsset.put("userCar", myAssetDao.userCar(userName));
         detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));
-
         return Collections.singletonMap("detailAsset", detailAsset);
     }
 
-    // 주식 자산 수익률
+    // 주식 자산 수익률 계산
     public Map<String, Object> userStockRevenue(String userName) throws IOException {
         log.info("Executing userStockRevenue for user: {}", userName);
         Map<String, Object> stockRevenue = new HashMap<>();
@@ -174,15 +168,20 @@ public class RabbitService {
         return Collections.singletonMap("stockRevenue", stockRevenue);
     }
 
-    // 자산 증감 추이
+    // 자산 증감 추이 계산
     public Map<String, BigInteger> idTrend(String userName) throws IOException {
-
         List<Map<String, Object>> transaction = myAssetService.transactionTen(userName);
         Map<String, Map<String, List<String>>> symbol = myAssetService.userStockSymbol(userName);
-
         Map<String, BigInteger> answer = StockSymbolProcessor.calculateAssetTrend(transaction, symbol);
-
         return answer;
+    }
+
+    // 동적 큐 생성
+    private void createUserBinding(String userName) {
+        rabbitTemplate.execute(channel -> {
+            channel.queueBind("portfolio_" + userName, "userPortfolioExchange", "portfolio_" + userName);
+            return null;
+        });
     }
 
     public Map<String, Object> advice(String userName) throws IOException {
@@ -195,14 +194,12 @@ public class RabbitService {
         String financeTrend = gptController.chat("현재 금융 시장의 트렌드에 대해 300자 이내로 자세하게 작성해줘");
         String investAdvice = gptController.chat("투자 시장의 트렌드에 맞게 투자 상품을 300자 이내로 자세하게 추천해줘");
 
-
         advice.put("financePlan", financePlan);
         advice.put("investPlan", investPlan);
         advice.put("stockPlan", stockPlan);
         advice.put("mzTrend", mzTrend);
         advice.put("financeTrend", financeTrend);
         advice.put("investAdvice", investAdvice);
-
 
         return advice;
     }

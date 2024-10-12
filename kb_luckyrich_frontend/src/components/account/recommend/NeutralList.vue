@@ -203,16 +203,18 @@ watch(searchQuery, () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 .title {
+  font-size: 30px;
   text-align: center;
   color: #333;
   margin-bottom: 20px;
 }
 
 .test-reset-button {
+  margin-top: 30px;
+  margin-bottom: 20px;
   display: block;
   margin: 0 auto 20px;
   padding: 10px 20px;
@@ -220,7 +222,7 @@ watch(searchQuery, () => {
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -290,7 +292,7 @@ watch(searchQuery, () => {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -301,9 +303,9 @@ watch(searchQuery, () => {
 
 .pagination-button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination-button:disabled {

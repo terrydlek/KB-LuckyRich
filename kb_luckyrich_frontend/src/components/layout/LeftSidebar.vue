@@ -48,7 +48,7 @@
             <li @click="goTo('PostList')">게시판</li>
           </ul>
         </li>
-        <li @click="goTo('adminBoard')">관리자 페이지</li>
+        <li @click="goTo('adminBoard')">서비스 관리</li>
       </ul>
     </nav>
   </div>
@@ -67,7 +67,7 @@ const isSubmenuVisible = ref({
 });
 
 const getAccessToken = () => {
-  return localStorage.getItem('access_token'); 
+  return localStorage.getItem('access_token');
 };
 
 const checkAdminStatus = async () => {
@@ -99,7 +99,7 @@ const checkAdminStatus = async () => {
 
 const goTo = (route) => {
   if (route === 'adminBoard' && !isAdmin.value) {
-    alert('관리자만 접근할 수 있습니다.');
+    alert('관리자만 접근 가능한 페이지입니다.');
     return;
   }
   const accessToken = getAccessToken();
