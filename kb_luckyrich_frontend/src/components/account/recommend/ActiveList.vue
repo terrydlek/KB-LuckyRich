@@ -6,125 +6,105 @@
         <i class="fas fa-sync-alt"></i>
       </div>
     </h3>
+
+    <div class="recommendation-explanation">
+      <li>적극 투자형 투자자는 높은 수익을 추구하며,위험을 감수할 준비가 되어 있는 투자자입니다. 주식 시장의 기회를 적극적으로 활용하여 장기적인 성장 잠재력에 투자하는
+        것을 선호합니다.</li>
+
+      <li>주식은 높은 수익 잠재력을 가지고 있으며, 다양한 산업과 기업에 분산 투자할 수 있는 기회를 제공합니다. 특히 TOP 100 주식은 장기적으로 안정적인
+        성장을 기대할 수 있습니다.</li>
+
+      <li>주식 상품은 높은 수익률을 추구하는 데 매우 적합합니다. 시장의 변동성을 활용해 적극적으로 매매를 진행할 수 있는 기회를 제공하며, 장기적으로 자산 증대를 도모할 수
+        있습니다.</li>
+    </div>
+    <div class="search">
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
+    </div>
+
+    <table v-if="filteredStocks.length" class="stock-table">
+      <thead>
+        <tr>
+          <th>종목명</th>
+          <th>현재가</th>
+          <th>전일비</th>
+          <th>등락률</th>
+          <!-- <th>거래량</th> -->
+          <th>시가총액</th>
+          <th>매출액</th>
+          <!-- <th>영업이익</th> -->
+          <th>주당 순 이익</th>
+          <th>PER</th>
+          <th>ROE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(stock, index) in paginatedStocks" :key="index">
+          <td>
+            <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
+              stock.stockName
+              }}</a>
+          </td>
+          <td>{{ stock.stockPrice }}</td>
+          <td>
+            <span v-if="stock.comparePre.includes('하락')" style="color: #d32f2f; font-size: 15px">
+              ▼ {{ stock.comparePre.replace('하락', '-') }}
+            </span>
+            <span v-else-if="stock.comparePre.includes('보합')" style="font-size: 15px">
+              {{ stock.comparePre.replace('보합', '') }}
+            </span>
+            <span v-else style="color: #388e3c; font-size: 15px">
+              ▲ {{ stock.comparePre.replace('상승', '+') }}
+            </span>
+          </td>
+
+          <td>
+            <span v-if="stock.fluctuationRate !== '0.00%' && stock.fluctuationRate.startsWith('-')"
+              style="color: #d32f2f; font-size: 15px">
+              ▼ {{ stock.fluctuationRate }}
+            </span>
+            <span v-else-if="stock.fluctuationRate !== '0.00%' && !stock.fluctuationRate.startsWith('-')"
+              style="color: #388e3c; font-size: 15px">
+              ▲ {{ stock.fluctuationRate }}
+            </span>
+            <span v-else>
+              0%
+            </span>
+          </td>
+
+          <!-- <td>{{ stock.tradingVolume }}</td> -->
+          <td>{{ stock.marketCapitalization }}</td>
+          <td>{{ stock.salesAmount }}</td>
+          <!-- <td>{{ stock.operatingProfit }}</td> -->
+          <td>{{ stock.earningsPerShare }}</td>
+          <td>{{ stock.per }}</td>
+
+          <td>{{ stock.roe }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div v-if="filteredStocks.length && totalPages > 1" class="pagination">
+      <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
+      <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+        :class="{ active: currentPage === page }">
+        {{ page }}
+      </button>
+      <button @click="currentPage++" :disabled="currentPage === totalPages">
+        다음
+      </button>
+    </div>
+    <center>
+      <button @click="resetTest" class="reset-test-button">
+        테스트 다시하기
+      </button>
+    </center>
+
+    <p v-if="stocks.length && !filteredStocks.length">
+      찾으시는 종목명은 TOP 100에 없습니다.
+    </p>
+    <p v-else-if="!stocks.length">주식 데이터를 불러오는 중입니다...</p>
   </div>
-  <div class="search">
-    <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="검색하고 싶은 종목명이 있나요?"
-    />
-  </div>
 
-  <table v-if="filteredStocks.length" class="stock-table">
-    <thead>
-      <tr>
-        <th>종목명</th>
-        <th>현재가</th>
-        <th>전일비</th>
-        <th>등락률</th>
-        <!-- <th>거래량</th> -->
-        <th>시가총액</th>
-        <th>매출액</th>
-        <!-- <th>영업이익</th> -->
-        <th>주당 순 이익</th>
-        <th>PER</th>
-        <th>ROE</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(stock, index) in paginatedStocks" :key="index">
-        <td>
-          <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
-            stock.stockName
-          }}</a>
-        </td>
-        <td>{{ stock.stockPrice }}</td>
-        <td>
-          <span
-            v-if="stock.comparePre.includes('하락')"
-            style="color: #d32f2f; font-size: 15px"
-          >
-            ▼ {{ stock.comparePre.replace('하락', '-') }}
-          </span>
-          <span
-            v-else-if="stock.comparePre.includes('보합')"
-            style="color: #388e3c; font-size: 15px"
-          >
-            ▲ {{ stock.comparePre.replace('보합', '+') }}
-          </span>
-          <span v-else style="color: #388e3c; font-size: 15px">
-            ▲ {{ stock.comparePre.replace('상승', '+') }}
-          </span>
-        </td>
-
-        <td>
-          <span
-            v-if="stock.fluctuationRate.startsWith('-')"
-            style="color: #d32f2f; font-size: 15px"
-          >
-            ▼ {{ stock.fluctuationRate }}
-          </span>
-          <span v-else style="color: #388e3c; font-size: 15px">
-            ▲ {{ stock.fluctuationRate }}
-          </span>
-        </td>
-
-        <!-- <td>{{ stock.tradingVolume }}</td> -->
-        <td>{{ stock.marketCapitalization }}</td>
-        <td>{{ stock.salesAmount }}</td>
-        <!-- <td>{{ stock.operatingProfit }}</td> -->
-        <td>{{ stock.earningsPerShare }}</td>
-        <td>
-          <span
-            v-if="stock.per.startsWith('-')"
-            style="color: #d32f2f; font-size: 15px"
-          >
-            ▼ {{ stock.per }}
-          </span>
-          <span v-else style="color: #388e3c; font-size: 15px">
-            ▲ {{ stock.per }}
-          </span>
-        </td>
-
-        <td>
-          <span
-            v-if="stock.roe.startsWith('-')"
-            style="color: #d32f2f; font-size: 15px"
-          >
-            ▼ {{ stock.roe }}
-          </span>
-          <span v-else style="color: #388e3c; font-size: 15px">
-            ▲ {{ stock.roe }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div v-if="filteredStocks.length && totalPages > 1" class="pagination">
-    <button @click="currentPage--" :disabled="currentPage === 1">이전</button>
-    <button
-      v-for="page in pageNumbers"
-      :key="page"
-      @click="currentPage = page"
-      :class="{ active: currentPage === page }"
-    >
-      {{ page }}
-    </button>
-    <button @click="currentPage++" :disabled="currentPage === totalPages">
-      다음
-    </button>
-  </div>
-  <center>
-    <button @click="resetTest" class="reset-test-button">
-      테스트 다시하기
-    </button>
-  </center>
-
-  <p v-if="stocks.length && !filteredStocks.length">
-    찾으시는 종목명은 TOP 100에 없습니다.
-  </p>
-  <p v-else-if="!stocks.length">주식 데이터를 불러오는 중입니다...</p>
 </template>
 
 <script setup>
@@ -246,8 +226,10 @@ watch(searchQuery, () => {
 
 .search {
   width: 100%;
-  display: flex; /* flex를 사용해 자식 요소 가운데 정렬 */
-  justify-content: center; /* 수평 가운데 정렬 */
+  display: flex;
+  /* flex를 사용해 자식 요소 가운데 정렬 */
+  justify-content: center;
+  /* 수평 가운데 정렬 */
   margin: 0 auto;
   /* margin-bottom: 20px; */
 }
@@ -347,9 +329,11 @@ button {
   margin-left: 2px;
   color: #3498db;
   transition: color 0.3s, transform 0.2s ease;
-  display: inline-block; /* 클릭할 수 있도록 영역 확장 */
+  display: inline-block;
+  /* 클릭할 수 있도록 영역 확장 */
   position: relative;
-  z-index: 1000; /* 다른 요소 위에 위치 */
+  z-index: 1000;
+  /* 다른 요소 위에 위치 */
 }
 
 .refresh-icon:hover .refresh-icon {
@@ -362,4 +346,12 @@ button {
   background-color: #4caf50;
   color: white;
 }*/
+
+.recommendation-explanation {
+  font-size: 16px;
+  color: #555;
+  /* 설명 텍스트 색상 */
+  margin-bottom: 20px;
+  /* 설명과 검색창 사이 여백 */
+}
 </style>

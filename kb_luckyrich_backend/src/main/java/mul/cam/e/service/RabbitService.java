@@ -48,6 +48,9 @@ public class RabbitService {
     public void createPortfolio(String userName) throws InterruptedException {
         log.info("Creating portfolio for user: {}", userName);
 
+        // 시작 시간 기록
+        long startTime = System.currentTimeMillis();
+
         try {
             // 포트폴리오 데이터 생성
             Map<String, Object> portfolioData = generatePortfolioData(userName);
@@ -73,6 +76,11 @@ public class RabbitService {
             log.error("Error serializing portfolio data for user {}", userName, e);
         } catch (IOException e) {
             log.error("Error during RabbitMQ operation for user {}", userName, e);
+        } finally {
+            // 종료 시간 기록
+            long endTime = System.currentTimeMillis();
+            long processingTime = endTime - startTime;
+            log.info("Processing time for user {}: {} ms", userName, processingTime);
         }
     }
 
@@ -84,7 +92,7 @@ public class RabbitService {
         data.put("stockRevenue", userStockRevenue(userName));
         data.put("idTrend", idTrend(userName));
         // TODO gpt 사용할 때는 풀고 사용하시면 됩니다.
-        // data.put("advice", advice(userName));
+         data.put("advice", advice(userName));
         return data;
     }
 

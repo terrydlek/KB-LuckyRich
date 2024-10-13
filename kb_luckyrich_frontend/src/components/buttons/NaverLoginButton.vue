@@ -62,9 +62,7 @@ button {
 }
 
 button img {
-    /* 이미지 크기 조정 */
-    width: 300px;
-    height: 50px;
-    
+    width: 200px;
+    height: 48px;
 }
 </style>

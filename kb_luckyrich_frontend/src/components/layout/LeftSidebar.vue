@@ -1,58 +1,38 @@
 <template lang="">
   <div class="left-sidebar">
-    <!-- <div class="profile-card">
-      <img
-        src="@/assets/images/profile.png"
-        alt="Profile"
-        class="profile-image"
-      />
-      <div class="profile-info">
-        <h3>GRAVITY SKIN 29</h3>
-      </div>
-    </div> -->
-
     <nav class="category-list">
       <h4>Category</h4>
       <ul>
-        <li
-          @mouseover="toggleSubmenu('luckyRich', true)"
-          @mouseleave="toggleSubmenu('luckyRich', false)"
-        >
+        <li @click="toggleSubmenu('luckyRich')">
           LuckyRich
-          <ul
-            v-show="isSubmenuVisible.luckyRich"
-            class="submenu"
-            :class="{ show: isSubmenuVisible }"
-          >
-            <li @click="goTo('about')">About</li>
-            <li @click="goTo('privacyPolicy')">Privacy Policy</li>
-            <li @click="goTo('termsOfService')">Terms of Service</li>
+          <ul :class="['submenu', { show: isSubmenuVisible.luckyRich }]">
+            <li @click="goTo('about')" :class="{ bold: selectedCategory === 'about' }">About</li>
+            <li @click="goTo('privacyPolicy')" :class="{ bold: selectedCategory === 'privacyPolicy' }">Privacy Policy</li>
+            <li @click="goTo('termsOfService')" :class="{ bold: selectedCategory === 'termsOfService' }">Terms of Service</li>
           </ul>
         </li>
-        <li @click="goTo('asset')">한눈에 내 자산 확인하기</li>
-        <li @click="goTo('test')">나에게 맞는 투자 상품은?</li>
-        <li @click="goTo('accountBook')">거래 내역 조회</li>
-        <li @click="goTo('realestate')">부동산</li>
-        <li @click="goTo('financenews')">금융 뉴스</li>
-        <li
-          @mouseover="toggleSubmenu('qa', true)"
-          @mouseleave="toggleSubmenu('qa', false)"
-        >
+
+        <li @click="goTo('asset')" :class="{ bold: selectedCategory === 'asset' }">한눈에 내 자산 확인하기</li>
+        <li @click="goTo('test')" :class="{ bold: selectedCategory === 'test' }">나에게 맞는 투자 상품은?</li>
+        <li @click="goTo('accountBook')" :class="{ bold: selectedCategory === 'accountBook' }">거래 내역 조회</li>
+        <li @click="goTo('realestate')" :class="{ bold: selectedCategory === 'realestate' }">부동산</li>
+        <li @click="goTo('financenews')" :class="{ bold: selectedCategory === 'financenews' }">금융 뉴스</li>
+
+        <li @click="toggleSubmenu('qa')">
           Q & A
-          <ul
-            v-show="isSubmenuVisible.qa"
-            class="submenu"
-            :class="{ show: isSubmenuVisible }"
-          >
-            <li @click="goTo('qa')">자주 묻는 질문</li>
-            <li @click="goTo('PostList')">게시판</li>
+          <ul :class="['submenu', { show: isSubmenuVisible.qa }]">
+            <li @click="goTo('qa')" :class="{ bold: selectedCategory === 'qa' }">자주 묻는 질문</li>
+            <li @click="goTo('PostList')" :class="{ bold: selectedCategory === 'PostList' }">게시판</li>
           </ul>
         </li>
-        <li @click="goTo('adminBoard')">서비스 관리</li>
+
+        
+        <li v-if="isAdmin" @click="goTo('adminBoard')" :class="{ bold: selectedCategory === 'adminBoard' }">서비스 관리</li>
       </ul>
     </nav>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -60,7 +40,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const isAdmin = ref(false);
+const isAdmin = ref(false); // 관리자 여부 확인용 변수
+const selectedCategory = ref(''); // 현재 선택된 카테고리 저장
 const isSubmenuVisible = ref({
   luckyRich: false,
   qa: false,
@@ -85,7 +66,7 @@ const checkAdminStatus = async () => {
     });
 
     const userRole = response.data;
-    isAdmin.value = userRole === 'ADMIN';
+    isAdmin.value = userRole === 'ADMIN'; // 관리자 여부 업데이트
     localStorage.setItem('user_role', userRole); // 역할 정보를 로컬 스토리지에 저장
   } catch (error) {
     console.error('사용자 역할 확인 중 오류 발생:', error);
@@ -98,32 +79,33 @@ const checkAdminStatus = async () => {
 };
 
 const goTo = (route) => {
+  selectedCategory.value = route;
   if (route === 'adminBoard' && !isAdmin.value) {
     alert('관리자만 접근 가능한 페이지입니다.');
     return;
   }
   const accessToken = getAccessToken();
 
-  // 회원만 접근 가능한 경로는 토큰 여부 확인
-  const restrictedRoutes = ['asset', 'test', 'accountBook'];
+  const restrictedRoutes = ['asset', 'test', 'accountBook', 'PostList'];
 
   if (restrictedRoutes.includes(route) && !accessToken) {
-    // 토큰이 없으면 로그인 페이지로 이동
     router.push({ name: 'login' });
   } else {
-    // 토큰이 있으면 해당 페이지로 이동
     router.push({ name: route });
   }
 };
 
-const toggleSubmenu = (menu, isVisible) => {
-  isSubmenuVisible.value[menu] = isVisible;
+const toggleSubmenu = (menu) => {
+  isSubmenuVisible.value[menu] = !isSubmenuVisible.value[menu];
 };
 
-onMounted(() => {
-  checkAdminStatus();
+
+// 페이지가 마운트될 때 관리자 상태 확인 후 메뉴 렌더링
+onMounted(async () => {
+  await checkAdminStatus();
 });
 </script>
+
 
 <style scoped>
 .left-sidebar {
@@ -171,7 +153,8 @@ onMounted(() => {
 }
 
 .category-list ul li:last-child {
-  border-bottom: 1px solid transparent; /* 마지막 줄에 불필요한 줄 제거 */
+  border-bottom: 1px solid transparent;
+  /* 마지막 줄에 불필요한 줄 제거 */
 }
 
 .category-list ul li:last-child::after {
@@ -187,25 +170,31 @@ onMounted(() => {
   list-style-type: none;
   padding-left: 20px;
   margin-top: 10px;
-  opacity: 0; /* 처음엔 보이지 않게 설정 */
-  transform: scaleY(0); /* 스케일을 0으로 해서 접혀있는 효과 */
-  transform-origin: top; /* 위쪽에서 아래로 펼쳐지도록 설정 */
-  transition: opacity 0.5s ease, transform 0.5s ease; /* 트랜지션 적용 */
+  max-height: 0;
+  /* 처음엔 보이지 않게 설정 */
+  overflow: hidden;
+  /* 내용이 넘칠 경우 숨기기 */
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  /* 트랜지션 적용 */
 }
 
 .submenu.show {
+  max-height: 300px;
+  /* 적당한 높이 설정, 내용에 따라 달라질 수 있음 */
   opacity: 1;
-  transform: scaleY(1);
 }
 
 .submenu li {
   color: rgb(134, 134, 134);
-  padding: 8px 0; /* 위아래 패딩을 균일하게 설정 */
+  padding: 8px 0;
+  /* 위아래 패딩을 균일하게 설정 */
   margin: 0;
   cursor: pointer;
   transition: color 0.3s;
   text-decoration: none;
-  line-height: 1.5; /* 텍스트 높이를 고르게 설정 */
+  line-height: 1.5;
+  /* 텍스트 높이를 고르게 설정 */
 }
 
 .submenu li:hover {
@@ -215,6 +204,12 @@ onMounted(() => {
 
 .submenu li:last-child {
   text-decoration: none;
-  margin-bottom: 0; /* 마지막 게시판 항목 아래 불필요한 공간 제거 */
+  margin-bottom: 0;
+  /* 마지막 게시판 항목 아래 불필요한 공간 제거 */
+}
+
+.bold {
+  font-weight: bold;
+  font-size: 20px;
 }
 </style>

@@ -12,7 +12,7 @@
     </main>
 
     <!-- 오른쪽 사이드바 -->
-    <RightSidebar />
+    <!-- <RightSidebar /> -->
   </div>
 </template>
 
@@ -27,7 +27,7 @@ import '@fortawesome/fontawesome-free/css/all.css'; // Font Awesome 스타일 �
 <style scoped>
 .layout-container {
   display: grid;
-  grid-template-columns: 1.3fr 6fr 1fr;
+  grid-template-columns: 2fr 7fr;
   gap: 20px;
   max-width: 1600px;
   margin: 50px auto; /* 왼쪽, 오른쪽 여백을 자동으로 추가 */

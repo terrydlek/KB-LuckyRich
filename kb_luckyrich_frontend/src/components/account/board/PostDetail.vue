@@ -148,7 +148,7 @@ export default {
     // 댓글 작성 메서드
     submitComment() {
       const token = localStorage.getItem("access_token");
-
+      console.log("123");
       // 권한 확인 후 댓글 작성 로직
       axios
         .get(`http://localhost:8080/board/checkAdmin`, {
