@@ -19,7 +19,7 @@
         </button>
         <!-- 다크 모드 토글 버튼 (아이콘 추가) -->
         <button class="dark-mode-toggle" @click="toggleDarkMode">
-          <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+          <i :class="isDarkMode ? 'fas fa-moon' : 'fas fa-moon'"></i>
         </button>
       </div>
     </div>
@@ -55,6 +55,7 @@ function checkLoginStatus() {
 const handleAuth = () => {
   if (isLoggedIn.value) {
     localStorage.removeItem('access_token');
+    localStorage.clear();
     alert('로그아웃 되었습니다.');
     isLoggedIn.value = false;
     checkLoginStatus();
@@ -95,7 +96,7 @@ onMounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1001;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 

@@ -14,7 +14,8 @@ export default defineConfig({
     global: 'window', // global을 window로 정의합니다.
   },
   server: {
-    host: '0.0.0.0',
+    // host: '0.0.0.0',
+    host: 'localhost',
     port: 5173,
   },
 });

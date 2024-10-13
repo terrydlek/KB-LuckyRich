@@ -30,108 +30,109 @@
       </div> -->
     </div>
 
-    <!-- 자산 관련 데이터 테이블 -->
-    <div class="data-tables" style="display: flex">
-      <!-- 왼쪽 섹션 -->
-      <div class="left-section" style="flex: 3; margin-right: 10px">
-        <h5>총 자산 정보</h5>
-        <table>
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th>금액 (원)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>은행 잔고</td>
-              <td>{{ formatCurrency(totalAssets['Bank Balance']) }}</td>
-            </tr>
-            <tr>
-              <td>주식 총액</td>
-              <td>{{ formatCurrency(totalAssets['Stock Total']) }}</td>
-            </tr>
-            <tr>
-              <td>자동차</td>
-              <td>{{ formatCurrency(totalAssets['Car']) }}</td>
-            </tr>
-            <tr>
-              <td>부동산</td>
-              <td>{{ formatCurrency(totalAssets['real estate']) }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <center>
+      <!-- 자산 관련 데이터 테이블 -->
+      <div class="data-tables" style="display: flex">
+        <!-- 왼쪽 섹션 -->
+        <div class="left-section" style="flex: 3; margin-right: 10px">
+          <h5>총 자산 정보</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>금액 (원)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>은행 잔고</td>
+                <td>{{ formatCurrency(totalAssets['Bank Balance']) }}</td>
+              </tr>
+              <tr>
+                <td>주식 총액</td>
+                <td>{{ formatCurrency(totalAssets['Stock Total']) }}</td>
+              </tr>
+              <tr>
+                <td>자동차</td>
+                <td>{{ formatCurrency(totalAssets['Car']) }}</td>
+              </tr>
+              <tr>
+                <td>부동산</td>
+                <td>{{ formatCurrency(totalAssets['real estate']) }}</td>
+              </tr>
+            </tbody>
+          </table>
 
-        <h5>계좌 보유 잔액</h5>
-        <table>
-          <thead>
-            <tr>
-              <th>은행명</th>
-              <th>계좌 번호</th>
-              <th>잔액 (원)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="account in accountData" :key="account.accountNumber">
-              <td>
-                <span v-if="account.bankId === 1">국민은행</span>
-                <span v-else-if="account.bankId === 2">카카오뱅크</span>
-                <span v-else-if="account.bankId === 3">신한은행</span>
-                <span v-else>알 수 없음</span>
-              </td>
-              <td>{{ account.accountNumber }}</td>
-              <td>{{ formatCurrency(account.balance) }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <h5>자본 증감 추이 (주식 + 은행 잔고)</h5>
-        <table>
-          <thead>
-            <tr>
-              <th>날짜</th>
-              <th>자산 변동 (원)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="([key, value], index) in sortedAssetData" :key="index">
-              <td>{{ key }}</td>
-              <td>{{ formatCurrency(value) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <h5>계좌 보유 잔액</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>은행명</th>
+                <th>계좌 번호</th>
+                <th>잔액 (원)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="account in accountData" :key="account.accountNumber">
+                <td>
+                  <span v-if="account.bankId === 1">국민은행</span>
+                  <span v-else-if="account.bankId === 2">카카오뱅크</span>
+                  <span v-else-if="account.bankId === 3">신한은행</span>
+                  <span v-else>알 수 없음</span>
+                </td>
+                <td>{{ account.accountNumber }}</td>
+                <td>{{ formatCurrency(account.balance) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <h5>자본 증감 추이 (주식 + 은행 잔고)</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>날짜</th>
+                <th>자산 변동 (원)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="([key, value], index) in sortedAssetData" :key="index">
+                <td>{{ key }}</td>
+                <td>{{ formatCurrency(value) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- 오른쪽 섹션 -->
-      <div class="right-section" style="flex: 2; margin-left: 20px">
-        <!-- <p>.</p> <br>
+        <!-- 오른쪽 섹션 -->
+        <div class="right-section" style="flex: 2; margin-left: 20px">
+          <!-- <p>.</p> <br>
         <p>.</p> <br> -->
-        <!-- {{ products }} -->
-        <!-- <p>은행 잔고 + 총 보유 주식: {{ totalAssets['Bank Balance'] + totalAssets['Stock Total'] }}</p> -->
-        <h5>
-          고객님의 은행 잔고와 주식 총액을 계산하여 상품을 추천해드릴게요.
-        </h5>
-        <table v-if="products.length" style="width: 400px">
-          <thead>
-            <tr>
-              <th style="width: 200px">상품명</th>
-              <th style="width: 100px">
-                {{ totalAssetsValue < 5000000 ? '이자' : '가격' }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(product, index) in products" :key="index">
-              <td>
-                <a :href="`${product.link}`">{{
-                  truncatedName(product.name)
-                }}</a>
-              </td>
-              <td>{{ product.performance }}</td>
-            </tr>
-          </tbody>
-        </table>
+          <!-- {{ products }} -->
+          <!-- <p>은행 잔고 + 총 보유 주식: {{ totalAssets['Bank Balance'] + totalAssets['Stock Total'] }}</p> -->
+          <h5>
+            고객님의 자본을 계산하여 상품을 추천해드릴게요.
+          </h5>
+          <table v-if="products.length" style="width: 500px">
+            <thead>
+              <tr>
+                <th style="width: 200px">상품명</th>
+                <th style="width: 100px">
+                  {{ totalAssetsValue < 5000000 ? '이자' : '가격' }} </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(product, index) in products" :key="index">
+                <td>
+                  <a :href="`${product.link}`">{{
+                    truncatedName(product.name)
+                    }}</a>
+                </td>
+                <td>{{ product.performance }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </center>
 
     <!-- 차트 섹션 -->
     <div>
@@ -237,7 +238,7 @@ export default {
   methods: {
     ...mapActions(['fetchTotalAssets']),
     truncatedName(name) {
-      return name.length > 25 ? name.slice(0, 25) + '...' : name;
+      return name.length > 35 ? name.slice(0, 35) + '...' : name;
     },
     async fetchProducts() {
       try {
@@ -444,6 +445,7 @@ export default {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -473,8 +475,8 @@ export default {
   border-radius: 16px;
   text-align: center;
   margin-right: 1px;
-  width: 300px;
-  margin-left: 10px;
+  width: 460px;
+  margin-left: 80px;
 }
 
 .card .amount {
@@ -510,7 +512,7 @@ export default {
 }
 
 .chart-row section:not(:last-child) {
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .data-tables table {
@@ -530,9 +532,10 @@ export default {
   background-color: #f4f4f4;
 }
 
-/* .dashboard-container {
-  width: 1000px;
-} */
+.dashboard-container {
+  width: 1140px;
+  margin-left: 10px;
+}
 
 a {
   color: #6c63ff;
@@ -542,4 +545,5 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
 </style>
