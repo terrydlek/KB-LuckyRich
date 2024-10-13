@@ -93,6 +93,10 @@ public class BoardController {
     // 사용자가 관리자 권한이 있는지 확인하는 메서드
     @GetMapping("/checkAdmin")
     public ResponseEntity<String> checkAdmin() {
+        System.out.println("execute checkAdmin~~~");
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
         return ResponseEntity.ok("ok");
     }
 
