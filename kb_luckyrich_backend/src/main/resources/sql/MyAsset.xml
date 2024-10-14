@@ -90,7 +90,7 @@
         where user_id = #{userId}
     </select>
 
-    <select id="totalRealestate" parameterType="int" resultType="int">
+    <select id="totalRealestate" parameterType="int" resultType="long">
         SELECT COALESCE(ra.total_price, 0) as total_price
         FROM user u
                  JOIN (
