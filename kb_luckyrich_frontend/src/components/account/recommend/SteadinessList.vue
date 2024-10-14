@@ -3,15 +3,30 @@
     <h3 class="title">
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
     </h3>
-    
+
     <div class="recommendation-explanation">
-      <li>안정형 투자자는 자산의 안전성을 최우선으로 고려하며, 큰 손실을 피하는 것을 중요시합니다. 이들은 시장의 변동성에 민감하고, 안정적인 수익을 선호합니다.</li>
-      <li>예적금 상품은 일반적으로 안전하고, 예측 가능한 수익을 제공합니다. 이자는 안정적인 형태로 지급되며, 원금 손실의 위험이 없습니다.</li>
-      <li>안정형 투자자에게 예적금은 리스크를 최소화하면서도 안정적인 자산 증대를 목표로 하는 최적의 선택입니다.</li>
+      <li>
+        안정형 투자자는 자산의 안전성을 최우선으로 고려하며, 큰 손실을 피하는
+        것을 중요시합니다. 이들은 시장의 변동성에 민감하고, 안정적인 수익을
+        선호합니다.
+      </li>
+      <li>
+        예적금 상품은 일반적으로 안전하고, 예측 가능한 수익을 제공합니다. 이자는
+        안정적인 형태로 지급되며, 원금 손실의 위험이 없습니다.
+      </li>
+      <li>
+        안정형 투자자에게 예적금은 리스크를 최소화하면서도 안정적인 자산 증대를
+        목표로 하는 최적의 선택입니다.
+      </li>
     </div>
 
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 상품명이 있나요?"
+        class="search-input"
+      />
     </div>
 
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
@@ -28,8 +43,11 @@
           <tr v-for="(deposit, index) in paginatedDeposits" :key="index">
             <td>{{ deposit.company }}</td>
             <td>
-              <a :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`" class="deposit-link">{{ deposit.prodname
-                }}</a>
+              <a
+                :href="`/luckyrich/recommend/steadiness/${deposit.prodname}`"
+                class="deposit-link"
+                >{{ deposit.prodname }}</a
+              >
             </td>
             <td>{{ deposit.bestinterest ?? 'N/A' }}</td>
           </tr>
@@ -37,14 +55,27 @@
       </table>
 
       <div v-if="filteredDeposits.length && totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
           이전
         </button>
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }" class="pagination-button">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
           다음
         </button>
       </div>
@@ -54,7 +85,10 @@
         </button>
       </center>
 
-      <div v-if="deposits.length && !filteredDeposits.length" class="no-results">
+      <div
+        v-if="deposits.length && !filteredDeposits.length"
+        class="no-results"
+      >
         검색 결과가 없습니다.
       </div>
       <div v-if="!deposits.length" class="no-data">
@@ -301,7 +335,7 @@ a:hover {
   font-size: 16px;
   color: #555;
   /* 설명 텍스트 색상 */
-  margin-bottom: 20px;
+  margin: 20px 0;
   /* 설명과 검색 */
 }
 </style>
