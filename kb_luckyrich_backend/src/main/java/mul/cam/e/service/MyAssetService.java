@@ -1,6 +1,7 @@
 package mul.cam.e.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.dao.MyAssetDao;
 import mul.cam.e.dto.*;
 import mul.cam.e.util.KeyDecrypt;
@@ -17,6 +18,7 @@ import java.util.Map;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class MyAssetService {
 
     private final MyAssetDao myAssetDao;
@@ -98,8 +100,9 @@ public class MyAssetService {
 
         for (AccountDto account : accounts) {
             String decryptedAccountNumber = account.getDecryptedAccountNumber(keyDecrypt);
-//            System.out.println(decryptedAccountNumber);
+            System.out.println(decryptedAccountNumber + "Decrypt");
             account.setAccountNumber(decryptedAccountNumber);
+            log.info("Set Decrypt Account");
         }
 
         return accounts;
