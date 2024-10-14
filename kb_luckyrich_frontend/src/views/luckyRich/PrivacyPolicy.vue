@@ -199,7 +199,6 @@
 
 <style scoped>
 .privacy-policy-page {
-  font-family: 'Noto Sans KR', sans-serif;
   line-height: 1.6;
   max-width: 100%;
   margin: 0 auto;

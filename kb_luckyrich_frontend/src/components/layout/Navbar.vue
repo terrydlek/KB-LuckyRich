@@ -18,9 +18,6 @@
           {{ isLoggedIn ? 'Logout' : 'Login' }}
         </button>
         <!-- 다크 모드 토글 버튼 (아이콘 추가) -->
-        <button class="dark-mode-toggle" @click="toggleDarkMode">
-          <i :class="isDarkMode ? 'fas fa-moon' : 'fas fa-moon'"></i>
-        </button>
       </div>
     </div>
   </nav>

@@ -16,8 +16,8 @@
         <h2>Lucky Rich란?</h2>
         <p>
           Lucky Rich는 재정적 자유를 추구하는 모든 사람들을 위한 맞춤형 자산
-          관리 플랫폼입니다. 우리는 최신 투자 트렌드와 개별 맞춤형 전략을 통해
-          여러분의 자산을 안전하게 보호하고 성장시킵니다.
+          관리 플랫폼입니다. <br />우리는 최신 투자 트렌드와 개별 맞춤형 전략을
+          통해 여러분의 자산을 안전하게 보호하고 성장시킵니다.
         </p>
       </div>
       <div class="about-stats">
@@ -43,7 +43,7 @@
           <img src="@/assets/images/security.png" alt="Security" />
           <h3>Unmatched Security</h3>
           <p>
-            최고 수준의 보안 시스템을 통해 자산을 안전하게 관리하며, 해킹 및
+            최고 수준의 보안 시스템으로 자산을 안전하게 관리하며, <br />해킹 및
             위험 요소로부터 안전하게 보호합니다.
           </p>
         </div>
@@ -51,15 +51,15 @@
           <img src="@/assets/images/customization.png" alt="Customization" />
           <h3>Personalized Strategy</h3>
           <p>
-            각 사용자별로 맞춤형 재정 전략을 제시하여 보다 효율적인 자산 증대를
-            돕습니다.
+            각 사용자별로 맞춤형 재정 전략을 제시하여 <br />보다 효율적인 자산
+            증대를 돕습니다.
           </p>
         </div>
         <div class="benefit">
           <img src="@/assets/images/growth.png" alt="Growth" />
           <h3>Proven Growth</h3>
           <p>
-            Lucky Rich는 수익성 높은 투자 포트폴리오를 제공하며, 장기적으로
+            Lucky Rich는 수익성 높은 투자 포트폴리오를 제공하며,<br />장기적으로
             자산을 안정적으로 성장시킵니다.
           </p>
         </div>
@@ -71,23 +71,28 @@
       <div class="testimonials-grid">
         <div class="testimonial">
           <p>
-            "Lucky Rich 덕분에 제 자산이 안정적으로 성장하고 있습니다. 맞춤형
-            서비스 덕분에 복잡한 재정 관리도 이제 쉽고 간단해졌어요!"
+            "LuckyRich의 혁신적인 투자 전략 덕분에<br />
+            제 자산이 꾸준히 성장하고 있어요.<br />
+            맞춤형 서비스로 훌륭한 포트폴리오를 구성했죠.
           </p>
-          <h4>- 김민수, 34세</h4>
+          <hr />
+          <h4>- 박지영, 32세</h4>
         </div>
         <div class="testimonial">
           <p>
-            "고객 지원도 훌륭하고, 투자에 대한 정보도 매우 정확해요. 이제는 재정
-            걱정 없이 여유롭게 살고 있습니다."
+            "신속하고 전문적인 응대와 투자에 대한 분석이<br />
+            초보 투자자였던 제게 엄청난 도움이 됐습니다. <br />
+            덕분에 진정한 재정적 자유를 경험하고 있습니다!"
           </p>
-          <h4>- 박지영, 29세</h4>
+          <hr />
+          <h4>- 김민수, 27세</h4>
         </div>
         <div class="testimonial">
           <p>
-            "처음엔 의심스러웠지만, Lucky Rich의 서비스와 플랫폼은 기대
-            이상이었습니다. 추천합니다!"
+            "처음엔 온라인 투자 플랫폼에 대해 의심이 컸지만, LuckyRich의 보안
+            시스템에 신뢰가 생겼어요. <br />모든 서비스가 기대 이상이었습니다.
           </p>
+          <hr />
           <h4>- 이정훈, 41세</h4>
         </div>
       </div>
@@ -126,8 +131,9 @@ const goToLogin = () => {
 </script>
 
 <style scoped>
-.lucky-rich-page {
-  font-family: 'Arial', sans-serif;
+h2 {
+  font-weight: bold;
+  margin-bottom: 50px;
 }
 
 .hero-section {
@@ -150,11 +156,13 @@ const goToLogin = () => {
 }
 
 .hero-title {
+  font-weight: 600;
   font-size: 3rem;
   margin-bottom: 10px;
 }
 
 .hero-subtitle {
+  font-weight: 500;
   font-size: 1.5rem;
   margin-bottom: 20px;
 }
@@ -181,7 +189,7 @@ const goToLogin = () => {
 
 .about-content h2 {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .about-content p {
@@ -236,6 +244,7 @@ const goToLogin = () => {
 }
 
 .testimonials-section {
+  margin: 20px 0px;
   padding: 50px 20px;
   background-color: #f7f7f7;
   text-align: center;

@@ -51,10 +51,22 @@
   background-color: var(--color-container);
 }
 
-.dark-mode .left-sidebar,
-.dark-mode .right-sidebar {
+.dark-mode .home-container,
+.dark-mode .main-content,
+.dark-mode .left-sidebar {
+  border-color: #555; /* 다크 모드 테두리 */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* 다크 모드 그림자 효과 */
   background-color: var(--color-container);
   color: var(--color-font);
+}
+
+.dark-mode .rounded-chart {
+  background-color: #444444; /* Dark background for the chart container */
+  border-color: #555555; /* Darker border for the chart container */
+  color: var(
+    --color-font
+  ); /* Ensure text within the chart container matches the dark mode font */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjust shadow to fit dark mode */
 }
 
 .dark-mode .navbar {
