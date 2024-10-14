@@ -78,19 +78,19 @@
         order by t.transaction_date desc;
     </select>
 
-    <select id="totalAccount" parameterType="string" resultType="int">
+    <select id="totalAccount" parameterType="int" resultType="int">
         select coalesce(sum(balance), 0) as balance
         from account
         where user_id = #{userId}
     </select>
 
-    <select id="totalStock" parameterType="string" resultType="int">
+    <select id="totalStock" parameterType="int" resultType="int">
         select coalesce(sum(purchase_price * quantity), 0) as total_price
         from stock_holdings
         where user_id = #{userId}
     </select>
 
-    <select id="totalRealestate" resultType="int">
+    <select id="totalRealestate" parameterType="int" resultType="int">
         SELECT COALESCE(ra.total_price, 0) as total_price
         FROM user u
                  JOIN (
@@ -102,7 +102,7 @@
         WHERE u.user_id = #{userId};
     </select>
 
-    <select id="totalCar" resultType="int">
+    <select id="totalCar" parameterType="int" resultType="int">
         SELECT COALESCE(ca.total_price, 0) as total_price
         FROM user u
         JOIN (
@@ -198,16 +198,16 @@
         group by 1;
     </select>
     
-    <select id="userCar" parameterType="string" resultType="mul.cam.e.dto.MyCarDto">
+    <select id="userCar" parameterType="int" resultType="mul.cam.e.dto.MyCarDto">
         select coalesce(c.car_no, 0) as car_no,
                coalesce(c.car_model, '없음') as car_model,
                coalesce(c.car_price, 0) as car_price
-        from user u
-                 left join car c on u.car_no = c.car_no
-        where u.user_name = #{userName};
+        from car_asset ca
+                 left join car c on ca.car_no = c.car_no
+        where ca.user_id = #{userId};
     </select>
 
-    <select id="userRealestate" parameterType="string" resultType="mul.cam.e.dto.RealEstateDto">
+    <select id="userRealestate" parameterType="int" resultType="mul.cam.e.dto.RealEstateDto">
         select coalesce(s.city, "없음")                        as city,
                coalesce(s.street_number, "없음")               as street_number,
                coalesce(s.estate_name, "없음")                 as estate_name,
@@ -215,9 +215,9 @@
                coalesce(s.transaction_amount, 0) * 100000000 as transaction_amount,
                coalesce(s.street_name, "없음")                 as street_name,
                coalesce(s.house_type, "없음")                  as house_type
-        from user u
-                 left join sg_real s on u.realestate_no = s.no
-        where u.user_name = #{userName};
+        from realestate_asset ra
+                 left join sg_real s on ra.realestate_no = s.no
+        where ra.user_id = #{userId};
     </select>
 
   <select id="getAccounts" resultType="mul.cam.e.dto.AccountDto">

@@ -60,7 +60,7 @@
               </tr>
               <tr>
                 <td>거래 금액</td>
-                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount.toLocaleString() }}</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userRealestate.transactionAmount }}</td> <!--toLocaleString() }}</td>-->
               </tr>
               <tr>
                 <td>전용 면적 (㎡)</td>
@@ -86,7 +86,7 @@
               </tr>
               <tr>
                 <td>차량 가격</td>
-                <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice.toLocaleString() }} 원</td>
+                <td>{{ portfolioData.detailAsset.detailAsset.userCar.carPrice }} 원</td>
               </tr>
             </tbody>
           </table>
