@@ -26,11 +26,14 @@
         values (#{userId}, #{stockSymbol}, #{stockName}, #{purchasePrice}, #{quantity}, #{purchaseDate})
     </update>
 
-    <update id="setRealAsset">
-        update user
-        set realestate_no = #{randEstateNo},
-            car_no = #{randCarNo}
-        where user_id = #{userId}
+    <update id="setRealEstateAsset">
+        insert into realestate_asset
+        values (#{randEstateNo}, #{userId});
+    </update>
+
+    <update id="setCarAsset">
+        insert into car_asset
+        values (#{randCarNo}, #{userId});
     </update>
 
     <select id="getTransactions" resultType="mul.cam.e.dto.TransactionDto">
@@ -55,18 +58,6 @@
         where user_id = #{userId}
     </select>
 
-    <!--<select id="getStocksByUser" resultType="">
-        select
-            u.user_id,
-            u.age,
-            sh.stock_symbol,
-            sh.purchase_price,
-            sh.quantity
-        FROM
-            user u
-                JOIN
-            stock_holdings sh ON u.user_id = sh.user_id;
-    </select>-->
     <select id="getBankTransactions" resultType="mul.cam.e.dto.BankTransactionDto">
         select t.account_id       as accountId,
                a.account_number   as accountNumber,
@@ -90,49 +81,37 @@
     <select id="totalAccount" parameterType="string" resultType="int">
         select coalesce(sum(balance), 0) as balance
         from account
-        where user_id = (select user_id
-                         from user
-                         where user_name = #{userName});
+        where user_id = #{userId}
     </select>
 
     <select id="totalStock" parameterType="string" resultType="int">
         select coalesce(sum(purchase_price * quantity), 0) as total_price
         from stock_holdings
-        where user_id = (select user_id
-                         from user
-                         where user_name = #{userName});
+        where user_id = #{userId}
     </select>
 
     <select id="totalRealestate" resultType="int">
-        select coalesce(sum(transaction_amount) * 100000000, 0)
-        from sg_real
-        where no = (select realestate_no
-            from user
-            where user_name = #{userName});
+        SELECT COALESCE(ra.total_price, 0) as total_price
+        FROM user u
+                 JOIN (
+            SELECT ra.user_id, SUM(sr.transaction_amount) * 100000000 AS total_price
+            FROM realestate_asset ra
+                     JOIN sg_real sr ON ra.realestate_no = sr.no
+            GROUP BY ra.user_id
+        ) AS ra ON u.user_id = ra.user_id
+        WHERE u.user_id = #{userId};
     </select>
 
     <select id="totalCar" resultType="int">
-        select coalesce(sum(car_price), 0)
-        from car
-        where car_no = (select car_no
-                        from user
-                        where user_name = #{userName});
-    </select>
-
-    <select id="getAllTotalAccounts" resultType="int">
-        SELECT total_account FROM users
-    </select>
-
-    <select id="getAllTotalStocks" resultType="int">
-        SELECT total_stock FROM users
-    </select>
-
-    <select id="getAllTotalRealestates" resultType="int">
-        SELECT total_realestate FROM users
-    </select>
-
-    <select id="getAllTotalCars" resultType="int">
-        SELECT total_car FROM users
+        SELECT COALESCE(ca.total_price, 0) as total_price
+        FROM user u
+        JOIN (
+            SELECT ca.user_id, SUM(c.car_price) AS total_price
+            FROM car_asset ca
+            JOIN car c ON ca.car_no = c.car_no
+            GROUP BY ca.user_id
+        ) AS ca ON u.user_id = ca.user_id
+        WHERE u.user_id = #{userId};
     </select>
 
     <select id="getPeerUsersByAge" parameterType="int" resultType="mul.cam.e.dto.UserDto">

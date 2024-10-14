@@ -36,7 +36,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
+/*
     @GetMapping("/role")
     public ResponseEntity<String> getUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,6 +50,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    */
 
     @PostMapping
     public ResponseEntity<String> updateUserInfo(@RequestBody Map<String, String> request) {

@@ -16,6 +16,7 @@ import java.util.HashMap;
 public class AssetComparisonService {
 
     private final MyAssetDao myAssetDao;
+    private final MyAssetService myAssetService;
 
     public Map<String, Double> getPeerAverageAssets(int userId) {
         log.info("Getting peer average assets for user ID: {}", userId);
@@ -32,10 +33,12 @@ public class AssetComparisonService {
             try {
                 double bankBalance = myAssetDao.getBankBalanceByUserId(peerUserId);
                 double stockTotal = myAssetDao.getStockTotalByUserId(peerUserId);
-                double carValue = myAssetDao.getCarByUserId(peerUserId);
-                double realEstateValue = myAssetDao.getRealestateByUserId(peerUserId);
+//                double carValue = myAssetDao.getCarByUserId(peerUserId);
+                int carValue = myAssetService.totalCar(peerUserId);
+//                double realEstateValue = myAssetDao.getRealestateByUserId(peerUserId);
+                int realEstateValue = myAssetService.totalRealestate(peerUserId);
 
-                log.debug("Peer user {} assets - Bank: {}, Stock: {}, Car: {}, RealEstate: {}",
+                log.info("Peer user {} assets - Bank: {}, Stock: {}, Car: {}, RealEstate: {}",
                         peerUserId, bankBalance, stockTotal, carValue, realEstateValue);
 
                 totalBankBalance += bankBalance;

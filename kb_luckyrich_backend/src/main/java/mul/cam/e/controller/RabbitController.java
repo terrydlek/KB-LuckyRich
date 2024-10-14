@@ -1,5 +1,6 @@
 package mul.cam.e.controller;
 
+import mul.cam.e.security.SecurityUserService;
 import mul.cam.e.service.RabbitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,15 +15,17 @@ import java.util.Map;
 @RequestMapping("/rabbit")
 public class RabbitController {
     private final RabbitService rabbitService;
+    private final SecurityUserService securityUserService;
 
-    public RabbitController(RabbitService rabbitService) {
+    public RabbitController(RabbitService rabbitService, SecurityUserService securityUserService) {
         this.rabbitService = rabbitService;
+        this.securityUserService = securityUserService;
     }
 
     @PostMapping("/portfolios")
     public ResponseEntity<String> sendMessage() throws InterruptedException {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        rabbitService.createPortfolio(userName);
+        rabbitService.createPortfolio(userName, securityUserService.getUserId(userName));
         return ResponseEntity.ok("Message sent to RabbitMQ");
     }
 

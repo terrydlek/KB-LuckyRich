@@ -45,7 +45,7 @@ public class RabbitService {
     }
 
     // 포트폴리오 생성 메서드
-    public void createPortfolio(String userName) throws InterruptedException {
+    public void createPortfolio(String userName, int userId) throws InterruptedException {
         log.info("Creating portfolio for user: {}", userName);
 
         // 시작 시간 기록
@@ -53,7 +53,7 @@ public class RabbitService {
 
         try {
             // 포트폴리오 데이터 생성
-            Map<String, Object> portfolioData = generatePortfolioData(userName);
+            Map<String, Object> portfolioData = generatePortfolioData(userName, userId);
 
             // 직렬화
             String jsonMessage = objectMapper.writeValueAsString(portfolioData);
@@ -85,14 +85,14 @@ public class RabbitService {
     }
 
     // 포트폴리오 데이터 생성
-    private Map<String, Object> generatePortfolioData(String userName) throws IOException {
+    private Map<String, Object> generatePortfolioData(String userName, int userId) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("assetTotal", userAssetTotal(userName));
-        data.put("detailAsset", userDetailAsset(userName));
+        data.put("assetTotal", userAssetTotal(userId));
+        data.put("detailAsset", userDetailAsset(userName, userId));
         data.put("stockRevenue", userStockRevenue(userName));
         data.put("idTrend", idTrend(userName));
         // TODO gpt 사용할 때는 풀고 사용하시면 됩니다.
-         data.put("advice", advice(userName));
+         data.put("advice", advice(userName, userId));
         return data;
     }
 
@@ -123,24 +123,26 @@ public class RabbitService {
     }
 
     // 자산 총액 계산
-    public Map<String, Object> userAssetTotal(String userName) {
-        log.info("Executing userAssetTotal for user: {}", userName);
+    public Map<String, Object> userAssetTotal(int userId) {
+//        log.info("Executing userAssetTotal for user: {}", userName);
         Map<String, Object> assetTotal = new HashMap<>();
-        assetTotal.put("totalAccount", myAssetDao.totalAccount(userName));
-        assetTotal.put("totalStock", myAssetDao.totalStock(userName));
-        assetTotal.put("totalRealestate", myAssetDao.totalRealestate(userName));
-        assetTotal.put("totalCar", myAssetDao.totalCar(userName));
+        assetTotal.put("totalAccount", myAssetDao.totalAccount(userId));
+        assetTotal.put("totalStock", myAssetDao.totalStock(userId));
+        assetTotal.put("totalRealestate", myAssetDao.totalRealestate(userId));
+        assetTotal.put("totalCar", myAssetDao.totalCar(userId));
         return Collections.singletonMap("assetTotal", assetTotal);
     }
 
     // 자산 세부 항목
-    public Map<String, Object> userDetailAsset(String userName) {
+    public Map<String, Object> userDetailAsset(String userName, int userId) {
         log.info("Executing userDetailAsset for user: {}", userName);
         Map<String, Object> detailAsset = new HashMap<>();
         detailAsset.put("userAccount", myAssetService.userAccounts(userName));
         detailAsset.put("userStock", myAssetDao.userStockSymbol(userName));
-        detailAsset.put("userCar", myAssetDao.userCar(userName));
-        detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));
+//        detailAsset.put("userCar", myAssetDao.userCar(userName));
+        detailAsset.put("userCar", myAssetService.totalCar(userId));
+//        detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));
+        detailAsset.put("userRealestate", myAssetService.totalRealestate(userId));
         return Collections.singletonMap("detailAsset", detailAsset);
     }
 
@@ -192,10 +194,10 @@ public class RabbitService {
         });
     }
 
-    public Map<String, Object> advice(String userName) throws IOException {
+    public Map<String, Object> advice(String userName, int userId) throws IOException {
         Map<String, Object> advice = new HashMap<>();
 
-        String financePlan = gptController.chat(userAssetTotal(userName) + " 재무설계사처럼 재무계획을 300자 이내로 작성해줘");
+        String financePlan = gptController.chat(userAssetTotal(userId) + " 재무설계사처럼 재무계획을 300자 이내로 작성해줘");
         String investPlan = gptController.chat(idTrend(userName) + " 투자전문가처럼 조언을 300자 이내로 자세하게 작성해줘 ");
         String stockPlan = gptController.chat(userStockRevenue(userName) + " 주식전문가처럼 조언을 300자 이내로 자세하게 작성해줘");
         String mzTrend = gptController.chat("MZ 세대의 자산 관리 트렌드에 대해 300자 이내로 자세하게 작성해줘.");
