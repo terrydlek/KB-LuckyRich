@@ -27,21 +27,13 @@ public interface MyAssetDao {
     
     List<BankTransactionDto> getBankTransactions(int userId);
 
-    int totalAccount(String userName);
+    int totalAccount(int userId);
 
-    int totalStock(String userName);
+    int totalStock(int userId);
 
-    int totalRealestate(String userName);
+    int totalRealestate(int userId);
 
-    int totalCar(String userName);
-
-    List<Integer> getAllTotalAccounts();
-
-    List<Integer> getAllTotalStocks();
-
-    List<Integer> getAllTotalRealestates();
-
-    List<Integer> getAllTotalCars();
+    int totalCar(int userId);
 
     // 특정 사용자의 또래 유저 목록 가져오기
     List<UserDto> getPeerUsersByAge(int userId);
@@ -77,7 +69,9 @@ public interface MyAssetDao {
 
     List<Integer> getCars();
 
-    void setRealAsset(@Param("randCarNo") int randCarNo, @Param("randEstateNo") int randEstateNo, @Param("userId") int userId);
+    void setRealEstateAsset(@Param("randEstateNo") int randEstateNo, @Param("userId") int userId);
+
+    void setCarAsset(@Param("randCarNo") int randCarNo, @Param("userId") int userId);
 
     List<Integer> getReals();
 }

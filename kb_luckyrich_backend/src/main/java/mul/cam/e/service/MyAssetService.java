@@ -60,12 +60,12 @@ public class MyAssetService {
         return bankTransactions;
     }
 
-    public int totalAccount(String userName) {
-        return myAssetDao.totalAccount(userName);
+    public int totalAccount(int userId) {
+        return myAssetDao.totalAccount(userId);
     }
 
-    public int totalStock(String userName) {
-        return myAssetDao.totalStock(userName);
+    public int totalStock(int userId) {
+        return myAssetDao.totalStock(userId);
     }
 
     public BigDecimal getCurrentTotalStockValue(String userName) throws IOException {
@@ -85,12 +85,12 @@ public class MyAssetService {
         return totalValue;
     }
 
-    public int totalRealestate(String userName) {
-        return myAssetDao.totalRealestate(userName);
+    public int totalRealestate(int userId) {
+        return myAssetDao.totalRealestate(userId);
     }
 
-    public int totalCar(String userName) {
-        return myAssetDao.totalCar(userName);
+    public int totalCar(int userId) {
+        return myAssetDao.totalCar(userId);
     }
 
     public List<AccountDto> userAccounts(String userName) {
@@ -129,9 +129,13 @@ public class MyAssetService {
         return map;
     }
 
-    public void setRealAsset(int randCarNo, int randEstateNo, int userId) {
-        myAssetDao.setRealAsset(randCarNo, randEstateNo, userId);
+    public void setRealAsset(int randEstateNo, int userId) {
+        myAssetDao.setRealEstateAsset(randEstateNo, userId);
     }
+    public void setCarAsset(int randCarNo, int userId) {
+        myAssetDao.setCarAsset(randCarNo, userId);
+    }
+
 
     public List<Integer> getCars() {
         return myAssetDao.getCars();
