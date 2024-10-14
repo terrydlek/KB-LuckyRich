@@ -139,10 +139,8 @@ public class RabbitService {
         Map<String, Object> detailAsset = new HashMap<>();
         detailAsset.put("userAccount", myAssetService.userAccounts(userName));
         detailAsset.put("userStock", myAssetDao.userStockSymbol(userName));
-//        detailAsset.put("userCar", myAssetDao.userCar(userName));
-        detailAsset.put("userCar", myAssetService.totalCar(userId));
-//        detailAsset.put("userRealestate", myAssetDao.userRealestate(userName));
-        detailAsset.put("userRealestate", myAssetService.totalRealestate(userId));
+        detailAsset.put("userCar", myAssetDao.userCar(userId));
+        detailAsset.put("userRealestate", myAssetDao.userRealestate(userId));
         return Collections.singletonMap("detailAsset", detailAsset);
     }
 
