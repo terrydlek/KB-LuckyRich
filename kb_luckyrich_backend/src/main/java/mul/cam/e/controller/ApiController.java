@@ -124,11 +124,14 @@ public class ApiController {
             myAssetService.setTransaction(transactionDto);
         }
 
+        String role = customUserDetail.getRole();
+
         // Vue Login창으로 Redirect
         String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
                 "account_num=" + account_num + "&" +
-                "refresh_token=" + refreshToken);
+                "refresh_token=" + refreshToken +
+                "user_role=" + role);
 
 //        Map<String, Object> responseBody = new HashMap<>();
 //        responseBody.put("access_token", jwtToken);
@@ -183,6 +186,7 @@ public class ApiController {
         map.put("access_token", jwtToken);
         map.put("refresh_token", refreshToken);
         map.put("account_num", account_num);
+        map.put("user_role", customUserDetail.getRole());
 
         return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환
     }
@@ -239,6 +243,7 @@ public class ApiController {
         map.put("access_token", jwtToken);
         map.put("refresh_token", refreshToken);
         map.put("account_num", account_num);
+        map.put("user_role", customUserDetail.getRole());
 
         return new ResponseEntity<>(map, HttpStatus.OK);  // JSON 응답을 반환
     }
