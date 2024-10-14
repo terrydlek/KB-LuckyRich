@@ -8,7 +8,10 @@
 
     <!-- 가운데 메인 콘텐츠 (라우터 뷰가 들어감) -->
     <main class="main-content">
-      <router-view />
+      <!-- 로딩 중일 때 로딩 오버레이를 표시 -->
+      <LoadingOverlay :visible="isLoading" />
+      <!-- 로딩이 끝나면 콘텐츠 표시 -->
+      <router-view v-if="!isLoading" />
     </main>
 
     <!-- 오른쪽 사이드바 -->
@@ -18,10 +21,26 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import Navbar from './components/layout/Navbar.vue';
 import LeftSidebar from './components/layout/LeftSidebar.vue';
-import RightSidebar from './components/layout/RightSidebar.vue';
+import LoadingOverlay from './assets/LoadingOverlay.vue'; // 로딩 화면 컴포넌트 추가
 import '@fortawesome/fontawesome-free/css/all.css'; // Font Awesome 스타일 추가
+
+const isLoading = ref(false);
+
+const router = useRouter();
+
+// 페이지 이동 시 로딩 상태를 간단히 변경하는 함수
+router.beforeEach(() => {
+  isLoading.value = true;
+});
+
+router.afterEach(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 200); // 적절한 딜레이 적용 가능
+});
 </script>
 
 <style scoped>
