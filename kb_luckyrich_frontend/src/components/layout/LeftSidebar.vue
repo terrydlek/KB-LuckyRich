@@ -8,7 +8,7 @@
           @mouseleave="hideSubmenu('luckyRich', false)"
           :class="{ bold: isLuckyRichSelected }"
         >
-          LuckyRich
+          Lucky Rich
           <ul
             :class="[
               'submenu',
