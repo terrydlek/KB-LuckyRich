@@ -1,22 +1,41 @@
 <template>
   <div class="home-container">
     <h1 class="main-heading">
-      <span class="letter" v-for="(char, index) in headingText" :key="index"
-        :style="{ 'animation-delay': index * 0.05 + 's' }">
+      <span
+        class="letter"
+        v-for="(char, index) in headingText"
+        :key="index"
+        :style="{ 'animation-delay': index * 0.05 + 's' }"
+      >
         {{ char === ' ' ? '\u00A0' : char }}
       </span>
     </h1>
     <main class="main-content">
       <div class="chart-section">
-        <component :is="totalChart" class="rounded-chart" style="width: 430px;" />
-        <component :is="assetGraph" class="rounded-chart" style="width: 430px;" />
+        <component
+          :is="totalChart"
+          class="rounded-chart"
+          style="width: 430px"
+        />
+        <component
+          :is="assetGraph"
+          class="rounded-chart"
+          style="width: 430px"
+        />
       </div>
 
       <div class="chart-section">
-        <component :is="consumptionstatus" class="rounded-chart" style="width: 430px;" />
-        <component :is="accountBookChart" class="rounded-chart" style="width: 430px;" />
+        <component
+          :is="consumptionstatus"
+          class="rounded-chart"
+          style="width: 430px"
+        />
+        <component
+          :is="accountBookChart"
+          class="rounded-chart"
+          style="width: 430px"
+        />
       </div>
-
     </main>
   </div>
 </template>
@@ -30,7 +49,7 @@ import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 
-const headingText = "효율적인 자산 관리로 더 나은 미래를 설계하세요".split('');
+const headingText = '효율적인 자산 관리로 더 나은 미래를 설계하세요'.split('');
 
 // const charts = [
 //   totalChart,
