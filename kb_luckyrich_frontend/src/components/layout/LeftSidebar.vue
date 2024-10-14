@@ -38,7 +38,6 @@
           </ul>
         </li>
 
-        <!-- Other menu items -->
         <li
           @click="goTo('asset')"
           :class="{ bold: selectedCategory === 'asset' }"
@@ -63,11 +62,47 @@
         >
           부동산
         </li>
-        <li
-          @click="goTo('financenews')"
-          :class="{ bold: selectedCategory === 'financenews' }"
-        >
-          금융 뉴스
+
+        <li @click="toggleSubmenu('news')">
+          뉴스
+          <ul :class="['submenu', { show: isSubmenuVisible.news }]">
+            <li
+              @click="goTo('FinanceNews')"
+              :class="{ bold: selectedCategory === 'FinanceNews' }"
+            >
+              금융
+            </li>
+            <li
+              @click="goTo('EstateNews')"
+              :class="{ bold: selectedCategory === 'EstateNews' }"
+            >
+              부동산
+            </li>
+            <li
+              @click="goTo('SecuritiesNews')"
+              :class="{ bold: selectedCategory === 'SecuritiesNews' }"
+            >
+              증권
+            </li>
+            <li
+              @click="goTo('PersonalNews')"
+              :class="{ bold: selectedCategory === 'PersonalNews' }"
+            >
+              생활경제
+            </li>
+            <li
+              @click="goTo('GlobalEconomyNews')"
+              :class="{ bold: selectedCategory === 'GlobalEconomyNews' }"
+            >
+              글로벌 경제
+            </li>
+            <li
+              @click="goTo('EconomyNews')"
+              :class="{ bold: selectedCategory === 'EconomyNews' }"
+            >
+              경제 일반
+            </li>
+          </ul>
         </li>
 
         <!-- Q & A Main Menu -->
@@ -120,6 +155,7 @@ const selectedCategory = ref('');
 const isSubmenuVisible = ref({
   luckyRich: false,
   qa: false,
+  news: false,
 });
 
 const resetCategoryMenu = () => {
@@ -130,43 +166,32 @@ const resetCategoryMenu = () => {
   };
 };
 
-// LuckyRich의 하위 메뉴가 선택되었는지 확인
-const isLuckyRichSelected = computed(() => {
-  return ['about', 'privacyPolicy', 'termsOfService'].includes(
-    selectedCategory.value
-  );
-});
+// const checkAdminStatus = async () => {
+//   try {
+//     const token = localStorage.getItem('access_token');
+//     if (!token) {
+//       console.error('토큰이 없습니다. 로그인이 필요합니다.');
+//       return;
+//     }
 
-// Q&A의 하위 메뉴가 선택되었는지 확인
-const isQaSelected = computed(() => {
-  return ['qa', 'PostList'].includes(selectedCategory.value);
-});
+//     const response = await axios.get('http://localhost:8080/user/role', {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
 
-// API로 관리자 여부 확인
-const checkAdminStatus = async () => {
-  try {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      console.error('토큰이 없습니다. 로그인이 필요합니다.');
-      return;
-    }
-
-    const response = await axios.get('http://localhost:8080/user/role', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const userRole = response.data;
-    isAdmin.value = userRole === 'ADMIN';
-    localStorage.setItem('user_role', userRole);
-  } catch (error) {
-    console.error('사용자 역할 확인 중 오류 발생:', error);
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user_role');
-      router.push('/luckyrich/login');
-    }
-  }
-};
+//     const userRole = response.data;
+//     isAdmin.value = userRole === 'ADMIN'; // 관리자 여부 업데이트
+//     localStorage.setItem('user_role', userRole); // 역할 정보를 로컬 스토리지에 저장
+//   } catch (error) {
+//     console.error('사용자 역할 확인 중 오류 발생:', error);
+//     if (error.response && error.response.status === 401) {
+//       localStorage.removeItem('access_token');
+//       localStorage.removeItem('user_role');
+//       router.push('/luckyrich/login');
+//     }
+//   }
+// };
 
 // 메뉴 항목 클릭 시 해당 경로로 이동
 const goTo = (route) => {
@@ -204,10 +229,10 @@ const hideSubmenu = (menu, immediate) => {
   }
 };
 
-// 마운트 시 관리자 여부 체크
-onMounted(async () => {
-  await checkAdminStatus();
-});
+// 페이지가 마운트될 때 관리자 상태 확인 후 메뉴 렌더링
+// onMounted(async () => {
+//   await checkAdminStatus();
+// });
 </script>
 
 <style scoped>

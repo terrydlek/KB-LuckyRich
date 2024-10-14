@@ -14,14 +14,16 @@
     </select>
     <select id="getRealEstatesByRegion" resultType="mul.cam.e.dto.RealEstateDto">
         SELECT no, city, street_number AS streetNumber, estate_name AS estateName,
-            exclusive_area AS exclusiveArea, contract_time AS contractTime,
-            transaction_amount AS transactionAmount, floor, buyer, bargainer,
-            construction_time AS constructionTime, street_name AS streetName,
-            transaction_type AS transactionType, brokerage_location AS brokerageLocation,
-            house_type AS houseType
+            MAX(exclusive_area) AS exclusiveArea, MAX(contract_time) AS contractTime,
+            MAX(transaction_amount) AS transactionAmount, MAX(floor) AS floor,
+            MAX(buyer) AS buyer, MAX(bargainer) AS bargainer,
+            MAX(construction_time) AS constructionTime, MAX(street_name) AS streetName,
+            MAX(transaction_type) AS transactionType, MAX(brokerage_location) AS brokerageLocation,
+            MAX(house_type) AS houseType
         FROM realestate_data
         WHERE city LIKE CONCAT(#{region}, '%')
-            LIMIT 10;
+        GROUP BY city, street_number, estate_name
+            ;
     </select>
 
 </mapper>

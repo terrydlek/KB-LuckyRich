@@ -1,7 +1,9 @@
 package mul.cam.e.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,8 +15,19 @@ import java.util.Base64;
 public class KeyDecrypt {
 
     private final static String alg = "AES/CBC/PKCS5Padding";
-    private final static String key = "LuckyRichCode-32Character-LuckyRichAPIKey";
-    private final static String iv = key.substring(0, 16);
+//    private final static String key = "LuckyRichCode-32Character-LuckyRichAPIKey";
+//    private final static String iv = key.substring(0, 16);
+
+    @Value("${aes.key}")
+    private String key;
+
+    private String iv;
+
+    // Bean 생성 후 초기화 단계에서 IV를 설정하는 메서드
+    @PostConstruct
+    public void init() {
+        this.iv = key.substring(0, 16);  // IV는 key의 첫 16바이트로 설정
+    }
 
     public String decrypt(String clientKey) {
         try {

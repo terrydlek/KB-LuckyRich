@@ -118,12 +118,13 @@ public class MyAssetController {
             e.printStackTrace();
         }
 
-        // random car
+        // random car, estate
         List<Integer> cars = myAssetService.getCars();
         List<Integer> sgreals = myAssetService.getReals();
         int randCarNo = randUtils.getRandomId(cars);
         int randEstateNo = randUtils.getRandomId(sgreals);
-        myAssetService.setRealAsset(randCarNo, randEstateNo, userId);
+        myAssetService.setRealAsset(randEstateNo, userId);
+        myAssetService.setCarAsset(randCarNo, userId);
 
         return ResponseEntity.ok("User information updated successfully");
     }
@@ -171,14 +172,16 @@ public class MyAssetController {
         log.info("getAssetTotal execute~~~~~");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
+        int userId = securityUserService.getUserId(userName);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("Bank Balance", myAssetService.totalAccount(userName));
-        map.put("Stock Total", myAssetService.totalStock(userName));
-        map.put("Car", myAssetService.totalCar(userName));
-        map.put("real estate", myAssetService.totalRealestate(userName));
+        map.put("Bank Balance", myAssetService.totalAccount(userId));
+        map.put("Stock Total", myAssetService.totalStock(userId));
+//        map.put("Car", myAssetService.totalCar(userId));
+        map.put("Car", myAssetService.totalCar(userId));
+        map.put("real estate", myAssetService.totalRealestate(userId));
 
-//        System.out.println(map);
+        log.info("total map" + map);
         return ResponseEntity.ok(map);
     }
 
