@@ -3,7 +3,6 @@
     <nav class="category-list">
       <h4>Category</h4>
       <ul>
-        <!-- LuckyRich Main Menu -->
         <li
           @mouseenter="showSubmenu('luckyRich')"
           @mouseleave="hideSubmenu('luckyRich', false)"
@@ -13,7 +12,7 @@
           <ul
             :class="[
               'submenu',
-              { show: isSubmenuVisible.luckyRich || isLuckyRichSelected },
+              { show: isSubmenuVisible.luckyRich || isAnyLuckyRichSelected },
             ]"
             @mouseleave="hideSubmenu('luckyRich', true)"
           >
@@ -63,9 +62,19 @@
           부동산
         </li>
 
-        <li @click="toggleSubmenu('news')">
+        <li
+          @mouseenter="showSubmenu('news')"
+          @mouseleave="hideSubmenu('news', false)"
+          :class="{ bold: isNewsSelected }"
+        >
           뉴스
-          <ul :class="['submenu', { show: isSubmenuVisible.news }]">
+          <ul
+            :class="[
+              'submenu',
+              { show: isSubmenuVisible.news || isAnyNewsSelected },
+            ]"
+            @mouseleave="hideSubmenu('news', true)"
+          >
             <li
               @click="goTo('FinanceNews')"
               :class="{ bold: selectedCategory === 'FinanceNews' }"
@@ -105,7 +114,6 @@
           </ul>
         </li>
 
-        <!-- Q & A Main Menu -->
         <li
           @mouseenter="showSubmenu('qa')"
           @mouseleave="hideSubmenu('qa', false)"
@@ -113,7 +121,10 @@
         >
           Q & A
           <ul
-            :class="['submenu', { show: isSubmenuVisible.qa || isQaSelected }]"
+            :class="[
+              'submenu',
+              { show: isSubmenuVisible.qa || isAnyQaSelected },
+            ]"
             @mouseleave="hideSubmenu('qa', true)"
           >
             <li
@@ -131,7 +142,6 @@
           </ul>
         </li>
 
-        <!-- Admin menu -->
         <li
           v-if="isAdmin"
           @click="goTo('adminBoard')"
@@ -145,9 +155,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 
 const router = useRouter();
 const isAdmin = ref(false);
@@ -158,67 +167,48 @@ const isSubmenuVisible = ref({
   news: false,
 });
 
-const resetCategoryMenu = () => {
-  selectedCategory.value = ''; // 선택된 카테고리 초기화
-  isSubmenuVisible.value = {
-    luckyRich: false,
-    qa: false,
-  };
-};
+const isAnyLuckyRichSelected = computed(() =>
+  luckyRichCategories.includes(selectedCategory.value)
+);
+const isAnyNewsSelected = computed(() =>
+  newsCategories.includes(selectedCategory.value)
+);
+const isAnyQaSelected = computed(() =>
+  qaCategories.includes(selectedCategory.value)
+);
 
-// const checkAdminStatus = async () => {
-//   try {
-//     const token = localStorage.getItem('access_token');
-//     if (!token) {
-//       console.error('토큰이 없습니다. 로그인이 필요합니다.');
-//       return;
-//     }
+const luckyRichCategories = ['about', 'privacyPolicy', 'termsOfService'];
+const newsCategories = [
+  'FinanceNews',
+  'EstateNews',
+  'SecuritiesNews',
+  'PersonalNews',
+  'GlobalEconomyNews',
+  'EconomyNews',
+];
+const qaCategories = ['qa', 'PostList'];
 
-//     const response = await axios.get('http://localhost:8080/user/role', {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
+const isLuckyRichSelected = ref(false);
+const isNewsSelected = ref(false);
+const isQaSelected = ref(false);
 
-//     const userRole = response.data;
-//     isAdmin.value = userRole === 'ADMIN'; // 관리자 여부 업데이트
-//     localStorage.setItem('user_role', userRole); // 역할 정보를 로컬 스토리지에 저장
-//   } catch (error) {
-//     console.error('사용자 역할 확인 중 오류 발생:', error);
-//     if (error.response && error.response.status === 401) {
-//       localStorage.removeItem('access_token');
-//       localStorage.removeItem('user_role');
-//       router.push('/luckyrich/login');
-//     }
-//   }
-// };
-
-// 메뉴 항목 클릭 시 해당 경로로 이동
 const goTo = (route) => {
-  selectedCategory.value = route; // 선택한 메뉴로 갱신
-  // 관리자 페이지 접근 시 관리자 권한 확인
-  if (route === 'adminBoard' && !isAdmin.value) {
-    alert('관리자만 접근 가능한 페이지입니다.');
-    return;
-  }
+  selectedCategory.value = route;
 
   const accessToken = localStorage.getItem('access_token');
   const restrictedRoutes = ['asset', 'test', 'accountBook', 'PostList'];
 
-  // 인증 필요 경로 접근 시 로그인 화면으로 이동
   if (restrictedRoutes.includes(route) && !accessToken) {
     router.push({ name: 'login' });
   } else {
-    router.push({ name: route }); // 선택한 메뉴로 라우팅
+    router.push({ name: route });
   }
 };
 
-// 서브메뉴 표시
 const showSubmenu = (menu) => {
   isSubmenuVisible.value[menu] = true;
 };
 
-// 서브메뉴 숨기기
 const hideSubmenu = (menu, immediate) => {
   if (immediate) {
     setTimeout(() => {
@@ -228,11 +218,6 @@ const hideSubmenu = (menu, immediate) => {
     isSubmenuVisible.value[menu] = false;
   }
 };
-
-// 페이지가 마운트될 때 관리자 상태 확인 후 메뉴 렌더링
-// onMounted(async () => {
-//   await checkAdminStatus();
-// });
 </script>
 
 <style scoped>
