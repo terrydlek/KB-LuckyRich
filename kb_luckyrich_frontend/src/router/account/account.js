@@ -18,6 +18,11 @@ import NewsDetail from '@/components/account/details/NewsDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import Socket from '@/views/account/Socket.vue';
 import test from '@/views/account/test.vue';
+import EstateNewsDetail from '@/components/account/details/EstateNewsDetail.vue';
+import SecuritiesNewsDetail from '@/components/account/details/SecuritiesNewsDetail.vue';
+import PersonalNewsDetail from '@/components/account/details/PersonalNewsDetail.vue';
+import GlobalEconomyNewsDetail from '@/components/account/details/GlobalEconomyNewsDetail.vue';
+import EconomyNewsDetail from '@/components/account/details/EconomyNewsDetail.vue';
 
 export default [
   {
@@ -119,5 +124,30 @@ export default [
     path: '/luckyrich/recommend',
     name: 'test',
     component: test,
+  },
+  {
+    path: '/luckyrich/estatenews/:code1/:code2',
+    name: 'EstateNewsDetail',
+    component: EstateNewsDetail,
+  },
+  {
+    path: '/luckyrich/securitiesnews/:code1/:code2',
+    name: 'SecuritiesNewsDetail',
+    component: SecuritiesNewsDetail,
+  },
+  {
+    path: '/luckyrich/personalnews/:code1/:code2',
+    name: 'PersonalNewsDetail',
+    component: PersonalNewsDetail,
+  },
+  {
+    path: '/luckyrich/globaleconomynews/:code1/:code2',
+    name: 'GlobalEconomyNewsDetail',
+    component: GlobalEconomyNewsDetail,
+  },
+  {
+    path: '/luckyrich/economynews/:code1/:code2',
+    name: 'EconomyNewsDetail',
+    component: EconomyNewsDetail,
   },
 ];
