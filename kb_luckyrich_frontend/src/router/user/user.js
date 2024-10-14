@@ -5,7 +5,6 @@ import Qa from '@/views/luckyRich/Qa.vue';
 import TermsOfService from '@/views/luckyRich/TermsOfService.vue';
 import Login from '@/views/user/login.vue';
 import UserUpdate from '@/views/user/UserUpdate.vue';
-import FinanceNews from '@/views/news/FinanceNews.vue';
 import PostList from '@/components/account/board/PostList.vue';
 // import BoardDetail from "@/components/account/board/PostdDetail.vue";
 import PostUpdate from '@/components/account/board/PostUpdate.vue';
@@ -14,6 +13,12 @@ import PostDetail from '@/components/account/board/PostDetail.vue';
 import AccountBook from '@/components/account/AccountBook.vue';
 import AdminBoard from '@/views/luckyRich/AdminBoard.vue';
 import NotFound from '@/views/luckyRich/NotFound.vue';
+import FinanceNews from '@/components/news/FinanceNews.vue';
+import EstateNews from '@/components/news/EstateNews.vue';
+import SecuritiesNews from '@/components/news/SecuritiesNews.vue';
+import PersonalNews from '@/components/news/PersonalNews.vue';
+import GlobalEconomyNews from '@/components/news/GlobalEconomyNews.vue';
+import EconomyNews from '@/components/news/EconomyNews.vue';
 
 export default [
   {
@@ -51,11 +56,7 @@ export default [
     name: 'qa',
     component: Qa,
   },
-  {
-    path: '/financenews',
-    name: 'financenews',
-    component: FinanceNews,
-  },
+
   {
     path: '/luckyrich/qa/ask',
     name: 'PostList',
@@ -76,11 +77,7 @@ export default [
     name: 'PostDetail',
     component: PostDetail,
   },
-  {
-    path: '/luckyrich/financenews',
-    name: 'financenews',
-    component: FinanceNews,
-  },
+
   {
     path: '/luckyrich/qa/admin',
     name: 'adminBoard',
@@ -100,5 +97,35 @@ export default [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound
-  }
+  },
+  {
+    path : '/luckyrich/fianaceNews',
+    name : 'FinanceNews',
+    component : FinanceNews
+  },
+  {
+    path : '/luckyrich/estateNews',
+    name : 'EstateNews',
+    component : EstateNews
+  },
+  {
+    path : '/luckyrich/securitiesNews',
+    name : 'SecuritiesNews',
+    component : SecuritiesNews
+  },
+  {
+    path : '/luckyrich/personalNews',
+    name : 'PersonalNews',
+    component : PersonalNews
+  },
+  {
+    path : '/luckyrich/globaleconomylNews',
+    name : 'GlobalEconomyNews',
+    component : GlobalEconomyNews
+  },
+  {
+    path : '/luckyrich/economyNews',
+    name : 'EconomyNews',
+    component : EconomyNews
+  },
 ];

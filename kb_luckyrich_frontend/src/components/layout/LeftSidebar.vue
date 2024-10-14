@@ -16,7 +16,18 @@
         <li @click="goTo('test')" :class="{ bold: selectedCategory === 'test' }">나에게 맞는 투자 상품은?</li>
         <li @click="goTo('accountBook')" :class="{ bold: selectedCategory === 'accountBook' }">거래 내역 조회</li>
         <li @click="goTo('realestate')" :class="{ bold: selectedCategory === 'realestate' }">부동산</li>
-        <li @click="goTo('financenews')" :class="{ bold: selectedCategory === 'financenews' }">금융 뉴스</li>
+
+        <li @click="toggleSubmenu('news')">
+          뉴스
+          <ul :class="['submenu', { show: isSubmenuVisible.news }]">
+            <li @click="goTo('FinanceNews')" :class="{ bold: selectedCategory === 'FinanceNews' }">금융</li>
+            <li @click="goTo('EstateNews')" :class="{ bold: selectedCategory === 'EstateNews' }">부동산</li>
+            <li @click="goTo('SecuritiesNews')" :class="{ bold: selectedCategory === 'SecuritiesNews' }">증권</li>
+            <li @click="goTo('PersonalNews')" :class="{ bold: selectedCategory === 'PersonalNews' }">생활경제</li>
+            <li @click="goTo('GlobalEconomyNews')" :class="{ bold: selectedCategory === 'GlobalEconomyNews' }">글로벌 경제</li>
+            <li @click="goTo('EconomyNews')" :class="{ bold: selectedCategory === 'EconomyNews' }">경제 일반</li>
+          </ul>
+        </li>
 
         <li @click="toggleSubmenu('qa')">
           Q & A
@@ -45,6 +56,7 @@ const selectedCategory = ref(''); // 현재 선택된 카테고리 저장
 const isSubmenuVisible = ref({
   luckyRich: false,
   qa: false,
+  news : false,
 });
 
 const getAccessToken = () => {

@@ -208,26 +208,7 @@ export default {
 </script>
 
 <style scoped>
-.sidebar {
-  width: 200px;
-  float: left;
-  position: fixed; /* 사이드바를 고정 */
-}
 
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.sidebar li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.sidebar li.active {
-  font-weight: bold;
-  background-color: #e6e9eb;
-}
 
 .news-container {
   display: flex;
