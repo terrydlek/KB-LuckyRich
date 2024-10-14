@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .antMatchers("/news/**").permitAll()
                         .antMatchers("/realestate/**").permitAll()
                         .antMatchers("/board/**").permitAll()
-                        .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
+                        .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
 //                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
                         .antMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
