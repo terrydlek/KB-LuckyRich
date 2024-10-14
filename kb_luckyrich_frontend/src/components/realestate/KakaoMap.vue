@@ -40,12 +40,51 @@
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
                 <div class="modal-scrollable-content">
-                    <p>단지명: {{ selectedPlace.complexName }}</p>
-                    <p>주소: {{ selectedPlace.address }}</p>
-                    <div v-for="(priceInfo, index) in selectedPlace.priceInfo" :key="index">
-                        <p>{{ priceInfo.floor }}층: {{ priceInfo.price }}억</p>
-                    </div>
-                    <p>계약월: {{ selectedPlace.contractTime }}</p>
+                    <h5>단지명 정보</h5>
+                    <table class="modal-table">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>내용</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>단지명</td>
+                                <td>{{ selectedPlace.complexName }}</td>
+                            </tr>
+                            <tr>
+                                <td>주소</td>
+                                <td>{{ selectedPlace.address }}</td>
+                            </tr>
+                            <tr>
+                                <td>전용면적</td>
+                                <td>{{ selectedPlace.exclusiveArea }}m²</td>
+                            </tr>
+                            <tr>
+                                <td>건축연도</td>
+                                <td>{{ selectedPlace.constructionTime }}년</td>
+                            </tr>
+                            <tr>
+                                <td>주택 유형</td>
+                                <td>{{ selectedPlace.houseType }}</td>
+                            </tr>
+                            <tr>
+                                <td>거래 유형</td>
+                                <td>{{ selectedPlace.transactionType }}</td>
+                            </tr>
+                            <tr v-for="(priceInfo, index) in selectedPlace.priceInfo" :key="index">
+                                <td>{{ priceInfo.floor }}층</td>
+                                <td>{{ priceInfo.price }}억</td>
+                            </tr>
+                            <tr>
+                                <td>계약월</td>
+                                <td>{{ formatContractTime(selectedPlace.contractTime) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5>로드뷰</h5>
                     <div id="roadview" class="roadview"></div>
                 </div>
             </div>
@@ -71,7 +110,7 @@ export default {
             isLoadingOtherRegions: false,
             regionCoordinates: {
                 "서울특별시": { lat: 37.5663, lng: 126.9779 },
-                "경기도": { lat: 37.2752, lng: 127.0094 },
+                "경기도": { lat: 37.288, lng: 127.054 },
                 "부산광역시": { lat: 35.1796, lng: 129.0756 },
                 "대구광역시": { lat: 35.8714, lng: 128.6014 },
                 "인천광역시": { lat: 37.4563, lng: 126.7052 },
@@ -98,6 +137,7 @@ export default {
         }
         this.loadKakaoMap();
         this.fetchRealEstateData('서울특별시');
+
     },
     methods: {
         loadKakaoMap() {
@@ -125,6 +165,12 @@ export default {
                 level: 4,
             };
             this.map = new kakao.maps.Map(mapContainer, mapOptions);
+            this.addAllCityHallMarkers();
+
+            kakao.maps.event.addListener(this.map, 'zoom_changed', () => {
+                const level = this.map.getLevel();
+                this.toggleMarkers(level);
+            });
         },
         fetchRealEstateData(region) {
             if (region === '서울특별시') {
@@ -145,6 +191,10 @@ export default {
                         price: item.transactionAmount || '가격 정보 없음',
                         floor: item.floor,
                         contractTime: item.contractTime,
+                        exclusiveArea: item.exclusiveArea || '정보 없음',
+                        constructionTime: item.constructionTime || '정보 없음',
+                        houseType: item.houseType || '정보 없음',
+                        transactionType: item.transactionType || '정보 없음',
                         region
                     }));
                     this.estate = regionEstateData;
@@ -164,7 +214,7 @@ export default {
                     if (coords) {
                         const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
                         const imageSrc = '/src/assets/images/EstateImg.png';
-                        const imageSize = new kakao.maps.Size(50, 50);
+                        const imageSize = new kakao.maps.Size(60, 50);
                         const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
                         const marker = new kakao.maps.Marker({
@@ -203,7 +253,7 @@ export default {
             otherRegions.forEach((region, index) => {
                 setTimeout(() => {
                     this.fetchRealEstateData(region);
-                }, index * 2000);
+                }, index * 1000);
             });
         },
         getCoordinatesFromAddress(address, callback) {
@@ -225,13 +275,16 @@ export default {
             const coords = this.regionCoordinates[region];
             const moveLatLon = new kakao.maps.LatLng(coords.lat, coords.lng);
             this.map.setCenter(moveLatLon);
-
-            this.addCityHallMarker(coords, region);
-
+        },
+        addAllCityHallMarkers() {
+            Object.keys(this.regionCoordinates).forEach(region => {
+                const coords = this.regionCoordinates[region];
+                this.addCityHallMarker(coords, region);
+            });
         },
         addCityHallMarker(coords, region) {
-            const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; // 파란색 별 모양 마커 이미지
-            const imageSize = new kakao.maps.Size(40, 35);
+            const imageSrc = '/src/assets/images/cityMarker.png'
+            const imageSize = new kakao.maps.Size(40, 50);
             const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
@@ -241,6 +294,25 @@ export default {
                 title: region + " 시청/도청",
             });
             marker.setMap(this.map);
+        },
+        toggleMarkers(level) {
+            const shouldShowMarkers = level < 9; 
+
+            this.markers.forEach(markerObj => {
+                if (shouldShowMarkers) {
+                    markerObj.marker.setMap(this.map); 
+                } else {
+                    markerObj.marker.setMap(null); 
+                }
+            });
+        },
+        formatContractTime(contractTime) {
+            if (contractTime && contractTime.length === 6) {
+                const year = contractTime.substring(0, 4);
+                const month = contractTime.substring(4, 6);
+                return `${year}년 ${month}월`;
+            }
+            return contractTime; 
         },
         openModal(place) {
             const relatedTransactions = this.estateData.filter(item => item.address === place.address);
@@ -254,6 +326,10 @@ export default {
             this.selectedPlace = {
                 ...place,
                 priceInfo,
+                exclusiveArea: place.exclusiveArea || '정보 없음',  
+                constructionTime: place.constructionTime || '정보 없음', 
+                houseType: place.houseType || '정보 없음',  
+                transactionType: place.transactionType || '정보 없음' 
             };
 
             this.$nextTick(() => {
@@ -335,20 +411,16 @@ export default {
 .region-panel {
     position: absolute;
     left: 20px;
-    /* 지도 왼쪽에서 약간의 여백 */
     top: 20px;
-    /* 지도 상단에서 약간의 여백 */
     z-index: 1000;
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.9);
-    /* 살짝 투명한 흰색 배경 */
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .region-panel select {
     background-color: rgba(255, 255, 255, 0);
-    /* 살짝 투명한 흰색 */
     border: none;
     padding: 10px;
     border-radius: 5px;
@@ -398,6 +470,23 @@ export default {
     max-height: 550px;
     overflow-y: auto;
     margin-bottom: 20px;
+    margin-top: 20px
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.modal-table th,
+.modal-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.modal-table th {
+    background-color: #f4f4f4;
 }
 
 #roadview {
@@ -410,7 +499,7 @@ export default {
     position: absolute;
     top: 10px;
     right: 20px;
-    font-size: 18px;
+    font-size: 30px;
     cursor: pointer;
 }
 </style>
