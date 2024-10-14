@@ -10,16 +10,13 @@
         <strong>상품명:</strong> {{ deposit.prodname }}
       </li>
       <li class="list-group-item">
-        <strong>세전 이자율:</strong> {{ deposit.prerate ?? 'N/A' }}
+        <strong>세전 이자율:</strong> {{ formatNumber(deposit.prerate) ?? 'N/A' }}%
       </li>
       <li class="list-group-item">
-        <strong>세후 이자율:</strong> {{ deposit.afterrate ?? 'N/A' }}
+        <strong>세후 이자율:</strong> {{ formatNumber(deposit.afterrate) ?? 'N/A' }}%
       </li>
       <li class="list-group-item">
-        <strong>세후 이자:</strong> {{ deposit.afterinterest ?? 'N/A' }}
-      </li>
-      <li class="list-group-item">
-        <strong>최고 우대 금리:</strong> {{ deposit.bestinterest ?? 'N/A' }}
+        <strong>최고 우대 금리:</strong> {{ formatNumber(deposit.bestinterest) ?? 'N/A' }}%
       </li>
       <li class="list-group-item">
         <strong>가입 제한 여부:</strong> {{ deposit.limit ?? 'N/A' }}
@@ -32,24 +29,12 @@
     <h3 class="mb-3">이자 계산기</h3>
     <form @submit.prevent="calculateInterest">
       <div class="mb-3">
-        <label for="principal" class="form-label">원금 (만원):</label>
-        <input
-          type="number"
-          class="form-control"
-          v-model="principal"
-          min="1"
-          required
-        />
+        <label for="principal" class="form-label">원금:</label>
+        <input type="number" class="form-control" v-model="principal" min="1" required />
       </div>
       <div class="mb-3">
         <label for="period" class="form-label">가입 기간 (개월):</label>
-        <input
-          type="number"
-          class="form-control"
-          v-model="period"
-          min="1"
-          required
-        />
+        <input type="number" class="form-control" v-model="period" min="1" required />
       </div>
       <div class="mb-3">
         <label for="method" class="form-label">계산 방식:</label>
@@ -63,13 +48,18 @@
 
     <!-- 계산 결과 표시 -->
     <div v-if="totalInterest !== null" class="mt-4 alert alert-info">
-      <h4>계산 결과:</h4>
+      <h4><strong>현재 상품에 대한 이자 합계를 계산해봤어요</strong></h4>
+      <br>
       <p>
-        <strong
-          >입력하신 정보를 바탕으로 {{ deposit.prodname }} 상품에 대한 이자
-          합계를 계산해봤어요:</strong
-        >
-        {{ totalInterest.toFixed(2) }} 원
+        <strong>세전 이자:</strong> {{ formatCurrency(totalInterest) }} 원
+      </p>
+      <p>
+        <strong>세후 이자:</strong> {{ formatCurrency(afterTaxInterest) }} 원
+      </p>
+
+      <p class="text-muted">
+        * 이 계산은 {{ period }}개월 동안 {{ formatNumber(deposit.prerate) }}%의 세전 이자율과, {{ formatNumber(deposit.afterrate) }}% 세후 이자율을 기준으로 했으며,
+        {{ taxRate * 100 }}%의 세율이 적용되었습니다.
       </p>
     </div>
   </div>
@@ -87,6 +77,9 @@ export default {
       period: null, // 사용자 입력 가입 기간 (개월)
       calcMethod: '단리', // 계산 방식 (단리 or 복리)
       totalInterest: null, // 계산된 이자 합계
+      beforeTaxInterest: null, // 세전 이자
+      afterTaxInterest: null, // 세후 이자
+      taxRate: 0.154, // 이자세율(15.4%)
     };
   },
   mounted() {
@@ -115,15 +108,34 @@ export default {
       const principalInWon = this.principal * 10000; // 원금 단위를 만원에서 원으로 변환
       const months = parseFloat(this.period);
 
+      let interest = 0;
+
       if (this.calcMethod === '단리') {
         // 단리 계산: 원금 * 금리 * 기간
-        this.totalInterest = (principalInWon * rate * (months / 12)) / 10000; // 결과를 만원 단위로 변환
+        interest = principalInWon * rate * (months / 12);
       } else if (this.calcMethod === '복리') {
         // 복리 계산: 원금 * (1 + 금리/12)^개월 수 - 원금
-        this.totalInterest =
-          (principalInWon * Math.pow(1 + rate / 12, months) - principalInWon) /
-          10000; // 만원 단위로 변환
+        interest = principalInWon * Math.pow(1 + rate / 12, months) - principalInWon;
       }
+
+      // 세전 이자
+      this.beforeTaxInterest = interest;
+
+      // 세후 이자 (세전 이자에서 세금(15.4%) 차감)
+      this.afterTaxInterest = interest * (1 - this.taxRate) / 10000;
+
+      // 총 이자 (만 원 단위로 변환)
+      this.totalInterest = interest / 10000;
+    },
+    // 숫자 콤마 추가 함수
+    formatCurrency(value) {
+      if (!value) return 'N/A';
+      return value.toLocaleString(); // 천 단위 구분
+    },
+    // 숫자를 포맷팅하는 함수 (소수점 포함)
+    formatNumber(value) {
+      if (!value) return 'N/A';
+      return parseFloat(value).toLocaleString('ko-KR', { maximumFractionDigits: 2 });
     },
     goBack() {
       this.$router.go(-1);
@@ -131,6 +143,8 @@ export default {
   },
 };
 </script>
+
+
 <style scoped>
 .back-button {
   width: 10%;

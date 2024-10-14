@@ -1,11 +1,11 @@
 <template>
   <div class="login-container">
-      <h2>회원가입하기</h2>
+      <h2>로그인</h2>
       <p>소셜 로그인 및 이메일로 가입할 수 있습니다.</p>
       <hr class="dotted-line" />
       <GoogleLoginButton class="social-button google" />
-      <KakaoLoginButton class="social-button kakao" />
       <NaverLoginButton class="social-button naver" />
+      <KakaoLoginButton class="social-button kakao" />
   </div>
 </template>
 
@@ -21,9 +21,10 @@ import KakaoLoginButton from '@/components/buttons/KakaoLoginButton.vue';
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   height: 100vh;
   text-align: center;
+  margin-top: 150px;
 }
 
 .login-container h2 {
@@ -37,7 +38,7 @@ import KakaoLoginButton from '@/components/buttons/KakaoLoginButton.vue';
 
 .dotted-line {
   border: none;
-  border-top: 3px dashed #ccc;
+  border-top: 3px dashed #272121;
   width: 300px;
   margin: 20px 0;
 }

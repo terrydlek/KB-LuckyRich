@@ -26,6 +26,18 @@
         >
           생활경제
         </li>
+        <li
+          @click="showNews('globaleconomy')"
+          :class="{ active: selectedCategory === 'globaleconomy' }"
+        >
+          글로벌 경제
+        </li>
+        <li
+          @click="showNews('economy')"
+          :class="{ active: selectedCategory === 'economy' }"
+        >
+          경제 일반
+        </li>
       </ul>
     </div>
 
@@ -70,6 +82,8 @@ export default {
       estateNews: [],
       securitiesNews: [],
       personalNews: [],
+      GlobalEconomyNews: [],
+      EconomyNews: [],
       selectedCategory: 'finance',
       currentPage: 1,
       itemsPerPage: 10,
@@ -80,6 +94,8 @@ export default {
     this.getEstateNews();
     this.getSecuritiesNews();
     this.getPersonalNews();
+    this.getGlobalEconomyNews();
+    this.getEconomyNews();
   },
   computed: {
     filteredNews() {
@@ -91,6 +107,10 @@ export default {
         return this.securitiesNews;
       } else if (this.selectedCategory === 'personal') {
         return this.personalNews;
+      } else if (this.selectedCategory == 'globaleconomy') {
+        return this.GlobalEconomyNews;
+      } else if (this.selectedCategory == 'economy') {
+        return this.EconomyNews;
       }
     },
     totalPages() {
@@ -143,6 +163,28 @@ export default {
           headers: { Authorization: `Bearer ${token}` },
         });
         this.personalNews = res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getGlobalEconomyNews() {
+      const token = localStorage.getItem('access_token');
+      try {
+        const res = await axios.get('http://localhost:8080/news/globaleconomy', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.GlobalEconomyNews = res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getEconomyNews() {
+      const token = localStorage.getItem('access_token');
+      try {
+        const res = await axios.get('http://localhost:8080/news/economy', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        this.EconomyNews = res.data;
       } catch (err) {
         console.log(err);
       }

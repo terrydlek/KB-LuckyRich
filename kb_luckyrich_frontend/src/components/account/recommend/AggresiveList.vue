@@ -7,14 +7,16 @@
         <i class="fas fa-sync-alt"></i>
       </div>
     </h3>
+    <div class="recommendation-explanation">
+      <li>공격투자형 투자자는 높은 수익을 추구하며, 높은 리스크를 감수할 준비가 되어 있는 투자자입니다. 일반적으로 시장 변동성을 감수하며, 장기적으로 자산을 급격히 증대시키고자
+        합니다.</li>
+      <li>암호화폐는 높은 변동성과 잠재적인 고수익을 제공하는 자산으로, 전통적인 투자 자산에 비해 혁신적이고 새로운 투자 기회를 제공합니다.</li>
+      <li>공격투자형 투자자에게 암호화폐 상품은 그들의 투자 목표와 잘 맞아떨어집니다. 높은 수익 잠재력과 함께 시장의 다양한 변동성을 활용하여 자산을 급격히 증대시킬 수 있습니다.</li>
+    </div>
   </div>
   <section class="coin-tracker">
     <div class="search">
-      <input
-        type="text"
-        v-model="searchQuery"
-        placeholder="검색하고 싶은 종목명이 있나요?"
-      />
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
     </div>
     <div class="result">
       <span v-if="loading" class="loader">Loading...</span>
@@ -75,10 +77,7 @@
                 {{ (coin.quotes.KRW.volume_24h / 1000000000000).toFixed(2) }}T
               </td>
               <td>
-                <span
-                  v-if="coin.quotes.KRW.percent_change_24h < 0"
-                  style="color: #d32f2f; font-size: 15px"
-                >
+                <span v-if="coin.quotes.KRW.percent_change_24h < 0" style="color: #d32f2f; font-size: 15px">
                   ▼ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
                 </span>
                 <span v-else style="color: #388e3c; font-size: 15px">
@@ -87,10 +86,7 @@
               </td>
 
               <td>
-                <span
-                  v-if="coin.quotes.KRW.percent_change_7d < 0"
-                  style="color: #d32f2f; font-size: 15px"
-                >
+                <span v-if="coin.quotes.KRW.percent_change_7d < 0" style="color: #d32f2f; font-size: 15px">
                   ▼ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
                 </span>
                 <span v-else style="color: #388e3c; font-size: 15px">
@@ -105,12 +101,8 @@
           <button @click="currentPage--" :disabled="currentPage === 1">
             이전
           </button>
-          <button
-            v-for="page in pageNumbers"
-            :key="page"
-            @click="currentPage = page"
-            :class="{ active: currentPage === page }"
-          >
+          <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
+            :class="{ active: currentPage === page }">
             {{ page }}
           </button>
           <button @click="currentPage++" :disabled="currentPage === totalPages">
@@ -147,7 +139,7 @@ const itemsPerPage = 10;
 const pageRange = 10; // 한번에 보여줄 페이지 번호 개수
 
 const refreshPage = () => {
-  console.log('새로고침 아이콘 클릭됨!');
+  console.log('Refresh page.');
   window.location.reload();
 };
 
@@ -260,13 +252,13 @@ h3 {
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-bottom: 0;
 }
 
 .coins {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin-bottom: 20px; */
 }
 
 .coin-tracker {
@@ -285,7 +277,10 @@ h3 {
 .search {
   width: 80%;
   flex-grow: 1;
-  margin: 20px auto;
+  margin: 0 auto;
+  /* 타이틀과 검색창 사이 여백 제거 */
+  margin-bottom: 20px;
+  /* 필요시 검색창과 다른 요소 간 여백을 남겨둠 */
 }
 
 input[type='text'] {
@@ -297,14 +292,14 @@ input[type='text'] {
 }
 
 .test-reset-button {
-  margin-top: 20px;
-  /* margin-left: 850px; */
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -334,7 +329,7 @@ tr:hover {
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -344,7 +339,7 @@ tr:hover {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -355,9 +350,9 @@ tr:hover {
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination button:disabled {
@@ -368,12 +363,14 @@ tr:hover {
 .refresh-icon {
   font-size: 24px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 2px;
   color: #3498db;
   transition: color 0.3s, transform 0.2s ease;
-  display: inline-block; /* 클릭할 수 있도록 영역 확장 */
+  display: inline-block;
+  /* 클릭할 수 있도록 영역 확장 */
   position: relative;
-  z-index: 1000; /* 다른 요소 위에 위치 */
+  z-index: 1000;
+  /* 다른 요소 위에 위치 */
 }
 
 .refresh-icon:hover .refresh-icon {
@@ -382,11 +379,19 @@ tr:hover {
 }
 
 a {
-    color: #6c63ff;
-    text-decoration: none;
+  color: #6c63ff;
+  text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+.recommendation-explanation {
+  font-size: 16px;
+  color: #555;
+  /* 설명 텍스트 색상 */
+  margin-bottom: 20px;
+  /* 설명과 검색창 사이 여백 */
 }
 </style>

@@ -1,11 +1,25 @@
 <template>
   <div class="stocks">
-
     <h3>
       당신의 투자 성향은 적극 투자형입니다. 주식 상품 TOP 100을 추천해드릴게요.
+      <div @click="refreshPage" class="refresh-icon">
+        <i class="fas fa-sync-alt"></i>
+      </div>
     </h3>
 
-    <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
+    <div class="recommendation-explanation">
+      <li>적극 투자형 투자자는 높은 수익을 추구하며,위험을 감수할 준비가 되어 있는 투자자입니다. 주식 시장의 기회를 적극적으로 활용하여 장기적인 성장 잠재력에 투자하는
+        것을 선호합니다.</li>
+
+      <li>주식은 높은 수익 잠재력을 가지고 있으며, 다양한 산업과 기업에 분산 투자할 수 있는 기회를 제공합니다. 특히 TOP 100 주식은 장기적으로 안정적인
+        성장을 기대할 수 있습니다.</li>
+
+      <li>주식 상품은 높은 수익률을 추구하는 데 매우 적합합니다. 시장의 변동성을 활용해 적극적으로 매매를 진행할 수 있는 기회를 제공하며, 장기적으로 자산 증대를 도모할 수
+        있습니다.</li>
+    </div>
+    <div class="search">
+      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
+    </div>
 
     <table v-if="filteredStocks.length" class="stock-table">
       <thead>
@@ -25,28 +39,35 @@
       </thead>
       <tbody>
         <tr v-for="(stock, index) in paginatedStocks" :key="index">
-          <td><a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{ stock.stockName }}</a></td>
+          <td>
+            <a :href="`/luckyrich/recommend/active/${stock.stockCode}`">{{
+              stock.stockName
+              }}</a>
+          </td>
           <td>{{ stock.stockPrice }}</td>
           <td>
-            <span v-if="stock.comparePre.includes('하락')" style="color: #d32f2f; font-size: 15px;">
+            <span v-if="stock.comparePre.includes('하락')" style="color: #d32f2f; font-size: 15px">
               ▼ {{ stock.comparePre.replace('하락', '-') }}
             </span>
-            <span v-else-if="stock.comparePre.includes('보합')" style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.comparePre.replace('보합', '+') }}
+            <span v-else-if="stock.comparePre.includes('보합')" style="font-size: 15px">
+              {{ stock.comparePre.replace('보합', '') }}
             </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
+            <span v-else style="color: #388e3c; font-size: 15px">
               ▲ {{ stock.comparePre.replace('상승', '+') }}
             </span>
-
           </td>
 
-
           <td>
-            <span v-if="stock.fluctuationRate.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
+            <span v-if="stock.fluctuationRate !== '0.00%' && stock.fluctuationRate.startsWith('-')"
+              style="color: #d32f2f; font-size: 15px">
               ▼ {{ stock.fluctuationRate }}
             </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
+            <span v-else-if="stock.fluctuationRate !== '0.00%' && !stock.fluctuationRate.startsWith('-')"
+              style="color: #388e3c; font-size: 15px">
               ▲ {{ stock.fluctuationRate }}
+            </span>
+            <span v-else>
+              0%
             </span>
           </td>
 
@@ -55,24 +76,9 @@
           <td>{{ stock.salesAmount }}</td>
           <!-- <td>{{ stock.operatingProfit }}</td> -->
           <td>{{ stock.earningsPerShare }}</td>
-          <td>
-            <span v-if="stock.per.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.per }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.per }}
-            </span>
-          </td>
+          <td>{{ stock.per }}</td>
 
-          <td>
-            <span v-if="stock.roe.startsWith('-')" style="color: #d32f2f; font-size: 15px;">
-              ▼ {{ stock.roe }}
-            </span>
-            <span v-else style="color: #388e3c; font-size: 15px;">
-              ▲ {{ stock.roe }}
-            </span>
-          </td>
-
+          <td>{{ stock.roe }}</td>
         </tr>
       </tbody>
     </table>
@@ -87,16 +93,18 @@
         다음
       </button>
     </div>
-
-    <button @click="resetTest" class="reset-test-button">
-      테스트 다시하기
-    </button>
+    <center>
+      <button @click="resetTest" class="reset-test-button">
+        테스트 다시하기
+      </button>
+    </center>
 
     <p v-if="stocks.length && !filteredStocks.length">
       찾으시는 종목명은 TOP 100에 없습니다.
     </p>
     <p v-else-if="!stocks.length">주식 데이터를 불러오는 중입니다...</p>
   </div>
+
 </template>
 
 <script setup>
@@ -110,6 +118,11 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const pageRange = 10; // 한번에 보여줄 페이지 번호 개수
+
+const refreshPage = () => {
+  console.log('Refresh page.');
+  window.location.reload();
+};
 
 // 검색된 종목 리스트
 const filteredStocks = computed(() => {
@@ -211,15 +224,25 @@ watch(searchQuery, () => {
   align-items: center;
 }
 
+.search {
+  width: 100%;
+  display: flex;
+  /* flex를 사용해 자식 요소 가운데 정렬 */
+  justify-content: center;
+  /* 수평 가운데 정렬 */
+  margin: 0 auto;
+  /* margin-bottom: 20px; */
+}
+
 .reset-test-button {
-  margin-top: 20px;
-  /* margin-left: 850px; */
+  margin-top: 30px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -250,15 +273,15 @@ watch(searchQuery, () => {
 }
 
 input[type='text'] {
-  margin: 10px 0;
   padding: 10px;
-  width: 50%;
+  width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 16px;
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -268,7 +291,7 @@ input[type='text'] {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -279,9 +302,9 @@ input[type='text'] {
 
 .pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination button:disabled {
@@ -289,7 +312,7 @@ input[type='text'] {
   cursor: not-allowed;
 }
 
-input[type="text"] {
+input[type='text'] {
   margin: 10px 0;
   padding: 5px;
   width: 50%;
@@ -300,18 +323,35 @@ button {
   padding: 5px 10px;
 }
 
-button.active {
+.refresh-icon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 2px;
+  color: #3498db;
+  transition: color 0.3s, transform 0.2s ease;
+  display: inline-block;
+  /* 클릭할 수 있도록 영역 확장 */
+  position: relative;
+  z-index: 1000;
+  /* 다른 요소 위에 위치 */
+}
+
+.refresh-icon:hover .refresh-icon {
+  color: #2980b9;
+  transform: scale(1.2);
+}
+
+/* button.active {
   font-weight: bold;
   background-color: #4caf50;
   color: white;
-}
+}*/
 
-a {
-    color: #6c63ff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
+.recommendation-explanation {
+  font-size: 16px;
+  color: #555;
+  /* 설명 텍스트 색상 */
+  margin-bottom: 20px;
+  /* 설명과 검색창 사이 여백 */
 }
 </style>

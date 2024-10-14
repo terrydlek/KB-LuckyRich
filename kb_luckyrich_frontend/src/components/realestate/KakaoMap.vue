@@ -66,7 +66,7 @@ export default {
             selectedRegion: '서울특별시',
             markers: [],
             estate: [],
-            estateData: [], 
+            estateData: [],
             isLoading: true,
             isLoadingOtherRegions: false,
             regionCoordinates: {
@@ -91,7 +91,7 @@ export default {
     },
     mounted() {
         if (!localStorage.getItem('initialLoadDone')) {
-            this.isLoading = true; 
+            this.isLoading = true;
             localStorage.setItem('initialLoadDone', 'true');
         } else {
             this.isLoading = false;
@@ -121,7 +121,7 @@ export default {
         initKakaoMap() {
             const mapContainer = document.getElementById('map');
             const mapOptions = {
-                center: new kakao.maps.LatLng(37.5663, 126.9779), 
+                center: new kakao.maps.LatLng(37.5663, 126.9779),
                 level: 4,
             };
             this.map = new kakao.maps.Map(mapContainer, mapOptions);
@@ -132,8 +132,8 @@ export default {
             }
 
             const token = localStorage.getItem('access_token');
-             axios.get(`http://localhost:8080/realestate/?region=${region}`, {
-                 //axios.get(`http://localhost:8080/realestate/?region=서울특별시`, {
+            axios.get(`http://localhost:8080/realestate/?region=${region}`, {
+                //axios.get(`http://localhost:8080/realestate/?region=서울특별시`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -148,7 +148,7 @@ export default {
                         region
                     }));
                     this.estate = regionEstateData;
-                    this.estateData = [...this.estateData, ...regionEstateData]; 
+                    this.estateData = [...this.estateData, ...regionEstateData];
                     this.createMarkers();
                 })
                 .catch((error) => {
@@ -203,7 +203,7 @@ export default {
             otherRegions.forEach((region, index) => {
                 setTimeout(() => {
                     this.fetchRealEstateData(region);
-                }, index * 2000); 
+                }, index * 2000);
             });
         },
         getCoordinatesFromAddress(address, callback) {
@@ -224,28 +224,28 @@ export default {
             const region = this.selectedRegion;
             const coords = this.regionCoordinates[region];
             const moveLatLon = new kakao.maps.LatLng(coords.lat, coords.lng);
-            this.map.setCenter(moveLatLon); 
+            this.map.setCenter(moveLatLon);
 
             this.addCityHallMarker(coords, region);
 
         },
         addCityHallMarker(coords, region) {
             const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; // 파란색 별 모양 마커 이미지
-            const imageSize = new kakao.maps.Size(40, 35); 
+            const imageSize = new kakao.maps.Size(40, 35);
             const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             const markerPosition = new kakao.maps.LatLng(coords.lat, coords.lng);
             const marker = new kakao.maps.Marker({
                 position: markerPosition,
                 image: markerImage,
-                title: region + " 시청/도청", 
+                title: region + " 시청/도청",
             });
             marker.setMap(this.map);
         },
         openModal(place) {
             const relatedTransactions = this.estateData.filter(item => item.address === place.address);
             console.log("Related Transactions", relatedTransactions);
-            
+
             const priceInfo = relatedTransactions.map(item => ({
                 floor: item.floor,
                 price: item.price,
@@ -334,17 +334,21 @@ export default {
 
 .region-panel {
     position: absolute;
-    left: 20px; /* 지도 왼쪽에서 약간의 여백 */
-    top: 20px;  /* 지도 상단에서 약간의 여백 */
+    left: 20px;
+    /* 지도 왼쪽에서 약간의 여백 */
+    top: 20px;
+    /* 지도 상단에서 약간의 여백 */
     z-index: 1000;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.9); /* 살짝 투명한 흰색 배경 */
+    background-color: rgba(255, 255, 255, 0.9);
+    /* 살짝 투명한 흰색 배경 */
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .region-panel select {
-    background-color: rgba(255, 255, 255, 0); /* 살짝 투명한 흰색 */
+    background-color: rgba(255, 255, 255, 0);
+    /* 살짝 투명한 흰색 */
     border: none;
     padding: 10px;
     border-radius: 5px;
@@ -355,7 +359,8 @@ export default {
 
 .region-panel select:focus {
     outline: none;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* 선택 시 강조 효과 */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    /* 선택 시 강조 효과 */
 }
 
 #map {

@@ -1,16 +1,16 @@
 <template lang="">
-  <div>
-    <investmentPreferenceTest />
-  </div>
-</template>
+    <div>
+      <investmentPreferenceTest />
+    </div>
+  </template>
 
 <script>
 import investmentPreferenceTest from '@/views/account/investmentPreferenceTest.vue';
 
 export default {
-  components: {
-    investmentPreferenceTest,
-  },
+    components: {
+        investmentPreferenceTest,
+    },
 };
 </script>
 

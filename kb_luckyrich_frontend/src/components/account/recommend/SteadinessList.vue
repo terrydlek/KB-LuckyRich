@@ -1,9 +1,15 @@
 <template>
   <div class="deposit-container">
-
     <h3 class="title">
       당신의 투자 성향은 안정형입니다. 예적금 상품을 추천해드릴게요.
     </h3>
+    
+    <div class="recommendation-explanation">
+      <li>안정형 투자자는 자산의 안전성을 최우선으로 고려하며, 큰 손실을 피하는 것을 중요시합니다. 이들은 시장의 변동성에 민감하고, 안정적인 수익을 선호합니다.</li>
+      <li>예적금 상품은 일반적으로 안전하고, 예측 가능한 수익을 제공합니다. 이자는 안정적인 형태로 지급되며, 원금 손실의 위험이 없습니다.</li>
+      <li>안정형 투자자에게 예적금은 리스크를 최소화하면서도 안정적인 자산 증대를 목표로 하는 최적의 선택입니다.</li>
+    </div>
+
     <div class="search-container">
       <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 상품명이 있나요?" class="search-input" />
     </div>
@@ -165,7 +171,6 @@ watch(searchQuery, () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 .title {
@@ -175,14 +180,14 @@ watch(searchQuery, () => {
 }
 
 .test-reset-button {
-  margin-top: 20px;
+  margin-top: 30px;
   /* margin-left: 850px; */
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   background-color: #d32f2f;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -206,13 +211,18 @@ watch(searchQuery, () => {
 .deposit-table {
   width: 100%;
   border-collapse: collapse;
+  /* 테두리 합치기 */
   margin-bottom: 20px;
+  border: 1px solid #ddd;
+  /* 테이블 전체 테두리 */
 }
 
 .deposit-table th,
 .deposit-table td {
   padding: 12px;
   text-align: left;
+  border: 1px solid #ddd;
+  /* 각 셀에 테두리 추가 */
 }
 
 .deposit-table th {
@@ -221,6 +231,7 @@ watch(searchQuery, () => {
 
 .deposit-table tr:nth-child(even) {
   background-color: #f8f8f8;
+  /* 짝수 행 배경색 */
 }
 
 .deposit-link {
@@ -242,20 +253,20 @@ watch(searchQuery, () => {
   margin: 0 5px;
   padding: 5px 10px;
   border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  background-color: #e4e4e4;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.pagination-button:hover:not(:disabled) {
+/* .pagination-button:hover:not(:disabled) {
   background-color: #e8e8e8;
-}
+} */
 
-.pagination-button.active {
+.pagination button.active {
   font-weight: bold;
-  background-color: #4caf50;
+  background-color: #3498db;
   color: white;
-  border-color: #4caf50;
+  border-color: #3498db;
 }
 
 .pagination-button:disabled {
@@ -272,6 +283,11 @@ watch(searchQuery, () => {
   color: #666;
 }
 
+.refresh-icon:hover .refresh-icon {
+  color: #2980b9;
+  transform: scale(1.2);
+}
+
 a {
   color: #6c63ff;
   text-decoration: none;
@@ -279,5 +295,13 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.recommendation-explanation {
+  font-size: 16px;
+  color: #555;
+  /* 설명 텍스트 색상 */
+  margin-bottom: 20px;
+  /* 설명과 검색 */
 }
 </style>
