@@ -1,5 +1,4 @@
 <template>
-  <button @click="goBack" class="back-button">목록으로</button>
   <div v-if="coinData">
     <h1>{{ coinData.name }}({{ coinData.symbol }}) Metrics</h1>
 
@@ -26,6 +25,7 @@
       <h2>{{ coinData.name }} 일일 가격 차트</h2>
       <CoinChart :coinId="coinData.id" />
     </div>
+    <button @click="goBack" class="back-button">목록으로</button>
   </div>
   <div v-else>Loading...</div>
 </template>
@@ -72,6 +72,7 @@ onMounted(() => {
 
 <style scoped>
 .back-button {
+  align-items: center;
   width: 10%;
   color: white;
   border: none;
@@ -80,7 +81,7 @@ onMounted(() => {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .back-button:hover {

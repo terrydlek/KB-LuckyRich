@@ -71,7 +71,7 @@
       <div class="testimonials-grid">
         <div class="testimonial">
           <p>
-            "LuckyRich의 혁신적인 투자 전략 덕분에<br />
+            "Lucky Rich의 혁신적인 투자 전략 덕분에<br />
             제 자산이 꾸준히 성장하고 있어요.<br />
             맞춤형 서비스로 훌륭한 포트폴리오를 구성했죠.
           </p>
@@ -89,8 +89,9 @@
         </div>
         <div class="testimonial">
           <p>
-            "처음엔 온라인 투자 플랫폼에 대해 의심이 컸지만, LuckyRich의 보안
-            시스템에 신뢰가 생겼어요. <br />모든 서비스가 기대 이상이었습니다.
+            "처음엔 온라인 투자 플랫폼에 대해 의심이 컸지만, <br />Lucky Rich의
+            보안 시스템에 신뢰가 생겼어요. <br />모든 서비스가 기대
+            이상이었습니다.
           </p>
           <hr />
           <h4>- 이정훈, 41세</h4>
