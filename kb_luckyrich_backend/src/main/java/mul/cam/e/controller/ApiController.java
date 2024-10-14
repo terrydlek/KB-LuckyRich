@@ -130,7 +130,7 @@ public class ApiController {
         String redirectUrl = "http://localhost:5173/luckyrich/login?access_token=";
         response.sendRedirect(redirectUrl + jwtToken + "&" +
                 "account_num=" + account_num + "&" +
-                "refresh_token=" + refreshToken +
+                "refresh_token=" + refreshToken + "&" +
                 "user_role=" + role);
 
 //        Map<String, Object> responseBody = new HashMap<>();
