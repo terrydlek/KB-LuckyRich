@@ -16,9 +16,11 @@ export function handleNaverLoginCallback() {
                 const accessToken = res.data.access_token;
                 const refreshToken = res.data.refresh_token;
                 const accountNum = res.data.account_num;
+                const userRole = res.data.user_role;
                 // console.log(accountNum)
                 localStorage.setItem('access_token', accessToken);
                 localStorage.setItem('refresh_token', refreshToken);
+                localStorage.setItem('user_role', userRole);
 
                 authStore.setLoggedIn(true); // 로그인 상태 업데이트
                 // console.log('NaverAccess Token:', accessToken);
