@@ -31,7 +31,7 @@ public interface MyAssetDao {
 
     int totalStock(int userId);
 
-    int totalRealestate(int userId);
+    long totalRealestate(int userId);
 
     int totalCar(int userId);
 

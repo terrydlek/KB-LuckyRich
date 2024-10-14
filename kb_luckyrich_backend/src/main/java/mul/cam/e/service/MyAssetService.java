@@ -87,7 +87,7 @@ public class MyAssetService {
         return totalValue;
     }
 
-    public int totalRealestate(int userId) {
+    public long totalRealestate(int userId) {
         return myAssetDao.totalRealestate(userId);
     }
 

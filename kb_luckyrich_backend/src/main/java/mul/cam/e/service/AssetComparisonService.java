@@ -36,7 +36,7 @@ public class AssetComparisonService {
 //                double carValue = myAssetDao.getCarByUserId(peerUserId);
                 int carValue = myAssetService.totalCar(peerUserId);
 //                double realEstateValue = myAssetDao.getRealestateByUserId(peerUserId);
-                int realEstateValue = myAssetService.totalRealestate(peerUserId);
+                long realEstateValue = myAssetService.totalRealestate(peerUserId);
 
                 log.info("Peer user {} assets - Bank: {}, Stock: {}, Car: {}, RealEstate: {}",
                         peerUserId, bankBalance, stockTotal, carValue, realEstateValue);
