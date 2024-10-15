@@ -8,7 +8,7 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import googleLoginImage from '@/assets/images/googleKorean.png';
+import googleLoginImage from '@/assets/images/GoogleLoginB.png';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -61,7 +61,7 @@ button {
 }
 
 button img {
-    width: 200px;
+    width: 100%;
     height: 50px;
     border-radius: 10px;
 }

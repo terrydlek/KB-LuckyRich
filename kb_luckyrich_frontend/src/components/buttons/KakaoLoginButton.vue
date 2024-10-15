@@ -8,7 +8,7 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import kakaoLoginImage from '@/assets/images/kakao-login.png';
+import kakaoLoginImage from '@/assets/images/KakaoLogin.png';
 import axios from 'axios';
 
 function loginWithKakao() {
@@ -55,12 +55,12 @@ button {
   background: none;
   padding: 0;
   cursor: pointer;
-  
 }
 
 button img {
   /* 이미지 크기 조정 */
-  width: 200px;
-  height: 48px;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
 }
 </style>

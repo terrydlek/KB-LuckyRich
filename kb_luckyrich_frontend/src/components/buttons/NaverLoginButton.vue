@@ -62,7 +62,8 @@ button {
 }
 
 button img {
-    width: 200px;
-    height: 48px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
 }
 </style>
