@@ -8,15 +8,29 @@
       </div>
     </h3>
     <div class="recommendation-explanation">
-      <li>공격투자형 투자자는 높은 수익을 추구하며, 높은 리스크를 감수할 준비가 되어 있는 투자자입니다. 일반적으로 시장 변동성을 감수하며, 장기적으로 자산을 급격히 증대시키고자
-        합니다.</li>
-      <li>암호화폐는 높은 변동성과 잠재적인 고수익을 제공하는 자산으로, 전통적인 투자 자산에 비해 혁신적이고 새로운 투자 기회를 제공합니다.</li>
-      <li>공격투자형 투자자에게 암호화폐 상품은 그들의 투자 목표와 잘 맞아떨어집니다. 높은 수익 잠재력과 함께 시장의 다양한 변동성을 활용하여 자산을 급격히 증대시킬 수 있습니다.</li>
+      <li>
+        공격투자형 투자자는 높은 수익을 추구하며, 높은 리스크를 감수할 준비가
+        되어 있는 투자자입니다. 일반적으로 시장 변동성을 감수하며, 장기적으로
+        자산을 급격히 증대시키고자 합니다.
+      </li>
+      <li>
+        암호화폐는 높은 변동성과 잠재적인 고수익을 제공하는 자산으로, 전통적인
+        투자 자산에 비해 혁신적이고 새로운 투자 기회를 제공합니다.
+      </li>
+      <li>
+        공격투자형 투자자에게 암호화폐 상품은 그들의 투자 목표와 잘
+        맞아떨어집니다. 높은 수익 잠재력과 함께 시장의 다양한 변동성을 활용하여
+        자산을 급격히 증대시킬 수 있습니다.
+      </li>
     </div>
   </div>
   <section class="coin-tracker">
     <div class="search">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 종목명이 있나요?" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 종목명이 있나요?"
+      />
     </div>
     <div class="result">
       <span v-if="loading" class="loader">Loading...</span>
@@ -77,7 +91,10 @@
                 {{ (coin.quotes.KRW.volume_24h / 1000000000000).toFixed(2) }}T
               </td>
               <td>
-                <span v-if="coin.quotes.KRW.percent_change_24h < 0" style="color: #d32f2f; font-size: 15px">
+                <span
+                  v-if="coin.quotes.KRW.percent_change_24h < 0"
+                  style="color: #d32f2f; font-size: 15px"
+                >
                   ▼ {{ coin.quotes.KRW.percent_change_24h.toFixed(2) }}%
                 </span>
                 <span v-else style="color: #388e3c; font-size: 15px">
@@ -86,7 +103,10 @@
               </td>
 
               <td>
-                <span v-if="coin.quotes.KRW.percent_change_7d < 0" style="color: #d32f2f; font-size: 15px">
+                <span
+                  v-if="coin.quotes.KRW.percent_change_7d < 0"
+                  style="color: #d32f2f; font-size: 15px"
+                >
                   ▼ {{ coin.quotes.KRW.percent_change_7d.toFixed(2) }}%
                 </span>
                 <span v-else style="color: #388e3c; font-size: 15px">
@@ -101,8 +121,12 @@
           <button @click="currentPage--" :disabled="currentPage === 1">
             이전
           </button>
-          <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-            :class="{ active: currentPage === page }">
+          <button
+            v-for="page in pageNumbers"
+            :key="page"
+            @click="currentPage = page"
+            :class="{ active: currentPage === page }"
+          >
             {{ page }}
           </button>
           <button @click="currentPage++" :disabled="currentPage === totalPages">
@@ -391,7 +415,7 @@ a:hover {
   font-size: 16px;
   color: #555;
   /* 설명 텍스트 색상 */
-  margin-bottom: 20px;
+  margin: 20px 0;
   /* 설명과 검색창 사이 여백 */
 }
 </style>

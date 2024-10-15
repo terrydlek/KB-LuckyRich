@@ -2,9 +2,10 @@
   <div class="lucky-rich-page">
     <section class="hero-section">
       <div class="hero-overlay">
-        <h1 class="hero-title">Lucky Rich에 오신 것을 환영합니다.</h1>
-        <p class="hero-subtitle">자산 관리의 자유를 위한 모든 것</p>
-
+        <div class="fade-in">
+          <h1 class="hero-title">Lucky Rich에 오신 것을 환영합니다.</h1>
+          <p class="hero-subtitle">자산 관리의 자유를 위한 모든 것</p>
+        </div>
         <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">
           세상에 단 하나뿐인 자산 관리 시작하기
         </button>
@@ -168,6 +169,10 @@ h2 {
   margin-bottom: 20px;
 }
 
+.login-button {
+  font-size: 1.2rem;
+}
+
 .cta-button {
   background-color: #f8b400;
   color: #fff;
@@ -287,5 +292,20 @@ h2 {
 
 .cta-button-large:hover {
   background-color: #e69c00;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

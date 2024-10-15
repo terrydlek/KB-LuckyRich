@@ -4,13 +4,28 @@
       당신의 투자 성향은 위험중립형입니다. 재간접 펀드 상품을 추천해드릴게요.
     </h2>
     <div class="recommendation-explanation">
-      <li>위험 중립형 투자자는 자산의 안정성과, 수익을 동시에 추구하는 경향이 있습니다.
-        큰 손실을 감수하기보다는, 안정적인 자산 관리를 통해 꾸준한 성과를 내는 것을 목표로 합니다.</li> 
-      <li>재간접 펀드는 여러 자산에 분산 투자할 수 있는 구조로, 전문 운용사가 자산 배분을 담당합니다. 리스크를 분산시키고 안정적인 수익을 제공하므로, 적합한 선택입니다.</li> 
-      <li>시장 상황에 따라 운용사가 적극적으로 자산 배분 전략을 수정해, 투자자들이 일일이 자산을 관리하지 않아도 되는 장점이 있습니다.</li>
+      <li>
+        위험 중립형 투자자는 자산의 안정성과, 수익을 동시에 추구하는 경향이
+        있습니다. 큰 손실을 감수하기보다는, 안정적인 자산 관리를 통해 꾸준한
+        성과를 내는 것을 목표로 합니다.
+      </li>
+      <li>
+        재간접 펀드는 여러 자산에 분산 투자할 수 있는 구조로, 전문 운용사가 자산
+        배분을 담당합니다. 리스크를 분산시키고 안정적인 수익을 제공하므로,
+        적합한 선택입니다.
+      </li>
+      <li>
+        시장 상황에 따라 운용사가 적극적으로 자산 배분 전략을 수정해, 투자자들이
+        일일이 자산을 관리하지 않아도 되는 장점이 있습니다.
+      </li>
     </div>
     <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 펀드명이 있나요?" class="search-input" />
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="검색하고 싶은 펀드명이 있나요?"
+        class="search-input"
+      />
     </div>
     <div v-if="loading" class="loading">데이터를 불러오는 중...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -30,24 +45,34 @@
           <tr v-for="fund in paginatedFunds" :key="fund.url">
             <td>{{ fund.country }}</td>
             <td>
-              <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(
-                fund.url
-              )}`" class="fund-link">{{ fund.name }}</a>
+              <a
+                :href="`/luckyrich/recommend/funds/${encodeURIComponent(
+                  fund.url
+                )}`"
+                class="fund-link"
+                >{{ fund.name }}</a
+              >
             </td>
             <td>{{ formatNumber(fund.lastPrice) }}</td>
-            <td :class="{
-              'text-green-500': parseFloat(fund.changePercent) > 0,
-              'text-red-500': parseFloat(fund.changePercent) < 0,
-            }">
-              <span v-if="parseFloat(fund.changePercent) > 0" style="font-size: 15px">
+            <td
+              :class="{
+                'text-green-500': parseFloat(fund.changePercent) > 0,
+                'text-red-500': parseFloat(fund.changePercent) < 0,
+              }"
+            >
+              <span
+                v-if="parseFloat(fund.changePercent) > 0"
+                style="font-size: 15px"
+              >
                 ▲ {{ fund.changePercent }}
               </span>
-              <span v-else-if="parseFloat(fund.changePercent) < 0" style="font-size: 15px">
+              <span
+                v-else-if="parseFloat(fund.changePercent) < 0"
+                style="font-size: 15px"
+              >
                 ▼ {{ fund.changePercent }}
               </span>
-              <span v-else style="font-size: 15px">
-                0%
-              </span>
+              <span v-else style="font-size: 15px"> 0% </span>
             </td>
             <td>{{ formatNumber(fund.totalAssets) }}</td>
             <!-- <td>{{ fund.lastUpdate }}</td> -->
@@ -56,14 +81,27 @@
       </table>
 
       <div v-if="filteredFunds.length && totalPages > 1" class="pagination">
-        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
           이전
         </button>
-        <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-          :class="{ active: currentPage === page }" class="pagination-button">
+        <button
+          v-for="page in pageNumbers"
+          :key="page"
+          @click="currentPage = page"
+          :class="{ active: currentPage === page }"
+          class="pagination-button"
+        >
           {{ page }}
         </button>
-        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
           다음
         </button>
       </div>
@@ -344,6 +382,6 @@ a:hover {
 .recommendation-explanation {
   font-size: 16px;
   color: #555; /* 설명 텍스트 색상 */
-  margin-bottom: 20px; /* 설명과 검색창 사이 여백 */
+  margin: 20px 0; /* 설명과 검색창 사이 여백 */
 }
 </style>

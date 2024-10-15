@@ -5,17 +5,30 @@
     </h2>
 
     <div class="recommendation-explanation">
-      <li>안정추구형 투자자는 안정적인 수익을 원하면서도, 어느 정도의 리스크를 감수할 준비가 되어 있는 사람들입니다. 주식보다 변동성이 적은 자산을 선호, 장기적 자산 증대를 목표합니다.
+      <li>
+        안정추구형 투자자는 안정적인 수익을 원하면서도, 어느 정도의 리스크를
+        감수할 준비가 되어 있는 사람들입니다. 주식보다 변동성이 적은 자산을
+        선호, 장기적 자산 증대를 목표합니다.
       </li>
-      <li>채권형 펀드는 주식보다 위험이 낮고, 일반적으로 안정적인 수익을 제공합니다. 이자 수익을 통해 자산을 증대시키는 데 적합하며, 시장의 변동성에 비교적 덜 영향을 받습니다.</li>
-      <li>안정추구형 투자자에게 채권형 펀드는 안정성과 수익성을 동시에 갖춘 상품으로, 포트폴리오의 리스크를 줄이면서 안정적인 수익을 추구할 수 있는 좋은 선택입니다.</li>
-
-
+      <li>
+        채권형 펀드는 주식보다 위험이 낮고, 일반적으로 안정적인 수익을
+        제공합니다. 이자 수익을 통해 자산을 증대시키는 데 적합하며, 시장의
+        변동성에 비교적 덜 영향을 받습니다.
+      </li>
+      <li>
+        안정추구형 투자자에게 채권형 펀드는 안정성과 수익성을 동시에 갖춘
+        상품으로, 포트폴리오의 리스크를 줄이면서 안정적인 수익을 추구할 수 있는
+        좋은 선택입니다.
+      </li>
     </div>
     <section class="fund-tracker">
       <div class="controls">
         <div class="search">
-          <input type="text" v-model="searchQuery" placeholder="검색하고 싶은 펀드명이 있나요?" />
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="검색하고 싶은 펀드명이 있나요?"
+          />
         </div>
       </div>
       <div class="result">
@@ -37,26 +50,34 @@
               <tr v-for="fund in paginatedFunds" :key="fund.url">
                 <td>{{ fund.country }}</td>
                 <td>
-                  <a :href="`/luckyrich/recommend/funds/${encodeURIComponent(
-                    fund.url
-                  )}`">{{ fund.name }}</a>
+                  <a
+                    :href="`/luckyrich/recommend/funds/${encodeURIComponent(
+                      fund.url
+                    )}`"
+                    >{{ fund.name }}</a
+                  >
                 </td>
                 <td>{{ formatNumber(fund.lastPrice) }}</td>
-                <td :class="{
-                  'text-green-500': parseFloat(fund.changePercent) > 0,
-                  'text-red-500': parseFloat(fund.changePercent) < 0,
-                }">
-                  <span v-if="parseFloat(fund.changePercent) > 0" style="font-size: 15px">
+                <td
+                  :class="{
+                    'text-green-500': parseFloat(fund.changePercent) > 0,
+                    'text-red-500': parseFloat(fund.changePercent) < 0,
+                  }"
+                >
+                  <span
+                    v-if="parseFloat(fund.changePercent) > 0"
+                    style="font-size: 15px"
+                  >
                     ▲ {{ fund.changePercent }}
                   </span>
-                  <span v-else-if="parseFloat(fund.changePercent) < 0" style="font-size: 15px">
+                  <span
+                    v-else-if="parseFloat(fund.changePercent) < 0"
+                    style="font-size: 15px"
+                  >
                     ▼ {{ fund.changePercent }}
                   </span>
-                  <span v-else style="font-size: 15px">
-                    0%
-                  </span>
+                  <span v-else style="font-size: 15px"> 0% </span>
                 </td>
-
 
                 <td>{{ formatNumber(fund.totalAssets) }}</td>
                 <!-- <td>{{ fund.lastUpdate }}</td> -->
@@ -68,11 +89,18 @@
             <button @click="currentPage--" :disabled="currentPage === 1">
               이전
             </button>
-            <button v-for="page in pageNumbers" :key="page" @click="currentPage = page"
-              :class="{ active: currentPage === page }">
+            <button
+              v-for="page in pageNumbers"
+              :key="page"
+              @click="currentPage = page"
+              :class="{ active: currentPage === page }"
+            >
               {{ page }}
             </button>
-            <button @click="currentPage++" :disabled="currentPage === totalPages">
+            <button
+              @click="currentPage++"
+              :disabled="currentPage === totalPages"
+            >
               다음
             </button>
           </div>
@@ -340,7 +368,7 @@ a:hover {
   font-size: 16px;
   color: #555;
   /* 설명 텍스트 색상 */
-  margin-bottom: 20px;
+  margin: 20px 0;
   /* 설명과 검색창 사이 여백 */
 }
 </style>

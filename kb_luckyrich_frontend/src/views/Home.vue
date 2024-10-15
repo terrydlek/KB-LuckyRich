@@ -37,11 +37,15 @@
         />
       </div>
     </main>
+    <button @click="goToAsset" class="asset-button">
+      더 많은 자산 정보 보러 가기
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import totalChart from '@/components/account/chart/totalChart.vue';
 import goalChart from '@/components/account/chart/goalChart.vue';
 import assetGraph from '@/components/account/chart/assetGraph.vue';
@@ -49,7 +53,12 @@ import accountBookChart from '@/components/account/chart/accountBookChart.vue';
 import assetcomparison from '@/components/account/chart/assetComparison.vue';
 import consumptionstatus from '@/components/account/chart/consumptionstatus.vue';
 
-const headingText = '효율적인 자산 관리로 더 나은 미래를 설계하세요'.split('');
+const headingText = '효율적인 자산 관리로 더 나은 미래를 설계하세요.'.split('');
+const router = useRouter();
+
+const goToAsset = () => {
+  router.push({ name: 'asset' });
+};
 
 // const charts = [
 //   totalChart,
@@ -99,6 +108,10 @@ const headingText = '효율적인 자산 관리로 더 나은 미래를 설계�
   margin-top: 10px;
   font-size: 14px;
   color: #666;
+}
+
+.main-content {
+  margin: auto;
 }
 
 .progress-section ul {
@@ -168,5 +181,12 @@ const headingText = '효율적인 자산 관리로 더 나은 미래를 설계�
   display: inline-block;
   opacity: 0;
   animation: fadeIn 0.3s forwards;
+}
+
+.asset-button {
+  margin: auto;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  width: 27%;
 }
 </style>

@@ -3,73 +3,87 @@
     <div class="cards-container">
       <button @click="prevCard">←</button>
       <div class="accounts">
-        <div class="card" v-if="currentCard" :class="{ active: selectedAccount === currentCard.accountNumber }"
-          :style="getCardStyle(currentCard.bankName)">
+        <div
+          class="card"
+          v-if="currentCard"
+          :class="{ active: selectedAccount === currentCard.accountNumber }"
+          :style="getCardStyle(currentCard.bankName)"
+        >
           <div class="card-header">
             <h3>{{ currentCard.bankName }}</h3>
           </div>
           <div class="card-body">
             <p>{{ currentCard.accountNumber }}</p>
           </div>
-          <div class="circle" :style="getCircleStyle(currentCard.bankName)"></div>
+          <div
+            class="circle"
+            :style="getCircleStyle(currentCard.bankName)"
+          ></div>
         </div>
       </div>
       <button @click="nextCard">→</button>
     </div>
 
     <div class="circle-indicators">
-      <span v-for="(card, index) in uniqueAccounts" :key="index" class="indicator"
-        :class="{ active: currentIndex === index }"></span>
+      <span
+        v-for="(card, index) in uniqueAccounts"
+        :key="index"
+        class="indicator"
+        :class="{ active: currentIndex === index }"
+      ></span>
     </div>
 
     <div id="app">
-
       <select v-model="currentYear" @change="resetAndFetchTransactions">
         <option :value="null">전체 년도</option>
         <option v-for="year in yearOptions" :key="year" :value="year">
           {{ year }}년
-        </option>
-      </select>&nbsp;
+        </option></select
+      >&nbsp;
       <select v-model="currentMonth" @change="resetAndFetchTransactions">
         <option :value="null">전체 월</option>
         <option v-for="month in 12" :key="month" :value="month">
           {{ month }}월
-        </option>
-      </select>&nbsp;
+        </option></select
+      >&nbsp;
 
       <select v-model="selectedType">
         <option value="">입금 / 출금</option>
         <option value="입금">입금</option>
-        <option value="출금">출금</option>
-      </select>&nbsp;
+        <option value="출금">출금</option></select
+      >&nbsp;
       <select v-model="selectedCategory">
         <option value="">카테고리</option>
-        <option v-for="category in uniqueCategories" :key="category" :value="category">
+        <option
+          v-for="category in uniqueCategories"
+          :key="category"
+          :value="category"
+        >
           {{ category }}
         </option>
       </select>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
       <button @click="makeExcelFiles">거래 내역 다운받기</button>
-
     </div>
-    <br>
-
-
-
-
+    <br />
 
     <div class="transactions">
-      <div v-for="transaction in paginatedTransactions" :key="transaction.transactionDate.getTime()"
-        class="transaction-item">
+      <div
+        v-for="transaction in paginatedTransactions"
+        :key="transaction.transactionDate.getTime()"
+        class="transaction-item"
+      >
         <div class="transaction-date">
           {{ formatDate(transaction.transactionDate) }}
         </div>
         <div class="transaction-details">
-          <span :class="{
-            income: transaction.transactionType === '입금',
-            expense: transaction.transactionType === '출금',
-          }">
+          <span
+            :class="{
+              income: transaction.transactionType === '입금',
+              expense: transaction.transactionType === '출금',
+            }"
+          >
             {{ transaction.transactionType === '입금' ? '+' : '-' }}
             {{ formatCurrency(transaction.amount) }}원
           </span>
@@ -78,14 +92,17 @@
         </div>
       </div>
       <div v-if="isLoading" class="loading">데이터 로딩 중...</div>
-      <div v-if="!isLoading && filteredTransactions.length === 0" class="no-data">
+      <div
+        v-if="!isLoading && filteredTransactions.length === 0"
+        class="no-data"
+      >
         거래 내역이 없습니다.
       </div>
     </div>
 
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <span class="page">{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">
         다음
       </button>
@@ -317,15 +334,12 @@ const getCardStyle = (bankName) => {
         backgroundImage: 'url(/src/assets/images/orangecard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-
       };
     case '카카오뱅크':
       return {
         backgroundImage: 'url(/src/assets/images/yellowcard.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-
-
       };
     case '신한은행':
       return {
@@ -461,7 +475,7 @@ select {
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-  margin-top: 5px
+  margin-top: 5px;
 }
 
 .transactions {
@@ -501,7 +515,7 @@ select {
 }
 
 .transaction-details .category {
-  margin-right: auto;
+  margin-left: 0;
   /* 왼쪽 끝에 위치 */
 }
 
@@ -522,8 +536,8 @@ select {
 
 .category {
   background-color: #f0f0f0;
-  margin-right: auto;
-  padding: 4px 10px;
+  margin-left: 3px;
+  padding: 5px 10px;
   border-radius: 10px;
   font-size: 0.85em;
 }
@@ -541,6 +555,7 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-top: 30px;
 }
 
 .pagination button {
@@ -561,6 +576,10 @@ select {
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.page {
+  margin-top: 8px;
 }
 
 .circle-indicators {
