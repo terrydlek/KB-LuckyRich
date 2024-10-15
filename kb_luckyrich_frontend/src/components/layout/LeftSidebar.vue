@@ -8,7 +8,7 @@
           @mouseleave="hideSubmenu('luckyRich', false)"
           :class="{ bold: isLuckyRichSelected }"
         >
-          LuckyRich
+          Lucky Rich
           <ul
             :class="[
               'submenu',
@@ -143,7 +143,7 @@
         </li>
 
         <li
-          v-if="isAdmin"
+          v-if="checkAdminRole()"
           @click="goTo('adminBoard')"
           :class="{ bold: selectedCategory === 'adminBoard' }"
         >
@@ -203,6 +203,10 @@ const goTo = (route) => {
   } else {
     router.push({ name: route });
   }
+};
+
+const checkAdminRole = () => {
+  return localStorage.getItem('user_role') === 'ADMIN';
 };
 
 const showSubmenu = (menu) => {
