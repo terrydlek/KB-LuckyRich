@@ -83,9 +83,12 @@ public class RecommendController {
         String completeUrl = "https://www.investing.com/funds/" + url;
         Document doc = Jsoup.connect(completeUrl).get();
 
+        // Remove header and footer
         doc.select("header, footer").remove();
+        doc.select("#Billboard_Default").remove();
+        doc.select(".midHeader").remove();
 
-        // remove specific words
+        // Remove specific words
         removeElementsWithWords(doc, "Watchlist", "Create Alert");
 
         // Remove the sentiment box
@@ -100,15 +103,13 @@ public class RecommendController {
         // Remove the chart and its controls
         doc.select("#js_instrument_chart_wrapper").remove();
 
-        doc.select("a, button, input[type=submit], input[type=button], [onclick]").forEach(element -> {
-            element.removeAttr("href");
-            element.removeAttr("onclick");
-            element.attr("style", element.attr("style") + "; pointer-events: none; cursor: default;");
-        });
-
         // Remove unnecessary elements
         doc.select(".chartWrap, #rightColumn").remove();
         doc.select("div[data-slot-id]").remove();
+
+        // Remove CSS classes associated with the removed elements
+        doc.select("header").removeClass("topBar");
+        doc.select("footer").removeClass("footer-class");
 
         // Improve the layout of the overview table
         Element overviewTable = doc.select(".overviewDataTable").first();
@@ -119,21 +120,31 @@ public class RecommendController {
         // Add custom CSS to disable interactions and improve layout
         Element head = doc.head();
         head.appendElement("style").text(
-                "* { pointer-events: none !important; user-select: none !important; }" +
+                "body, html { margin: 0; padding: 0; }" +  // 여백 및 패딩 제거
                         "a, button, input[type=submit], input[type=button] { cursor: default !important; }" +
                         ".improved-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }" +
                         ".improved-layout > div { margin-bottom: 10px; }" +
                         ".float_lang_base_1 { font-weight: bold; display: block; margin-bottom: 5px; }" +
                         ".float_lang_base_2 { display: block; }" +
                         ".instrumentHeader h1 { font-size: 24px; margin-bottom: 20px; }" +
-                        "body { font-family: Arial, sans-serif; line-height: 1.6; }"
+                        "body { font-family: Arial, sans-serif; line-height: 1.6; }" +
+                        ".wrapper { " + // .wrapper 스타일 추가
+                        "width: 1000px; " +
+                        "position: relative; " +
+                        "padding: 0px 100px 0; " +
+                        "margin: 0 auto; " +
+                        "}"
         );
 
         // Remove all script tags to prevent any JavaScript execution
         doc.select("script").remove();
 
+//        System.out.println(doc.outerHtml());
+
         return doc.outerHtml();
     }
+
+
 
     private void removeElementsWithWords(Document doc, String... words) {
         for (String word : words) {

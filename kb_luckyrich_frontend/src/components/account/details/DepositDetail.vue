@@ -1,5 +1,4 @@
 <template>
-  <button @click="goBack" class="back-button">목록으로</button>
   <div v-if="deposit" class="container mt-5">
     <h2 class="mb-4">{{ deposit.prodname }} 상품 상세 정보</h2>
     <ul class="list-group mb-4">
@@ -64,6 +63,8 @@
     </div>
   </div>
   <p v-else>상품 정보를 불러오는 중입니다...</p>
+  <button @click="goBack" class="back-button">목록으로</button>
+
 </template>
 
 <script>

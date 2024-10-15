@@ -1,7 +1,8 @@
 <template>
-  <button @click="goBack" class="back-button">뒤로 가기</button>
-  <div v-html="htmlContent"></div>
+  <!-- <button @click="goBack" class="back-button">뒤로 가기</button> -->
+  <div class="fd" v-html="htmlContent"></div>
   <!-- HTML 소스를 렌더링 -->
+  <button @click="goBack" class="back-button">뒤로 가기</button>
 </template>
 
 <script>
@@ -54,5 +55,9 @@ export default {
 
 .back-button:hover {
   background-color: #32d43ace;
+}
+
+.fd {
+  margin-top: 0px !important;
 }
 </style>
