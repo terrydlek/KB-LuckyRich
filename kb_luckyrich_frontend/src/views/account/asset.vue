@@ -200,7 +200,7 @@ export default {
       });
     },
     totalAssetsValue() {
-      return 20000000;
+      return 50000000;
       // return this.totalAssets['Bank Balance'] + this.totalAssets['Stock Total'];
     },
   },

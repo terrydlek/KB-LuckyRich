@@ -354,4 +354,13 @@ button {
   margin-bottom: 20px;
   /* 설명과 검색창 사이 여백 */
 }
+
+a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 </style>

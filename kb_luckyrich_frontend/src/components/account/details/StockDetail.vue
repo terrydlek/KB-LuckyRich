@@ -1,5 +1,5 @@
 <template>
-  <button @click="goBack" class="back-button">목록으로</button>
+  <!-- <button @click="goBack" class="back-button">목록으로</button> -->
   <div class="container mt-5">
     <div v-if="stockData">
       <div class="text-center mb-4">
