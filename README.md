@@ -80,12 +80,6 @@
 
 ---
 
-## 📚 API 문서
-
-API 명세서 이미지 들어갈 자리
-
----
-
 ## 📚 구조도
 <br>
 <img src="./structure.png" alt="structure 이미지" height="500px" width="700px">
@@ -94,7 +88,9 @@ API 명세서 이미지 들어갈 자리
 
 ## 📚 ERD
 <br/>
-<img src="./ERD.png" alt="ERD 이미지" height="500px" width="700px">
+<p align="center">
+   <img src="./ERD.png" alt="ERD 이미지" height="500px" width="700px">
+</p>
 
 ---
 
