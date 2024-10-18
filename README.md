@@ -5,7 +5,7 @@
 **MZ 세대를 위한 자산 관리 서비스**, Lucky Rich는 자산 관리, 투자 분석 및 맞춤형 금융 상품 추천 기능을 제공합니다.
 
 <p>
-   <img src="./title_image.png" alt="대표 이미지" height="630px" width="920px">
+   <img src="./README-GIF/title_image.png" alt="대표 이미지" height="630px" width="920px">
 </p>
 
 ---
@@ -111,7 +111,7 @@
 ## 🏗️ 시스템 아키텍처
 
 <div>
-  <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="680px">
+  <img src="./README-GIF/architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="680px">
   <p><b>시스템 아키텍처</b></p>
 </div>
 
@@ -120,7 +120,7 @@
 ## 📋 구조도
 
 <div>
-  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="750px">
+  <img src="./README-GIF/structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="750px">
   <p><b>시스템 구조도</b></p>
 </div>
 
@@ -129,7 +129,7 @@
 ## 📚 ERD (Entity Relationship Diagram)
 
 <div>
-  <img src="./ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="530px" width="700px">
+  <img src="./README-GIF/ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="530px" width="700px">
 </div>
 
 
