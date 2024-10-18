@@ -95,7 +95,7 @@ API 명세서 이미지 들어갈 자리
 
 ERD 들어갈 자리
 <br/>
-<img src="./ERD.png" alt="ERD 이미지" height="500px" width="500px">
+<img src="./ERD.png" alt="ERD 이미지" height="500px" width="700px">
 
 
 
