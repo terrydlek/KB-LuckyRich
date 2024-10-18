@@ -182,69 +182,69 @@
 
 | **로그인** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/로그인.gif"> |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/로그인.gif"> |
 <br/>
 
 | **최초 로그인 시 정보 이용 동의** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/계좌연동.gif"> |
+| <img height="420px" width="720px" alt="계좌 연동" src="./README-GIF/계좌연동.gif"> |
 <br/>
 
 | **정보 이용 동의 후 자산 관리 서비스를 받을 계좌 연동** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/계좌선택.gif"> |
+| <img height="420px" width="720px" alt="계좌 선택" src="./README-GIF/계좌선택.gif"> |
 <br/>
 
 | **로그인 후 메인화면** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/로그인후_메인.gif"> |
+| <img height="420px" width="720px" alt="로그인 후 메인" src="./README-GIF/로그인후_메인.gif"> |
 <br/>
 
 | **마이페이지** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/마이페이지.gif"> |
+| <img height="420px" width="720px" alt="마이페이지" src="./README-GIF/마이페이지.gif"> |
 <br/>
 
 | **Lucky Rich 서비스 소개** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/서비스소개.gif"> |
+| <img height="420px" width="720px" alt="서비스 소개" src="./README-GIF/서비스소개.gif"> |
 <br/>
 
 | **투자 성향 테스트에 기반한 상품 추천** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/테스트.gif"> |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/추천상품_상세페이지.gif"> |
+| <img height="420px" width="720px" alt="테스트" src="./README-GIF/테스트.gif"> |
+| <img height="420px" width="720px" alt="상세페이지" src="./README-GIF/추천상품_상세페이지.gif"> |
 <br/>
 
 | **한눈에 내 자산 확인하기** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자산대시보드.gif"> |
+| <img height="420px" width="720px" alt="자산대시보드" src="./README-GIF/자산대시보드.gif"> |
 <br/>
 
 | **자산 포트폴리오** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자산대시보드.gif"> |
+| <img height="420px" width="720px" alt="포트폴리오" src="./README-GIF/포트폴리오.gif"> |
 <br/>
 
 | **거래 내역 조회** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_csv.gif"> |
+| <img height="420px" width="720px" alt="거래내역조회1" src="./README-GIF/거래내역조회_필터링.gif"> |
+| <img height="420px" width="720px" alt="거래내역조회2" src="./README-GIF/거래내역조회_csv.gif"> |
 <br/>
 
 | **자주 묻는 질문** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> |
+| <img height="420px" width="720px" alt="자주묻는질문" src="./README-GIF/자주 묻는 질문.gif"> |
 <br/>
 
 | **Q&A 게시판** |
 | :---: |
-| <img height="420px" width="720px" alt="프로필" src="./README-GIF/board.gif"> |
+| <img height="420px" width="720px" alt="게시판" src="./README-GIF/board.gif"> |
 <br/>
 
 | **관리자 페이지** |
 | :---: |
-| <img height="420px" width="720px" alt="프로필" src="./README-GIF/관리자.gif"> |
+| <img height="420px" width="720px" alt="관리자" src="./README-GIF/관리자.gif"> |
 
 | **금융 뉴스** |
 | :---: |
@@ -253,7 +253,7 @@
 
 | **부동산** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
+| <img height="420px" width="720px" alt="부동산" src="./README-GIF/부동산.gif"> |
 <br/>
 
 ---
