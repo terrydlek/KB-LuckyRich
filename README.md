@@ -130,7 +130,6 @@
 
 <div>
   <img src="./ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="530px" width="700px">
-  <p><b>ERD (Entity Relationship Diagram)</b></p>
 </div>
 
 
