@@ -240,7 +240,7 @@
 
 | **Q&A 게시판** |
 | :---: |
-| <img height="420px" width="720px" alt="프로필" src="./README-GIF/게시판.gif"> |
+| <img height="420px" width="720px" alt="프로필" src="./README-GIF/board.gif"> |
 <br/>
 
 | **관리자 페이지** |
@@ -249,7 +249,7 @@
 
 | **금융 뉴스** |
 | :---: |
-| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
+| <img height="420px" width="720px" alt="뉴스" src="./README-GIF/뉴스.gif"> |
 <br/>
 
 | **부동산** |
