@@ -176,19 +176,26 @@
 
 ---
 
+### 서비스 시연
+
+| **자주 묻는 질문** |
+| :---: |
+| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> |
+<br/>
+
+| **Q&A 게시판** |
+| <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> |
+| :---: |
+<br/>
+
+| **관리자 페이지** |
+| :---: |
+| <img width="350" alt="프로필" src="./README-GIF/관리자.gif"> |
+
+---
+
 ### 팀원
 | [황세호](https://github.com/ssoo1234) | [박제욱](https://github.com/terrydlek) |[김재이](https://github.com/Kim-Jaei) | [이시윤](https://github.com/siyun2)
 | :---: | :---: | :---: | :---: |
 | <img src="https://avatars.githubusercontent.com/u/97676838?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/103116277?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/170384603?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/138185165?v=4" width="150"/> | 
 | Full-Stack | Full-Stack | Full-Stack | Full-Stack |
-
----
-
-| 자주 묻는 질문 | Q&A 게시판 |
-| :---: | :---: |
-| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> | <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> |
-<br/>
-
-| 관리자 페이지 |
-| :---: |
-| <img width="350" alt="프로필" src="./README-GIF/관리자.gif"> |
