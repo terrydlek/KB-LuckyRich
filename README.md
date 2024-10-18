@@ -64,14 +64,6 @@
 
 ---
 
-## 🚀 데모
-
-🔗 [Live Demo](http://your-demo-url.com)
-
-![Lucky Rich Demo](https://your-demo-image-url.com/demo.gif)
-
----
-
 ## 🔧 설치 방법
 
 아래 단계를 따라 로컬 환경에 프로젝트를 설치하세요.
