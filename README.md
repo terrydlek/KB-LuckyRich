@@ -1,8 +1,6 @@
 # 🌟 Lucky Rich
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/terrydlek/KB-LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich)
-[![GitHub forks](https://img.shields.io/github/forks/terrydlek/KB-LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich/fork)
 
 **MZ 세대를 위한 자산 관리 서비스**, Lucky Rich는 자산 관리, 투자 분석 및 맞춤형 금융 상품 추천 기능을 제공합니다.
 
@@ -18,6 +16,8 @@
 - 💹 **실시간 자산 비교**: 비슷한 연령대의 자산과 비교
 - 📈 **트렌드 추적**: 자산 증가 추이 및 투자 동향 추적
 
+주요기능 설명 들어갈 자리
+
 ---
 
 ## 🚀 데모
@@ -32,10 +32,11 @@
 
 - [설치 방법](#-설치-방법)
 - [사용 방법](#-사용-방법)
+- [시스템 아키텍처](#-시스템-아키텍처)
+- [구조도](#-구조도)
 - [API 문서](#-api-문서)
-- [기여 방법](#-기여-방법)
-- [라이선스](#-라이선스)
-- [연락처](#-연락처)
+- [ERD](#-ERD)
+
 
 ---
 
@@ -60,7 +61,8 @@
    npm run dev
 
 ---
-📖 사용 방법
+
+## 📖 사용 방법
 
 회원가입: 회원 가입 후 자산 관리 시작.
 
@@ -72,33 +74,28 @@
 
 ---
 
-📚 시스템 아키텍처
+## 📚 시스템 아키텍처
 
 아키텍처 들어갈 자리
 
 ---
-📚 API 문서
+
+## 📚 API 문서
 
 API 명세서 이미지 들어갈 자리
 
 ---
 
-📚구조도
+## 📚구조도
 구도조 들어갈 자리
 
 ---
 
-📚ERD
+## 📚ERD
 
 ERD 들어갈 자리
 
 ---
-
-📧 연락처
-프로젝트 링크: https://github.com/terrydlek/LuckyRich
-이메일: your.email@example.com
-이 프로젝트는 Lucky Rich 팀의 ❤️으로 개발되었습니다.
-
 
 ### 주요 포인트:
 1. **시각적 요소**: 프로젝트 뱃지와 아이콘을 사용해 가독성 높임.
