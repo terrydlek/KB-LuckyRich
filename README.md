@@ -192,7 +192,7 @@
 | :---: |
 | <img height="400px" width="720px" alt="로그인" src="./README-GIF/계좌연동.gif"> |
 | <img height="400px" width="720px" alt="로그인" src="./README-GIF/계좌선택.gif"> |
-- 마이데이터 
+- 마이데이터 제공 동의를 선택하면 유저의 계좌를 연동할 수 있습니다.
 <br/>
 
 | **로그인 후 메인화면** |
