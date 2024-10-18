@@ -1,4 +1,4 @@
-# 🌟 Lucky Rich
+![로그인](https://github.com/user-attachments/assets/9914a58b-e79b-4f23-b27f-3fbcd985464a)# 🌟 Lucky Rich
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -19,6 +19,10 @@
 - [구조도](#-구조도)
 - [API 문서](#-api-문서)
 - [ERD](#-erd)
+- [기술 스택](#-기술-스택)
+- [주요 포인트](#주요-포인트)
+- [팀원](#-팀원)
+- [서비스 시연](#-서비스-시연)
 
 ---
 
@@ -176,11 +180,63 @@
 
 ---
 
-### 서비스 시연
+### 🪄 서비스 시연
+
+| **로그인** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/로그인.gif"> |
+<br/>
+
+| **최초 로그인 시 정보 이용 동의** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/계좌연동.gif"> |
+<br/>
+
+| **정보 이용 동의 후 자산 관리 서비스를 받을 계좌 연동** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/계좌선택.gif"> |
+<br/>
+
+| **로그인 후 메인화면** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/로그인후_메인.gif"> |
+<br/>
+
+| **마이페이지** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/마이페이지.gif"> |
+<br/>
+
+| **Lucky Rich 서비스 소개** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/서비스소개.gif"> |
+<br/>
+
+| **투자 성향 테스트에 기반한 상품 추천** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/테스트.gif"> |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/추천상품_상세페이지.gif"> |
+<br/>
+
+| **한눈에 내 자산 확인하기** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자산대시보드.gif"> |
+<br/>
+
+| **자산 포트폴리오** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자산대시보드.gif"> |
+<br/>
+
+| **거래 내역 조회** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_csv.gif"> |
+<br/>
 
 | **자주 묻는 질문** |
 | :---: |
-| <img alt="로그인" src="./README-GIF/자주 묻는 질문.gif" height="300" width="500"> |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> |
 <br/>
 
 | **Q&A 게시판** |
@@ -190,7 +246,17 @@
 
 | **관리자 페이지** |
 | :---: |
-| <img height="440px" width="720px" alt="프로필" src="./README-GIF/관리자.gif"> |
+| <img height="420px" width="720px" alt="프로필" src="./README-GIF/관리자.gif"> |
+
+| **금융 뉴스** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
+<br/>
+
+| **부동산** |
+| :---: |
+| <img height="420px" width="720px" alt="로그인" src="./README-GIF/거래내역조회_필터링.gif"> |
+<br/>
 
 ---
 
