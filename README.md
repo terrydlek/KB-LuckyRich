@@ -101,7 +101,10 @@
 ---
 
 ## 📚 개발 환경
-이미지
+<br/>
+<p align="center">
+   <img src="./env.PNG" alt="env 이미지" height="500px" width="700px">
+</p>
 
 ---
 
