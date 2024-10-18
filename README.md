@@ -180,7 +180,7 @@
 
 | **자주 묻는 질문** |
 | :---: |
-| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> |
+| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif" height="400px" width="620px"> |
 <br/>
 
 | **Q&A 게시판** |
