@@ -5,7 +5,7 @@
 **MZ 세대를 위한 자산 관리 서비스**, Lucky Rich는 자산 관리, 투자 분석 및 맞춤형 금융 상품 추천 기능을 제공합니다.
 
 <p>
-   <img src="./title_image.png" alt="대표 이미지" height="680px" width="920px">
+   <img src="./title_image.png" alt="대표 이미지" height="630px" width="920px">
 </p>
 
 ---
