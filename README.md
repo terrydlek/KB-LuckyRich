@@ -106,25 +106,30 @@
 ---
 
 ## 📚 시스템 아키텍처
-<br>
-<p align="center">
-<img src="./architecture.png" alt="architecture 이미지" height="500px" width="700px">
-</p>
+
+<div align="center">
+  <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+  <p><b>시스템 아키텍처</b></p>
+</div>
+
 ---
 
 ## 📚 구조도
-<br>
-<p align="center">
-<img src="./structure.png" alt="structure 이미지" height="500px" width="700px">
-</p>
+
+<div align="center">
+  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+  <p><b>시스템 구조도</b></p>
+</div>
 
 ---
 
-## 📚 ERD
-<br/>
-<p align="center">
-   <img src="./ERD.png" alt="ERD 이미지" height="500px" width="700px">
-</p>
+## 📚 ERD (Entity Relationship Diagram)
+
+<div align="center">
+  <img src="./ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+  <p><b>ERD (Entity Relationship Diagram)</b></p>
+</div>
+
 
 ---
 
