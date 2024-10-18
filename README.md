@@ -75,8 +75,8 @@
 ---
 
 ## 📚 시스템 아키텍처
-
-아키텍처 들어갈 자리
+<br>
+<img src="./architecture.png" alt="architecture 이미지" height="500px" width="700px">
 
 ---
 
