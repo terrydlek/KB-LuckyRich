@@ -11,6 +11,17 @@
 
 ---
 
+## 📋 목차
+- [주요 기능](#주요-기능)
+- [설치 방법](#-설치-방법)
+- [사용 방법](#-사용-방법)
+- [시스템 아키텍처](#-시스템-아키텍처)
+- [구조도](#-구조도)
+- [API 문서](#-api-문서)
+- [ERD](#-erd)
+
+---
+
 ## ✨ 주요 기능
 
 - 📊 **포트폴리오 관리**: 사용자 맞춤형 투자 포트폴리오 자동 생성
@@ -57,18 +68,6 @@
 🔗 [Live Demo](http://your-demo-url.com)
 
 ![Lucky Rich Demo](https://your-demo-image-url.com/demo.gif)
-
----
-
-## 📋 목차
-
-- [설치 방법](#-설치-방법)
-- [사용 방법](#-사용-방법)
-- [시스템 아키텍처](#-시스템-아키텍처)
-- [구조도](#-구조도)
-- [API 문서](#-api-문서)
-- [ERD](#-erd)
-
 
 ---
 
@@ -135,7 +134,6 @@
 - <img src="https://img.shields.io/badge/Language-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/java-%23ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"><img src="https://img.shields.io/badge/17-515151?style=for-the-badge">
 - <img src="https://img.shields.io/badge/Project Encoding-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/UTF 8-EA2328?style=for-the-badge">
 
-
 ---
 
 ### 주요 포인트:
@@ -146,6 +144,7 @@
 5. **API 문서**: 주요 엔드포인트를 간단히 소개하고 전체 문서로 링크 연결.
 
 ---
+
 ### 팀원
 | [황세호](https://github.com/ssoo1234) | [박제욱](https://github.com/terrydlek) |[김재이](https://github.com/Kim-Jaei) | [이시윤](https://github.com/siyun2)
 | :---: | :---: | :---: | :---: |
