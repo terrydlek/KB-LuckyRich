@@ -184,7 +184,11 @@
 
 ---
 
-| 자주 묻는 질문 | Q&A 게시판 | 관리자 페이지 |
-| :---: | :---: | :---: |
-| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> | <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> | <img width="350" alt="프로필" src="./README-GIF/관리자.gif"> | 
+| 자주 묻는 질문 | Q&A 게시판 |
+| :---: | :---: |
+| <img width="350" alt="로그인" src="./README-GIF/자주 묻는 질문.gif"> | <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> |
 <br/>
+
+| 관리자 페이지 |
+| :---: |
+| <img width="350" alt="프로필" src="./README-GIF/관리자.gif"> |
