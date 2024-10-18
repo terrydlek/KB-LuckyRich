@@ -1,8 +1,8 @@
 # 🌟 Lucky Rich
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/terrydlek/LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich)
-[![GitHub forks](https://img.shields.io/github/forks/terrydlek/LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich/fork)
+[![GitHub stars](https://img.shields.io/github/stars/terrydlek/KB-LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich)
+[![GitHub forks](https://img.shields.io/github/forks/terrydlek/KB-LuckyRich?style=social)](https://github.com/terrydlek/KB-LuckyRich/fork)
 
 **MZ 세대를 위한 자산 관리 서비스**, Lucky Rich는 자산 관리, 투자 분석 및 맞춤형 금융 상품 추천 기능을 제공합니다.
 
