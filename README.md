@@ -129,8 +129,8 @@
 ---
 
 ## 📺 기술 스택
-- <img src="https://img.shields.io/badge/Framework-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=strapi&logoColor=white"><img src="https://img.shields.io/badge/5.3.37-515151?style=for-the-badge">
-- <img src="https://img.shields.io/badge/Build-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"><img src="https://img.shields.io/badge/8.7-515151?style=for-the-badge">
+- <img src="https://img.shields.io/badge/Framework-%23121011?style=for-the-badge" style="margin-right: 10px;"><img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=strapi&logoColor=white"><img src="https://img.shields.io/badge/5.3.37-515151?style=for-the-badge">
+- <img src="https://img.shields.io/badge/Build-%23121011?style=for-the-badge" style="margin-right: 10px;"><img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"><img src="https://img.shields.io/badge/8.7-515151?style=for-the-badge">
 - <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white">
 - <img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white">
 - <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white">
