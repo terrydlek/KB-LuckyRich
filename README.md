@@ -184,8 +184,8 @@
 <br/>
 
 | **Q&A 게시판** |
-| <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> |
 | :---: |
+| <img width="350" alt="프로필" src="./README-GIF/게시판.gif"> |
 <br/>
 
 | **관리자 페이지** |
