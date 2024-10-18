@@ -147,5 +147,5 @@
 ### 팀원
 | [황세호](https://github.com/ssoo1234) | [박제욱](https://github.com/terrydlek) |[김재이](https://github.com/Kim-Jaei) | [이시윤](https://github.com/siyun2)
 | :---: | :---: | :---: | :---: |
-| <img src="https://avatars.githubusercontent.com/u/93467085?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/104892909?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/103116277?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/140796676?v=4" width="150"/> | 
-| Front-End | Front-End | Front-End | Front-End |
+| <img src="https://avatars.githubusercontent.com/u/97676838?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/103116277?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/170384603?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/138185165?v=4" width="150"/> | 
+| Full-Stack | Full-Stack | Full-Stack | Full-Stack |
