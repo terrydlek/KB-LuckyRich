@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mul.cam.e.dao.RealEstateDao">
+
+    <select id="getRealEstates" resultType="mul.cam.e.dto.RealEstateDto">
+        SELECT no, city, street_number AS streetNumber, estate_name AS estateName,
+            exclusive_area AS exclusiveArea, contract_time AS contractTime,
+            transaction_amount AS transactionAmount, floor, buyer, bargainer,
+            construction_time AS constructionTime, street_name AS streetName,
+            transaction_type AS transactionType, brokerage_location AS brokerageLocation,
+            house_type AS houseType
+        FROM realestate_data;
+    </select>
+    <select id="getRealEstatesByRegion" resultType="mul.cam.e.dto.RealEstateDto">
+        SELECT no, city, street_number AS streetNumber, estate_name AS estateName,
+            MAX(exclusive_area) AS exclusiveArea, MAX(contract_time) AS contractTime,
+            MAX(transaction_amount) AS transactionAmount, MAX(floor) AS floor,
+            MAX(buyer) AS buyer, MAX(bargainer) AS bargainer,
+            MAX(construction_time) AS constructionTime, MAX(street_name) AS streetName,
+            MAX(transaction_type) AS transactionType, MAX(brokerage_location) AS brokerageLocation,
+            MAX(house_type) AS houseType
+        FROM realestate_data
+        WHERE city LIKE CONCAT(#{region}, '%')
+        GROUP BY city, street_number, estate_name
+            ;
+    </select>
+
+</mapper>

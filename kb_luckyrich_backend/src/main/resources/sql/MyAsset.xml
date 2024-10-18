@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="mul.cam.e.dao.MyAssetDao">
+
+    <update id="setMyAccount">
+        insert into account(account_number, user_id, bank_id, account_type_id, balance)
+        values (#{accountNumber}, #{userId}, #{bankId}, #{accountTypeId}, #{balance});
+    </update>
+
+    <update id="setTransaction" parameterType="mul.cam.e.dto.TransactionDto">
+        insert into transaction(account_id, amount, transaction_type, category, description, transaction_date)
+        values (#{accountId}, #{amount}, #{transactionType}, #{category}, #{description}, #{transactionDate});
+    </update>
+
+    <select id="getAccountNum" parameterType="java.lang.String" resultType="integer">
+        select account_id
+        from account
+        where account_number = #{accountNumber}
+    </select>
+
+    <update id="setStockHoldings">
+        insert into stock_holdings(user_id, stock_symbol, stock_name, purchase_price, quantity, purchase_date)
+        values (#{userId}, #{stockSymbol}, #{stockName}, #{purchasePrice}, #{quantity}, #{purchaseDate})
+    </update>
+
+    <update id="setRealEstateAsset">
+        insert into realestate_asset
+        values (#{randEstateNo}, #{userId});
+    </update>
+
+    <update id="setCarAsset">
+        insert into car_asset
+        values (#{randCarNo}, #{userId});
+    </update>
+
+    <select id="getTransactions" resultType="mul.cam.e.dto.TransactionDto">
+        select t.account_id,
+               t.amount,
+               t.transaction_type,
+               t.category,
+               t.description,
+               t.transaction_date
+        from transaction t
+                 join
+             account a on t.account_id = a.account_id
+                 join
+             user u on a.user_id = u.user_id
+        where u.user_id = #{userId}
+        order by t.transaction_date desc
+    </select>
+
+    <select id="getStock" resultType="mul.cam.e.dto.StockHoldingsDto">
+        select *
+        from stock_holdings
+        where user_id = #{userId}
+    </select>
+
+    <select id="getBankTransactions" resultType="mul.cam.e.dto.BankTransactionDto">
+        select t.account_id       as accountId,
+               a.account_number   as accountNumber,
+               t.amount,
+               t.transaction_type as transactionType,
+               t.category,
+               t.description      as description,
+               t.transaction_date as transactionDate,
+               b.bank_id          as bankId
+        from transaction t
+                 join
+             account a on t.account_id = a.account_id
+                 join
+             user u on a.user_id = u.user_id
+                 join
+             bank b on a.bank_id = b.bank_id
+        where u.user_id = #{userId}
+        order by t.transaction_date desc;
+    </select>
+
+    <select id="totalAccount" parameterType="int" resultType="int">
+        select coalesce(sum(balance), 0) as balance
+        from account
+        where user_id = #{userId}
+    </select>
+
+    <select id="totalStock" parameterType="int" resultType="int">
+        select coalesce(sum(purchase_price * quantity), 0) as total_price
+        from stock_holdings
+        where user_id = #{userId}
+    </select>
+
+    <select id="totalRealestate" parameterType="int" resultType="long">
+        SELECT COALESCE(ra.total_price, 0) as total_price
+        FROM user u
+                 JOIN (
+            SELECT ra.user_id, SUM(sr.transaction_amount) * 100000000 AS total_price
+            FROM realestate_asset ra
+                     JOIN sg_real sr ON ra.realestate_no = sr.no
+            GROUP BY ra.user_id
+        ) AS ra ON u.user_id = ra.user_id
+        WHERE u.user_id = #{userId};
+    </select>
+
+    <select id="totalCar" parameterType="int" resultType="int">
+        SELECT COALESCE(ca.total_price, 0) as total_price
+        FROM user u
+        JOIN (
+            SELECT ca.user_id, SUM(c.car_price) AS total_price
+            FROM car_asset ca
+            JOIN car c ON ca.car_no = c.car_no
+            GROUP BY ca.user_id
+        ) AS ca ON u.user_id = ca.user_id
+        WHERE u.user_id = #{userId};
+    </select>
+
+    <select id="getPeerUsersByAge" parameterType="int" resultType="mul.cam.e.dto.UserDto">
+        SELECT *
+        FROM user
+        WHERE FLOOR((age - 1) / 5) = (
+            SELECT FLOOR((age - 1) / 5)
+            FROM user
+            WHERE user_id = #{userId}
+        )
+    </select>
+
+    <!-- 각 userId에 해당하는 Bank Balance 가져오기 -->
+    <select id="getBankBalanceByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(SUM(balance), 0)
+        FROM account
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Stock Total 가져오기 -->
+    <select id="getStockTotalByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(SUM(purchase_price * quantity), 0)
+        FROM stock_holdings
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Car Price 가져오기 -->
+    <select id="getCarByUserId" parameterType="int" resultType="double">
+        SELECT COALESCE(c.car_price, 0)
+        FROM user u
+                 LEFT JOIN car c ON u.car_no = c.car_no
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!-- 각 userId에 해당하는 Real Estate Price 가져오기 -->
+    <select id="getRealestateByUserId" resultType="double">
+        SELECT COALESCE(SUM(r.transaction_amount * 100000000), 0)
+        FROM user u
+                 LEFT JOIN sg_real r ON u.realestate_no = r.no
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <select id="userAccounts" parameterType="string" resultType="mul.cam.e.dto.AccountDto">
+        select account_id, account_number, user_id, bank_id, account_type_id, balance
+        from account
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName});
+    </select>
+
+    <select id="transactionTen" parameterType="string" resultType="map">
+        with tb1 as (select transaction_id,
+                            account_id,
+                            case
+                                when transaction_type = '출금' then amount * -1
+                                when transaction_type = '입금' then amount
+                                end                                   as amount,
+                            transaction_type,
+                            category,
+                            description,
+                            date_format(transaction_date, '%Y-%m-%d') as transaction_date
+                     from transaction)
+
+        select transaction_date, coalesce(sum(amount), 0) as amount
+        from tb1
+        where account_id in (select account_id
+                             from account
+                             where user_id = (select user_id
+                                              from user
+                                              where user_name = #{userName})
+                               and transaction_date between date_format(
+                                     date_sub(date_add(now(), interval 9 hour), interval 9 day),
+                                     '%Y-%m-%d') and date_format(date_add(now(), interval 9 hour), '%Y-%m-%d'))
+        group by 1
+        order by 1 desc;
+    </select>
+
+    <select id="userStockSymbol" parameterType="string" resultType="mul.cam.e.dto.StockHoldingsDto">
+        select stock_symbol, stock_name, purchase_price, sum(quantity) as quantity, purchase_date
+        from stock_holdings
+        where user_id = (select user_id
+                         from user
+                         where user_name = #{userName})
+        group by 1;
+    </select>
+    
+    <select id="userCar" parameterType="int" resultType="mul.cam.e.dto.MyCarDto">
+        select coalesce(c.car_no, 0) as car_no,
+               coalesce(c.car_model, '없음') as car_model,
+               coalesce(c.car_price, 0) as car_price
+        from car_asset ca
+                 left join car c on ca.car_no = c.car_no
+        where ca.user_id = #{userId};
+    </select>
+
+    <select id="userRealestate" parameterType="int" resultType="mul.cam.e.dto.RealEstateDto">
+        select coalesce(s.city, "없음")                        as city,
+               coalesce(s.street_number, "없음")               as street_number,
+               coalesce(s.estate_name, "없음")                 as estate_name,
+               coalesce(s.exclusive_area, "없음")              as exclusive_area,
+               coalesce(s.transaction_amount, 0) * 100000000 as transaction_amount,
+               coalesce(s.street_name, "없음")                 as street_name,
+               coalesce(s.house_type, "없음")                  as house_type
+        from realestate_asset ra
+                 left join sg_real s on ra.realestate_no = s.no
+        where ra.user_id = #{userId};
+    </select>
+
+  <select id="getAccounts" resultType="mul.cam.e.dto.AccountDto">
+        select *
+        FROM account
+        WHERE user_id = #{userId};
+
+    </select>
+
+    <select id="getCategoryExpenses" parameterType="int" resultType="map">
+        select t.category as 'category', sum(t.amount) as 'amount' from transaction t
+        join account a on t.account_id = a.account_id where a.user_id = #{userId} and t.transaction_type = '출금'
+        group by t.category
+        order by amount desc
+    </select>
+
+    <select id="getCars" resultType="java.lang.Integer">
+        select car_no from car
+    </select>
+
+    <select id="getReals" resultType="java.lang.Integer">
+        select no from sg_real
+    </select>
+
+</mapper>

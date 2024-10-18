@@ -1,0 +1,311 @@
+<template>
+  <div class="lucky-rich-page">
+    <section class="hero-section">
+      <div class="hero-overlay">
+        <div class="fade-in">
+          <h1 class="hero-title">Lucky Rich에 오신 것을 환영합니다.</h1>
+          <p class="hero-subtitle">자산 관리의 자유를 위한 모든 것</p>
+        </div>
+        <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">
+          세상에 단 하나뿐인 자산 관리 시작하기
+        </button>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <div class="about-content">
+        <h2>Lucky Rich란?</h2>
+        <p>
+          Lucky Rich는 재정적 자유를 추구하는 모든 사람들을 위한 맞춤형 자산
+          관리 플랫폼입니다. <br />우리는 최신 투자 트렌드와 개별 맞춤형 전략을
+          통해 여러분의 자산을 안전하게 보호하고 성장시킵니다.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat">
+          <h3>5M+</h3>
+          <p>Active Users</p>
+        </div>
+        <div class="stat">
+          <h3>$10B+</h3>
+          <p>Assets Managed</p>
+        </div>
+        <div class="stat">
+          <h3>150+</h3>
+          <p>Investment Options</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits-section">
+      <h2>왜 Lucky Rich인가?</h2>
+      <div class="benefits-grid">
+        <div class="benefit">
+          <img src="@/assets/images/security.png" alt="Security" />
+          <h3>Unmatched Security</h3>
+          <p>
+            최고 수준의 보안 시스템으로 자산을 안전하게 관리하며, <br />해킹 및
+            위험 요소로부터 안전하게 보호합니다.
+          </p>
+        </div>
+        <div class="benefit">
+          <img src="@/assets/images/customization.png" alt="Customization" />
+          <h3>Personalized Strategy</h3>
+          <p>
+            각 사용자별로 맞춤형 재정 전략을 제시하여 <br />보다 효율적인 자산
+            증대를 돕습니다.
+          </p>
+        </div>
+        <div class="benefit">
+          <img src="@/assets/images/growth.png" alt="Growth" />
+          <h3>Proven Growth</h3>
+          <p>
+            Lucky Rich는 수익성 높은 투자 포트폴리오를 제공하며,<br />장기적으로
+            자산을 안정적으로 성장시킵니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials-section">
+      <h2>고객 사용후기</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <p>
+            "Lucky Rich의 혁신적인 투자 전략 덕분에<br />
+            제 자산이 꾸준히 성장하고 있어요.<br />
+            맞춤형 서비스로 훌륭한 포트폴리오를 구성했죠.
+          </p>
+          <hr />
+          <h4>- 박지영, 32세</h4>
+        </div>
+        <div class="testimonial">
+          <p>
+            "신속하고 전문적인 응대와 투자에 대한 분석이<br />
+            초보 투자자였던 제게 엄청난 도움이 됐습니다. <br />
+            덕분에 진정한 재정적 자유를 경험하고 있습니다!"
+          </p>
+          <hr />
+          <h4>- 김민수, 27세</h4>
+        </div>
+        <div class="testimonial">
+          <p>
+            "처음엔 온라인 투자 플랫폼에 대해 의심이 컸지만, <br />Lucky Rich의
+            보안 시스템에 신뢰가 생겼어요. <br />모든 서비스가 기대
+            이상이었습니다.
+          </p>
+          <hr />
+          <h4>- 이정훈, 41세</h4>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { handleKakaoLoginCallback } from '@/components/buttons/HandleKakaoLogin';
+import { handleNaverLoginCallback } from '@/components/buttons/HandleNaverLogin';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+const isLoggedIn = ref(false);
+const router = useRouter();
+const route = useRoute();
+
+onMounted(() => {
+  handleKakaoLoginCallback();
+  handleNaverLoginCallback();
+  checkLoginStatus();
+});
+
+function checkLoginStatus() {
+  const token = localStorage.getItem('access_token');
+  isLoggedIn.value = !!token;
+}
+
+watch(route, () => {
+  checkLoginStatus();
+});
+
+const goToLogin = () => {
+  router.push({ name: 'login' });
+};
+</script>
+
+<style scoped>
+h2 {
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.hero-section {
+  background-image: url('@/assets/images/aboutDetail.png');
+  background-size: cover;
+  background-position: center;
+  height: 70vh;
+  position: relative;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.hero-title {
+  font-weight: 600;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  font-size: 1.2rem;
+}
+
+.cta-button {
+  background-color: #f8b400;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #e69c00;
+}
+
+.about-section {
+  padding: 50px 20px;
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.about-content h2 {
+  font-size: 2rem;
+  margin-bottom: 50px;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.about-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat h3 {
+  font-size: 2rem;
+  color: #f8b400;
+}
+
+.stat p {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.benefits-section {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.benefit img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.benefit h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.benefit p {
+  font-size: 1rem;
+}
+
+.testimonials-section {
+  margin: 20px 0px;
+  padding: 50px 20px;
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.testimonial p {
+  font-size: 1rem;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.testimonial h4 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.cta-section {
+  padding: 50px 20px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+}
+
+.cta-button-large {
+  background-color: #f8b400;
+  color: #fff;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cta-button-large:hover {
+  background-color: #e69c00;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="mul.cam.e.dao.FundDao">
+
+    <select id="conservativeList" resultType="mul.cam.e.dto.FundDto">
+        select *
+        from fund_data
+        where fund_type like "%채권%"
+        order by ter_fee desc;
+    </select>
+
+    <select id="neutralList" resultType="mul.cam.e.dto.FundDto">
+        select *
+        from fund_data
+        where fund_type like "%재간접%"
+        order by ter_fee desc;
+    </select>
+
+</mapper>

@@ -1,16 +1,20 @@
 package mul.cam.e.security;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mul.cam.e.config.WebConfig;
 import mul.cam.e.jwt.JwtTokenFilter;
-import mul.cam.e.jwt.JwtTokenProvider;
+import mul.cam.e.enumrate.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,60 +24,49 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Date;
 
 @Import(WebConfig.class)
+@Slf4j
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final SecurityService service;
-    private final JwtTokenFilter jwtTokenFilter;        // 토큰 검사용
-    private final JwtTokenProvider jwtTokenProvider;    // 토큰 발급용
+    private final JwtTokenFilter jwtTokenFilter;
 
-    // 회원가입 시에 암호화할 클래스
     @Bean
-    public BCryptPasswordEncoder encoderPwd() {
-        return new BCryptPasswordEncoder();
+    public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
+        return web -> web.ignoring()
+                // error endpoint를 열어줘야 함, favicon.ico 추가
+                .requestMatchers("/favicon.ico", "/error"); //, "/resources/**", "/css/**", "/dist/**", "/js/**", "/plugins/**");
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        // 1.권한 filter
-        http.csrf(csrf -> csrf.disable())
-                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .antMatchers("/member/**").permitAll()
-                        .antMatchers("/bbs/bbslist").permitAll()
-                        .antMatchers("bbs.bbswrite").authenticated()
-                        .anyRequest().authenticated());   // (무조건)허용
+                        // api login -> 권한 상관 없이 진입 가능
+                        .antMatchers("/api/**", "/auth/**").permitAll()
+                        .antMatchers("/rabbit/**").permitAll()
+                        .antMatchers("/news/**").permitAll()
+                        .antMatchers("/realestate/**").permitAll()
+//                        .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
+                        .antMatchers("/board/checkAdmin").hasRole(Role.ADMIN.name())
+                        .antMatchers("/board/deleteBoard", "/board/updateBoard").hasRole(Role.ADMIN.name())
+                        .antMatchers("/board/**").permitAll()
+                        .antMatchers("/ws/**").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin().disable()
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 
-        // 2. 세션을 사용하지 않음
-        http.sessionManagement((sessionManagement)
-                ->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) );
-
-        // 3. JWT 필터를 사용여부 설정
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // 4. login form
-
-
-        // enable h2-console
-        http.headers(headers ->
-            headers.frameOptions(options ->
-                    options.sameOrigin()  // SAME ORIGIN은 같은 도메인 내에서의 참조만 허용하겠다는 것
-            )
-        );
-
-        // 5. csrf 설정을 off 합니다
-        //http.csrf(csrf -> csrf.disable());
+                .sessionManagement((sessionManagement)
+                        -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
     @Bean
     public CorsFilter corsFilter() {
-        System.out.println("^^ SecurityConfig corsFilter " + new Date());
+        log.info("---------- SecurityConfig corsFilter " + new Date());
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
@@ -86,16 +79,12 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, SecurityUserService securityUserService) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(securityUserService)
+                .and()
+                .build();
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-

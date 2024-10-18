@@ -28,3 +28,9 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# test.vue 파일 무시
+views/test.vue
+
+# 환경 변수 파일 무시
+.env

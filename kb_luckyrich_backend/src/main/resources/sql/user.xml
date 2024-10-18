@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mul.cam.e.dao.UserDao">
+    <select id="findByUsername" resultType="mul.cam.e.security.SecurityUser">
+        select user_id, user_name, nick_name, email, gender, age, role
+        from user
+        where user_name=#{userName}
+    </select>
+
+    <insert id="register" parameterType="mul.cam.e.security.SecurityUser">
+        insert into user(user_name, nick_name, email, role)
+        values (#{userName}, #{nickName}, #{email}, #{role})
+    </insert>
+
+    <select id="getAccountNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(a.account_id)
+        FROM user u
+        join account a on u.user_id = a.user_id
+        WHERE u.user_name=#{userName}
+    </select>
+
+    <update id="updateUserInfo">
+        UPDATE user
+        SET age=#{request.age}, gender=#{request.gender}
+        WHERE user_name=#{user_name}
+    </update>
+
+    <update id="updateRefreshToken">
+        UPDATE user
+        SET refresh_token=#{refreshToken}
+        WHERE user_name=#{userName}
+    </update>
+
+    <select id="getUserId" resultType="java.lang.Integer">
+        select user_id
+        from user
+        where user_name=#{userName}
+    </select>
+
+    <select id="getNickname" resultType="java.lang.String">
+        select nick_name
+        from user
+        where user_name=#{userName}
+    </select>
+
+    <select id="getRefreshToken" resultType="java.lang.String">
+        select refresh_token
+        from user
+        where user_name=#{userName}
+    </select>
+
+    <!--    <select id="checkAuthority" parameterType="string" resultType="int">-->
+<!--        select count(*)-->
+<!--        from user-->
+<!--        where user_name = #{userName} and role = "ADMIN"-->
+<!--    </select>-->
+
+    <delete id="withdrawUser" parameterType="int">
+        delete
+        from user
+        where user_id = #{userId};
+    </delete>
+
+    <select id="getUserRole" resultType="java.lang.String">
+        select role
+        from user
+        where user_name=#{userName}
+    </select>
+</mapper>

@@ -1,0 +1,127 @@
+/* 폰트 설정 */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Pretendard.woff2') format('woff2-variations');
+}
+
+/* 기본 스타일 초기화 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 글로벌 스타일 */
+:root {
+  --max-width: 1200px; /* 최대 너비 설정 */
+  --padding-horizontal: 50px;
+  --header-height: 80px;
+  --color-bg: #ffffff; /* 기본 배경색 */
+  --color-font: #000000; /* 기본 글자색 */
+  --color-primary: #3498db; /* 기본 primary 색상 */
+  --color-container: #f9f9f9; /* 컨테이너 배경색 */
+  --color-button-bg: #34c759; /* 버튼 배경색 */
+  --color-button-font: #ffffff; /* 버튼 글자색 */
+}
+
+/* 다크 모드에서 배경 및 글자색 변경 */
+.dark-mode {
+  --color-bg: #333333;
+  --color-font: #cfcfcf;
+  --color-container: #444444;
+  --color-button-bg: #555555;
+  --color-button-font: #cfcfcf;
+}
+
+/* 다크 모드에서 버튼 스타일 */
+.dark-mode button {
+  background-color: var(--color-button-bg);
+  color: var(--color-button-font);
+}
+
+/* 다크 모드에서 차트 및 메인 컨텐츠 */
+.dark-mode .main-content {
+  background-color: var(--color-container);
+}
+
+.dark-mode .home-container,
+.dark-mode .main-content,
+.dark-mode .left-sidebar {
+  border-color: #555; /* 다크 모드 테두리 */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* 다크 모드 그림자 효과 */
+  background-color: var(--color-container);
+  color: var(--color-font);
+}
+
+.dark-mode .rounded-chart {
+  background-color: #444444; /* Dark background for the chart container */
+  border-color: #555555; /* Darker border for the chart container */
+  color: var(
+    --color-font
+  ); /* Ensure text within the chart container matches the dark mode font */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjust shadow to fit dark mode */
+}
+
+.dark-mode .navbar {
+  background-color: var(--color-container);
+  color: var(--color-font);
+}
+
+.dark-mode a {
+  color: #3498db; /* 링크 색상 다크 모드에 맞게 변경 */
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  background-color: var(--color-bg); /* 배경색 변경 */
+  color: var(--color-font); /* 글자색 변경 */
+  padding-top: var(--header-height); /* 헤더 높이만큼 패딩 추가 */
+}
+
+/* 버튼 스타일 */
+button {
+  background-color: var(--color-button-bg); /* 다크/라이트 모드에 맞춘 배경색 */
+  color: var(--color-button-font); /* 다크/라이트 모드에 맞춘 글자색 */
+  border-radius: 10px;
+  padding: 10px 20px;
+  border: none;
+  font-size: 14px;
+}
+
+/* 홈 컨테이너 스타일 */
+.home-container {
+  max-width: var(--max-width); /* 고정된 너비 */
+  margin: 0 auto; /* 가운데 정렬 */
+  padding: 20px;
+  background-color: var(--color-container); /* 컨테이너 배경색 */
+}
+
+/* 사이드바 스타일 */
+.left-sidebar,
+.right-sidebar {
+  padding: 20%;
+  background-color: var(--color-container); /* 다크/라이트 모드에 맞춘 배경색 */
+  color: var(--color-font); /* 글자색 */
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+  padding: 20px;
+  margin-top: 10px;
+  background-color: var(--color-container); /* 다크/라이트 모드에 맞춘 배경색 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 10px;
+    margin-top: 20px;
+  }
+}

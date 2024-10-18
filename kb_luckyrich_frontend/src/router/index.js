@@ -1,23 +1,12 @@
-import { createWebHistory, createRouter } from 'vue-router'  // npm im vue-router@next
-import Home from '@/views/Home.vue'
-
-
-const routes = [
-    // MZ 자산 관리 API 등록 라우터
-    {
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
-]
-
-
+import { createWebHistory, createRouter } from 'vue-router';
+import account from '@/router/account/account.js';
+import user from '@/router/user/user.js';
+import analyze from './analyze/analyze';
+//
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes: [...account, ...user, ...analyze],
 });
-
-
 
 export default router;

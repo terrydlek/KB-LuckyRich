@@ -1,0 +1,436 @@
+<template>
+  <div class="test-wrapper">
+    <h2 v-if="!testCompleted" class="test-title">투자 성향 테스트</h2>
+    <div
+      v-if="!testCompleted && currentQuestionIndex < questions.length"
+      class="question-container"
+    >
+      <div class="progress-bar">
+        <div
+          class="progress"
+          :style="{
+            width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`,
+          }"
+        ></div>
+      </div>
+      <div class="question-number">
+        질문 {{ currentQuestionIndex + 1 }} / {{ questions.length }}
+      </div>
+      <div class="question">{{ questions[currentQuestionIndex].text }}</div>
+      <div class="options">
+        <label
+          v-for="(option, index) in questions[currentQuestionIndex].options"
+          :key="index"
+          class="option"
+          :class="{ selected: answers[currentQuestionIndex] === index }"
+        >
+          <input
+            type="radio"
+            :id="'option' + index"
+            :value="index"
+            v-model="answers[currentQuestionIndex]"
+            class="hidden-radio"
+          />
+          {{ option.text }}
+        </label>
+      </div>
+      <button
+        class="next-button"
+        @click="nextQuestion"
+        :disabled="answers[currentQuestionIndex] === null"
+      >
+        {{ isLastQuestion ? '결과 보기' : '다음 질문' }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
+const userId = ref(null);
+const testCompleted = ref(false);
+const investmentType = ref(null);
+
+const questions = [
+  {
+    text: '투자하고자 하는 자금의 투자 가능 기간은 얼마나 됩니까?',
+    options: [
+      { text: '6개월 이내', score: 3.1 },
+      { text: '6개월 이상 ~ 1년 이내', score: 6.2 },
+      { text: '1년 이상 ~ 2년 이내', score: 9.3 },
+      { text: '2년 이상 ~ 3년 이내', score: 12.5 },
+      { text: '3년 이상', score: 15.6 },
+    ],
+  },
+  {
+    text: '다음 중 투자경험과 가장 가까운 것은 어느 것입니까?',
+    options: [
+      { text: '은행의 예·적금, 국채, 지방채, 보증채, MMF, CMA 등', score: 3.1 },
+      {
+        text: '금융채, 신용도가 높은 회사채, 채권형펀드, 원금보존추구형 ELS 등',
+        score: 6.2,
+      },
+      {
+        text: '신용도 중간 등급의 회사채, 원금의 일부만 보장되는 ELS, 혼합형펀드 등',
+        score: 9.3,
+      },
+      {
+        text: '신용도가 낮은 회사채, 주식, 원금이 보장되지 않는 ELS, 시장수익률 수준의 수익을 추구하는 주식형펀드 등',
+        score: 12.5,
+      },
+      {
+        text: 'ELW, 선물옵션, 시장수익률 이상의 수익을 추구하는 주식형펀드, 파생상품에 투자하는 펀드, 주식 신용거래 등',
+        score: 15.6,
+      },
+    ],
+  },
+  {
+    text: '금융상품 투자에 대한 본인의 지식수준은 어느 정도라고 생각하십니까?',
+    options: [
+      {
+        text: '[매우 낮은 수준] 투자의사 결정을 스스로 내려본 경험이 없는 정도',
+        score: 3.1,
+      },
+      {
+        text: '[낮은 수준] 주식과 채권의 차이를 구별할 수 있는 정도',
+        score: 6.2,
+      },
+      {
+        text: '[높은 수준] 투자할 수 있는 대부분의 금융상품의 차이를 구별할수 있는 정도',
+        score: 9.3,
+      },
+      {
+        text: '[매우 높은 수준] 금융상품을 비롯하여 모든 투자대상 상품의 차이를 이해할 수있는 정도',
+        score: 12.5,
+      },
+    ],
+  },
+  {
+    text: '현재 투자하고자 하는 자금은 전체 금융자산(부동산 등을 제외) 중 어느 정도의 비중을 차지합니까?',
+    options: [
+      { text: '10% 이내', score: 3.1 },
+      { text: '10% 이상 ~ 20% 이내', score: 6.2 },
+      { text: '20% 이상 ~ 30% 이내', score: 9.3 },
+      { text: '30% 이상 ~ 40% 이내', score: 12.5 },
+      { text: '40%', score: 15.6 },
+    ],
+  },
+  {
+    text: '다음 중 당신의 수입원을 가장 잘 나타내고 있는 것은 어느 것입니까?',
+    options: [
+      {
+        text: '현재 일정한 수입이 발생하고 있으며, 향후 현재 수준을 유지하거나 증가할 것으로 예상된다',
+        score: 9.3,
+      },
+      {
+        text: '현재 일정한 수입이 발생하고 있으나, 향후 감소하거나 불안정할 것으로 예상된다.',
+        score: 6.2,
+      },
+      { text: '현재 일정한 수입이 없으며, 연금이 주수입원이다.', score: 3.1 },
+    ],
+  },
+  {
+    text: '만약 투자원금에 손실이 발생할 경우 다음 중 감수할 수 있는 손실 수준은 어느 것입니까?',
+    options: [
+      {
+        text: '무슨 일이 있어도 투자원금은 보전되어야 한다.',
+        score: 6.2,
+      },
+      {
+        text: '10% 미만까지는 손실을 감수할 수 있을 것 같다.',
+        score: 6.2,
+      },
+      { text: '20% 미만까지는 손실을 감수할 수 있을 것 같다', score: 12.5 },
+      { text: '기대수익이 높다면 위험이 높아도 상관하지 않겠다.', score: 18.7 },
+    ],
+  },
+];
+
+const currentQuestionIndex = ref(0);
+const answers = ref(new Array(questions.length).fill(null));
+
+const isLastQuestion = computed(
+  () => currentQuestionIndex.value === questions.length - 1
+);
+
+const allQuestionsAnswered = computed(() => {
+  return answers.value.every((answer) => answer !== null);
+});
+
+const nextQuestion = () => {
+  if (currentQuestionIndex.value < questions.length - 1) {
+    currentQuestionIndex.value++;
+  } else if (allQuestionsAnswered.value) {
+    submitTest();
+  } else {
+    alert('모든 질문에 답해주세요.');
+  }
+};
+
+const totalScore = computed(() => {
+  return answers.value.reduce((sum, answerIndex, questionIndex) => {
+    const question = questions[questionIndex];
+    return sum + (question.options[answerIndex]?.score || 0);
+  }, 0);
+});
+
+const computedInvestmentType = computed(() => {
+  const score = totalScore.value;
+  if (score <= 29) return '안정형';
+  if (score <= 40) return '안정추구형';
+  if (score <= 60) return '위험중립형';
+  if (score <= 80) return '적극투자형';
+  return '공격투자형';
+});
+
+const showResult = () => {
+  const resultRoutes = {
+    안정형: '/luckyrich/recommend/steadiness',
+    안정추구형: '/luckyrich/recommend/conservative',
+    위험중립형: '/luckyrich/recommend/neutral',
+    적극투자형: '/luckyrich/recommend/active',
+    공격투자형: '/luckyrich/recommend/aggressive',
+  };
+  router.push(resultRoutes[investmentType.value]);
+};
+
+const submitTest = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+      router.push('/luckyrich/login');
+      return;
+    }
+
+    const response = await axios.post(
+      'http://localhost:8080/investment',
+      {
+        userId: userId.value,
+        investmentType: computedInvestmentType.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      testCompleted.value = true;
+      investmentType.value = computedInvestmentType.value;
+      localStorage.setItem('investmentType', computedInvestmentType.value);
+      showResult();
+    } else {
+      alert('결과 저장에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('결과 저장 중 오류 발생:', error);
+  }
+};
+
+const checkTestResult = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await axios.get('http://localhost:8080/investment', {
+      params: { userId: userId.value },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.data && response.data.investmentType) {
+      testCompleted.value = true;
+      investmentType.value = response.data.investmentType;
+      showResult();
+    } else {
+      testCompleted.value = false;
+    }
+  } catch (error) {
+    console.error('결과 확인 중 오류 발생:', error);
+  }
+};
+
+onMounted(async () => {
+  const token = localStorage.getItem('access_token');
+  const storedInvestmentType = localStorage.getItem('investmentType');
+
+  if (!token) {
+    router.push('/luckyrich/login');
+    return;
+  }
+
+  try {
+    const userResponse = await axios.get('http://localhost:8080/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (userResponse.data && userResponse.data.userId) {
+      userId.value = userResponse.data.userId;
+
+      // 서버에서 테스트 결과 확인
+      const testResultResponse = await axios.get(
+        'http://localhost:8080/investment',
+        {
+          params: { userId: userId.value },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (testResultResponse.data && testResultResponse.data.investmentType) {
+        testCompleted.value = true;
+        investmentType.value = testResultResponse.data.investmentType;
+        localStorage.setItem('investmentType', investmentType.value);
+        showResult();
+      } else {
+        // 서버에 결과가 없으면 로컬 스토리지도 초기화
+        localStorage.removeItem('investmentType');
+        testCompleted.value = false;
+        currentQuestionIndex.value = 0;
+        answers.value = new Array(questions.length).fill(null);
+      }
+    } else {
+      router.push('/luckyrich/login');
+    }
+  } catch (error) {
+    console.error('에러 발생:', error);
+    router.push('/luckyrich/login');
+  }
+});
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+.test-wrapper {
+  font-family: 'Noto Sans KR', sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.test-title {
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.question-number {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.question {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.option {
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
+}
+
+.option.selected {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+}
+
+.hidden-radio {
+  display: none;
+}
+
+.next-button {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: #45a049;
+}
+
+.next-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .test-wrapper {
+    padding: 1rem;
+  }
+
+  .test-title {
+    font-size: 1.5rem;
+  }
+
+  .question {
+    font-size: 1rem;
+  }
+
+  .option {
+    padding: 0.8rem;
+  }
+
+  .next-button {
+    padding: 0.6rem 1.5rem;
+  }
+}
+</style>
