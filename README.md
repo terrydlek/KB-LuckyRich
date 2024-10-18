@@ -180,12 +180,12 @@
 
 | **자주 묻는 질문** |
 | :---: |
-| <img alt="로그인" src="./README-GIF/자주 묻는 질문.gif" height="440px" width="720px"> |
+| <img alt="로그인" src="./README-GIF/자주 묻는 질문.gif" height="300" width="500"> |
 <br/>
 
 | **Q&A 게시판** |
 | :---: |
-| <img height="440px" width="720px" alt="프로필" src="./README-GIF/게시판.gif"> |
+| <img height="420px" width="720px" alt="프로필" src="./README-GIF/게시판.gif"> |
 <br/>
 
 | **관리자 페이지** |
