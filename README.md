@@ -94,7 +94,8 @@ API 명세서 이미지 들어갈 자리
 ## 📚 ERD
 
 ERD 들어갈 자리
-![ERD](./ERD.png)
+<img src="./ERD.png" alt="ERD 이미지" height="100px" width="100px">
+
 
 
 ---
