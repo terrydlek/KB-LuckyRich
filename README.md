@@ -76,13 +76,16 @@
 
 ## 📚 시스템 아키텍처
 <br>
+<p align="center">
 <img src="./architecture.png" alt="architecture 이미지" height="500px" width="700px">
-
+</p>
 ---
 
 ## 📚 구조도
 <br>
+<p align="center">
 <img src="./structure.png" alt="structure 이미지" height="500px" width="700px">
+</p>
 
 ---
 
