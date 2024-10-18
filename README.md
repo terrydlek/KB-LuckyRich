@@ -1,4 +1,4 @@
-![로그인](https://github.com/user-attachments/assets/9914a58b-e79b-4f23-b27f-3fbcd985464a)# 🌟 Lucky Rich
+# 🌟 Lucky Rich
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -112,7 +112,7 @@
 ## 🏗️ 시스템 아키텍처
 
 <div align="center">
-  <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+  <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="350px" width="700px">
   <p><b>시스템 아키텍처</b></p>
 </div>
 
@@ -121,7 +121,7 @@
 ## 📋 구조도
 
 <div align="center">
-  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="700px">
   <p><b>시스템 구조도</b></p>
 </div>
 
