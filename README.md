@@ -32,7 +32,7 @@
  
  ### 1. 투자 성향 분석을 통한 개인맞춤형 추천
  
- ### 📝 투자 성향 테스트를 통한 상품 추천
+ ### 🧪 투자 성향 테스트를 통한 상품 추천
  - 총 테스트 점수를 바탕으로 사용자의 성향을 분류하고, 해당 성향에 맞는 투자 상품을 추천합니다.
  - 성향은 총 5가지로 나뉘며, 안정형/안정추구형/위험중립형/적극투자형/공격투자형이 있습니다.
  - 안정형은 예적금 상품, 안정추구형은 채권형 펀드 상품, 위험중립형은 재간접 펀드 상품, 적극투자형은 주식 상품, 공격투자형은 암호화폐를 추천합니다.
@@ -52,7 +52,7 @@
  - 포트폴리오 다운이 완료되면 실시간 알림을 받을 수 있어 대기 시간을 효율적으로 사용할 수 있습니다.
  - 포트폴리오 다운로드 시간이 길어짐에 따라, Rebbit MQ와 WebSocket을 사용해 실시간 알림을 전송하도록 구현했습니다.
  
- ### 4. 💵 거래 내역 조회
+ ### 4. 💳 거래 내역 조회
  - 사용자가 가진 계좌별로 거래 내역을 조회할 수 있습니다.
  - 날짜, 입금/출금, 카테고리 필터링을 통해 원하는 내역을 쉽고 빠르게 찾을 수 있습니다.
  - 거래 내역을 csv 파일로 다운 받아 개인적으로 백업 및 보관이 가능합니다.
@@ -139,7 +139,7 @@
 - <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=strapi&logoColor=white">
 - <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white">
 
-### 🗃️ Database
+### 💾 Database
 - <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white">
 - <img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white">
 
