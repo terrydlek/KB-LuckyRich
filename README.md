@@ -111,7 +111,7 @@
 
 ## 🏗️ 시스템 아키텍처
 
-<div align="center">
+<div>
   <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="680px">
   <p><b>시스템 아키텍처</b></p>
 </div>
@@ -120,8 +120,8 @@
 
 ## 📋 구조도
 
-<div align="center">
-  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="350px" width="700px">
+<div>
+  <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="400px" width="750px">
   <p><b>시스템 구조도</b></p>
 </div>
 
@@ -129,8 +129,8 @@
 
 ## 📚 ERD (Entity Relationship Diagram)
 
-<div align="center">
-  <img src="./ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
+<div>
+  <img src="./ERD.png" alt="ERD 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="530px" width="700px">
   <p><b>ERD (Entity Relationship Diagram)</b></p>
 </div>
 
