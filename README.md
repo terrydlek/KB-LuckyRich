@@ -114,3 +114,10 @@
 3. **깔끔한 목차**: 사용자들이 문서를 쉽게 탐색할 수 있도록 목차 구성.
 4. **설치 및 사용법**: 명확한 설치 방법과 사용 예시 제공.
 5. **API 문서**: 주요 엔드포인트를 간단히 소개하고 전체 문서로 링크 연결.
+
+---
+### 팀원
+| [황세호](https://github.com/ssoo1234) | [박제욱](https://github.com/terrydlek) |[김재이](https://github.com/Kim-Jaei) | [이시윤](https://github.com/siyun2)
+| :---: | :---: | :---: | :---: |
+| <img src="https://avatars.githubusercontent.com/u/93467085?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/104892909?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/103116277?v=4" width="150"/> | <img src="https://avatars.githubusercontent.com/u/140796676?v=4" width="150"/> | 
+| Front-End | Front-End | Front-End | Front-End |
