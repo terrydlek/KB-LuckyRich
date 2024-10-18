@@ -105,7 +105,7 @@
 
 ---
 
-## 📚 시스템 아키텍처
+## 🏗️ 시스템 아키텍처
 
 <div align="center">
   <img src="./architecture.png" alt="시스템 아키텍처 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
@@ -114,7 +114,7 @@
 
 ---
 
-## 📚 구조도
+## 📋 구조도
 
 <div align="center">
   <img src="./structure.png" alt="구조도 이미지" style="border: 1px solid #ddd; border-radius: 10px;" height="500px" width="700px">
