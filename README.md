@@ -192,11 +192,14 @@
 | :---: |
 | <img height="400px" width="720px" alt="로그인" src="./README-GIF/계좌연동.gif"> |
 | <img height="400px" width="720px" alt="로그인" src="./README-GIF/계좌선택.gif"> |
+- 마이데이터 
 <br/>
 
 | **로그인 후 메인화면** |
 | :---: |
 | <img height="400px" width="720px" alt="로그인 후 메인" src="./README-GIF/로그인후_메인.gif"> |
+- 사용자가 보유한 자산의 총액, 자산 분포, 투자 성과 등을 한눈에 확인할 수 있는 시각적 대시보드를 제공합니다. 그래프와 차트를 통해 자산의 변동 추세를 쉽게 이해할 수 있습니다.
+
 <br/>
 
 | **마이페이지** |
