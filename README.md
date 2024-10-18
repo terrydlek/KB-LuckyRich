@@ -6,7 +6,7 @@
 
 <br>
 <p align="center">
-   <img src="./image1.PNG" alt="대표 이미지" height="500px" width="1000px">
+   <img src="./image1.PNG" alt="대표 이미지" height="600px" width="1000px">
 </p>
 
 ---
