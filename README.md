@@ -77,7 +77,7 @@
 
 1. 저장소 클론:
    ```bash
-   git clone [https://github.com/terrydlek/LuckyRich.git](https://github.com/terrydlek/KB-LuckyRich.git)
+   git clone https://github.com/terrydlek/KB-LuckyRich.git
 
 2. 프로젝트 디렉토리로 이동:
    ```bash
